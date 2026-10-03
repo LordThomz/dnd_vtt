@@ -1,0 +1,77 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   table-layout.css – moderner Aufbau des Spieltischs (lädt nach table.css)
+   ══════════════════════════════════════════════════════════════════════════
+   1. Werkzeug-Dock: Die Werkzeuge schweben als senkrechte Leiste am linken
+      Kartenrand (verschoben von table.html-Skript, Funktionen unverändert).
+   2. Seitenleiste mit Symbol-Schiene: senkrechte Reiter mit großen Symbolen
+      und Tooltips. Eingeklappt bleibt nur die Schiene sichtbar – die Karte
+      bekommt fast die volle Breite. Klick auf das aktive Symbol klappt ein.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Werkzeug-Dock ───────────────────────────────────────────────────── */
+#tool-dock {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%); z-index: 45;
+  display: flex; flex-direction: column; gap: 4px; padding: 8px 6px; border-radius: 16px;
+  background: linear-gradient(180deg, rgba(var(--panel-rgb), .9), rgba(var(--panel-rgb), .78));
+  border: 1px solid rgba(var(--gold-rgb), .22); backdrop-filter: blur(10px);
+  box-shadow: 0 16px 40px rgba(var(--shade-rgb), .45), inset 0 1px 0 rgba(var(--hi-rgb), .05);
+  animation: fx-fade-up .4s ease both;
+}
+#tool-dock .tb-group { flex-direction: column; gap: 3px; padding: 6px 0 0; margin-top: 2px; border-left: none;
+  border-top: 1px solid rgba(var(--hi-rgb), .08); }
+#tool-dock .tb-group:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+#tool-dock .tb-btn { width: 40px; height: 40px; border-radius: 11px; color: var(--text-dim); }
+#tool-dock .tb-btn svg.ic { width: 20px; height: 20px; }
+#tool-dock .tb-btn:hover { color: var(--text-bright); background: rgba(var(--hi-rgb), .06); }
+#tool-dock .tb-btn.active { color: var(--gold-light); background: rgba(var(--gold-rgb), .16); box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), .45); }
+/* Tooltips nach rechts statt nach unten */
+#tool-dock .tb-btn[data-tip]:hover::after { left: calc(100% + 10px); top: 50%; bottom: auto; transform: translateY(-50%); font-size: .66rem; padding: 4px 9px; }
+#tool-dock #draw-color-group { flex-wrap: wrap; justify-content: center; max-width: 44px; }
+/* Messanzeige und Ebenen nicht unter dem Dock */
+#measure-hud { left: 76px !important; }
+#layer-panel { left: 76px !important; }
+
+/* ── 2. Seitenleiste mit Symbol-Schiene ─────────────────────────────────── */
+#right-panel { display: grid !important; grid-template-columns: 58px minmax(0, 1fr); grid-template-rows: 100%;
+  width: 470px; transition: width .28s cubic-bezier(.2, .8, .2, 1); }
+#right-panel .panel-tabs { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 0 64px; border-bottom: none; border-right: 1px solid var(--border); overflow-y: auto; overflow-x: hidden;
+  background: rgba(var(--shade-rgb), .14); }
+#right-panel .tab-pane { grid-column: 2; grid-row: 1; min-width: 0; }
+#right-panel .p-tab { position: relative; width: 44px; height: 44px; padding: 0; margin: 0; border-radius: 12px; border-bottom: none;
+  display: grid; place-items: center; font-size: 0; color: var(--text-dim); flex: 0 0 auto; }
+#right-panel .p-tab .t-icon { font-size: 1.15rem; margin: 0; }
+#right-panel .p-tab .t-icon svg.ic { width: 21px; height: 21px; }
+#right-panel .p-tab::after { display: none; }                       /* alte Leuchtlinie */
+#right-panel .p-tab::before { content: ""; position: absolute; left: -7px; top: 10px; bottom: 10px; width: 3px; border-radius: 3px;
+  background: var(--arcane); box-shadow: 0 0 8px rgba(var(--arcane-rgb), .7); transform: scaleY(0); transition: transform .25s ease; }
+#right-panel .p-tab:hover { color: var(--text-bright); background: rgba(var(--hi-rgb), .06); }
+#right-panel .p-tab.active { color: var(--arcane); background: rgba(var(--arcane-rgb), .12); text-shadow: none; }
+#right-panel .p-tab.active::before { transform: scaleY(1); }
+/* Ungelesen-Punkt (z.B. neue Chat-Nachricht bei eingeklappter Leiste) */
+#right-panel .p-tab.has-news::after { display: block; content: ""; position: absolute; top: 7px; right: 7px; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); transform: none; left: auto; bottom: auto; }
+
+/* Eingeklappt: nur die Schiene */
+#right-panel.collapsed { width: 58px !important; min-width: 58px !important; }
+#right-panel.collapsed .tab-pane { display: none !important; }
+#right-panel.collapsed #panel-resize-handle { display: none; }
+#right-panel.collapsed .p-tab.active { background: transparent; color: var(--text-dim); }
+#right-panel.collapsed .p-tab.active::before { transform: scaleY(0); }
+
+/* Ein-/Ausklapp-Knopf unten in der Schiene */
+#panel-toggle-btn { left: 7px !important; right: auto; top: auto !important; bottom: 12px; transform: none !important;
+  width: 44px !important; height: 38px !important; border: 1px solid var(--border) !important; border-radius: 11px !important;
+  background: rgba(var(--hi-rgb), .03) !important; font-size: .85rem !important; }
+#panel-toggle-btn:hover { border-color: var(--gold-dark) !important; color: var(--gold-light) !important; }
+
+/* Tooltip der Schiene (wird per Skript positioniert) */
+#rail-tip { position: fixed; z-index: 700; pointer-events: none; padding: 5px 10px; border-radius: 8px; white-space: nowrap;
+  font: 600 .72rem/1 var(--font-display); letter-spacing: .04em; color: var(--text-bright);
+  background: var(--bg-panel2); border: 1px solid rgba(var(--gold-rgb), .35); box-shadow: 0 8px 22px rgba(var(--shade-rgb), .45);
+  opacity: 0; transform: translateX(6px); transition: opacity .15s, transform .15s; }
+#rail-tip.show { opacity: 1; transform: none; }
+
+/* Kopfzeile: aufgeräumt (Werkzeuge sind ins Dock gewandert) */
+#topbar { gap: 8px; }
+#topbar #users-row { margin-left: auto; border-left: none; }

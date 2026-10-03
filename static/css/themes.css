@@ -29,7 +29,7 @@
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════════════════════════════════
-   OBERFLÄCHE 1 – ARKANUM (Standard): Fantasy trifft Moderne
+   STANDARD-OBERFLÄCHE – ARKANUM (fest eingebaut): Fantasy trifft Moderne
    Tiefes Nachtblau, Messing-Gold, arkanes Türkis, gläserne Panels.
    ══════════════════════════════════════════════════════════════════════════ */
 :root, [data-ui-theme="arkanum"] {
@@ -63,104 +63,9 @@
   color-scheme: dark;
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   OBERFLÄCHE 2 – SCHATTENFESTE: düster, schwer, bedrohlich
-   Verrußtes Eisen, angelaufenes Messing, Blutrot, knochenfarbene Schrift.
-   ══════════════════════════════════════════════════════════════════════════ */
-[data-ui-theme="schattenfeste"] {
-  --gold: #b89a6a;        --gold-light: #d9c29a;   --gold-dark: #6e5634;   --gold-rgb: 184,154,106;
-  --arcane: #c8412f;      --arcane-dim: #8e2a1f;   --arcane-deep: #3a0f0a; --arcane-rgb: 200,65,47;
-  --arcane-violet: #8a6a9a; --violet-rgb: 138,106,154;
-  --crimson: #7a1010;     --crimson-rgb: 122,16,16;
-  --bg-deep: #070605;     --bg-dark: #0f0d0b;      --bg-mid: #161310;
-  --bg-panel: #1b1714;    --bg-panel2: #241f1a;
-  --border: #3a302a;      --border-rgb: 58,48,42;
-  --text: #d8cdb8;        --text-dim: #7d7266;     --text-bright: #efe4cf;
-  --on-accent: #120d08;
-  --shade-rgb: 0,0,0;     --hi-rgb: 255,240,220;   --panel-rgb: 14,11,9;
-  --font-display: 'Cinzel', Georgia, serif;   /* Uncial war in Buttons unleserlich */
-  --radius: 4px;  --radius-lg: 8px;
-  --backdrop:    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(200,65,47,.13) 0%, transparent 60%),
-                 radial-gradient(ellipse 60% 50% at 50% 110%, rgba(0,0,0,.8) 0%, transparent 70%);
-  --stars-opacity: .25;
-}
 
-/* ══════════════════════════════════════════════════════════════════════════
-   OBERFLÄCHE 3 – PERGAMENT: hell, klassisch, wie ein Abenteuerbuch
-   Pergament, Tinte, Siegelrot, Grünspan.
-   ══════════════════════════════════════════════════════════════════════════ */
-[data-ui-theme="pergament"] {
-  --gold: #8a5a1c;        --gold-light: #6b4210;   --gold-dark: #b8864a;   --gold-rgb: 138,90,28;
-  --arcane: #2f6b5e;      --arcane-dim: #4d8a7c;   --arcane-deep: #d7e3d6; --arcane-rgb: 47,107,94;
-  --arcane-violet: #6a4a8a; --violet-rgb: 106,74,138; --purple: #6a4a8a;
-  --crimson: #9a2a1a;     --crimson-rgb: 154,42,26;
-  --bg-deep: #e6d8b8;     --bg-dark: #efe3c6;      --bg-mid: #f3e9d2;
-  --bg-panel: #f7efdc;    --bg-panel2: #efe2c4;
-  --border: #cbb58a;      --border-rgb: 203,181,138;
-  --text: #33261a;        --text-dim: #7a664c;     --text-bright: #1c140b;
-  --on-accent: #fff8e8;
-  --green: #3e7a3e;       --green-soft: #2f6a30;   --green-rgb: 62,122,62;
-  --red: #a83224;         --red-soft: #9a2a1a;     --red-rgb: 168,50,36;
-  --blue: #2e5a82;        --blue-soft: #2e5a82;    --blue-rgb: 46,90,130;
-  --shade-rgb: 70,45,15;  --hi-rgb: 120,80,30;     --panel-rgb: 247,239,220;
-  --radius: 6px;  --radius-lg: 10px;
-  --glow-arcane: 0 0 0 1px rgba(var(--arcane-rgb),.35);
-  --glow-gold:   0 1px 6px rgba(var(--gold-rgb),.25);
-  --backdrop:    radial-gradient(ellipse at 50% 40%, rgba(255,250,235,.7) 0%, transparent 65%),
-                 radial-gradient(ellipse at 50% 100%, rgba(120,80,30,.18) 0%, transparent 70%);
-  --stars-opacity: 0;
-  color-scheme: light;
-}
 
-/* ══════════════════════════════════════════════════════════════════════════
-   OBERFLÄCHE 4 – NEONSPHÄRE: futuristisch, klar, leuchtend
-   Tiefschwarz, Cyan als Hauptakzent, Magenta als Signal, kantige Formen.
-   ══════════════════════════════════════════════════════════════════════════ */
-[data-ui-theme="neonsphaere"] {
-  --gold: #2fe3ff;        --gold-light: #9af3ff;   --gold-dark: #127e94;   --gold-rgb: 47,227,255;
-  --arcane: #ff3ea5;      --arcane-dim: #b0266f;   --arcane-deep: #3a0a24; --arcane-rgb: 255,62,165;
-  --arcane-violet: #8f7bff; --violet-rgb: 143,123,255; --purple: #8f7bff;
-  --crimson: #ff2d55;     --crimson-rgb: 255,45,85;
-  --bg-deep: #030409;     --bg-dark: #070a12;      --bg-mid: #0b0f1a;
-  --bg-panel: #0e1320;    --bg-panel2: #141a2b;
-  --border: #1f2940;      --border-rgb: 31,41,64;
-  --text: #cfe3ee;        --text-dim: #5f7488;     --text-bright: #f1fbff;
-  --on-accent: #01141a;
-  --green: #2bffa0;       --green-soft: #7dffc6;   --green-rgb: 43,255,160;
-  --red: #ff2d55;         --red-soft: #ff6f8a;     --red-rgb: 255,45,85;
-  --blue: #3d8bff;        --blue-soft: #8fbaff;    --blue-rgb: 61,139,255;
-  --shade-rgb: 0,0,0;     --hi-rgb: 180,240,255;   --panel-rgb: 5,8,16;
-  --font-display: 'Orbitron', 'Segoe UI', sans-serif;
-  --font-body:    'Segoe UI', system-ui, sans-serif;
-  --radius: 3px;  --radius-lg: 6px;
-  --glow-arcane: 0 0 14px rgba(var(--arcane-rgb),.45);
-  --glow-gold:   0 0 14px rgba(var(--gold-rgb),.45);
-  --backdrop:    linear-gradient(rgba(47,227,255,.035) 1px, transparent 1px) 0 0/40px 40px,
-                 linear-gradient(90deg, rgba(47,227,255,.035) 1px, transparent 1px) 0 0/40px 40px,
-                 radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,62,165,.10) 0%, transparent 60%);
-  --stars-opacity: .5;
-}
 
-/* ══════════════════════════════════════════════════════════════════════════
-   OBERFLÄCHE 5 – MONDWALD: elfisch, ruhig, naturverbunden
-   Nachtgrün, Mondsilber-Grün, sanftes Violett.
-   ══════════════════════════════════════════════════════════════════════════ */
-[data-ui-theme="mondwald"] {
-  --gold: #a9d8a2;        --gold-light: #d6f0cf;   --gold-dark: #4f7a52;   --gold-rgb: 169,216,162;
-  --arcane: #b9a6ff;      --arcane-dim: #7a68c0;   --arcane-deep: #231d3d; --arcane-rgb: 185,166,255;
-  --arcane-violet: #e0a6ff; --violet-rgb: 224,166,255;
-  --crimson: #8a3a4a;     --crimson-rgb: 138,58,74;
-  --bg-deep: #050b09;     --bg-dark: #09120f;      --bg-mid: #0d1814;
-  --bg-panel: #112019;    --bg-panel2: #172a21;
-  --border: #243a30;      --border-rgb: 36,58,48;
-  --text: #d5e3d6;        --text-dim: #6f8a7a;     --text-bright: #eff8ef;
-  --on-accent: #0a160f;
-  --shade-rgb: 0,0,0;     --hi-rgb: 220,255,225;   --panel-rgb: 8,16,13;
-  --radius: 10px; --radius-lg: 18px;
-  --backdrop:    radial-gradient(ellipse 70% 50% at 20% 0%, rgba(169,216,162,.09) 0%, transparent 60%),
-                 radial-gradient(ellipse 50% 50% at 90% 80%, rgba(185,166,255,.08) 0%, transparent 60%);
-  --stars-opacity: .8;
-}
 
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -177,43 +82,10 @@
   --table-fog-rgb: 6,6,12;
   --table-measure: #ffd95a;
 }
-[data-table-theme="eiche"] {
-  --table-bg: #2a1a0e;
-  --table-bg-image:
-    repeating-linear-gradient(90deg, rgba(0,0,0,.18) 0 2px, transparent 2px 140px),
-    repeating-linear-gradient(0deg, rgba(255,210,150,.035) 0 1px, transparent 1px 7px),
-    linear-gradient(180deg, #3a2414, #24160b);
-  --table-grid-rgb: 30,18,8;
-  --table-fog-rgb: 18,11,6;
-  --table-measure: #ffcf6a;
-}
-[data-table-theme="kerker"] {
-  --table-bg: #111214;
-  --table-bg-image:
-    repeating-linear-gradient(0deg, rgba(0,0,0,.35) 0 2px, transparent 2px 64px),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.35) 0 2px, transparent 2px 64px),
-    radial-gradient(ellipse at 50% 50%, #26282c 0%, #0c0d0f 80%);
-  --table-grid-rgb: 200,200,205;
-  --table-fog-rgb: 8,8,10;
-  --table-measure: #ff8a3a;
-}
-[data-table-theme="karte"] {
-  --table-bg: #cdb88e;
-  --table-bg-image: radial-gradient(ellipse at 50% 45%, #efe2c2 0%, #d8c49a 60%, #b39a6a 100%);
-  --table-grid-rgb: 90,60,25;
-  --table-fog-rgb: 60,42,20;
-  --table-measure: #a3261a;
-}
-[data-table-theme="holo"] {
-  --table-bg: #02060c;
-  --table-bg-image:
-    linear-gradient(rgba(47,227,255,.06) 1px, transparent 1px) 0 0/32px 32px,
-    linear-gradient(90deg, rgba(47,227,255,.06) 1px, transparent 1px) 0 0/32px 32px,
-    radial-gradient(ellipse at 50% 50%, #062033 0%, #02060c 75%);
-  --table-grid-rgb: 47,227,255;
-  --table-fog-rgb: 2,8,16;
-  --table-measure: #ff3ea5;
-}
+
+
+
+
 
 /* ── Übergänge beim Umschalten (nur kurz, damit nichts „flackert") ─────── */
 html.theme-switching, html.theme-switching * {

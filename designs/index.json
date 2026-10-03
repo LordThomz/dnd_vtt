@@ -1,0 +1,77 @@
+{
+  "format": 1,
+  "designs": [
+    {
+      "id": "schattenfeste",
+      "name": "Schattenfeste",
+      "scope": "ui",
+      "version": "1.0.0",
+      "tag": "Düster",
+      "description": "Verrußtes Eisen, Blutrot, knochenfarbene Schrift. Für Grimdark-Runden.",
+      "file": "schattenfeste.vttdesign"
+    },
+    {
+      "id": "pergament",
+      "name": "Pergament",
+      "scope": "ui",
+      "version": "1.0.0",
+      "tag": "Klassisch · Hell",
+      "description": "Wie ein aufgeschlagenes Abenteuerbuch: Pergament, Tinte, Siegelrot.",
+      "file": "pergament.vttdesign"
+    },
+    {
+      "id": "neonsphaere",
+      "name": "Neonsphäre",
+      "scope": "ui",
+      "version": "1.0.0",
+      "tag": "Futuristisch",
+      "description": "Tiefschwarz mit Cyan und Magenta, kantig und leuchtend.",
+      "file": "neonsphaere.vttdesign"
+    },
+    {
+      "id": "mondwald",
+      "name": "Mondwald",
+      "scope": "ui",
+      "version": "1.0.0",
+      "tag": "Elfisch",
+      "description": "Nachtgrün, Mondsilber und sanftes Violett – ruhig und naturverbunden.",
+      "file": "mondwald.vttdesign"
+    },
+    {
+      "id": "eiche",
+      "name": "Eichentafel",
+      "scope": "table",
+      "version": "1.0.0",
+      "tag": "Holz",
+      "description": "Warmes, gemasertes Holz – wie am echten Spieltisch.",
+      "file": "eiche.vttdesign"
+    },
+    {
+      "id": "kerker",
+      "name": "Kerkerstein",
+      "scope": "table",
+      "version": "1.0.0",
+      "tag": "Stein",
+      "description": "Kalte Steinplatten, helles Raster.",
+      "file": "kerker.vttdesign"
+    },
+    {
+      "id": "karte",
+      "name": "Pergamentkarte",
+      "scope": "table",
+      "version": "1.0.0",
+      "tag": "Papier",
+      "description": "Gealtertes Papier mit Sepia-Raster.",
+      "file": "karte.vttdesign"
+    },
+    {
+      "id": "holo",
+      "name": "Holo-Tisch",
+      "scope": "table",
+      "version": "1.0.0",
+      "tag": "Futuristisch",
+      "description": "Leuchtendes Cyan-Raster auf tiefem Blau.",
+      "file": "holo.vttdesign"
+    }
+  ]
+}

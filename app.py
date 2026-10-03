@@ -48,6 +48,18 @@ app.config.update(
     SESSION_COOKIE_SECURE=False,
 )
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
+@app.context_processor
+def _inject_profile():
+    """Persönliches Profil (Würfel-Sets, Designs) nur für die EIGENE
+    Installation in die Seite legen – theme.js übernimmt es sofort."""
+    try:
+        from routes.api import _is_local_request, _read_profile
+        if _is_local_request():
+            return {"vtt_profile": _read_profile()}
+    except Exception:
+        pass
+    return {"vtt_profile": None}
+
 app.register_blueprint(api_bp)
 app.register_blueprint(pages_bp)
 register_socket_events(socketio)
@@ -68,11 +80,16 @@ _APP_ORIGINS |= {o.strip() for o in os.environ.get("VTT_DEV_ORIGINS", "").split(
 @app.after_request
 def _add_cors_headers(response):
     origin = request.headers.get("Origin")
+    # Server-Infos (Version, Name) darf jede Seite lesen – ohne Anmeldedaten.
+    # Das braucht das Spiel, um vor dem Verbinden die Version des DM zu prüfen.
+    if request.path == "/api/server/info":
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
     if origin and (origin in _APP_ORIGINS or origin == request.host_url.rstrip("/")):
         response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Access-Control-Allow-Credentials"] = "true"
         response.headers["Vary"] = "Origin"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-VTT-App"
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
     # Die 3D-Würfel (dice-box) werden als ES-Modul geladen. Der Browser lädt ein
     # Modul aber NUR, wenn der Server einen JavaScript-MIME-Typ meldet.

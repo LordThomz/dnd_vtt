@@ -153,7 +153,7 @@ function renderUsers(){
 function renderInitiative(){
   const panel=document.getElementById("init-list"); if(!panel) return;
   if(!State.initiative.length){
-    panel.innerHTML=`<div style="color:var(--text-dim);text-align:center;padding:18px;font-style:italic">Keine Einträge…</div>`;
+    panel.innerHTML=`<div class="fx-empty" style="margin:14px 10px"><div class="fx-empty-ic">${typeof Icons!=="undefined"?Icons.svg("swords"):""}</div><b>Noch keine Initiative</b>Würfle die Initiative oder füge unten Teilnehmer hinzu.</div>`;
     return;
   }
   const ci=State.current_turn_index||0;
@@ -410,7 +410,7 @@ function renderRoster(){
   const roster=State.roster||{};
   const entries=Object.values(roster);
   if(!entries.length){
-    panel.innerHTML=`<div style="color:var(--text-dim);text-align:center;padding:16px;font-style:italic">Noch keine Spieler beigetreten…</div>`;
+    panel.innerHTML=`<div class="fx-empty" style="margin:14px 10px"><div class="fx-empty-ic">${typeof Icons!=="undefined"?Icons.svg("users"):""}</div><b>Noch niemand da</b>Sobald Spieler beitreten, erscheinen sie hier.</div>`;
     return;
   }
   panel.innerHTML=entries.map(r=>{

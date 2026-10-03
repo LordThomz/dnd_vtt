@@ -1,0 +1,17 @@
+{
+  "vttdesign": 1,
+  "id": "karte",
+  "name": "Pergamentkarte",
+  "scope": "table",
+  "version": "1.0.0",
+  "author": "D&D Virtual Tabletop",
+  "tag": "Papier",
+  "description": "Gealtertes Papier mit Sepia-Raster.",
+  "vars": {
+    "--table-bg": "#cdb88e",
+    "--table-bg-image": "radial-gradient(ellipse at 50% 45%, #efe2c2 0%, #d8c49a 60%, #b39a6a 100%)",
+    "--table-grid-rgb": "90,60,25",
+    "--table-fog-rgb": "60,42,20",
+    "--table-measure": "#a3261a"
+  }
+}

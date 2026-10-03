@@ -8,412 +8,200 @@
 <link rel="stylesheet" href="/static/css/fonts.css">
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/design-studio.css">
+<link rel="stylesheet" href="/static/css/fx.css">
+<script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
 <link rel="stylesheet" href="/static/css/dialog.css">
 <style>
-  body{
-    background:radial-gradient(ellipse at 50% 0%, #12172a 0%, var(--bg-deep) 60%);
-    min-height:100vh; color:var(--text);
-    font-family:'Segoe UI',system-ui,sans-serif;
-  }
-  .wrap{ max-width:1240px; margin:0 auto; padding:20px 24px 60px; }
+/* ══════════════════════════════════════════════════════════════════════════
+   WÜRFEL-WERKSTATT – Gestaltung (Logik unten im Skript)
+   Links: Würfel · Mitte: Studio-Bühne · Rechts: Einstellungen
+   ══════════════════════════════════════════════════════════════════════════ */
+html, body { height: 100%; }
+body { margin: 0; color: var(--text); font-family: var(--font-ui); background: var(--bg-deep); background-image: var(--backdrop); overflow: hidden; }
+.ws { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
 
-  /* Kopfzeile */
-  .top{
-    display:flex; align-items:center; gap:14px;
-    padding:14px 0 18px; margin-bottom:20px;
-    border-bottom:1px solid var(--border);
-  }
-  .top h1{
-    flex:1;
-    font-family:'Cinzel',Georgia,serif; font-size:1.5rem;
-    color:var(--gold); letter-spacing:.03em; font-weight:700;
-  }
-  .top .sub{ font-size:.78rem; color:var(--text-dim); margin-top:2px; letter-spacing:.02em; }
-  .back-btn{
-    padding:9px 16px; border-radius:9px;
-    background:var(--bg-panel2); border:1px solid var(--border);
-    color:var(--gold); font-family:'Cinzel',serif; font-size:.88rem;
-    cursor:pointer; transition:all .14s ease; text-decoration:none;
-  }
-  .back-btn:hover{ border-color:var(--arcane-dim); }
+/* Kopfzeile */
+.ws-top { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(var(--panel-rgb), .9), rgba(var(--panel-rgb), .6)); backdrop-filter: blur(8px); position: relative; z-index: 2; }
+.ws-back { padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+  font: 600 .78rem/1 var(--font-display); letter-spacing: .06em; cursor: pointer; text-decoration: none; }
+.ws-back:hover { color: var(--gold-light); border-color: var(--gold-dark); }
+.ws-title { font: 700 1.15rem/1 var(--font-display); color: var(--gold-light); letter-spacing: .04em; white-space: nowrap; }
+.ws-sep { width: 1px; height: 26px; background: var(--border); }
+.set-pick { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.set-pick select, .set-name { padding: 8px 11px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-dark);
+  color: var(--text-bright); font: 600 .9rem/1.2 var(--font-ui); }
+.set-name { min-width: 120px; max-width: 220px; flex: 0 1 220px; }
+.set-name:focus, .set-pick select:focus { outline: none; border-color: var(--arcane); box-shadow: 0 0 0 3px rgba(var(--arcane-rgb), .15); }
+.ibtn { width: 36px; height: 36px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; color: var(--text);
+  cursor: pointer; display: grid; place-items: center; flex: 0 0 auto; }
+.ibtn:hover:not(:disabled) { color: var(--gold-light); border-color: var(--gold-dark); background: rgba(var(--gold-rgb), .06); }
+.ibtn:disabled { opacity: .35; cursor: default; }
+.ibtn svg { width: 17px; height: 17px; }
+.tbtn { padding: 9px 14px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; color: var(--text);
+  font: 700 .74rem/1 var(--font-display); letter-spacing: .06em; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.tbtn:hover { color: var(--gold-light); border-color: var(--gold-dark); }
+.tbtn.gold { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--on-accent); border-color: transparent; }
+.tbtn.gold:hover { filter: brightness(1.08); color: var(--on-accent); }
+.active-pill { font: 600 .7rem/1 var(--font-ui); padding: 5px 9px; border-radius: 20px; color: var(--green-soft);
+  background: rgba(var(--green-rgb), .1); border: 1px solid rgba(var(--green-rgb), .35); white-space: nowrap; }
 
-  /* Set-Leiste */
-  .setbar{
-    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
-    background:var(--bg-panel); border:1px solid var(--border);
-    border-radius:12px; padding:10px 12px; margin-bottom:18px;
-  }
-  .setbar-lbl{
-    font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--gold-dark); margin-right:2px;
-  }
-  .set-chip{
-    display:flex; align-items:center; gap:7px;
-    padding:7px 13px; border-radius:8px;
-    background:var(--bg-deep); border:1px solid var(--border);
-    color:var(--text-dim); font-size:.84rem;
-    cursor:pointer; transition:all .14s ease;
-  }
-  .set-chip:hover{ border-color:var(--arcane-dim); color:var(--text-bright); }
-  .set-chip.on{
-    background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-    border-color:transparent; color:var(--on-accent); font-weight:600;
-  }
-  .set-chip .x{ opacity:.5; font-size:.8rem; }
-  .set-chip .x:hover{ opacity:1; color:var(--red); }
-  .set-add{
-    padding:7px 13px; border-radius:8px;
-    background:transparent; border:1px dashed var(--gold-dark);
-    color:var(--gold-dark); font-size:.84rem; cursor:pointer;
-    transition:all .14s ease;
-  }
-  .set-add:hover{ border-color:var(--gold); color:var(--gold); }
+/* Hauptbereich */
+.ws-main { display: grid; grid-template-columns: 96px 1fr minmax(360px, 420px); min-height: 0; }
 
-  /* Hauptbereich: Würfelwahl | Vorschau | Einstellungen */
-  .layout{ display:grid; grid-template-columns:104px 1fr 340px; gap:18px; align-items:start; }
+/* Würfel-Leiste */
+.rail { display: flex; flex-direction: column; gap: 6px; padding: 14px 10px; border-right: 1px solid var(--border); overflow-y: auto; }
+.scope { display: grid; grid-template-columns: 1fr; gap: 4px; margin-bottom: 8px; }
+.scope button { padding: 7px 4px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+  font: 600 .64rem/1.2 var(--font-ui); cursor: pointer; }
+.scope button.on { color: var(--on-accent); background: var(--gold); border-color: var(--gold); }
+.die-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px 8px; border-radius: var(--radius-lg);
+  border: 1px solid transparent; background: transparent; color: var(--text-dim); cursor: pointer; }
+.die-btn svg { width: 34px; height: 34px; }
+.die-btn b { font: 700 .72rem/1 var(--font-display); letter-spacing: .04em; }
+.die-btn:hover { color: var(--text-bright); background: rgba(var(--hi-rgb), .04); }
+.die-btn.on { color: var(--gold-light); border-color: rgba(var(--gold-rgb), .5); background: rgba(var(--gold-rgb), .08); box-shadow: 0 0 18px rgba(var(--gold-rgb), .12); }
 
-  /* Links: die sieben Würfel */
-  .dielist{ display:flex; flex-direction:column; gap:7px; }
-  .die-btn{
-    display:flex; flex-direction:column; align-items:center; gap:3px;
-    padding:11px 6px; border-radius:10px;
-    background:var(--bg-panel); border:1px solid var(--border);
-    color:var(--text-dim); cursor:pointer;
-    transition:all .14s ease;
-  }
-  .die-btn:hover{ border-color:var(--arcane-dim); color:var(--text-bright); transform:translateX(2px); }
-  .die-btn.on{
-    background:linear-gradient(135deg,var(--bg-panel2),var(--bg-panel));
-    border-color:var(--gold); color:var(--gold);
-    box-shadow:var(--glow-gold);
-  }
-  .die-btn .ic{ font-size:1.25rem; }
-  .die-btn .nm{ font-family:'Cinzel',serif; font-size:.8rem; font-weight:600; }
-  .die-btn .st{ font-size:.58rem; opacity:.65; }
+/* Bühne */
+.stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 0; overflow: hidden;
+  background: radial-gradient(ellipse 55% 50% at 50% 42%, rgba(var(--gold-rgb), .10), transparent 70%),
+              radial-gradient(ellipse 70% 30% at 50% 100%, rgba(var(--arcane-rgb), .07), transparent 70%); }
+.stage::before { content: ""; position: absolute; left: 50%; top: 0; width: 560px; height: 100%; transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(var(--hi-rgb), .06), transparent 55%); clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%); pointer-events: none; }
+.floor { position: absolute; left: 50%; top: calc(50% + 175px); width: 340px; height: 46px; transform: translateX(-50%); border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(var(--shade-rgb), .55), transparent 70%); filter: blur(4px); pointer-events: none; }
+.stage-canvas { position: relative; width: 460px; height: 460px; }
+.stage-info { position: absolute; top: 18px; left: 22px; }
+.stage-info b { display: block; font: 700 1.6rem/1 var(--font-display); color: var(--text-bright); }
+.stage-info span { font-size: .84rem; color: var(--text-dim); }
+.stage-actions { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.hint-drag { position: absolute; top: 22px; right: 22px; font-size: .78rem; color: var(--text-dim); }
 
-  /* Mitte: Live-Vorschau */
-  .stage{
-    position:relative;
-    background:
-      radial-gradient(ellipse at 50% 35%, rgba(var(--arcane-rgb),.05), transparent 55%),
-      linear-gradient(180deg,var(--bg-panel2),var(--bg-panel));
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:18px;
-    min-height:430px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-  }
-  .stage::before{
-    content:""; position:absolute; inset:0;
-    border-radius:16px; pointer-events:none;
-    background:linear-gradient(90deg,transparent,rgba(var(--arcane-rgb),.09),transparent) top/100% 1px no-repeat;
-  }
-  #preview-canvas{ width:340px; height:340px; display:block; }
-  .stage-hint{
-    font-size:.72rem; color:var(--text-dim);
-    margin-top:6px; letter-spacing:.03em;
-  }
-  .stage-actions{ display:flex; gap:9px; margin-top:14px; }
+/* Einstellungen */
+.insp { border-left: 1px solid var(--border); overflow-y: auto; padding: 14px 16px 60px; background: rgba(var(--panel-rgb), .35); }
+.sec { border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 10px; background: rgba(var(--hi-rgb), .02); overflow: hidden; }
+.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 9px; padding: 13px 14px;
+  font: 700 .76rem/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.sec > summary::-webkit-details-marker { display: none; }
+.sec > summary::after { content: ""; margin-left: auto; width: 8px; height: 8px; border-right: 2px solid var(--text-dim); border-bottom: 2px solid var(--text-dim);
+  transform: rotate(45deg); transition: transform .2s; }
+.sec[open] > summary::after { transform: rotate(225deg); }
+.sec > summary svg { width: 16px; height: 16px; }
+.sec-body { padding: 2px 14px 14px; }
+.sec[open] .sec-body { animation: fx-fade-up .25s ease both; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; }
+.row > span { font-size: .88rem; }
+.row i { display: block; font-style: normal; font-size: .72rem; color: var(--text-dim); }
+.lbl { font: 700 .66rem/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin: 12px 0 7px; }
 
-  /* Rechts: Einstellungen */
-  .panel{
-    background:var(--bg-panel); border:1px solid var(--border);
-    border-radius:14px; padding:16px; margin-bottom:14px;
-  }
-  .panel h3{
-    font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.09em;
-    text-transform:uppercase; color:var(--gold-dark);
-    margin-bottom:11px; padding-bottom:7px;
-    border-bottom:1px solid var(--border);
-  }
+/* Stil-Galerie */
+.styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.style-card { padding: 6px 6px 8px; border-radius: var(--radius); border: 1px solid var(--border); background: rgba(var(--hi-rgb), .02); cursor: pointer; text-align: center; color: inherit; }
+.style-card:hover { border-color: rgba(var(--gold-rgb), .55); transform: translateY(-1px); }
+.style-card img, .style-card .ph { width: 100%; aspect-ratio: 1; border-radius: 8px; display: block; object-fit: contain;
+  background: radial-gradient(circle at 50% 40%, rgba(var(--hi-rgb), .06), transparent 70%); }
+.style-card b { display: block; font: 700 .7rem/1.2 var(--font-display); color: var(--text-bright); margin-top: 5px; }
+.style-card small { font-size: .62rem; color: var(--text-dim); }
 
-  /* Oberflächen + Muster: Kachelwahl */
-  .tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
-  .tile{
-    display:flex; flex-direction:column; align-items:center; gap:3px;
-    padding:9px 4px; border-radius:9px;
-    background:var(--bg-deep); border:1px solid var(--border);
-    color:var(--text-dim); cursor:pointer;
-    transition:all .13s ease;
-  }
-  .tile:hover{ border-color:var(--arcane-dim); color:var(--text-bright); }
-  .tile.on{
-    background:rgba(var(--gold-rgb),.13); border-color:var(--gold-dark);
-    color:var(--gold); font-weight:600;
-  }
-  .tile .ic{ font-size:1.05rem; }
-  .tile .lb{ font-size:.66rem; text-align:center; line-height:1.2; }
+/* Material */
+.mats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+.mat { padding: 8px 2px 7px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--text-dim);
+  display: flex; flex-direction: column; align-items: center; gap: 6px; font: 600 .62rem/1.1 var(--font-ui); }
+.mat:hover { color: var(--text-bright); border-color: rgba(var(--gold-rgb), .45); }
+.mat.on { color: var(--gold-light); border-color: var(--gold); background: rgba(var(--gold-rgb), .08); }
+.orb { width: 30px; height: 30px; border-radius: 50%; box-shadow: inset -4px -5px 10px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.4); }
+.orb.plastic { background: radial-gradient(circle at 35% 30%, #fff8 0 8%, #d4b578 30%, #8a6d35 100%); }
+.orb.metal { background: conic-gradient(from 200deg, #6d6f78, #e8eaf0, #8a8c96, #f4f6fa, #6d6f78); }
+.orb.glass { background: radial-gradient(circle at 35% 30%, #fff 0 6%, #a8d8e855 35%, #1a3a4a88 100%); border: 1px solid #a8d8e866; }
+.orb.crystal { background: conic-gradient(from 30deg, #9ad8ff, #c9a6ff, #8af0d0, #ffd9a6, #9ad8ff); opacity: .85; }
+.orb.stone { background: radial-gradient(circle at 35% 30%, #8a8a90, #3a3a40 70%), repeating-radial-gradient(circle, #0002 0 1px, transparent 1px 3px); }
+.orb.marble { background: linear-gradient(130deg, #f2f0ea 30%, #2a2a30 32%, #f2f0ea 36%, #e0ddd5 60%, #4a4a50 62%, #f2f0ea 66%); }
+.orb.wood { background: repeating-linear-gradient(100deg, #a06838 0 4px, #7a4a22 4px 6px, #b07848 6px 10px); }
+.orb.pearl { background: radial-gradient(circle at 35% 30%, #fff 0 10%, #f2ece4 30%, #d9cdea 60%, #c8e6e0 100%); }
+.orb.holo { background: conic-gradient(from 0deg, #ff7ad9, #7ad9ff, #b6ff7a, #ffe07a, #ff7ad9); }
+.orb.obsidian { background: radial-gradient(circle at 35% 28%, #fff9 0 6%, #2a2430 25%, #050407 80%); }
 
-  /* Farbwahl */
-  .colorrow{ display:flex; align-items:center; gap:9px; margin-bottom:9px; }
-  .colorrow label{ flex:1; font-size:.79rem; color:var(--text); }
-  .swatches{ display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
-  .sw{
-    width:23px; height:23px; border-radius:6px;
-    border:1px solid rgba(var(--hi-rgb),.14);
-    cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;
-  }
-  .sw:hover{ transform:scale(1.14); box-shadow:0 0 0 2px rgba(var(--arcane-rgb),.35); }
-  .sw.on{ box-shadow:0 0 0 2px var(--gold); }
-  input[type=color]{
-    width:44px; height:30px; padding:0;
-    background:transparent; border:1px solid var(--border);
-    border-radius:7px; cursor:pointer;
-  }
-  .hint-inline{
-    display:block; font-size:.66rem; color:var(--text-dim); font-weight:400;
-  }
-  .mini-x{
-    padding:5px 9px; border-radius:6px;
-    background:var(--bg-deep); border:1px solid var(--border);
-    color:var(--text-dim); font-size:.68rem; cursor:pointer;
-    transition:all .13s ease;
-  }
-  .mini-x:hover{ border-color:var(--arcane-dim); color:var(--text-bright); }
+/* Farben */
+.palettes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.pal { height: 34px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; display: flex; overflow: hidden; padding: 0; }
+.pal i { flex: 1; } .pal i:last-child { flex: .5; }
+.pal:hover { transform: translateY(-1px); border-color: var(--gold); }
+.crow { display: flex; align-items: center; gap: 8px; }
+.crow input[type=color] { width: 40px; height: 30px; padding: 0; border: 1px solid var(--border); border-radius: 8px; background: none; cursor: pointer; }
+.crow input[type=color]::-webkit-color-swatch-wrapper { padding: 2px; } .crow input[type=color]::-webkit-color-swatch { border: none; border-radius: 6px; }
+.crow code { font: 500 .72rem/1 var(--font-mono); color: var(--text-dim); width: 62px; }
+.xbtn { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; font-size: .7rem; }
+.xbtn:hover { color: var(--red-soft); border-color: var(--red); }
 
-  /* Schieberegler */
-  .slider-row{
-    display:flex; align-items:center; gap:9px; margin-bottom:9px;
-  }
-  .slider-row label{
-    flex:0 0 92px; font-size:.79rem; color:var(--text);
-  }
-  .slider-row input[type=range]{
-    flex:1; height:4px; -webkit-appearance:none; appearance:none;
-    background:var(--bg-deep); border-radius:3px; outline:none;
-    border:1px solid var(--border);
-  }
-  .slider-row input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none; appearance:none;
-    width:15px; height:15px; border-radius:50%;
-    background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-    cursor:pointer; border:none;
-  }
-  .slider-row input[type=range]::-moz-range-thumb{
-    width:15px; height:15px; border-radius:50%;
-    background:var(--gold); cursor:pointer; border:none;
-  }
-  .slider-val{
-    flex:0 0 42px; text-align:right;
-    font-size:.74rem; color:var(--gold); font-family:'Cinzel',serif;
-  }
+/* Muster & Schriften */
+.patterns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+.pat { border-radius: var(--radius); border: 1px solid var(--border); background: transparent; cursor: pointer; padding: 4px; color: var(--text-dim); font: 600 .6rem/1.1 var(--font-ui); }
+.pat img { width: 100%; aspect-ratio: 1; border-radius: 6px; display: block; margin-bottom: 4px; }
+.pat:hover { border-color: rgba(var(--gold-rgb), .45); color: var(--text-bright); }
+.pat.on { border-color: var(--gold); color: var(--gold-light); box-shadow: 0 0 0 1px var(--gold); }
+.fonts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+.font { padding: 8px 2px 6px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--text-bright); }
+.font b { display: block; font-size: 1.4rem; line-height: 1.1; font-weight: 700; }
+.font small { font: 500 .58rem/1 var(--font-ui); color: var(--text-dim); }
+.font.on { border-color: var(--gold); background: rgba(var(--gold-rgb), .08); }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.seg button { padding: 7px 11px; border: none; background: transparent; color: var(--text-dim); font: 600 .72rem/1 var(--font-ui); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button.on { background: rgba(var(--gold-rgb), .16); color: var(--gold-light); }
+input[type=range] { accent-color: var(--gold); width: 150px; }
 
-  /* Sound-Zeile unter der Bühne */
-  .sound-row{
-    display:flex; align-items:center; gap:12px;
-    margin-top:12px; padding-top:12px;
-    border-top:1px solid var(--border);
-    width:100%; max-width:340px;
-  }
-  .sound-toggle{
-    display:flex; align-items:center; gap:7px;
-    font-size:.79rem; color:var(--text-dim); cursor:pointer;
-  }
-  .sound-toggle input{ width:15px; height:15px; cursor:pointer; }
-  .sound-row input[type=range]{
-    flex:1; height:4px; -webkit-appearance:none; appearance:none;
-    background:var(--bg-deep); border:1px solid var(--border);
-    border-radius:3px; outline:none;
-  }
-  .sound-row input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none; appearance:none;
-    width:13px; height:13px; border-radius:50%;
-    background:var(--arcane); cursor:pointer; border:none;
-  }
+/* Neues-Set-Fenster */
+.ns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 
-  .btn{
-    padding:10px 18px; border-radius:9px; border:none;
-    font-family:inherit; font-size:.87rem; font-weight:600;
-    cursor:pointer; transition:all .14s ease;
-  }
-  .btn-gold{ background:linear-gradient(135deg,var(--gold),var(--gold-dark)); color:var(--on-accent); }
-  .btn-gold:hover{ filter:brightness(1.09); }
-  .btn-dark{ background:var(--bg-panel2); border:1px solid var(--border); color:var(--text); }
-  .btn-dark:hover{ border-color:var(--arcane-dim); }
-  .btn-wide{ width:100%; }
-
-  .toast{
-    position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(80px);
-    background:var(--bg-panel2); border:1px solid var(--gold-dark);
-    color:var(--gold); padding:11px 22px; border-radius:10px;
-    font-size:.88rem; z-index:9000; opacity:0;
-    transition:all .22s cubic-bezier(.2,.8,.3,1);
-    box-shadow:0 8px 30px rgba(var(--shade-rgb),.5);
-  }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
-  @media (max-width:1000px){
-    .layout{ grid-template-columns:1fr; }
-    .dielist{ flex-direction:row; flex-wrap:wrap; }
-  }
+@media (max-width: 1100px) { .ws-main { grid-template-columns: 80px 1fr 340px; } .stage-canvas { width: 360px; height: 360px; } .floor { top: calc(50% + 135px); } }
 </style>
 </head>
 <body>
-<div class="wrap">
-
-  <div class="top">
-    <div style="flex:1">
-      <h1>🎲 Würfel-Werkstatt</h1>
-      <div class="sub">Gestalte deine Würfel – Material und Farbe</div>
+<div class="ws">
+  <header class="ws-top">
+    <a class="ws-back" href="/menu">← Menü</a>
+    <div class="ws-title">Würfel-Werkstatt</div>
+    <div class="ws-sep"></div>
+    <div class="set-pick">
+      <select id="set-select" title="Set wechseln" onchange="loadSet(this.value)"></select>
+      <input class="set-name" id="set-name" maxlength="40" title="Set umbenennen" onchange="renameSet(this.value)">
+      <span class="active-pill" id="active-pill">Aktiv beim Würfeln</span>
     </div>
-    <a href="/play" class="back-btn" id="back-btn">← Zurück</a>
-  </div>
+    <button class="ibtn" id="btn-undo" title="Rückgängig (Strg+Z)" onclick="undo()"></button>
+    <button class="ibtn" id="btn-redo" title="Wiederholen (Strg+Y)" onclick="redo()"></button>
+    <button class="tbtn" onclick="surprise()" title="Zufälliger, stimmiger Look"><span id="ic-surprise"></span>Überrasch mich</button>
+    <button class="tbtn" onclick="duplicateSet()"><span id="ic-dup"></span>Duplizieren</button>
+    <button class="tbtn gold" onclick="openNewSet()"><span id="ic-new"></span>Neues Set</button>
+  </header>
 
-  <!-- Würfel-Sets -->
-  <div class="setbar">
-    <span class="setbar-lbl">Deine Sets</span>
-    <div id="set-list" style="display:flex;gap:7px;flex-wrap:wrap"></div>
-    <button class="set-add" onclick="addSet()">+ Neues Set</button>
-    <button class="set-add" onclick="DesignStudio.open('dice')">✦ Aus Vorlage</button>
-    <div style="flex:1"></div>
-    <span style="font-size:.72rem;color:var(--text-dim)">Das gewählte Set wird beim Würfeln benutzt.</span>
-  </div>
+  <main class="ws-main">
+    <aside class="rail">
+      <div class="scope" title="Gilt eine Änderung für alle Würfel des Sets oder nur für den gewählten?">
+        <button id="scope-all" class="on" onclick="setScope('all')">Alle Würfel</button>
+        <button id="scope-one" onclick="setScope('one')">Nur dieser</button>
+      </div>
+      <div id="die-rail"></div>
+    </aside>
 
-  <div class="layout">
-
-    <!-- Welcher Würfel wird gerade bearbeitet? -->
-    <div class="dielist" id="die-list"></div>
-
-    <!-- Live-Vorschau -->
-    <div class="stage">
-      <canvas id="preview-canvas" width="680" height="680"></canvas>
-      <div class="stage-hint">🖱 Zum Drehen ziehen – beim Loslassen dreht er sich weiter.</div>
+    <section class="stage">
+      <div class="stage-info"><b id="stage-die">W20</b><span id="stage-sub"></span></div>
+      <div class="hint-drag">Ziehen zum Drehen</div>
+      <div class="floor"></div>
+      <canvas id="preview-canvas" class="stage-canvas" style="width:460px;height:460px"></canvas>
       <div class="stage-actions">
-        <button class="btn btn-gold" onclick="doTestRoll()">🎲 Testwurf</button>
-        <button class="btn btn-dark" onclick="playSound()" title="So klingt dieses Material">🔊 Klang</button>
-        <button class="btn btn-dark" onclick="resetDie()">↺ Zurücksetzen</button>
+        <button class="tbtn gold" onclick="Dice3D.testRoll(current)"><span id="ic-roll"></span>Testwurf</button>
+        <button class="tbtn" onclick="rollSet()"><span id="ic-rollall"></span>Ganzes Set würfeln</button>
+        <button class="tbtn" onclick="testSound()"><span id="ic-sound"></span>Klang</button>
       </div>
-      <div class="sound-row">
-        <label class="sound-toggle">
-          <input type="checkbox" id="snd-on" onchange="toggleSound(this.checked)">
-          <span>Würfel-Geräusche</span>
-        </label>
-        <input type="range" id="snd-vol" min="0" max="1" step="0.05"
-               oninput="setSoundVolume(this.value)" title="Lautstärke">
-      </div>
-    </div>
+    </section>
 
-    <!-- Einstellungen -->
-    <div>
-      <div class="panel">
-        <h3>Oberfläche</h3>
-        <div class="tiles" id="surface-tiles"></div>
-      </div>
-
-      <div class="panel">
-        <h3>Farben</h3>
-        <div class="colorrow">
-          <label>Würfelkörper</label>
-          <input type="color" id="col-body" oninput="setColor('color', this.value)">
-        </div>
-        <div class="swatches" id="sw-body"></div>
-
-        <!-- Zweitfarbe/Verlauf: unsere Engine zeichnet die Fläche selbst und
-             kann einen Verlauf zwischen zwei Farben rendern. -->
-        <div class="colorrow" style="margin-top:13px">
-          <label>
-            Zweitfarbe
-            <span class="hint-inline">erzeugt einen Verlauf</span>
-          </label>
-          <input type="color" id="col-body2" oninput="setColor('color2', this.value)">
-          <button class="mini-x" onclick="setColor('color2', null)" title="Zweitfarbe entfernen">✕</button>
-        </div>
-        <div class="swatches" id="sw-body2"></div>
-
-        <!-- Zahlenfarbe: unsere Engine legt die Zahlen als eigene Ebene über den
-             Würfel, die Farbe ist frei wählbar. -->
-        <div class="colorrow" style="margin-top:13px">
-          <label>Zahlen</label>
-          <input type="color" id="col-num" oninput="setColor('numberColor', this.value)">
-        </div>
-        <div class="swatches" id="sw-num"></div>
-
-        <!-- Muster-Akzent: Zweitfarbe für die Muster. -->
-        <div class="colorrow" style="margin-top:13px">
-          <label>Muster-Akzent</label>
-          <input type="color" id="col-acc" oninput="setColor('accentColor', this.value)">
-        </div>
-        <div class="swatches" id="sw-acc"></div>
-      </div>
-
-      <!-- Muster: unsere Engine zeichnet die Muster selbst per Canvas. -->
-      <div class="panel">
-        <h3>Muster</h3>
-        <div class="tiles" id="pattern-tiles"></div>
-      </div>
-
-      <!-- Zahlen/Rahmen/Kanten: alle Feineinstellungen wirken jetzt, weil wir
-           die Flächen selbst zeichnen. -->
-      <div class="panel">
-        <h3>Zahlen</h3>
-        <div class="tiles" id="font-tiles" style="grid-template-columns:repeat(2,1fr);margin-bottom:12px"></div>
-
-        <div class="slider-row">
-          <label>Größe</label>
-          <input type="range" id="num-scale" min="0.5" max="1.5" step="0.05"
-                 oninput="setNumberScale(this.value)">
-          <span class="slider-val" id="num-scale-val">100%</span>
-        </div>
-
-        <div class="slider-row">
-          <label>Umrandung</label>
-          <input type="range" id="num-outline" min="0" max="0.2" step="0.01"
-                 oninput="setOutline(this.value)">
-          <span class="slider-val" id="num-outline-val">8%</span>
-        </div>
-
-        <div class="colorrow" style="margin-top:10px">
-          <label>Farbe der Umrandung</label>
-          <input type="color" id="col-outline" oninput="setColor('outlineColor', this.value)">
-          <button class="mini-x" onclick="setColor('outlineColor', null)" title="Automatisch wählen">auto</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h3>Rahmen auf den Flächen</h3>
-        <div class="tiles" id="border-tiles" style="grid-template-columns:repeat(4,1fr)"></div>
-        <div id="border-opts" style="display:none;margin-top:11px">
-          <div class="colorrow">
-            <label>Farbe</label>
-            <input type="color" id="col-border" oninput="setColor('borderColor', this.value)">
-          </div>
-          <div class="slider-row" style="margin-top:6px">
-            <label>Stärke</label>
-            <input type="range" id="border-width" min="3" max="18" step="1"
-                   oninput="setBorderWidth(this.value)">
-            <span class="slider-val" id="border-width-val">8</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h3>Kanten färben</h3>
-        <div class="tiles" id="edge-tiles" style="grid-template-columns:repeat(3,1fr)"></div>
-        <div id="edge-opts" style="display:none;margin-top:11px">
-          <div class="colorrow">
-            <label>Farbe der Kanten</label>
-            <input type="color" id="col-edge" oninput="setColor('edgeColor', this.value)">
-          </div>
-          <div class="swatches" id="sw-edge"></div>
-        </div>
-      </div>
-
-      <button class="btn btn-dark btn-wide" onclick="applyToAll()"
-              title="Überträgt das aktuelle Aussehen auf alle Würfel dieses Sets">
-        ⇄ Auf alle Würfel übertragen
-      </button>
-    </div>
-
-  </div>
+    <aside class="insp" id="insp"></aside>
+  </main>
 </div>
 
-<div class="toast" id="toast"></div>
-
-<!-- 3D-Würfel: KOMPLETT EIGENE Engine. dice-material.js liefert zusätzlich die
-     Daten für die Werkstatt-Oberfläche (Farbpaletten, Oberflächen-/Muster-
-     Listen, Schriftarten). Reihenfolge: libs → Bausteine → Engine. -->
 <script src="/static/lib/three.min.js"></script>
 <script src="/static/lib/cannon-es.min.js"></script>
 <script src="/static/lib/RoomEnvironment.js"></script>
@@ -423,376 +211,284 @@
 <script src="/static/js/dice-sound.js"></script>
 <script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/dice3d.js"></script>
+<script src="/static/js/icons.js"></script>
 <script>
-// ── Zustand der Werkstatt ────────────────────────────────────────────────
-const DICE_TYPES = [
-  { sides:4,   icon:"▲", name:"W4"   },
-  { sides:6,   icon:"⬛", name:"W6"   },
-  { sides:8,   icon:"◆", name:"W8"   },
-  { sides:10,  icon:"◈", name:"W10"  },
-  { sides:12,  icon:"⬟", name:"W12"  },
-  { sides:20,  icon:"⬢", name:"W20"  },
-  { sides:100, icon:"⬡", name:"W100" },
-];
-
+"use strict";
+/* ══════════════════════════════════════════════════════════════════════════
+   WÜRFEL-WERKSTATT – Logik
+   • Ein Set = 7 Würfel (W4 … W100), jeder mit eigenem Aussehen.
+   • „Alle Würfel": Änderungen gelten für das ganze Set, „Nur dieser": nur
+     für den gewählten Würfel.
+   • Stil = Startpunkt (Vorlagen aus dice-presets.js), alles darunter
+     verfeinert ihn – es gibt keine zweite Stelle für Würfel-Looks.
+   • Rückgängig/Wiederholen, Vorschaubild je Set (Dice3D.snapshot).
+   • Löschen und Teilen von Sets: im Launcher (eine Stelle).
+   ══════════════════════════════════════════════════════════════════════════ */
+const SIDES = [4, 6, 8, 10, 12, 20, 100];
 const FONTS = [
-  { id:"'Cinzel', Georgia, serif",             label:"Fantasy"    },
-  { id:"'Uncial Antiqua', Georgia, serif",     label:"Altertümlich" },
-  { id:"'Orbitron', sans-serif",               label:"Arkan"      },
-  { id:"'JetBrains Mono', monospace",          label:"Technisch"  },
-  { id:"'Crimson Pro', Georgia, serif",        label:"Klassisch"  },
-  { id:"'Segoe UI', system-ui, sans-serif",    label:"Klar"       },
+  { id: "'Cinzel', Georgia, serif",                    label: "Fantasy" },
+  { id: "'Cinzel Decorative', 'Cinzel', serif",         label: "Zier" },
+  { id: "'Uncial Antiqua', Georgia, serif",             label: "Altertum" },
+  { id: "'Crimson Pro', Georgia, serif",                label: "Klassisch" },
+  { id: "'Orbitron', sans-serif",                       label: "Futur" },
+  { id: "'JetBrains Mono', monospace",                  label: "Technisch" },
+  { id: "'Segoe UI', system-ui, sans-serif",            label: "Klar" },
+  { id: "Georgia, serif",                               label: "Buch" },
 ];
+// Abgestimmte Farbpaletten: Körper, Zweitfarbe, Zahlen
+const PALETTES = [
+  { n: "Königsgold", c: ["#c8a24a", null, "#1b1407"] },   { n: "Mitternacht", c: ["#141a33", "#3a2a6a", "#e8c46a"] },
+  { n: "Blutmond", c: ["#5a0f12", "#1a0405", "#f1dcc0"] }, { n: "Smaragd", c: ["#0f5a3f", "#0a2a20", "#e9f5d0"] },
+  { n: "Gletscher", c: ["#bfe6ff", "#ffffff", "#12324f"] }, { n: "Neon", c: ["#0a0f1a", "#1a0a2a", "#2fe3ff"] },
+  { n: "Synthwave", c: ["#2a0a3a", "#ff3ea5", "#fff3a0"] }, { n: "Elfenbein", c: ["#efe4c8", null, "#2a1a0a"] },
+  { n: "Kupfer", c: ["#b0613a", "#5a2a14", "#fff0dc"] },    { n: "Schiefer", c: ["#3a4048", "#1e2328", "#e8eef4"] },
+];
+const DIE_SVG = {
+  4:   '<polygon points="12,3 21,20 3,20" />',
+  6:   '<rect x="4" y="4" width="16" height="16" rx="2" />',
+  8:   '<polygon points="12,2 21,12 12,22 3,12" /><line x1="3" y1="12" x2="21" y2="12" />',
+  10:  '<polygon points="12,2 21,10 12,22 3,10" /><polyline points="3,10 12,13 21,10" /><line x1="12" y1="13" x2="12" y2="22" />',
+  12:  '<polygon points="12,2 21,8.5 18,20 6,20 3,8.5" /><polygon points="12,7 16,10 14.5,15 9.5,15 8,10" />',
+  20:  '<polygon points="12,2 21,7 21,17 12,22 3,17 3,7" /><polygon points="12,6 17,15 7,15" />',
+  100: '<polygon points="12,2 21,10 12,22 3,10" /><text x="12" y="15" text-anchor="middle" font-size="6" stroke="none" fill="currentColor">%</text>',
+};
+const dieSvg = s => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">${DIE_SVG[s]}</svg>`;
+// DicePresets ist eine globale const (kein window-Eintrag) → so abfragen
+const presetList = () => (typeof DicePresets !== "undefined" ? DicePresets : []);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const ic = n => (typeof Icons !== "undefined" ? Icons.svg(n) : "");
 
-let current = 20;          // welcher Würfel wird bearbeitet
+let current = 20, scope = "all", set = null, history = [], future = [];
 const canvas = document.getElementById("preview-canvas");
+const styleOf = sides => Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, (set.dice || {})[sides] || {});
 
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(t._h);
-  t._h = setTimeout(()=>t.classList.remove("show"), 2000);
+// ── Laden, Speichern, Verlauf ───────────────────────────────────────────────
+function loadSet(id) {
+  const all = Dice3D.getSets();
+  const s = all.find(x => x.id === id) || Dice3D.getActiveSet();
+  set = JSON.parse(JSON.stringify(s));
+  SIDES.forEach(sd => { set.dice[sd] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, set.dice[sd] || set.dice[20] || {}); });
+  Dice3D.setActiveSet(set.id);           // die Werkstatt zeigt immer das Set, mit dem gewürfelt wird
+  history = []; future = [];
+  renderAll();
 }
-
-// ── Zugriff auf das aktive Set ───────────────────────────────────────────
-function activeSet(){ return Dice3D.getActiveSet(); }
-function dieStyle(sides){
-  const set = activeSet();
-  if (!set.dice[sides]) set.dice[sides] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE);
-  return set.dice[sides];
+let saveT = 0, thumbT = 0;
+function persist() {
+  clearTimeout(saveT); saveT = setTimeout(() => Dice3D.saveSet(set), 250);
+  clearTimeout(thumbT); thumbT = setTimeout(makeThumb, 1400);
 }
-/** Ändert das Aussehen des gewählten Würfels.
- *  @param {boolean} redraw  Kacheln neu zeichnen? (Bei Schiebereglern nicht –
- *                           sonst verliert der Regler beim Ziehen den Fokus.) */
-function updateStyle(patch, redraw = true){
-  const set = activeSet();
-  set.dice[current] = Object.assign({}, dieStyle(current), patch);
-  Dice3D.saveSet(set);
-  refreshPreview();
-  renderDieList();          // die kleinen Farbpunkte in der Liste auffrischen
-  if (redraw) syncControls();   // Markierung springt sofort auf die neue Kachel
+async function makeThumb() {
+  try { const url = await Dice3D.snapshot(20, set.dice[20], 140); if (url) { set.thumb = url; Dice3D.saveSet(set); renderSetSelect(); } } catch (e) {}
 }
-
-// ── Sets ─────────────────────────────────────────────────────────────────
-function renderSets(){
-  const box = document.getElementById("set-list");
-  const sets = Dice3D.getSets();
-  const act = activeSet();
-  box.innerHTML = sets.map(s => `
-    <div class="set-chip ${s.id===act.id?"on":""}" onclick="pickSet('${s.id}')">
-      <span>${escapeHtml(s.name)}</span>
-      ${sets.length>1 ? `<span class="x" onclick="event.stopPropagation();removeSet('${s.id}')" title="Set löschen">✕</span>` : ""}
-    </div>`).join("");
+function snapshot() { return JSON.stringify(set.dice); }
+function apply(patch, opts) {
+  history.push(snapshot()); if (history.length > 60) history.shift(); future = [];
+  const targets = (opts && opts.all) || scope === "all" ? SIDES : [current];
+  targets.forEach(sd => { set.dice[sd] = Object.assign({}, set.dice[sd], patch); });
+  persist(); refresh();
 }
-// Vorlage im Design-Studio gewählt → Werkstatt sofort auffrischen
-window.addEventListener("vtt:dice-set", () => { renderSets(); renderDieList(); refreshPreview(); syncControls(); });
-
-function pickSet(id){
-  Dice3D.setActiveSet(id);
-  renderSets(); renderDieList(); refreshPreview(); syncControls();
-}
-async function addSet(){
-  const name = await Dialog.prompt("Wie soll das neue Set heißen?", "",
-    { title:"Neues Würfel-Set", icon:"🎲", okText:"Anlegen", placeholder:"z. B. Drachenglas" });
-  if (!name || !name.trim()) return;
-  const set = Dice3D.newSet(name.trim());
-  Dice3D.setActiveSet(set.id);
-  renderSets(); renderDieList(); refreshPreview(); syncControls();
-  toast("✅ Set angelegt");
-}
-async function removeSet(id){
-  const s = Dice3D.getSets().find(x => x.id===id);
-  if (!await Dialog.confirmDanger(`Das Set „${s?s.name:"?"}“ wird gelöscht.`,
-      { title:"Set löschen?", icon:"🎲" })) return;
-  if (Dice3D.deleteSet(id)) {
-    renderSets(); renderDieList(); refreshPreview(); syncControls();
-    toast("🗑 Set gelöscht");
-  }
-}
-
-// ── Würfel-Liste links ───────────────────────────────────────────────────
-function renderDieList(){
-  const box = document.getElementById("die-list");
-  box.innerHTML = DICE_TYPES.map(d => {
-    const st = dieStyle(d.sides);
-    return `
-    <div class="die-btn ${d.sides===current?"on":""}" onclick="pickDie(${d.sides})">
-      <span class="ic" style="color:${st.color}">${d.icon}</span>
-      <span class="nm">${d.name}</span>
-      <span class="st">${surfaceLabel(st.surface)}</span>
-    </div>`;
-  }).join("");
-}
-function surfaceLabel(id){
-  const s = DiceMaterial.SURFACES[id];
-  return s ? s.label : "Kunststoff";
-}
-function pickDie(sides){
-  current = sides;
-  renderDieList(); refreshPreview(); syncControls();
-}
-
-// ── Einstellungs-Kacheln ─────────────────────────────────────────────────
-function renderSurfaces(){
-  const box = document.getElementById("surface-tiles");
-  const st = dieStyle(current);
-  box.innerHTML = Object.entries(DiceMaterial.SURFACES).map(([id, s]) => `
-    <div class="tile ${st.surface===id?"on":""}" onclick="pickSurface('${id}')">
-      <span class="ic">${s.icon}</span>
-      <span class="lb">${s.label}</span>
-    </div>`).join("");
-}
-
-/** Wechselt das Material – und schlägt dazu passende Farben vor.
- *  (Ein goldener Metallwürfel sähe seltsam aus, ein durchsichtiges Glas in
- *  Dunkelbraun ebenfalls. Jedes Material bringt eigene Vorgaben mit.) */
-function pickSurface(id){
-  const surf = DiceMaterial.SURFACES[id];
-  const st = dieStyle(current);
-  const patch = { surface: id };
-
-  // Nur vorschlagen, wenn der Nutzer noch die Standardfarben hat –
-  // eigene Farbwahl wird nicht überschrieben.
-  const isDefault = (st.color === Dice3D.DEFAULT_DIE_STYLE.color);
-  const changedSurface = (st.surface !== id);
-
-  if (surf && changedSurface && (isDefault || _autoColors)) {
-    if (surf.defaultColor)   patch.color       = surf.defaultColor;
-    if (surf.defaultColor2)  patch.color2      = surf.defaultColor2;
-    else if (!surf.dualColor) patch.color2     = null;
-    if (surf.defaultNumber)  patch.numberColor = surf.defaultNumber;
-  }
-  updateStyle(patch);
-}
-// Solange der Nutzer die Farben nicht selbst angefasst hat, dürfen wir sie
-// beim Materialwechsel anpassen.
-let _autoColors = true;
-function renderPatterns(){
-  const box = document.getElementById("pattern-tiles");
-  const st = dieStyle(current);
-  box.innerHTML = Object.entries(DiceMaterial.PATTERNS).map(([id, p]) => `
-    <div class="tile ${st.pattern===id?"on":""}" onclick="updateStyle({pattern:'${id}'})">
-      <span class="ic">${p.icon}</span>
-      <span class="lb">${p.label}</span>
-    </div>`).join("");
-}
-function renderFonts(){
-  const box = document.getElementById("font-tiles");
-  const st = dieStyle(current);
-  // Über den Index gehen: Der Schriftname enthält Anführungszeichen
-  // ('Orbitron', sans-serif) und würde das onclick-Attribut zerbrechen.
-  box.innerHTML = FONTS.map((f, i) => `
-    <div class="tile ${st.font===f.id?"on":""}" onclick="pickFont(${i})">
-      <span class="lb" style="font-family:${f.id};font-size:.9rem">123</span>
-      <span class="lb">${f.label}</span>
-    </div>`).join("");
-}
-function pickFont(i){
-  const f = FONTS[i];
-  if (!f) return;
-  updateStyle({ font: f.id });
-}
-
-// ── Farben ───────────────────────────────────────────────────────────────
-function renderSwatches(){
-  const st = dieStyle(current);
-  const build = (boxId, key) => {
-    const box = document.getElementById(boxId);
-    if (!box) return;
-    box.innerHTML = DiceMaterial.PRESET_COLORS.map(c => `
-      <div class="sw ${st[key]===c?"on":""}" style="background:${c}"
-           onclick="setColor('${key}','${c}')" title="${c}"></div>`).join("");
-  };
-  build("sw-body",  "color");
-  build("sw-body2", "color2");
-  build("sw-num",   "numberColor");
-  build("sw-acc",   "accentColor");
-}
-function setColor(key, value){
-  // Sobald der Nutzer selbst eine Farbe wählt, schlagen wir beim
-  // Materialwechsel keine mehr vor – seine Wahl hat Vorrang.
-  if (key === "color" || key === "color2" || key === "numberColor") {
-    _autoColors = false;
-  }
-  updateStyle({ [key]: value }, false);
-  renderSwatches();
-  renderEdges();
-}
-
-// ── Rahmen auf den Flächen ───────────────────────────────────────────────
-const BORDERS = [
-  { id:"none",   icon:"○",  label:"Ohne"    },
-  { id:"solid",  icon:"◯",  label:"Linie"   },
-  { id:"glow",   icon:"◉",  label:"Leuchten"},
-  { id:"dashed", icon:"◌",  label:"Gestrichelt" },
-];
-function renderBorders(){
-  const box = document.getElementById("border-tiles");
-  const st = dieStyle(current);
-  box.innerHTML = BORDERS.map(b => `
-    <div class="tile ${(st.border||"none")===b.id?"on":""}" onclick="updateStyle({border:'${b.id}'})">
-      <span class="ic">${b.icon}</span>
-      <span class="lb">${b.label}</span>
-    </div>`).join("");
-  const opts = document.getElementById("border-opts");
-  opts.style.display = (st.border && st.border !== "none") ? "block" : "none";
-  document.getElementById("col-border").value = st.borderColor || "#f0d79c";
-  document.getElementById("border-width").value = st.borderWidth ?? 8;
-  document.getElementById("border-width-val").textContent = String(st.borderWidth ?? 8);
-}
-function setBorderWidth(v){
-  const n = parseInt(v);
-  document.getElementById("border-width-val").textContent = String(n);
-  updateStyle({ borderWidth: n }, false);
-}
-
-// ── Rand an den Kanten ───────────────────────────────────────────────────
-const EDGES = [
-  { id:"none",   icon:"○", label:"Ohne"   },
-  { id:"subtle", icon:"◇", label:"Dezent" },
-  { id:"bold",   icon:"◈", label:"Kräftig"},
-];
-function renderEdges(){
-  const box = document.getElementById("edge-tiles");
-  const st = dieStyle(current);
-  box.innerHTML = EDGES.map(e => `
-    <div class="tile ${(st.edges||"none")===e.id?"on":""}" onclick="updateStyle({edges:'${e.id}'})">
-      <span class="ic">${e.icon}</span>
-      <span class="lb">${e.label}</span>
-    </div>`).join("");
-  const opts = document.getElementById("edge-opts");
-  opts.style.display = (st.edges && st.edges !== "none") ? "block" : "none";
-  document.getElementById("col-edge").value = st.edgeColor || "#f0d79c";
-  const sw = document.getElementById("sw-edge");
-  if (sw) {
-    sw.innerHTML = DiceMaterial.PRESET_COLORS.map(c => `
-      <div class="sw ${st.edgeColor===c?"on":""}" style="background:${c}"
-           onclick="setColor('edgeColor','${c}')" title="${c}"></div>`).join("");
-  }
-}
-
-// ── Zahlen: Größe und Umrandung ──────────────────────────────────────────
-function setNumberScale(v){
-  const f = parseFloat(v);
-  document.getElementById("num-scale-val").textContent = Math.round(f * 100) + "%";
-  updateStyle({ numberScale: f }, false);
-}
-function setOutline(v){
-  const f = parseFloat(v);
-  document.getElementById("num-outline-val").textContent = Math.round(f * 100) + "%";
-  updateStyle({ numberOutline: f }, false);
-}
-
-// ── Klang ────────────────────────────────────────────────────────────────
-function playSound(){
-  if (typeof DiceSound === "undefined") return;
-  const st = dieStyle(current);
-  const surf = DiceMaterial.SURFACES[st.surface];
-  const sound = (surf && surf.sound) || "plastic";
-  // Ein kleiner Aufprall-Reigen – so klingt der Würfel beim Rollen
-  DiceSound.setEnabled(true);
-  document.getElementById("snd-on").checked = true;
-  [0.9, 0.55, 0.3, 0.18].forEach((s, i) =>
-    setTimeout(() => DiceSound.impact(sound, s), i * 190));
-}
-function toggleSound(on){
-  if (typeof DiceSound !== "undefined") DiceSound.setEnabled(on);
-}
-function setSoundVolume(v){
-  if (typeof DiceSound !== "undefined") DiceSound.setVolume(parseFloat(v));
-}
-
-/** Bringt alle Bedienelemente auf den Stand des gewählten Würfels. */
-function syncControls(){
-  const st = dieStyle(current);
-  document.getElementById("col-body").value    = st.color       || "#d4b578";
-  document.getElementById("col-body2").value   = st.color2      || "#4de0d4";
-  document.getElementById("col-num").value     = st.numberColor || "#1a1408";
-  document.getElementById("col-acc").value     = st.accentColor || "#ffffff";
-  document.getElementById("col-outline").value = st.outlineColor|| "#ffffff";
-
-  const scale = st.numberScale ?? 1;
-  document.getElementById("num-scale").value = scale;
-  document.getElementById("num-scale-val").textContent = Math.round(scale * 100) + "%";
-
-  const outline = st.numberOutline ?? 0.08;
-  document.getElementById("num-outline").value = outline;
-  document.getElementById("num-outline-val").textContent = Math.round(outline * 100) + "%";
-
-  renderSurfaces(); renderPatterns(); renderFonts();
-  renderSwatches(); renderBorders(); renderEdges();
-}
-
-// ── Vorschau ─────────────────────────────────────────────────────────────
-function refreshPreview(){
-  Dice3D.preview(current, dieStyle(current), canvas);
-}
-
-// ── Aktionen ─────────────────────────────────────────────────────────────
-function doTestRoll(){
-  // Physik entscheidet frei – der Würfel rollt groß über den Bildschirm, das
-  // Ergebnis erscheint danach am Würfel.
-  Dice3D.testRoll(current);
-  toast(`🎲 W${current} wird geworfen …`);
-}
-async function resetDie(){
-  if (!await Dialog.confirm(`Das Aussehen des W${current} wird auf die Vorgabe zurückgesetzt.`,
-      { title:"Würfel zurücksetzen?", icon:"↺", okText:"Zurücksetzen" })) return;
-  const set = activeSet();
-  set.dice[current] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE);
-  Dice3D.saveSet(set);
-  renderDieList(); refreshPreview(); syncControls();
-  toast("↺ Zurückgesetzt");
-}
-async function applyToAll(){
-  if (!await Dialog.confirm(
-      `Alle Würfel dieses Sets bekommen das Aussehen des W${current}.`,
-      { title:"Auf alle übertragen?", icon:"⇄", okText:"Übertragen" })) return;
-  const set = activeSet();
-  const src = Object.assign({}, dieStyle(current));
-  Object.keys(set.dice).forEach(k => { set.dice[k] = Object.assign({}, src); });
-  Dice3D.saveSet(set);
-  renderDieList(); refreshPreview();
-  toast("⇄ Auf alle Würfel übertragen");
-}
-
-function escapeHtml(s){
-  return String(s ?? "").replace(/[&<>"']/g, c =>
-    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-// ── Start ────────────────────────────────────────────────────────────────
-
-// Kommt man aus einer laufenden Sitzung (?from=…), führt der Zurück-Knopf
-// dorthin zurück. Sonst zur Kampagnen-Übersicht. So verlässt niemand
-// versehentlich seine Sitzung, nur weil er die Würfel anpassen wollte.
-(function setupBackButton(){
-  const from = new URLSearchParams(window.location.search).get("from");
-  const btn = document.getElementById("back-btn");
-  if (from && btn) {
-    btn.href = "/table/" + encodeURIComponent(from);
-    btn.textContent = "← Zurück zur Sitzung";
-  }
-})();
-
-window.addEventListener("load", async () => {
-  // Auf die Schriften warten – sonst würden die Zahlen mit der Standardschrift
-  // gezeichnet und die Schriftauswahl bliebe wirkungslos.
-  if (window.DiceMaterial?.ensureFonts) await DiceMaterial.ensureFonts();
-
-  renderSets();
-  renderDieList();
-  syncControls();
-  refreshPreview();
-
-  // Klang-Einstellungen übernehmen
-  if (typeof DiceSound !== "undefined") {
-    document.getElementById("snd-on").checked = DiceSound.isEnabled();
-    document.getElementById("snd-vol").value  = DiceSound.getVolume();
-  }
+function undo() { if (!history.length) return; future.push(snapshot()); set.dice = JSON.parse(history.pop()); persist(); refresh(); }
+function redo() { if (!future.length) return; history.push(snapshot()); set.dice = JSON.parse(future.pop()); persist(); refresh(); }
+document.addEventListener("keydown", e => {
+  if (!(e.ctrlKey || e.metaKey) || /input|select|textarea/i.test(e.target.tagName)) return;
+  if (e.key.toLowerCase() === "z" && !e.shiftKey) { e.preventDefault(); undo(); }
+  if (e.key.toLowerCase() === "y" || (e.key.toLowerCase() === "z" && e.shiftKey)) { e.preventDefault(); redo(); }
 });
+
+// ── Sets ────────────────────────────────────────────────────────────────────
+function renderSetSelect() {
+  const sel = document.getElementById("set-select");
+  sel.innerHTML = Dice3D.getVisibleSets().map(s => `<option value="${esc(s.id)}" ${s.id === set.id ? "selected" : ""}>${esc(s.name || "Set")}</option>`).join("");
+  document.getElementById("set-name").value = set.name || "";
+}
+function renameSet(name) { set.name = (name || "").trim().slice(0, 40) || "Mein Set"; Dice3D.saveSet(set); renderSetSelect(); }
+function duplicateSet() {
+  const c = JSON.parse(JSON.stringify(set)); c.id = "set_" + Date.now().toString(36); c.name = (set.name || "Set") + " (Kopie)";
+  delete c.presetId; delete c.hidden; Dice3D.saveSet(c); loadSet(c.id);
+  if (typeof UI !== "undefined") UI.toast("Set dupliziert");
+}
+function openNewSet() {
+  const list = presetList();
+  const el = document.getElementById("ns") || Object.assign(document.createElement("div"), { id: "ns", className: "ds-backdrop" });
+  el.innerHTML = `<div class="ds-win" style="width:min(860px,94vw)"><header class="ds-head"><div><h2>Neues Würfel-Set</h2>
+    <span>Wähle einen Stil als Startpunkt – danach passt du alles frei an.</span></div><button class="ds-x">✕</button></header>
+    <div class="ds-body"><div class="ns-grid">
+      <button class="style-card" data-new=""><div class="ph" style="display:grid;place-items:center;font-size:2rem;color:var(--gold)">＋</div><b>Leer</b><small>Standard</small></button>
+      ${list.map(p => `<button class="style-card" data-new="${p.id}"><img data-thumb="${p.id}" alt=""><b>${esc(p.name)}</b><small>${esc(p.tag || "")}</small></button>`).join("")}
+    </div></div></div>`;
+  document.body.appendChild(el);
+  fillPresetThumbs(el);
+  el.onclick = e => {
+    if (e.target === el || e.target.closest(".ds-x")) return el.classList.remove("open");
+    const b = e.target.closest("[data-new]"); if (!b) return;
+    let s;
+    if (b.dataset.new) {
+      const p = list.find(x => x.id === b.dataset.new);
+      s = Dice3D.newSet(p.name); SIDES.forEach(sd => { s.dice[sd] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, p.style); });
+    } else s = Dice3D.newSet("Neues Set");
+    Dice3D.saveSet(s); el.classList.remove("open"); loadSet(s.id);
+  };
+  requestAnimationFrame(() => el.classList.add("open"));
+}
+function rollSet() { Dice3D.roll([4, 6, 8, 10, 12, 20].map(s => ({ sides: s })), { label: set.name || "Probewurf" }); }
+function testSound() {
+  try { const surf = (DiceMaterial.SURFACES[styleOf(current).surface] || {}).sound || "plastic"; DiceSound.impact(surf, .8); setTimeout(() => DiceSound.impact(surf, .45), 180); } catch (e) {}
+}
+
+// ── Überrasch mich: Stil + Palette + Muster stimmig kombinieren ─────────────
+function surprise() {
+  const P = presetList(), pick = a => a[Math.floor(Math.random() * a.length)];
+  const base = Object.assign({}, pick(P).style);
+  if (Math.random() < .55) { const pal = pick(PALETTES).c; base.color = pal[0]; base.color2 = pal[1]; base.numberColor = pal[2]; }
+  if (Math.random() < .4) base.pattern = pick(Object.keys(DiceMaterial.PATTERNS));
+  if (Math.random() < .35) base.edges = pick(["subtle", "bold"]);
+  apply(Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, base), { all: true });
+}
+
+// ── Vorschau-Bilder für Stile und Muster ───────────────────────────────────
+// Stil-Vorschauen: für die Sitzung merken (nicht bei jedem Neuzeichnen rendern)
+const _thumbCache = (() => { try { return JSON.parse(sessionStorage.getItem("vtt_style_thumbs") || "{}"); } catch (e) { return {}; } })();
+async function fillPresetThumbs(root) {
+  for (const img of root.querySelectorAll("img[data-thumb]")) {
+    const id = img.dataset.thumb;
+    if (!_thumbCache[id]) {
+      const p = presetList().find(x => x.id === id); if (!p) continue;
+      _thumbCache[id] = await Dice3D.snapshot(20, p.style, 120);
+      try { sessionStorage.setItem("vtt_style_thumbs", JSON.stringify(_thumbCache)); } catch (e) {}
+    }
+    img.src = _thumbCache[id] || "";
+  }
+}
+
+// ── Darstellung ─────────────────────────────────────────────────────────────
+function renderRail() {
+  document.getElementById("die-rail").innerHTML = SIDES.map(s =>
+    `<button class="die-btn${s === current ? " on" : ""}" onclick="pickDie(${s})" title="W${s}">${dieSvg(s)}<b>W${s}</b></button>`).join("");
+}
+function pickDie(s) { current = s; renderRail(); refresh(); }
+function setScope(v) {
+  scope = v;
+  document.getElementById("scope-all").classList.toggle("on", v === "all");
+  document.getElementById("scope-one").classList.toggle("on", v === "one");
+  refreshStageInfo();
+}
+function refreshStageInfo() {
+  document.getElementById("stage-die").textContent = "W" + current;
+  const st = styleOf(current), surf = DiceMaterial.SURFACES[st.surface] || {};
+  document.getElementById("stage-sub").textContent = (surf.label || "") + (scope === "all" ? " · Änderungen für alle Würfel" : " · Änderungen nur für diesen Würfel");
+}
+let prevT = 0;
+function refresh() {
+  refreshStageInfo();
+  clearTimeout(prevT); prevT = setTimeout(() => Dice3D.preview(current, styleOf(current), canvas), 40);
+  renderInspector();
+  document.getElementById("btn-undo").disabled = !history.length;
+  document.getElementById("btn-redo").disabled = !future.length;
+}
+function renderAll() { renderSetSelect(); renderRail(); refresh(); }
+
+// Einstellungen rechts. Geöffnete Abschnitte bleiben beim Neuzeichnen offen.
+const openSecs = new Set(["style", "material", "colors"]);
+function sec(id, icon, title, body) {
+  return `<details class="sec" data-sec="${id}" ${openSecs.has(id) ? "open" : ""}><summary>${ic(icon)}${title}</summary><div class="sec-body">${body}</div></details>`;
+}
+function colorRow(key, label, hint, removable) {
+  const v = styleOf(current)[key];
+  return `<div class="row"><span>${label}${hint ? `<i>${hint}</i>` : ""}</span><div class="crow">
+    <input type="color" value="${esc(v || "#888888")}" oninput="liveColor('${key}', this.value)" onchange="apply({${key}: this.value})"><code>${v ? esc(v) : "–"}</code>
+    ${removable && v ? `<button class="xbtn" title="Entfernen" onclick="apply({${key}: null})">✕</button>` : ""}</div></div>`;
+}
+let liveT = 0;
+function liveColor(key, v) {           // Farbe beim Ziehen sofort zeigen, Verlauf erst beim Loslassen
+  clearTimeout(liveT);
+  liveT = setTimeout(() => { const st = Object.assign(styleOf(current), { [key]: v }); Dice3D.preview(current, st, canvas); }, 60);
+}
+function seg(key, opts) {
+  const v = styleOf(current)[key];
+  return `<div class="seg">${opts.map(([val, label]) => `<button class="${String(v) === String(val) ? "on" : ""}" onclick='apply(${JSON.stringify({ [key]: val })})'>${label}</button>`).join("")}</div>`;
+}
+function range(key, min, max, step, scale) {
+  const v = styleOf(current)[key] ?? 0;
+  return `<input type="range" min="${min}" max="${max}" step="${step}" value="${v * (scale || 1)}" onchange="apply({${key}: this.value / ${scale || 1}})">`;
+}
+function renderInspector() {
+  const st = styleOf(current), S = DiceMaterial.SURFACES, PT = DiceMaterial.PATTERNS;
+  const presets = presetList();
+  const html =
+    sec("style", "sparkles", "Stil",
+      `<div class="styles">${presets.map(p => `<button class="style-card" title="${esc(p.tag || "")}" onclick="applyPreset('${p.id}')"><img data-thumb="${p.id}" alt=""><b>${esc(p.name)}</b></button>`).join("")}</div>
+       <div class="lbl" style="margin-top:10px">Ein Stil ist der Startpunkt – darunter verfeinerst du ihn.</div>`) +
+    sec("material", "gem", "Material",
+      `<div class="mats">${Object.entries(S).map(([id, m]) => `<button class="mat${st.surface === id ? " on" : ""}" onclick="pickSurface('${id}')"><span class="orb ${id}"></span>${esc(m.label)}</button>`).join("")}</div>`) +
+    sec("colors", "palette", "Farben",
+      `<div class="lbl">Abgestimmte Paletten</div><div class="palettes">${PALETTES.map((p, i) =>
+        `<button class="pal" title="${esc(p.n)}" onclick="pickPalette(${i})"><i style="background:${p.c[0]}"></i><i style="background:${p.c[1] || p.c[0]}"></i><i style="background:${p.c[2]}"></i></button>`).join("")}</div>
+       <div class="lbl">Einzeln</div>${colorRow("color", "Körper")}${colorRow("color2", "Zweitfarbe", "Verlauf", true)}${colorRow("numberColor", "Zahlen", "leer = automatisch", true)}${colorRow("accentColor", "Muster-Akzent")}`) +
+    sec("pattern", "sparkle", "Muster",
+      `<div class="patterns">${Object.entries(PT).map(([id, p]) => `<button class="pat${(st.pattern || "none") === id ? " on" : ""}" onclick="apply({pattern:'${id}'})"><img data-pat="${id}" alt="">${esc(p.label)}</button>`).join("")}</div>`) +
+    sec("numbers", "type", "Zahlen",
+      `<div class="fonts">${FONTS.map(f => `<button class="font${st.font === f.id ? " on" : ""}" onclick="apply({font:${JSON.stringify(f.id).replace(/"/g, "&quot;")}})"><b style="font-family:${esc(f.id)}">20</b><small>${esc(f.label)}</small></button>`).join("")}</div>
+       <div class="row"><span>Größe</span>${range("numberScale", 60, 140, 5, 100)}</div>
+       <div class="row"><span>Umrandung</span>${range("numberOutline", 0, 20, 1, 100)}</div>
+       ${colorRow("outlineColor", "Farbe der Umrandung", "", true)}
+       <div class="row"><span>Leuchten<i>Zahlen glühen von innen</i></span>${range("numberGlow", 0, 100, 5, 100)}</div>`) +
+    sec("edges", "hexagon", "Kanten & Rahmen",
+      `<div class="row"><span>Kanten<i>abgerundete Kanten färben</i></span>${seg("edges", [["none", "Körper"], ["subtle", "Dezent"], ["bold", "Kräftig"]])}</div>
+       ${st.edges && st.edges !== "none" ? colorRow("edgeColor", "Kantenfarbe") : ""}
+       <div class="row"><span>Rahmen auf den Flächen</span>${seg("border", [["none", "Keiner"], ["solid", "Linie"], ["glow", "Leuchtend"], ["dashed", "Gestrichelt"]])}</div>
+       ${st.border && st.border !== "none" ? colorRow("borderColor", "Rahmenfarbe") + `<div class="row"><span>Stärke</span>${range("borderWidth", 2, 16, 1, 1)}</div>` : ""}`) +
+    sec("sound", "volume-2", "Klang",
+      `<div class="row"><span>Würfel-Geräusche</span><input type="checkbox" ${DiceSound.isEnabled() ? "checked" : ""} onchange="DiceSound.setEnabled(this.checked)" style="width:18px;height:18px;accent-color:var(--gold)"></div>
+       <div class="row"><span>Lautstärke</span><input type="range" min="0" max="100" value="${Math.round(DiceSound.getVolume() * 100)}" oninput="DiceSound.setVolume(this.value/100)"></div>
+       <div class="lbl">Der Klang richtet sich nach dem Material.</div>`);
+  const insp = document.getElementById("insp"), y = insp.scrollTop;
+  insp.innerHTML = html; insp.scrollTop = y;
+  insp.querySelectorAll("details.sec").forEach(d => d.addEventListener("toggle", () => {
+    d.open ? openSecs.add(d.dataset.sec) : openSecs.delete(d.dataset.sec);
+    if (d.open) { fillPresetThumbs(d); fillPatternThumbs(d); }
+  }));
+  fillPresetThumbs(insp); fillPatternThumbs(insp);
+}
+const _patCache = {};
+function fillPatternThumbs(root) {
+  const st = styleOf(current);
+  root.querySelectorAll("img[data-pat]").forEach(img => {
+    const key = img.dataset.pat + "|" + st.color + "|" + st.accentColor;
+    img.src = _patCache[key] || (_patCache[key] = DiceMaterial.patternPreview(img.dataset.pat, st.color, st.accentColor, 72));
+  });
+}
+function applyPreset(id) {
+  const p = presetList().find(x => x.id === id); if (!p) return;
+  apply(Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, p.style));
+}
+function pickSurface(id) {
+  const m = DiceMaterial.SURFACES[id] || {};
+  // passende Grundfarben der Oberfläche übernehmen (bleiben danach frei änderbar)
+  const patch = { surface: id };
+  if (m.defaultColor) patch.color = m.defaultColor;
+  if (m.defaultNumber) patch.numberColor = m.defaultNumber;
+  patch.color2 = m.defaultColor2 || null;
+  apply(patch);
+}
+function pickPalette(i) { const c = PALETTES[i].c; apply({ color: c[0], color2: c[1], numberColor: c[2] }); }
+
+// ── Start ───────────────────────────────────────────────────────────────────
+document.getElementById("btn-undo").innerHTML = ic("undo-2");
+document.getElementById("btn-redo").innerHTML = ic("redo-2");
+document.getElementById("ic-surprise").innerHTML = ic("shuffle");
+document.getElementById("ic-dup").innerHTML = ic("copy");
+document.getElementById("ic-new").innerHTML = ic("plus");
+document.getElementById("ic-roll").innerHTML = ic("dices");
+document.getElementById("ic-rollall").innerHTML = ic("dices");
+document.getElementById("ic-sound").innerHTML = ic("volume-2");
+window.addEventListener("vtt:dice-set", () => loadSet((Dice3D.getActiveSet() || {}).id));
+(async () => {
+  if (window.DiceMaterial && DiceMaterial.ensureFonts) { try { await DiceMaterial.ensureFonts(); } catch (e) {} }
+  loadSet((Dice3D.getActiveSet() || {}).id);
+})();
 </script>
 <script src="/static/js/design-studio.js"></script>
+<script src="/static/js/sfx.js"></script>
+<script src="/static/js/fx.js"></script>
 </body>
 </html>

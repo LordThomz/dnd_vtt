@@ -14,7 +14,9 @@ Benutzung:
     python tools/release.py --check v0.2.0 prüft (für GitHub Actions)
     python tools/release.py --show         zeigt die aktuelle Version
     python tools/release.py --repo NAME/REPO   trägt das GitHub-Repository
-                                               für den Updater ein
+                                               für Updater + Design-Katalog ein
+    python tools/release.py --pubkey DATEI     trägt den öffentlichen Signatur-
+                                               Schlüssel ein (vtt.key.pub)
 """
 import json, re, sys
 from pathlib import Path
@@ -52,13 +54,28 @@ def set_version(ver):
     print(f"Version überall auf {ver} gesetzt.")
 
 
+LAUNCHER_CONFIG = ROOT / "desktop" / "src" / "config.js"
+
 def set_repo(repo):
     if not re.match(r"^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$", repo):
         sys.exit("Format: GITHUB-NUTZER/REPOSITORY")
     d = json.loads(FILES["tauri"].read_text(encoding="utf-8"))
     d["plugins"]["updater"]["endpoints"] = [f"https://github.com/{repo}/releases/latest/download/latest.json"]
     FILES["tauri"].write_text(json.dumps(d, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Updater sucht jetzt bei github.com/{repo}")
+    t = LAUNCHER_CONFIG.read_text(encoding="utf-8")
+    LAUNCHER_CONFIG.write_text(re.sub(r'window\.VTT_REPO = "[^"]*";', f'window.VTT_REPO = "{repo}";', t), encoding="utf-8")
+    print(f"Updater und Design-Katalog nutzen jetzt github.com/{repo}")
+
+
+def set_pubkey(path):
+    """Öffentlichen Signatur-Schlüssel aus der .pub-Datei eintragen."""
+    key = Path(path).expanduser().read_text(encoding="utf-8").strip()
+    if not key or len(key) < 40:
+        sys.exit("Die Schlüsseldatei scheint leer zu sein.")
+    d = json.loads(FILES["tauri"].read_text(encoding="utf-8"))
+    d["plugins"]["updater"]["pubkey"] = key
+    FILES["tauri"].write_text(json.dumps(d, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print("Öffentlicher Schlüssel eingetragen.")
 
 
 def main(argv):
@@ -68,6 +85,8 @@ def main(argv):
         print(read_versions()); return
     if argv[0] == "--repo":
         set_repo(argv[1]); return
+    if argv[0] == "--pubkey":
+        set_pubkey(argv[1]); return
     if argv[0] == "--check":
         tag = argv[1].lstrip("v") if len(argv) > 1 else None
         v = read_versions()
@@ -77,6 +96,8 @@ def main(argv):
             sys.exit(f"Tag v{tag} passt nicht zur Version {v['api']} im Code.")
         d = json.loads(FILES["tauri"].read_text(encoding="utf-8"))
         up = d.get("plugins", {}).get("updater", {})
+        if "GITHUB-NUTZER" in LAUNCHER_CONFIG.read_text(encoding="utf-8"):
+            sys.exit("Design-Katalog noch nicht eingerichtet – bitte „python tools/release.py --repo NAME/REPO“ ausführen.")
         if "GITHUB-NUTZER" in json.dumps(up) or "HIER-DEN" in up.get("pubkey", ""):
             sys.exit("Updater ist noch nicht eingerichtet (Repository / öffentlicher Schlüssel fehlt) – siehe UPDATES.md.")
         print(f"OK – Version {v['api']} überall gleich, Updater eingerichtet.")

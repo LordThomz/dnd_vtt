@@ -7,17 +7,21 @@
 <link rel="stylesheet" href="/static/css/fonts.css">
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/design-studio.css">
+<link rel="stylesheet" href="/static/css/fx.css">
+<script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
 <link rel="stylesheet" href="/static/css/dialog.css">
 <link rel="stylesheet" href="/static/css/table.css">
+<link rel="stylesheet" href="/static/css/table-layout.css">
 <script src="/static/lib/socket.io.min.js"></script>
 </head>
 <body data-session="{{ session_id }}" data-role="{{ role }}" data-username="{{ username }}" data-char-id="{{ char_id }}">
 
 <div id="topbar">
   <button class="tb-btn back-btn" id="btn-leave-session" data-tip="Sitzung verlassen" onclick="leaveToMenu()" style="font-size:1.1rem">←</button>
-  <span class="logo">⚔️ D&amp;D</span>
+  <span class="logo"><svg class="crest-svg sm" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="cg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold-light)"/><stop offset=".55" stop-color="var(--gold)"/><stop offset="1" stop-color="var(--arcane)"/></linearGradient></defs><polygon points="32,3 58,18 58,46 32,61 6,46 6,18" fill="rgba(var(--panel-rgb),.55)" stroke="url(#cg2)" stroke-width="2.4" stroke-linejoin="round"/><polygon points="32,14 49,42 15,42" fill="none" stroke="url(#cg2)" stroke-width="2" stroke-linejoin="round"/><path d="M32 3v11M58 18 49 42M6 18l9 24M58 46 49 42M6 46l9-4M32 61V42M32 14 6 18M32 14l26 4" stroke="url(#cg2)" stroke-opacity=".55" stroke-width="1.4" fill="none"/></svg> D&amp;D</span>
   <span class="session-badge">{{ session_id }}</span>
   <span class="role-badge {{ role }}">{{ role|upper }}</span>
 
@@ -2151,6 +2155,105 @@ const CampaignPacks = (() => {
   document.addEventListener("click", e => { if (e.target.closest('[data-tab="gmsettings"]')) load(); });
   return { load };
 })();
+</script>
+<script src="/static/js/sfx.js"></script>
+<script src="/static/js/icons.js"></script>
+<script src="/static/js/fx.js"></script>
+<script>
+  // ── Neues Layout: Werkzeug-Dock + Symbol-Schiene (table-layout.css) ──────
+  (function(){
+    // 1) Werkzeuggruppen aus der Kopfzeile in das schwebende Dock verschieben.
+    //    Die Knöpfe selbst ziehen nur um – alle Klick-Funktionen bleiben gleich.
+    const area = document.getElementById("map-area"), top = document.getElementById("topbar");
+    if (area && top) {
+      const dock = document.createElement("div"); dock.id = "tool-dock"; dock.setAttribute("aria-label", "Werkzeuge");
+      top.querySelectorAll(":scope > .tb-group").forEach(g => dock.appendChild(g));
+      area.appendChild(dock);
+    }
+    // 2) Symbol-Schiene: Tooltips aus der Beschriftung
+    const panel = document.getElementById("right-panel");
+    const tabs = panel ? panel.querySelector(".panel-tabs") : null;
+    if (!panel || !tabs) return;
+    const tip = document.createElement("div"); tip.id = "rail-tip"; document.body.appendChild(tip);
+    tabs.querySelectorAll(".p-tab").forEach(t => {
+      const label = [...t.childNodes].filter(n => n.nodeType === 3).map(n => n.nodeValue.trim()).join(" ").trim();
+      t.dataset.label = label; t.setAttribute("aria-label", label);
+      t.addEventListener("mouseenter", () => {
+        const r = t.getBoundingClientRect(); tip.textContent = label;
+        tip.style.top = (r.top + r.height / 2 - 13) + "px"; tip.style.left = (r.left - tip.offsetWidth - 10) + "px";
+        requestAnimationFrame(() => { tip.style.left = (r.left - tip.offsetWidth - 10) + "px"; tip.classList.add("show"); });
+      });
+      t.addEventListener("mouseleave", () => tip.classList.remove("show"));
+    });
+    // 3) Klick auf ein Symbol: eingeklappt → aufklappen; aktives Symbol → einklappen
+    let wasActive = null;
+    tabs.addEventListener("pointerdown", e => { const t = e.target.closest(".p-tab"); wasActive = t && t.classList.contains("active") ? t : null; }, true);
+    tabs.addEventListener("click", e => {
+      const t = e.target.closest(".p-tab"); if (!t) return;
+      setTimeout(() => {
+        if (panel.classList.contains("collapsed")) togglePanel();
+        else if (wasActive === t) togglePanel();
+        if (t.dataset.tab === "chat") t.classList.remove("has-news");
+      }, 0);
+    });
+    // 4) Ein-/Ausklappen: Zustand merken, Karte danach neu vermessen
+    const origToggle = window.togglePanel;
+    window.togglePanel = function(){
+      origToggle();
+      const c = panel.classList.contains("collapsed");
+      document.getElementById("panel-toggle-btn").textContent = c ? "‹" : "›";
+      try { localStorage.setItem("vtt_panel_collapsed", c ? "1" : "0"); } catch (e) {}
+      setTimeout(() => window.dispatchEvent(new Event("resize")), 320);
+    };
+    document.getElementById("panel-toggle-btn").textContent = "›";
+    document.getElementById("panel-toggle-btn").title = "Seitenleiste ein-/ausklappen";
+    try { if (localStorage.getItem("vtt_panel_collapsed") === "1") window.togglePanel(); } catch (e) {}
+    // 5) Neue Chat-Nachricht, während der Chat nicht sichtbar ist → Punkt am Symbol
+    const chat = document.getElementById("chat-messages"), chatTab = tabs.querySelector('[data-tab="chat"]');
+    if (chat && chatTab) new MutationObserver(() => {
+      if (panel.classList.contains("collapsed") || !chatTab.classList.contains("active")) chatTab.classList.add("has-news");
+    }).observe(chat, { childList: true });
+  })();
+
+  // ── Steuerungshilfe: nach 12 s ausblenden, „?" holt sie zurück ───────────
+  (function(){
+    const hud = document.getElementById("controls-hud"); if (!hud) return;
+    const btn = document.createElement("button"); btn.id = "hud-toggle"; btn.textContent = "?"; btn.title = "Steuerung anzeigen";
+    hud.parentElement.appendChild(btn);
+    let t = 0;
+    const hide = () => { hud.classList.add("hud-hidden"); btn.classList.add("show"); };
+    const show = () => { hud.classList.remove("hud-hidden"); btn.classList.remove("show"); clearTimeout(t); t = setTimeout(hide, 8000); };
+    btn.onclick = show;
+    t = setTimeout(hide, 12000);
+  })();
+  // ── Hinweis für den DM, solange die aktive Karte kein Bild hat ──────────
+  (function(){
+    if (typeof State === "undefined" || !State.isGM) return;
+    const area = document.getElementById("map-area"); if (!area) return;
+    const hint = document.createElement("div"); hint.id = "map-empty-hint"; hint.style.display = "none";
+    hint.innerHTML = `<div class="ico">${typeof Icons !== "undefined" ? Icons.svg("map") : ""}</div><b>Noch kein Kartenbild</b>
+      <p>Lade ein Bild für diese Karte hoch – Raster, Nebel und Spielfiguren liegen dann darüber.</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" style="width:auto" id="map-empty-btn">Karte bearbeiten</button>
+        <button class="btn btn-secondary" style="width:auto" id="map-empty-skip">Ohne Bild spielen</button></div>`;
+    area.appendChild(hint);
+    hint.querySelector("#map-empty-btn").onclick = () => {
+      try { const m = State.map || {}; if (typeof openMapEditor === "function") openMapEditor(m.id); } catch (e) {}
+    };
+    // „Ohne Bild spielen": Hinweis für diese Karte nicht mehr zeigen
+    const skipped = () => { try { return JSON.parse(localStorage.getItem("vtt_map_hint_skip") || "[]"); } catch (e) { return []; } };
+    hint.querySelector("#map-empty-skip").onclick = () => {
+      const m = State.map || {}; const l = skipped(); if (m.id && !l.includes(m.id)) l.push(m.id);
+      try { localStorage.setItem("vtt_map_hint_skip", JSON.stringify(l.slice(-200))); } catch (e) {}
+      check();
+    };
+    const check = () => { const m = State.map; hint.style.display = (m && !m.url && !skipped().includes(m.id)) ? "block" : "none"; };
+    ["dnd:full_state", "dnd:map_changed", "dnd:maps_changed", "dnd:active_map"].forEach(ev => document.addEventListener(ev, () => setTimeout(check, 50)));
+    setInterval(check, 2000); setTimeout(check, 800);
+  })();
+  // Für „Weiterspielen" im Hauptmenü (nur eigene Installation)
+  try { if (["localhost","127.0.0.1"].includes(location.hostname) && State && State.session_id)
+          localStorage.setItem("vtt_last_session", JSON.stringify({ id: State.session_id, at: Date.now() })); } catch(e) {}
 </script>
 </body>
 </html>

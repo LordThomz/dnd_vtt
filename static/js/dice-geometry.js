@@ -329,6 +329,10 @@ const DiceGeometry = (() => {
     return values;
   }
 
+  // «STELLSCHRAUBE» Breite der abgerundeten Kanten (Anteil am Radius).
+  // 0 = scharfe Kanten wie früher. Nur Darstellung – die Physik bleibt exakt.
+  const BEVEL_FRAC = 0.045;
+
   // Zwischenspeicher: Geometrie wird pro Würfelform nur einmal gerechnet.
   const _cache = new Map();
 
@@ -358,6 +362,9 @@ const DiceGeometry = (() => {
     const groups = [];
     const layout = [];      // je Fläche: {poly:[[u,v]…], cx, cy, inR, cornerIds}
     const faceNormals = [];
+    const insetByFace = [];   // je Fläche: versetzte Ecken (für Kantenstreifen)
+    const BEVEL = radius * BEVEL_FRAC;
+    const textUps = [];     // „oben" der Zahl je Fläche (Körper-Koordinaten)
     let vertexCount = 0;
 
     faces.forEach((face, faceIndex) => {
@@ -402,23 +409,93 @@ const DiceGeometry = (() => {
       const half = Math.max(...flat.map(p => Math.max(Math.abs(p[0]), Math.abs(p[1])))) * 1.02;
       const uv = flat.map(([x, y]) => [0.5 + x / (2 * half), 0.5 + y / (2 * half)]);
 
+      textUps.push(e2);
       layout.push({
         poly: uv.map(q => [q[0], q[1]]),   // Umriss in UV (v nach oben!)
         inR: inc.r / (2 * half),            // Inkreis-Radius in UV-Einheiten
         cornerIds: [...f],
       });
 
+      // ── Abgerundete Kanten: Fläche um BEVEL nach innen versetzen ──────
+      // Jede Kante der Fläche wird in der Flächenebene um BEVEL nach innen
+      // geschoben; die neuen Ecken sind die Schnittpunkte benachbarter Kanten.
+      const m = flat0.length;
+      const inset2d = flat0.map((_, k) => {
+        const lineAt = j => {        // nach innen versetzte Kante j (Punkt + Richtung)
+          const A = flat0[j], B = flat0[(j + 1) % m];
+          const dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
+          const nx = -dy / L, ny = dx / L;                // Linksnormale = nach innen (CCW)
+          return { px: A[0] + nx * BEVEL, py: A[1] + ny * BEVEL, dx, dy };
+        };
+        const l1 = lineAt((k - 1 + m) % m), l2 = lineAt(k);
+        const det = l1.dx * l2.dy - l1.dy * l2.dx;
+        if (Math.abs(det) < 1e-9) return flat0[k];
+        const t = ((l2.px - l1.px) * l2.dy - (l2.py - l1.py) * l2.dx) / det;
+        return [l1.px + l1.dx * t, l1.py + l1.dy * t];
+      });
+      const to3d = ([x, y]) => [center[0] + e1[0] * x + e2[0] * y, center[1] + e1[1] * x + e2[1] * y, center[2] + e1[2] * x + e2[2] * y];
+      const ipts = BEVEL > 0 ? inset2d.map(to3d) : pts;
+      const iuv = BEVEL > 0 ? inset2d.map(([x, y]) => [0.5 + (x - inc.x) / (2 * half), 0.5 + (y - inc.y) / (2 * half)]) : uv;
+      insetByFace.push({ ids: [...f], pts: ipts, n });
+
       const startVertex = vertexCount;
-      for (let i = 1; i < pts.length - 1; i++) {
+      for (let i = 1; i < ipts.length - 1; i++) {
         [0, i, i + 1].forEach(k => {
-          positions.push(pts[k][0], pts[k][1], pts[k][2]);
+          positions.push(ipts[k][0], ipts[k][1], ipts[k][2]);
           normals.push(n[0], n[1], n[2]);
-          uvs.push(uv[k][0], uv[k][1]);
+          uvs.push(iuv[k][0], iuv[k][1]);
           vertexCount++;
         });
       }
       groups.push({ start: startVertex, count: vertexCount - startVertex, materialIndex: faceIndex });
     });
+
+    // ── Kantenstreifen und Eckkappen (eigenes Material: Index faces.length) ─
+    // Die Normalen gehen von der einen Fläche zur nächsten über – dadurch
+    // wirkt der schmale Streifen beim Licht wie eine gerundete Kante.
+    if (BEVEL > 0) {
+      const start = vertexCount;
+      const tri = (a, na, b, nb, c, nc) => {
+        // Außenseite sicherstellen (Dreiecksnormale zeigt vom Mittelpunkt weg)
+        const tn = cross(sub(b, a), sub(c, a));
+        const mid = [(a[0] + b[0] + c[0]) / 3, (a[1] + b[1] + c[1]) / 3, (a[2] + b[2] + c[2]) / 3];
+        if (dot(tn, mid) < 0) { [b, c] = [c, b]; [nb, nc] = [nc, nb]; }
+        [[a, na], [b, nb], [c, nc]].forEach(([p, q]) => {
+          positions.push(p[0], p[1], p[2]); normals.push(q[0], q[1], q[2]); uvs.push(0.5, 0.5); vertexCount++;
+        });
+      };
+      const edgeMap = new Map();     // "a|b" → [{face, pa, pb}]
+      insetByFace.forEach((F, fi) => {
+        F.ids.forEach((a, k) => {
+          const b = F.ids[(k + 1) % F.ids.length];
+          const key = a < b ? a + "|" + b : b + "|" + a;
+          const e = { fi, ids: [a, b], pts: [F.pts[k], F.pts[(k + 1) % F.ids.length]], n: F.n };
+          (edgeMap.get(key) || edgeMap.set(key, []).get(key)).push(e);
+        });
+      });
+      edgeMap.forEach(list => {
+        if (list.length !== 2) return;
+        const [A, B] = list;
+        // gleiche Eckpunkt-Reihenfolge herstellen
+        const bA = B.ids[0] === A.ids[0] ? B.pts : [B.pts[1], B.pts[0]];
+        tri(A.pts[0], A.n, A.pts[1], A.n, bA[1], B.n);
+        tri(A.pts[0], A.n, bA[1], B.n, bA[0], B.n);
+      });
+      // Eckkappen: alle versetzten Ecken um einen Original-Eckpunkt herum
+      verts.forEach((v, vi) => {
+        const ring = [];
+        insetByFace.forEach(F => { const k = F.ids.indexOf(vi); if (k >= 0) ring.push({ p: F.pts[k], n: F.n }); });
+        if (ring.length < 3) return;
+        const vn = norm(v);
+        const c = ring.reduce((acc, r) => [acc[0] + r.p[0], acc[1] + r.p[1], acc[2] + r.p[2]], [0, 0, 0]).map(x => x / ring.length);
+        // Ring um die Eck-Richtung sortieren
+        const ax = norm(sub(ring[0].p, c)), ay = cross(vn, ax);
+        ring.sort((r1, r2) => { const d1 = sub(r1.p, c), d2 = sub(r2.p, c);
+          return Math.atan2(dot(d1, ay), dot(d1, ax)) - Math.atan2(dot(d2, ay), dot(d2, ax)); });
+        ring.forEach((r, k) => { const r2 = ring[(k + 1) % ring.length]; tri(c, vn, r.p, r.n, r2.p, r2.n); });
+      });
+      groups.push({ start, count: vertexCount - start, materialIndex: faces.length });
+    }
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
@@ -434,6 +511,7 @@ const DiceGeometry = (() => {
 
     const faceData = faces.map((face, fi) => ({
       normal: faceNormals[fi],
+      up: textUps[fi],
       cornerIds: layout[fi].cornerIds,
     }));
 
@@ -441,6 +519,7 @@ const DiceGeometry = (() => {
       sides,
       geometry: geo,
       faceCount: faces.length,
+      bevel: BEVEL > 0,         // es gibt eine zusätzliche Materialgruppe (Index faceCount)
       faces: faceData,        // je Fläche: echte Normale + Ecken
       corners: verts,         // Eckpunkte (für W4 und Symmetrie-Suche)
       layout,                 // Umriss je Fläche in der Textur
@@ -475,37 +554,42 @@ const DiceGeometry = (() => {
    * @returns {number[]|null} 3×3-Matrix (zeilenweise) oder null
    */
   const _symCache = new Map();
-  function symmetry(sides, from, to, radius = 2.0) {
+  /** ALLE Symmetrie-Drehungen, die Merkmal `from` auf `to` abbilden und den
+   *  Körper auf sich selbst (beim W12 z.B. 5 Stück – um die Flächennormale
+   *  gedreht). dice3d.js wählt daraus die, bei der die Zahl am Ende am
+   *  geradesten zum Betrachter steht. */
+  function symmetries(sides, from, to, radius = 2.0) {
     const key = sides + ":" + from + ">" + to;
     if (_symCache.has(key)) return _symCache.get(key);
     const g = build(sides, radius);
     const feats = features(sides, radius);
     const V = g.corners;
     const a = feats[from], b = feats[to];
-    // Bezugsvektor: eine Ecke, die nicht parallel zur Merkmalsachse liegt
     const perp = (v, axis) => sub(v, axis.map(x => x * dot(v, axis)));
     const ref = V.find(v => len(perp(v, a)) > 1e-3);
     const ra = norm(perp(ref, a));
     const frameA = [a, ra, cross(a, ra)];
-    let found = null;
+    const found = [];
     for (const c of V) {
       const pc = perp(c, b);
       if (len(pc) < 1e-3) continue;
-      // Gleicher Abstand zur Achse und gleiche Höhe? (sonst kein Kandidat)
       if (Math.abs(dot(c, b) - dot(ref, a)) > 1e-4) continue;
       const rb = norm(pc);
       const frameB = [b, rb, cross(b, rb)];
-      // R = Σ frameB_i ⊗ frameA_i   (bildet frameA auf frameB ab)
       const R = [0,0,0, 0,0,0, 0,0,0];
       for (let k = 0; k < 3; k++)
         for (let r = 0; r < 3; r++)
-          for (let s = 0; s < 3; s++) R[r*3+s] += frameB[k][r] * frameA[k][s];
+          for (let s2 = 0; s2 < 3; s2++) R[r*3+s2] += frameB[k][r] * frameA[k][s2];
       const apply = v => [R[0]*v[0]+R[1]*v[1]+R[2]*v[2], R[3]*v[0]+R[4]*v[1]+R[5]*v[2], R[6]*v[0]+R[7]*v[1]+R[8]*v[2]];
       const ok = V.every(v => { const w = apply(v); return V.some(u => len(sub(u, w)) < 1e-4); });
-      if (ok) { found = R; break; }
+      if (ok && !found.some(F => F.every((x, i) => Math.abs(x - R[i]) < 1e-6))) found.push(R);
     }
     _symCache.set(key, found);
     return found;
+  }
+  /** Eine (die erste) passende Symmetrie – für ältere Aufrufer. */
+  function symmetry(sides, from, to, radius = 2.0) {
+    return symmetries(sides, from, to, radius)[0] || null;
   }
 
   /** Physik-Körper (ConvexPolyhedron) aus denselben Daten. */
@@ -540,5 +624,5 @@ const DiceGeometry = (() => {
     });
   }
 
-  return { build, buildPhysicsShape, features, symmetry, SIDES: Object.keys(SHAPES).map(Number) };
+  return { build, buildPhysicsShape, features, symmetry, symmetries, SIDES: Object.keys(SHAPES).map(Number) };
 })();

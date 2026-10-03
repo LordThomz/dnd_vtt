@@ -1,0 +1,17 @@
+{
+  "vttdesign": 1,
+  "id": "eiche",
+  "name": "Eichentafel",
+  "scope": "table",
+  "version": "1.0.0",
+  "author": "D&D Virtual Tabletop",
+  "tag": "Holz",
+  "description": "Warmes, gemasertes Holz – wie am echten Spieltisch.",
+  "vars": {
+    "--table-bg": "#2a1a0e",
+    "--table-bg-image": "repeating-linear-gradient(90deg, rgba(0,0,0,.18) 0 2px, transparent 2px 140px), repeating-linear-gradient(0deg, rgba(255,210,150,.035) 0 1px, transparent 1px 7px), linear-gradient(180deg, #3a2414, #24160b)",
+    "--table-grid-rgb": "30,18,8",
+    "--table-fog-rgb": "18,11,6",
+    "--table-measure": "#ffcf6a"
+  }
+}

@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="/static/css/fonts.css">
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/design-studio.css">
+<link rel="stylesheet" href="/static/css/fx.css">
+<script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
 <link rel="stylesheet" href="/static/css/dialog.css">
@@ -32,6 +35,8 @@ h1{
 }
 .saved-chars-label{font-family:var(--font-display);color:var(--gold-dark);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;}
 .saved-chars-scroll{flex:1;display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;}
+/* Zurück-Knöpfe neben den breiten Weiter-Knöpfen nicht zusammenquetschen */
+.btn-secondary{white-space:nowrap;flex:0 0 auto;}
 .saved-char-chip{
   display:flex;align-items:center;gap:8px;
   background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
@@ -55,7 +60,11 @@ h1{
   transition:all .15s;color:var(--text-dim);
 }
 .step-item:hover{color:var(--text);background:var(--bg-mid);}
-.step-item.active{background:var(--gold-dark);color:var(--bg-deep);}
+.step-item.active{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--on-accent);box-shadow:0 4px 16px rgba(var(--gold-rgb),.25);}
+.step-item.done .step-num{background:rgba(var(--green-rgb),.18);color:var(--green-soft);border-color:rgba(var(--green-rgb),.5);}
+.step-item.done .step-num::before{content:"✓";}
+.step-item.done .step-num{font-size:0;} .step-item.done .step-num::before{font-size:.8rem;}
+.step-panel.active{animation:fx-fade-up .35s cubic-bezier(.2,.8,.2,1) both;}
 .step-item.active .step-num{background:var(--bg-deep);color:var(--gold);}
 .step-num{
   width:26px;height:26px;border-radius:50%;background:var(--bg-dark);color:var(--gold);
@@ -275,16 +284,26 @@ textarea{resize:vertical;min-height:70px;}
 <div class="bg-layer"></div>
 <div class="stars"></div>
 
-<a href="/" class="btn btn-secondary nav-btn">← Zurück</a>
-
 <div class="container">
   <header>
-    <button onclick="backFromBuilder()" style="position:absolute;left:20px;top:20px;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));color:var(--gold,var(--gold));padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.9rem">← Zurück</button>
+    <button onclick="backFromBuilder()" class="btn btn-secondary" style="position:absolute;left:20px;top:20px">← Zurück</button>
     <h1>🧙 Charakter-Builder</h1>
     <div class="subtitle">Dein Held, Schritt für Schritt</div>
   </header>
   <script src="/static/js/dialog.js"></script>
 <script>
+  // Verfügbare Erweiterungen anzeigen (nur lesen – verwaltet im Launcher)
+  (async function(){
+    try {
+      const sid = new URLSearchParams(location.search).get("join");
+      let list = await (await fetch("/api/packs")).json();
+      list = list.filter(p => p.enabled && p.total);
+      if (sid) { const c = await (await fetch(`/api/sessions/${sid}/packs`)).json(); if (Array.isArray(c.packs)) list = list.filter(p => c.packs.includes(p.id)); }
+      const box = document.getElementById("avail-packs");
+      if (box) box.innerHTML = list.map(p => `<span class="src-badge ${p.id==="basis"?"basis":p.id==="eigene"?"eigene":""}" style="font-size:.78rem;padding:4px 10px">${(p.name||p.id).replace(/[<>&]/g,"")}</span>`).join("") || '<span style="color:var(--text-dim)">Keine – bitte im Launcher eine Erweiterung aktivieren.</span>';
+    } catch(e) {}
+  })();
+
   async function backFromBuilder(){
     // Falls ungespeicherte Eingaben: kurz nachfragen.
     if(await Dialog.confirm("Nicht gespeicherte Änderungen gehen verloren.",
@@ -298,7 +317,7 @@ textarea{resize:vertical;min-height:70px;}
   <div class="saved-chars">
     <span class="saved-chars-label">Meine Charaktere:</span>
     <div class="saved-chars-scroll" id="saved-chars-list"></div>
-    <button class="btn btn-primary" style="padding:8px 14px;font-size:.78rem" onclick="newCharacter()">+ Neu</button>
+    <button class="btn btn-primary" style="padding:8px 16px;font-size:.78rem;width:auto;flex:0 0 auto" onclick="newCharacter()">＋ Neuer Charakter</button>
   </div>
 
   <!-- Step nav -->
@@ -351,21 +370,15 @@ textarea{resize:vertical;min-height:70px;}
         <div class="row">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
             <input type="checkbox" id="f-optional_features" style="width:auto;margin:0" checked>
-            <span style="font-size:.9rem">✨ Optional Features (Tasha's Cauldron) aktivieren</span>
+            <span style="font-size:.9rem">✨ Optionale Klassenmerkmale aktivieren</span>
           </label>
         </div>
 
         <div class="row">
           <div style="flex:2">
-            <label class="field-label">Quellen / Content</label>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
-              <label class="skill-check on" style="padding:6px 12px"><div class="box">✓</div><span class="name">Player's Handbook</span></label>
-              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Xanathar's Guide</span></label>
-              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Tasha's Cauldron</span></label>
-              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Critical Role</span></label>
-              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Eberron</span></label>
-              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">MTG / Strixhaven</span></label>
-            </div>
+            <label class="field-label">Verfügbare Inhalte</label>
+            <div id="avail-packs" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"></div>
+            <div style="font-size:.78rem;color:var(--text-dim);margin-top:6px">Welche Erweiterungen genutzt werden, legst du im Launcher fest – in einer Kampagne bestimmt der DM.</div>
           </div>
         </div>
       </div>
@@ -387,7 +400,7 @@ textarea{resize:vertical;min-height:70px;}
         <div id="race-info"></div>
       </div>
 
-      <label class="field-label">Ability Score Bonus verteilen (Tasha's: frei wählbar)</label>
+      <label class="field-label">Attributsbonus verteilen (frei wählbar)</label>
       <div class="ability-bonus-row">
         <span style="font-size:.88rem">+2 auf:</span>
         <select id="f-race_asi_2" style="flex:1">
@@ -681,7 +694,7 @@ async function loadSavedChars(){
     if (!chars.length) { list.innerHTML = '<span style="color:var(--text-dim);font-style:italic;font-size:.82rem">Noch keine gespeichert</span>'; return; }
     list.innerHTML = chars.map(c=>`
       <div class="saved-char-chip ${c.id===sheet.id?"active":""}" onclick="loadCharacter('${c.id}')">
-        ${c.pic_url?`<img src="${esc(c.pic_url)}">`:`<div class="chip-ph">🧙</div>`}
+        ${c.pic_url?`<img src="${esc(c.pic_url)}" onerror="this.outerHTML='<div class=&quot;chip-ph&quot;>🧙</div>'">`:`<div class="chip-ph">🧙</div>`}
         <span class="cname">${esc(c.name||"Unbenannt")}</span>
       </div>`).join("");
   } catch(e){}
@@ -754,6 +767,8 @@ function goStep(n){
   document.querySelectorAll(".step-item").forEach(p=>p.classList.remove("active"));
   document.getElementById("step-"+n).classList.add("active");
   document.querySelector(`.step-item[data-step="${n}"]`).classList.add("active");
+  // Fortschritt: frühere Schritte als erledigt markieren
+  document.querySelectorAll(".step-item").forEach(p=>p.classList.toggle("done", +p.dataset.step < n));
   if (n===5) populateBackgrounds();
   if (n===7) renderSummary();
   window.scrollTo({top:0,behavior:"smooth"});
@@ -1723,5 +1738,8 @@ init();
 </script>
 <script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/design-studio.js"></script>
+<script src="/static/js/sfx.js"></script>
+<script src="/static/js/icons.js"></script>
+<script src="/static/js/fx.js"></script>
 </body>
 </html>

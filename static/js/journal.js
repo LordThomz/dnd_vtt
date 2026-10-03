@@ -29,8 +29,8 @@ function renderJournalList(){
   ).sort((a,b)=>(a.title||"").localeCompare(b.title||""));
 
   if (!entries.length){
-    box.innerHTML = `<div style="color:var(--text-dim);text-align:center;padding:20px;font-style:italic;font-size:.85rem">
-      ${search?"Nichts gefunden.":"Noch keine Einträge."}${State.isGM&&!search?'<br>Klicke „+ Neu" für den ersten Eintrag.':""}
+    box.innerHTML = `<div class="fx-empty" style="margin:14px 10px"><div class="fx-empty-ic">${typeof Icons!=="undefined"?Icons.svg(search?"search":"book-open"):""}</div>
+      <b>${search?"Nichts gefunden":"Das Journal ist noch leer"}</b>${search?"Versuche einen anderen Suchbegriff.":State.isGM?"Klicke „+ Neu“ für den ersten Eintrag – Orte, Personen, Hinweise.":"Der DM hat noch nichts geteilt."}
     </div>`;
     return;
   }

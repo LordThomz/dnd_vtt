@@ -58,7 +58,7 @@ function renderNotes(){
   if(State.isGM){
     // DM-Ansicht: Ordnerstruktur nach Autor + Geteilte
     if(!notes.length){
-      box.innerHTML = `<div style="color:var(--text-dim);text-align:center;padding:20px;font-style:italic;font-size:.85rem">Noch keine Spieler-Notizen.</div>`;
+      box.innerHTML = `<div class="fx-empty" style="margin:14px 10px"><div class="fx-empty-ic">${typeof Icons!=="undefined"?Icons.svg("notebook-pen"):""}</div><b>Noch keine Notizen</b>Notizen deiner Spieler erscheinen hier.</div>`;
       return;
     }
     // Gruppieren
@@ -92,7 +92,7 @@ function renderNotes(){
   } else {
     // Spieler-Ansicht: eigene + geteilte, als flache Liste
     if(!notes.length){
-      box.innerHTML = `<div style="color:var(--text-dim);text-align:center;padding:20px;font-style:italic;font-size:.85rem">Noch keine Notizen.<br>Erstelle unten deine erste Notiz.</div>`;
+      box.innerHTML = `<div class="fx-empty" style="margin:14px 10px"><div class="fx-empty-ic">${typeof Icons!=="undefined"?Icons.svg("notebook-pen"):""}</div><b>Noch keine Notizen</b>Erstelle unten deine erste Notiz.</div>`;
       return;
     }
     box.innerHTML = notes.map(n=>_noteCardPlayer(n)).join("");

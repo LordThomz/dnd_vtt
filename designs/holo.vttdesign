@@ -1,0 +1,17 @@
+{
+  "vttdesign": 1,
+  "id": "holo",
+  "name": "Holo-Tisch",
+  "scope": "table",
+  "version": "1.0.0",
+  "author": "D&D Virtual Tabletop",
+  "tag": "Futuristisch",
+  "description": "Leuchtendes Cyan-Raster auf tiefem Blau.",
+  "vars": {
+    "--table-bg": "#02060c",
+    "--table-bg-image": "linear-gradient(rgba(47,227,255,.06) 1px, transparent 1px) 0 0/32px 32px, linear-gradient(90deg, rgba(47,227,255,.06) 1px, transparent 1px) 0 0/32px 32px, radial-gradient(ellipse at 50% 50%, #062033 0%, #02060c 75%)",
+    "--table-grid-rgb": "47,227,255",
+    "--table-fog-rgb": "2,8,16",
+    "--table-measure": "#ff3ea5"
+  }
+}

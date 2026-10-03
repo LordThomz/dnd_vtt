@@ -1,4 +1,234 @@
 ════════════════════════════════════════════════════════════
+  VERSION 0.2.0 – DAS GROSSE DESIGN-UPDATE
+════════════════════════════════════════════════════════════
+Zusammenfassung aller Einträge unten seit 0.1.x:
+  • Würfel-Engine V3, Würfel-Werkstatt neu, abgerundete Kanten
+  • Design-System mit Editor und Design-Katalog
+  • Launcher als Verwaltungszentrale, Intro, Musik, Klänge
+  • Animationen und Symbole im ganzen Spiel
+  • Inhaltspakete, Besitzer-Prinzip, Charakter mitbringen
+
+────────────────────────────────────────────────────────────
+  NEUER STARTBILDSCHIRM + NEUES SPIELTISCH-LAYOUT – 3. Oktober (0.2.0)
+────────────────────────────────────────────────────────────
+STARTBILDSCHIRM (Hauptmenü und Spielen-Seite zusammengelegt)
+  • Ein Bildschirm statt zwei: links Konto, „Weiterspielen", Navigation
+    (Kampagnen, Mitspielen, Charaktere, Bibliothek, Würfel-Werkstatt,
+    Design, Einstellungen, Launcher) und Version; rechts die Kampagnen
+  • Einstellungen öffnen sich rechts ohne Seitenwechsel (Konto, Klang &
+    Bewegung, Updates, Deinstallieren)
+  • /, /menu und /play zeigen denselben Startbildschirm (templates/index.html)
+  • templates/menu.html entfernt
+
+SPIELTISCH (static/css/table-layout.css + Skript in table.html)
+  • Werkzeuge als schwebendes Dock am linken Kartenrand (Tooltips rechts);
+    die Knöpfe sind nur umgezogen – alle Funktionen unverändert
+  • Seitenleiste mit Symbol-Schiene: große Symbole, Tooltips, Leuchtbalken
+    am aktiven Reiter; eingeklappt bleibt nur die Schiene (58 px)
+  • Klick auf das aktive Symbol klappt ein, Klick auf ein Symbol klappt auf;
+    Zustand wird gemerkt; Karte vermisst sich danach neu
+  • Punkt am Chat-Symbol bei neuen Nachrichten, solange der Chat
+    nicht sichtbar ist
+  • Kartenhinweis für den DM mit „Ohne Bild spielen" (je Karte ausblendbar)
+
+
+────────────────────────────────────────────────────────────
+  VISUELLER GESAMT-DURCHGANG – 3. Oktober (Teil von 0.2.0)
+────────────────────────────────────────────────────────────
+Alle Seiten und Reiter per Screenshot geprüft, danach korrigiert:
+  • Logo: W20-Wappen (wie im Launcher) statt ⚔️-Emoji – Anmeldung,
+    Hauptmenü, Spielen-Seite, Spieltisch; sanftes Schweben
+  • Anmeldung: falscher Hinweis „Standardkonto Thomas/thomas" entfernt
+  • Spielen-Seite: Titel „Spielen", drei Kacheln nebeneinander,
+    einheitlicher Zurück-Knopf, „Beitreten" ohne Emoji
+  • Builder: „Neuer Charakter" als normaler Knopf statt Vollbreiten-Balken,
+    Zurück-Knöpfe brechen nicht mehr um (Ursache: .btn-primary 100 %
+    Breite), Ersatzbild bei fehlendem Porträt, Symbole in Schritt-Titeln
+  • Spieltisch: Steuerungshilfe blendet sich nach 12 s aus („?" holt sie
+    zurück); Meldungen erscheinen oben statt über der Hilfe; Hinweis für den
+    DM, solange die Karte kein Bild hat (mit Knopf „Karte bearbeiten")
+  • Leere Zustände gestaltet: Initiative, Notizen, Journal, Spieler,
+    Angriffe, Inventar, Jukebox
+  • App-weit: Bildlaufleisten im App-Stil, sichtbarer Tastatur-Fokus,
+    einheitlicher Fokus-Schein für Eingabefelder, Markierungsfarbe
+
+
+────────────────────────────────────────────────────────────
+  WÜRFEL-WERKSTATT NEU + ABGERUNDETE KANTEN – 3. Oktober
+────────────────────────────────────────────────────────────
+WÜRFEL
+  • Abgerundete Kanten: Flächen leicht nach innen versetzt, dazwischen
+    Kantenstreifen mit weich überblendeten Normalen (dice-geometry.js,
+    BEVEL_FRAC). Nur Darstellung – Physik und Ergebnis unverändert.
+  • Kantenfärbung färbt jetzt die echten Kanten (eigenes Material)
+  • Neue Materialien: Perlmutt, Holografisch, Obsidian
+  • Neue Option „Leuchtende Zahlen" für jedes Material
+  • 4 neue Stile: Perlmond, Prisma, Vulkanglas, Smaragd (jetzt 14)
+
+WERKSTATT (templates/dice.html, komplett neu)
+  • Links Würfelauswahl, Mitte Studio-Bühne, rechts Einstellungen
+  • Stil-Galerie mit echten Vorschauen als Startpunkt; darunter Material,
+    Farben (10 Paletten), Muster (mit Vorschau), Zahlen, Kanten & Rahmen,
+    Klang
+  • „Alle Würfel" / „Nur dieser", Rückgängig/Wiederholen (Strg+Z/Y),
+    „Überrasch mich", Duplizieren, Umbenennen, Neues Set mit Stilwahl,
+    Testwurf, ganzes Set würfeln
+  • Automatische Vorschaubilder je Set (Dice3D.snapshot, ein gemeinsamer
+    Renderer) – auch im Launcher sichtbar
+
+FEINSCHLIFF
+  • Builder: doppelter Zurück-Knopf entfernt; wirkungslose Buchauswahl
+    durch die tatsächlich verfügbaren Erweiterungen ersetzt; neutrale
+    Bezeichnungen statt „Tasha's"; erledigte Schritte mit Haken;
+    weiche Schrittwechsel; aktiver Schritt auch im hellen Design lesbar
+  • Bibliothek, Charakterbogen, Überschriften: einheitliche Symbole
+
+BEHOBEN
+  • Symbol-Generator hatte in jedes Symbol ein zweites <svg> geschrieben →
+    Text direkt hinter Symbolen verschwand (alle Symbole bereinigt)
+  • Stil-Liste in der Werkstatt war leer (DicePresets ist keine
+    window-Eigenschaft)
+
+WERKZEUG
+  • release.py --pubkey DATEI trägt den öffentlichen Signatur-Schlüssel ein
+    (nach dem Überkopieren von Dateien nötig)
+
+
+════════════════════════════════════════════════════════════
+  INTRO, ANIMATIONEN, KLÄNGE, SYMBOLE, NEUES MENÜ – 3. Oktober
+════════════════════════════════════════════════════════════
+
+INTRO (Launcher → „Spiel starten")
+  • ~2,7 s: W20-Wappen zeichnet sich aus Lichtlinien, Runenringe, Titel,
+    Glutleiste, Intro-Klang; Klick überspringt. Danach Ankunft im
+    Hauptmenü mit Lichtblitz, Klang und gestaffelt erscheinenden Knöpfen.
+
+KLÄNGE & MUSIK (static/js/sfx.js, Kopie in desktop/src/sfx.js)
+  • Alles per Web Audio erzeugt – keine Sounddateien, keine Lizenzen
+  • Bedien-Klänge: Klick, Überfahren, Reiter, Fenster auf/zu, Meldung,
+    Fehler, Erfolg, kritischer Treffer (Fanfare), Patzer, Intro, Ankunft
+  • Launcher-Musik: generative Klangfläche (D-Dorisch, Harfe, Wind),
+    Knopf + Lautstärke oben rechts; startet ohne Klick (WebView2-Schalter
+    --autoplay-policy in tauri.conf.json)
+
+ANIMATIONEN (static/js/fx.js + static/css/fx.css)
+  • Weiche Seitenübergänge (View Transitions)
+  • Knöpfe: Druck-Effekt, Lichtwelle, Glanz über Hauptknöpfen
+  • Fenster gleiten auf; Listen erscheinen gestaffelt; Reiter mit
+    gleitender Leuchtlinie
+  • Spieltisch: Spielfiguren gleiten (FLIP in tokens.js), Schaden/Heilung
+    mit Aufblitzen und schwebender Zahl, aktiver Spieler in der Initiative
+    pulsiert, kritischer Treffer/Patzer mit Bildschirm-Puls
+  • Chat: Nachrichten gleiten ein, Würfelergebnis zählt hoch
+  • Meldungen mit Restzeit-Leiste
+  • „Animationen reduzieren" + Windows-Einstellung werden beachtet
+
+SYMBOLE (static/js/icons.js, Lucide, ISC-Lizenz)
+  • 89 Linien-Symbole statt Emojis in Knöpfen, Reitern, Menüs und Kacheln –
+    automatisch, auch in später erzeugten Elementen
+
+MENÜ & SEITEN
+  • Hauptmenü: schwebende Lichtpartikel, „Weiterspielen"-Karte (zuletzt
+    gespielte Kampagne), Einstellungen „Klang & Bewegung"
+  • Anmeldung mit bewegtem Hintergrund
+  • Kampagnen als Karten mit Bild der aktuellen Karte; Ladeplatzhalter
+    und gestaltete leere Zustände; „Kampagne joinen" → „beitreten"
+  • Launcher: eigene Bestätigungsdialoge statt Windows-Fenster,
+    Ladeplatzhalter, gestaffelte Listen
+
+GEPRÜFT
+  Intro → Menü, Weiterspielen, Symbole (Werkzeugleiste 11/12 – der
+  zwölfte Knopf hat kein Symbol), schwebende Schadenszahl, Kampagnen-
+  karten, Regressionstest Würfeln. Klang selbst ist im Test nicht hörbar –
+  bitte am echten PC anhören.
+
+
+════════════════════════════════════════════════════════════
+  DESIGNS ALS DATEIEN, DESIGN-KATALOG, DESIGN-EDITOR – 3. Oktober
+════════════════════════════════════════════════════════════
+
+DESIGNS ALS DATEIEN (.vttdesign, static/js/design-runtime.js)
+  • Ein Design = kleine JSON-Datei mit CSS-Variablen (+ Grundeinstellungen
+    für den Editor). Gilt für Katalog, Editor und Import gleichermaßen.
+  • Strenge Prüfung beim Laden: nur bekannte Variablen, keine Regeln,
+    keine externen Bilder/Skripte (getestet mit absichtlich bösartiger Datei)
+
+NUR NOCH EIN STANDARD-DESIGN JE BEREICH
+  • Eingebaut: „Arkanum" (Oberfläche) und „Arkaner Tisch"
+  • Schattenfeste, Pergament, Neonsphäre, Mondwald, Eichentafel,
+    Kerkerstein, Pergamentkarte, Holo-Tisch → Katalog (Ordner designs/)
+
+DESIGN-KATALOG (Launcher → Designs)
+  • Liest designs/index.json aus dem GitHub-Repository
+    (raw.githubusercontent.com, Branch main) – neue Katalog-Designs =
+    Datei in designs/ + Eintrag in index.json, kein App-Update nötig
+  • Herunterladen, Updates (neuere Katalog-Version), Import/Export
+    (.vttdesign), Löschen, Ein-/Ausblenden
+  • Repository-Angabe: desktop/src/config.js (von release.py --repo
+    geschrieben; --check prüft sie)
+
+DESIGN-EDITOR (Spiel → Design-Studio → „Eigenes Design" bzw. ✎ / ⧉)
+  • Oberfläche: Helligkeit, Hintergrund, Flächen, Schrift, Haupt- und
+    Zweitakzent, Warn-/Erfolgsfarbe, Schriften, Ecken, Leuchten, Sterne
+  • Spieltisch: Grundfarbe, Muster (6), Musterstärke, Raster, Nebel, Lineal
+  • Aus wenigen Einstellungen entsteht ein vollständiger, stimmiger
+    Farbsatz; die GANZE Seite zeigt den Entwurf live
+  • Bestehende Designs als Vorlage (⧉) oder eigene bearbeiten (✎)
+  • Zierschriften sind gekennzeichnet (in Knöpfen schwer lesbar)
+
+GEPRÜFT
+  Katalog-Download im Launcher → Auswahl im Spiel → eigenes Design im
+  Editor → nach Neuladen weiterhin aktiv → im Launcher exportierbar.
+  Alle acht Katalog-Dateien bestehen die Sicherheitsprüfung.
+
+
+════════════════════════════════════════════════════════════
+  NEUORDNUNG: LAUNCHER = VERWALTUNG, SPIEL = ALLES ANDERE – 3. Oktober
+════════════════════════════════════════════════════════════
+
+GRUNDSATZ (Thomas): Jede Einstellung gibt es nur an EINER Stelle.
+
+LAUNCHER (desktop/src/index.html) – nur verwalten, nichts bearbeiten
+  • „Spiel starten" (Update läuft vorher automatisch)
+  • Erweiterungen: an/aus, Übersicht (nur Namen + Kurzbeschreibung),
+    importieren, exportieren, entfernen
+  • Würfel-Sets: ein-/ausblenden, importieren (.vttdice/.vttpack),
+    exportieren (.vttdice), löschen
+  • Designs: ein-/ausblenden (Vorschau mit dem echten Spiel-CSS)
+  • Entfernt: Schnellzugriff-Kacheln, „Bei einem DM mitspielen"
+
+SPIEL
+  • Hauptmenü: „Bei einem DM mitspielen" (join.js, umgezogen aus dem
+    Launcher, mit Versionsvergleich und Übergabe) und „Design"
+  • Design-Studio = EINE Stelle für Oberfläche, Spieltisch UND Würfel
+    (Würfel-Reiter wählt aus den EIGENEN Sets; „Neues Set" → Werkstatt)
+  • Komplett-Designs entfernt (hätten eine eigene Zusammenstellung mit
+    einem Klick überschrieben)
+  • Bibliothek: Paket-Verwaltung entfernt (jetzt im Launcher)
+  • Würfel-Werkstatt: Vorlagen sind nur noch Startpunkt für ein neues Set
+  • Im Launcher ausgeblendete Designs/Sets erscheinen nicht zur Auswahl
+    (das aktive bleibt immer sichtbar)
+
+WÜRFEL
+  • Ergebniszahl steht jetzt gerade zum Betrachter: Unter allen
+    gleichwertigen Beschriftungs-Drehungen wird die geradeste gewählt,
+    der Rest wird unmerklich während des Rollens herausgedreht.
+    Test: 1.475 Würfe, alle richtig, Schräglage 0°.
+  • Vorschau springt beim Loslassen nicht mehr zurück; dreht mit Schwung
+    weiter und läuft sanft aus.
+
+TECHNIK
+  • Würfel-Sets und Designs liegen jetzt in der INSTALLATION (Profil):
+    Der Server legt das Profil in jede Seite (window.__VTT_PROFILE__);
+    theme.js übernimmt den neueren Stand (Server oder Browser).
+  • Verwalten am eigenen PC ohne Anmeldung nur mit App-Kennung
+    (Kopfzeile X-VTT-App) – schützt vor fremden Webseiten im selben
+    Browser. /api/server/info ist für alle lesbar (Versionsvergleich).
+  • Neu: /api/packs/<id>/contents (Übersicht)
+  • Entfernt: static/js/pack-manager.js
+
+
+════════════════════════════════════════════════════════════
   SICHERHEIT: KEIN VORGEGEBENES KONTO MEHR – 1. Oktober
 ════════════════════════════════════════════════════════════
   Jede neue Installation legte automatisch „Thomas" / „thomas" an. Wer

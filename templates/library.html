@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="/static/css/fonts.css">
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/design-studio.css">
+<link rel="stylesheet" href="/static/css/fx.css">
+<script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
 <link rel="stylesheet" href="/static/css/dialog.css">
@@ -162,7 +165,6 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0;}
   <header>
     <h1>📚 Bibliothek</h1>
     <div class="subtitle">Homebrew · Regeln · Inhalte</div>
-    <button onclick="PackManager.open({onChange: loadLibrary, readOnly: !isOwner})" title="Inhaltspakete verwalten, importieren, teilen" style="position:fixed;top:18px;right:168px;z-index:10;background:var(--bg-panel2);border:1px solid var(--gold-dark);color:var(--gold);padding:9px 16px;border-radius:10px;cursor:pointer;font-size:.9rem">📦 Pakete</button>
     <button onclick="refreshLibrary()" id="lib-refresh-btn" title="Neueste Einträge vom Server holen" style="position:fixed;top:18px;right:18px;z-index:10;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));color:var(--gold,var(--gold));padding:9px 16px;border-radius:10px;cursor:pointer;font-size:.9rem">🔄 Aktualisieren</button>
   </header>
   <script src="/static/js/dialog.js"></script>
@@ -279,7 +281,7 @@ function renderCatTabs(){
   ).join("");
 }
 
-// Quellen (Inhaltspakete) – siehe packs.py / pack-manager.js
+// Quellen (Erweiterungen) – siehe packs.py; verwaltet werden sie im Launcher
 let packs = [], srcFilter = "";
 const srcName = id => (packs.find(p => p.id === id) || {}).name || id;
 async function loadPacks(){
@@ -1114,11 +1116,13 @@ loadLibrary();
 </script>
 <script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/design-studio.js"></script>
-<script src="/static/js/pack-manager.js"></script>
 <footer style="max-width:1200px;margin:30px auto 20px;padding:0 20px;font-size:.72rem;line-height:1.5;color:var(--text-dim);text-align:center">
   Die „Grundregeln (SRD 5.1)" enthalten Material aus dem System Reference Document 5.1 von Wizards of the Coast LLC,
   lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/legalcode" target="_blank" style="color:var(--text-dim)">CC-BY-4.0</a>.
   Kompatibel mit der 5. Edition, keine Verbindung zu Wizards of the Coast.
 </footer>
+<script src="/static/js/sfx.js"></script>
+<script src="/static/js/icons.js"></script>
+<script src="/static/js/fx.js"></script>
 </body>
 </html>

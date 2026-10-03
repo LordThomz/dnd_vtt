@@ -1,0 +1,17 @@
+{
+  "vttdesign": 1,
+  "id": "kerker",
+  "name": "Kerkerstein",
+  "scope": "table",
+  "version": "1.0.0",
+  "author": "D&D Virtual Tabletop",
+  "tag": "Stein",
+  "description": "Kalte Steinplatten, helles Raster.",
+  "vars": {
+    "--table-bg": "#111214",
+    "--table-bg-image": "repeating-linear-gradient(0deg, rgba(0,0,0,.35) 0 2px, transparent 2px 64px), repeating-linear-gradient(90deg, rgba(0,0,0,.35) 0 2px, transparent 2px 64px), radial-gradient(ellipse at 50% 50%, #26282c 0%, #0c0d0f 80%)",
+    "--table-grid-rgb": "200,200,205",
+    "--table-fog-rgb": "8,8,10",
+    "--table-measure": "#ff8a3a"
+  }
+}

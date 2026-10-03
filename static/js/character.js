@@ -895,7 +895,7 @@ const Character = (() => {
     const panel = document.getElementById("attacks-list");
     if (!panel) return;
     if (!sheet.attacks.length) {
-      panel.innerHTML = `<div style="color:var(--text-dim);text-align:center;padding:16px;font-style:italic">Noch keine Angriffe oder Zauber erstellt.</div>`;
+      panel.innerHTML = `<div class="fx-empty" style="margin:14px 10px"><div class="fx-empty-ic">${typeof Icons!=="undefined"?Icons.svg("sword"):""}</div><b>Noch keine Angriffe</b>Lege Angriffe und Zauber an – sie erscheinen hier zum Würfeln.</div>`;
       return;
     }
     // Trennung: Zauber vs. normale Angriffe (Nahkampf/Fernkampf)

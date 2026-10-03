@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="/static/css/fonts.css">
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/design-studio.css">
+<link rel="stylesheet" href="/static/css/fx.css">
+<script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
 <link rel="stylesheet" href="/static/css/dialog.css">
@@ -27,13 +30,15 @@ h1{font-family:'Cinzel Decorative',serif;font-size:3.4rem;font-weight:900;letter
   background:linear-gradient(135deg,var(--gold-dark) 0%,var(--gold-light) 40%,var(--gold) 60%,var(--gold-dark) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
 .subtitle{color:var(--text-dim);letter-spacing:.4em;font-family:var(--font-display);font-size:.85rem;text-transform:uppercase;}
-.creator-tiles{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px;}
-@media(max-width:720px){.creator-tiles{grid-template-columns:1fr;}}
+.creator-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px;}
+@media(max-width:1000px){.creator-tiles{grid-template-columns:1fr 1fr;}}
+@media(max-width:640px){.creator-tiles{grid-template-columns:1fr;}}
 .creator-tile{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--bg-panel2) 0%,var(--bg-panel) 100%);
   border:2px solid var(--gold-dark);border-radius:16px;padding:34px 26px;cursor:pointer;text-decoration:none;color:inherit;
   transition:all .25s cubic-bezier(.25,.46,.45,.94);min-height:200px;display:flex;flex-direction:column;}
 .creator-tile:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 10px 36px rgba(var(--shade-rgb),.5);}
-.tile-icon{font-size:3.2rem;margin-bottom:12px;filter:drop-shadow(0 2px 8px rgba(var(--gold-rgb),.3));}
+.tile-icon{font-size:3.2rem;margin-bottom:12px;filter:drop-shadow(0 2px 8px rgba(var(--gold-rgb),.3));color:var(--gold);}
+.tile-icon svg.ic{width:50px;height:50px;stroke-width:1.35;}
 .tile-title{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold-light);margin-bottom:8px;letter-spacing:.05em;}
 .tile-desc{font-size:.92rem;color:var(--text);line-height:1.5;margin-bottom:14px;flex:1;}
 .tile-cta{align-self:flex-start;padding:8px 18px;background:var(--gold-dark);color:var(--bg-deep);font-family:var(--font-display);font-size:.76rem;letter-spacing:.12em;border-radius:6px;text-transform:uppercase;font-weight:600;}
@@ -46,11 +51,19 @@ h1{font-family:'Cinzel Decorative',serif;font-size:3.4rem;font-weight:900;letter
 .camp-box{background:linear-gradient(180deg,var(--bg-panel) 0%,var(--bg-panel2) 100%);
   border:1px solid var(--gold-dark);border-radius:16px;padding:24px;min-height:280px;display:flex;flex-direction:column;}
 .camp-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--gold-dark);}
-.camp-head .h-icon{font-size:1.8rem;}
+.camp-head .h-icon{font-size:1.8rem;color:var(--gold);}
 .camp-head h2{font-family:'Cinzel Decorative',serif;font-size:1.15rem;color:var(--gold);letter-spacing:.05em;}
 .camp-list{flex:1;min-height:120px;}
-.camp-card{background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:all .14s;}
-.camp-card:hover{border-color:var(--gold);}
+.camp-card{position:relative;background:linear-gradient(180deg,var(--bg-panel),var(--bg-dark));border:1px solid rgba(var(--gold-rgb),.35);border-radius:var(--radius-lg);padding:0 14px 12px;margin-bottom:12px;overflow:hidden;
+  transition:transform .2s, box-shadow .2s, border-color .2s;box-shadow:0 8px 24px rgba(var(--shade-rgb),.3);}
+.camp-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 14px 34px rgba(var(--shade-rgb),.4),0 0 20px rgba(var(--gold-rgb),.1);}
+.cc-cover{position:relative;height:96px;margin:0 -14px 10px;overflow:hidden;
+  background:radial-gradient(ellipse at 30% 30%,rgba(var(--arcane-rgb),.2),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(var(--gold-rgb),.18),transparent 55%),
+             repeating-linear-gradient(0deg,rgba(var(--gold-rgb),.07) 0 1px,transparent 1px 22px),repeating-linear-gradient(90deg,rgba(var(--gold-rgb),.07) 0 1px,transparent 1px 22px),var(--bg-mid);}
+.cc-cover img{width:100%;height:100%;object-fit:cover;transition:transform 6s ease;}
+.camp-card:hover .cc-cover img{transform:scale(1.08);}
+.cc-cover-fade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,var(--bg-panel) 100%);}
+.cc-map{position:absolute;left:12px;bottom:8px;font-size:.72rem;color:var(--text-bright);text-shadow:0 1px 4px rgba(0,0,0,.8);}
 .cc-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;}
 .cc-name{font-family:var(--font-display);color:var(--gold);font-size:.98rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
 .cc-meta{display:flex;gap:6px;flex-wrap:wrap;font-size:.72rem;color:var(--text-dim);margin-bottom:8px;}
@@ -82,26 +95,62 @@ h1{font-family:'Cinzel Decorative',serif;font-size:3.4rem;font-weight:900;letter
 .form-group input{width:100%;background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:6px;padding:9px 12px;color:var(--text);}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg-panel);border:1px solid var(--gold);color:var(--text);padding:12px 20px;border-radius:8px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
 #toast.show{opacity:1;}
+
+/* ══ STARTBILDSCHIRM: Navigation links, Inhalt rechts ══════════════════════ */
+body{overflow:hidden;}
+.hub{display:grid;grid-template-columns:290px 1fr;height:100vh;position:relative;z-index:1;}
+.hub-nav{display:flex;flex-direction:column;gap:12px;padding:22px 16px 16px;border-right:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(var(--panel-rgb),.86),rgba(var(--panel-rgb),.62));backdrop-filter:blur(10px);overflow-y:auto;}
+.hub-brand{display:flex;align-items:center;gap:12px;padding:0 6px 6px;}
+.hub-brand .crest-svg{width:46px;height:46px;filter:drop-shadow(0 0 14px rgba(var(--gold-rgb),.35));}
+.hub-brand b{display:block;font:700 1.35rem/1 var(--font-display);color:var(--gold-light);letter-spacing:.04em;}
+.hub-brand span{font:600 .62rem/1 var(--font-ui);letter-spacing:.28em;text-transform:uppercase;color:var(--arcane);}
+.hub-account{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-lg);border:1px solid var(--border);background:rgba(var(--hi-rgb),.03);}
+.hub-account .user-avatar-round{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:700 .95rem/1 var(--font-display);color:var(--on-accent);flex:0 0 auto;}
+.ha-txt{flex:1;min-width:0;} .ha-txt b{display:block;font:700 .9rem/1.2 var(--font-display);color:var(--text-bright);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ha-txt span{font-size:.72rem;color:var(--text-dim);}
+.ha-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-size:.9rem;}
+.ha-btn:hover{color:var(--gold-light);border-color:var(--gold-dark);}
+.hub-links{display:flex;flex-direction:column;gap:3px;margin-top:4px;}
+.hub-link{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:var(--radius);border:1px solid transparent;
+  background:transparent;color:var(--text);font:600 .86rem/1.2 var(--font-display);letter-spacing:.03em;text-align:left;cursor:pointer;text-decoration:none;}
+.hub-link .hl-ic{width:22px;display:grid;place-items:center;color:var(--gold);flex:0 0 auto;}
+.hub-link .hl-ic svg{width:19px;height:19px;}
+.hub-link:hover{background:rgba(var(--hi-rgb),.05);color:var(--text-bright);}
+.hub-link.on{background:linear-gradient(90deg,rgba(var(--gold-rgb),.16),rgba(var(--gold-rgb),.03));border-color:rgba(var(--gold-rgb),.35);color:var(--gold-light);}
+.hub-link.hidden{display:none;}
+.hub-sep{height:1px;background:var(--border);margin:8px 6px;}
+.hub-foot{margin-top:auto;padding:10px 6px 0;font:500 .7rem/1.3 var(--font-ui);color:var(--text-dim);}
+.hub-main{overflow-y:auto;position:relative;}
+.hub-main .container{max-width:1180px;}
+.hub-head{text-align:left;margin:6px 0 18px;}
+.hub-head h1{font:700 2rem/1.1 var(--font-display);color:var(--gold-light);}
+.hub-head .subtitle{text-align:left;margin-top:6px;letter-spacing:.02em;text-transform:none;font-size:.95rem;}
+.continue{position:relative;overflow:hidden;cursor:pointer;padding:14px 50px 14px 16px;border-radius:var(--radius-lg);
+  background:linear-gradient(120deg,rgba(var(--gold-rgb),.16),rgba(var(--arcane-rgb),.07));border:1px solid rgba(var(--gold-rgb),.45);transition:transform .2s,box-shadow .2s;}
+.continue:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(var(--shade-rgb),.4),0 0 22px rgba(var(--gold-rgb),.15);}
+.continue.hidden{display:none;}
+.cont-glow{position:absolute;inset:-40%;background:radial-gradient(circle at 80% 50%,rgba(var(--gold-rgb),.18),transparent 45%);animation:cont-pulse 4s ease-in-out infinite;pointer-events:none;}
+@keyframes cont-pulse{50%{opacity:.4;}}
+.cont-kicker{font:700 .62rem/1 var(--font-display);letter-spacing:.18em;text-transform:uppercase;color:var(--arcane);}
+.cont-name{font:700 1.02rem/1.25 var(--font-display);color:var(--text-bright);margin-top:5px;}
+.cont-meta{font-size:.76rem;color:var(--text-dim);margin-top:2px;}
+.cont-go{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  background:var(--gold);color:var(--on-accent);font-size:.75rem;box-shadow:0 0 14px rgba(var(--gold-rgb),.5);}
+.set-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+.set-card{padding:18px 20px;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,var(--bg-panel),var(--bg-dark));}
+.set-card h3{font:700 .95rem/1.2 var(--font-display);color:var(--gold-light);margin-bottom:8px;}
+.set-card p{font-size:.88rem;color:var(--text-dim);margin-bottom:12px;line-height:1.45;}
+.set-card.danger{border-color:rgba(var(--red-rgb),.4);} .set-card.danger h3{color:var(--red-soft);}
+.fx-opt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid rgba(var(--hi-rgb),.06);cursor:pointer;}
+.fx-opt:first-of-type{border-top:none;} .fx-opt span{font-size:.9rem;} .fx-opt i{display:block;font-style:normal;font-size:.75rem;color:var(--text-dim);}
+.fx-opt input[type=checkbox]{width:18px;height:18px;} .fx-opt input[type=range]{width:140px;}
+.hidden{display:none !important;}
+@media(max-width:900px){.hub{grid-template-columns:1fr;height:auto;} body{overflow:auto;} .hub-nav{border-right:none;border-bottom:1px solid var(--border);}}
 </style>
 </head>
 <body>
 <div class="bg-layer"></div><div class="stars"></div>
-<div class="user-bar" id="user-bar" style="display:none">
-  <div class="user-account-btn" id="user-account-btn" onclick="toggleAccountMenu()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 10px;border-radius:10px;transition:background .15s">
-    <div class="user-avatar-round" id="user-avatar">?</div>
-    <span class="uname" id="user-name">...</span>
-    <span style="color:var(--text-dim);font-size:.7rem">▼</span>
-  </div>
-  <div id="account-menu" style="display:none;position:absolute;top:100%;right:0;margin-top:6px;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));border-radius:12px;padding:8px;min-width:220px;box-shadow:0 8px 30px rgba(var(--shade-rgb),.5);z-index:100">
-    <div style="padding:10px 12px;border-bottom:1px solid var(--border,var(--border));margin-bottom:6px">
-      <div id="am-name" style="font-weight:600;color:var(--gold,var(--gold))"></div>
-      <div id="am-sub" style="font-size:.78rem;color:var(--text-dim,var(--text-dim))"></div>
-    </div>
-    <button class="am-item" onclick="openAccountEditor()" style="width:100%;text-align:left;background:transparent;border:none;color:var(--text,var(--text));padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.9rem">⚙️ Account bearbeiten</button>
-    <button class="am-item" onclick="doLogout()" style="width:100%;text-align:left;background:transparent;border:none;color:var(--red-soft);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.9rem">🚪 Abmelden</button>
-  </div>
-</div>
-
 <!-- Account-Editor (Overlay) -->
 <div id="account-editor" style="display:none;position:fixed;inset:0;background:rgba(var(--shade-rgb),.6);z-index:200;align-items:center;justify-content:center">
   <div style="background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));border-radius:16px;padding:26px;width:90%;max-width:420px">
@@ -127,36 +176,46 @@ h1{font-family:'Cinzel Decorative',serif;font-size:3.4rem;font-weight:900;letter
     </div>
   </div>
 </div>
-<div class="container">
-  <button onclick="location.href='/menu'" title="Zurück zum Hauptmenü" style="position:fixed;top:14px;left:14px;z-index:50;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));color:var(--gold,var(--gold));padding:9px 16px;border-radius:10px;cursor:pointer;font-size:.9rem;font-family:Cinzel,serif">← Menü</button>
-  <header>
-    <div class="crest">⚔️</div>
-    <h1>D&amp;D</h1>
-    <p class="subtitle">Virtual Tabletop · 5e</p>
-  </header>
-  <div class="creator-tiles">
-    <a href="/builder" class="creator-tile">
-      <div class="tile-icon">🧙‍♂️</div>
-      <div class="tile-title">Charakter-Builder</div>
-      <div class="tile-desc">Erstelle deine eigenen Helden Schritt für Schritt.</div>
-      <div class="tile-cta">Charakter erstellen →</div>
-    </a>
-    <a href="/library" class="creator-tile">
-      <div class="tile-icon">📚</div>
-      <div class="tile-title">Bibliothek</div>
-      <div class="tile-desc">Homebrew: Rassen, Klassen, Zauber, Talente und mehr.</div>
-      <div class="tile-cta">Bibliothek öffnen →</div>
-    </a>
-    <a href="/dice" class="creator-tile">
-      <div class="tile-icon">🎲</div>
-      <div class="tile-title">Würfel-Werkstatt</div>
-      <div class="tile-desc">Gestalte deine Würfel: Oberfläche, Farben, Muster – mit Live-Vorschau.</div>
-      <div class="tile-cta">Würfel gestalten →</div>
-    </a>
+<div class="hub">
+<aside class="hub-nav" id="hub-nav">
+  <div class="hub-brand"><svg class="crest-svg" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold-light)"/><stop offset=".55" stop-color="var(--gold)"/><stop offset="1" stop-color="var(--arcane)"/></linearGradient></defs><polygon points="32,3 58,18 58,46 32,61 6,46 6,18" fill="rgba(var(--panel-rgb),.55)" stroke="url(#cg)" stroke-width="2.4" stroke-linejoin="round"/><polygon points="32,14 49,42 15,42" fill="none" stroke="url(#cg)" stroke-width="2" stroke-linejoin="round"/><path d="M32 3v11M58 18 49 42M6 18l9 24M58 46 49 42M6 46l9-4M32 61V42M32 14 6 18M32 14l26 4" stroke="url(#cg)" stroke-opacity=".55" stroke-width="1.4" fill="none"/></svg><div><b>D&amp;D</b><span>Virtual Tabletop</span></div></div>
+
+  <div class="hub-account">
+    <div class="user-avatar-round" id="user-avatar">?</div>
+    <div class="ha-txt"><b id="user-name">…</b><span id="am-sub"></span></div>
+    <button class="ha-btn" title="Konto bearbeiten" onclick="openAccountEditor()">⚙</button>
+    <button class="ha-btn" title="Abmelden" onclick="doLogout()">⏻</button>
   </div>
 
-  <script src="/static/js/dialog.js"></script>
-  <div class="divider"><span>✦</span></div>
+  <div id="continue" class="continue hidden" onclick="continueLast()" role="button" tabindex="0">
+    <div class="cont-glow"></div>
+    <div class="cont-kicker">Weiterspielen</div>
+    <div class="cont-name" id="cont-name"></div>
+    <div class="cont-meta" id="cont-meta"></div>
+    <div class="cont-go">▶</div>
+  </div>
+
+  <nav class="hub-links" id="hub-links">
+    <button class="hub-link on" data-view="camps" onclick="showView('camps')"><span class="hl-ic">🏰</span>Kampagnen</button>
+    <button class="hub-link" id="btn-join" onclick="JoinDM.open()"><span class="hl-ic">👥</span>Bei einem DM mitspielen</button>
+    <div class="hub-sep"></div>
+    <a class="hub-link" href="/builder"><span class="hl-ic">🧙</span>Charaktere</a>
+    <a class="hub-link" href="/library"><span class="hl-ic">📚</span>Bibliothek</a>
+    <a class="hub-link" href="/dice"><span class="hl-ic">🎲</span>Würfel-Werkstatt</a>
+    <button class="hub-link" onclick="DesignStudio.open()"><span class="hl-ic">🎨</span>Design</button>
+    <div class="hub-sep"></div>
+    <button class="hub-link" data-view="settings" onclick="showView('settings')"><span class="hl-ic">⚙</span>Einstellungen</button>
+    <button class="hub-link hidden" id="btn-launcher" onclick="location.href=Theme.launcherUrl()"><span class="hl-ic">⬅</span>Zum Launcher</button>
+  </nav>
+  <div class="hub-foot" id="hub-version"></div>
+</aside>
+
+<main class="hub-main">
+<div class="container" id="view-camps">
+  <header class="hub-head">
+    <h1>Kampagnen</h1>
+    <p class="subtitle">Leite deine eigenen Abenteuer oder tritt einer Runde bei.</p>
+  </header>
   <div class="campaign-row">
     <div class="camp-box">
       <div class="camp-head"><span class="h-icon">🏰</span><h2>Meine Kampagnen</h2></div>
@@ -170,13 +229,43 @@ h1{font-family:'Cinzel Decorative',serif;font-size:3.4rem;font-weight:900;letter
       </div>
     </div>
     <div class="camp-box">
-      <div class="camp-head"><span class="h-icon">🐉</span><h2>Kampagne joinen</h2></div>
+      <div class="camp-head"><span class="h-icon">👥</span><h2>Kampagne beitreten</h2></div>
       <p style="color:var(--text-dim);font-size:.82rem;margin-bottom:12px">Kampagnen bei denen du <strong style="color:var(--gold)">eingeladen</strong> bist oder die <strong style="color:var(--gold)">öffentlich</strong> sind.</p>
       <div class="camp-list" id="join-camps"></div>
       <button class="btn btn-secondary" style="width:100%;margin-top:6px;font-size:.78rem" onclick="silentRefreshJoinable()">🔄 Aktualisieren</button>
       <div id="join-updated" style="text-align:center;color:var(--text-dim);font-size:.68rem;margin-top:4px"></div>
     </div>
   </div>
+</div>
+
+<!-- Einstellungen (ehemals im Hauptmenü) -->
+<div class="container hidden" id="view-settings">
+  <header class="hub-head"><h1>Einstellungen</h1><p class="subtitle">Gilt nur für dich auf diesem Gerät.</p></header>
+  <div class="set-grid">
+    <div class="set-card">
+      <h3>Konto</h3>
+      <p>Anzeigename, Spitzname und deine Farbe am Spieltisch.</p>
+      <button class="btn btn-secondary" style="width:auto" onclick="openAccountEditor()">Konto bearbeiten</button>
+    </div>
+    <div class="set-card">
+      <h3>Klang &amp; Bewegung</h3>
+      <label class="fx-opt"><span>Bedien-Klänge</span><input type="checkbox" id="fx-sound" onchange="fxSet()"></label>
+      <label class="fx-opt"><span>Lautstärke</span><input type="range" id="fx-vol" min="0" max="100" oninput="fxSet()"></label>
+      <label class="fx-opt"><span>Musik im Launcher</span><input type="checkbox" id="fx-music" onchange="fxSet()"></label>
+      <label class="fx-opt"><span>Animationen reduzieren<i>weniger Bewegung, z. B. bei Unwohlsein</i></span><input type="checkbox" id="fx-reduce" onchange="fxSet()"></label>
+    </div>
+    <div class="set-card">
+      <h3>Updates</h3>
+      <p>Neue Versionen installiert der Launcher beim Start automatisch. Inhalte, Würfel-Sets und Designs verwaltest du im Launcher.</p>
+    </div>
+    <div class="set-card danger">
+      <h3>Programm deinstallieren</h3>
+      <p>Entfernt D&amp;D Virtual Tabletop von diesem PC (über die Windows-Einstellungen).</p>
+      <button class="btn btn-secondary" style="width:auto;border-color:var(--red);color:var(--red-soft)" onclick="uninstallApp()">Deinstallieren</button>
+    </div>
+  </div>
+</div>
+</main>
 </div>
 
 <div class="modal-backdrop" id="pw-modal">
@@ -216,16 +305,13 @@ async function loadMe(){
   const res=await fetch("/api/auth/me");const data=await res.json();
   if(!data.logged_in){window.location.href="/login";return;}
   currentUser=data.user;
-  document.getElementById("user-bar").style.display="flex";
   const av=document.getElementById("user-avatar");
   av.style.background=currentUser.avatar_color||"#c9a96e";
   av.textContent=(currentUser.display_name||currentUser.username)[0].toUpperCase();
   document.getElementById("user-name").textContent=currentUser.display_name||currentUser.username;
   // Account-Dropdown-Kopf befüllen
-  const amName=document.getElementById("am-name");
   const amSub=document.getElementById("am-sub");
-  if(amName) amName.textContent=currentUser.display_name||currentUser.username;
-  if(amSub) amSub.textContent="@"+currentUser.username;
+  if(amSub) amSub.textContent="@"+currentUser.username+(currentUser.is_guest?" · Gast":"");
   // Gäste können keine eigenen Kampagnen erstellen
   if(currentUser.is_guest){
     const box = document.querySelector(".camp-box");
@@ -235,7 +321,7 @@ async function loadMe(){
       const list = document.getElementById("my-camps");
       if(list) list.innerHTML=`<div class="empty-camp">👤 Als Gast kannst du öffentlichen Kampagnen beitreten,<br>aber keine eigenen erstellen.<br><br>Registriere einen Account für alle Funktionen.</div>`;
     }
-    document.getElementById("user-name").textContent += " (Gast)";
+    const jb=document.getElementById("btn-join"); if(jb) jb.classList.add("hidden");
   }
 }
 async function doLogout(){await fetch("/api/auth/logout",{method:"POST"});window.location.href="/login";}
@@ -285,17 +371,26 @@ async function saveAccount(){
     toast("✅ Profil gespeichert");
   }catch(e){err.textContent="Netzwerkfehler";}
 }
+// Kopfbild einer Kampagnen-Karte: Bild der aktuellen Karte, sonst Muster
+function campCover(s){
+  const img = s.cover ? `<img src="${esc(s.cover)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+  return `<div class="cc-cover">${img}<div class="cc-cover-fade"></div>${s.map_name ? `<span class="cc-map">🗺️ ${esc(s.map_name)}</span>` : ""}</div>`;
+}
+const emptyBox = (icon, title, text) => `<div class="fx-empty"><div class="fx-empty-ic">${typeof Icons!=="undefined" ? Icons.svg(icon) : ""}</div><b>${title}</b>${text}</div>`;
+const skeleton = n => Array.from({length:n}, () => `<div class="fx-skel" style="height:150px"></div>`).join("");
+
 async function loadMyCamps(){
   if(currentUser && currentUser.is_guest) return;
-  const res=await fetch("/api/sessions/my");const list=await res.json();
   const el=document.getElementById("my-camps");
-  if(!list.length){el.innerHTML=`<div class="empty-camp">Keine Kampagnen.<br>Erstelle unten deine erste!</div>`;return;}
+  if(!el.children.length) el.innerHTML = skeleton(2);
+  const res=await fetch("/api/sessions/my");const list=await res.json();
+  if(!list.length){el.innerHTML=emptyBox("castle","Noch keine Kampagne","Erstelle unten deine erste – als DM bestimmst du Welt, Karten und Regeln.");return;}
   el.innerHTML=list.map(s=>{
     const visClass=s.visibility==="public"?"public":"private";
     const visText=s.visibility==="public"?"🟢 Öffentlich":"🔒 Privat (nur Eingeladene)";
     const toggleText=s.visibility==="public"?"🔒 Privat schalten":"🌐 Öffentlich schalten";
     const nextVis=s.visibility==="public"?"private":"public";
-    return `<div class="camp-card"><div class="cc-top"><div class="cc-name">${esc(s.name)}</div></div>
+    return `<div class="camp-card">${campCover(s)}<div class="cc-top"><div class="cc-name">${esc(s.name)}</div></div>
       <div class="cc-meta"><span class="cc-badge ${visClass}">${visText}</span><span class="cc-badge">${s.invited_count} Spieler</span></div>
       <div class="cc-actions">
         <button class="btn btn-primary" onclick="startAsDM('${s.id}')">▶️ Session starten</button>
@@ -352,19 +447,20 @@ async function cloneCampaign(sid){
   loadMyCamps();
 }
 async function loadJoinable(){
-  const res=await fetch("/api/sessions/joinable");const list=await res.json();
   const el=document.getElementById("join-camps");
-  if(!list.length){el.innerHTML=`<div class="empty-camp">Keine offenen Kampagnen.<br>Ein DM muss eine Session starten.</div>`;return;}
+  if(!el.children.length) el.innerHTML = skeleton(1);
+  const res=await fetch("/api/sessions/joinable");const list=await res.json();
+  if(!list.length){el.innerHTML=emptyBox("users","Gerade keine offenen Kampagnen","Sobald ein DM auf diesem Server eine Sitzung startet, erscheint sie hier.");return;}
   el.innerHTML=list.map(s=>{
     const badges=[];
     if(s.invited)badges.push(`<span class="cc-badge invited">📜 Eingeladen</span>`);
     else if(s.visibility==="public")badges.push(`<span class="cc-badge public">🌐 Öffentlich</span>`);
     badges.push(s.dm_online?`<span class="cc-badge online">🟢 DM online</span>`:`<span class="cc-badge offline">⚪ DM offline</span>`);
     const dim=s.joinable?"":"opacity:.55;";
-    return `<div class="camp-card" style="${dim}"><div class="cc-top"><div class="cc-name" style="${s.joinable?"":"color:var(--text-dim)"}">${esc(s.name)}</div></div>
+    return `<div class="camp-card" style="${dim}">${campCover(s)}<div class="cc-top"><div class="cc-name" style="${s.joinable?"":"color:var(--text-dim)"}">${esc(s.name)}</div></div>
       <div class="cc-meta"><span class="cc-badge">DM: ${esc(s.owner||"?")}</span>${badges.join("")}</div>
       <div class="cc-actions">${s.joinable
-        ?`<button class="btn btn-primary" onclick="joinCampaign('${s.id}')">⚔️ Beitreten →</button>`
+        ?`<button class="btn btn-primary" onclick="joinCampaign('${s.id}')">▶ Beitreten</button>`
         :`<button class="btn btn-secondary" disabled style="cursor:not-allowed" title="Die Sitzung ist offen, sobald der DM sie betritt.">⏳ Warte auf den DM</button>`}</div></div>`;
   }).join("");
 }
@@ -550,5 +646,81 @@ async function silentRefreshJoinable(){
 </script>
 <script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/design-studio.js"></script>
+<script src="/static/js/sfx.js"></script>
+<script src="/static/js/icons.js"></script>
+<script src="/static/js/fx.js"></script>
+<script src="/static/js/dialog.js"></script>
+<script src="/static/js/join.js"></script>
+<script>
+// ══ Startbildschirm: Ansichten, Weiterspielen, Einstellungen ═══════════════
+function showView(v){
+  document.getElementById("view-camps").classList.toggle("hidden", v!=="camps");
+  document.getElementById("view-settings").classList.toggle("hidden", v!=="settings");
+  document.querySelectorAll(".hub-link[data-view]").forEach(b=>b.classList.toggle("on", b.dataset.view===v));
+  if (v==="settings") fxLoad();
+  document.querySelector(".hub-main").scrollTop = 0;
+}
+function continueLast(){
+  try { const l = JSON.parse(localStorage.getItem("vtt_last_session")||"null"); if (l && l.id) location.href = "/table/" + l.id; } catch(e) {}
+}
+(async function(){
+  let last = null; try { last = JSON.parse(localStorage.getItem("vtt_last_session")||"null"); } catch(e) {}
+  if (!last || !last.id) return;
+  try {
+    const mine = await (await fetch("/api/sessions/my")).json();
+    const s = Array.isArray(mine) && mine.find(x => x.id === last.id); if (!s) return;
+    document.getElementById("cont-name").textContent = s.name || "Kampagne";
+    const ago = last.at ? Math.round((Date.now() - last.at) / 86400000) : null;
+    document.getElementById("cont-meta").textContent = [s.map_name ? "Karte: " + s.map_name : "", ago === 0 ? "heute gespielt" : ago === 1 ? "gestern gespielt" : ago ? "vor " + ago + " Tagen" : ""].filter(Boolean).join(" · ");
+    document.getElementById("continue").classList.remove("hidden");
+  } catch(e) {}
+})();
+function fxLoad(){
+  const s = Sfx.settings();
+  document.getElementById("fx-sound").checked = s.sound;
+  document.getElementById("fx-vol").value = Math.round(s.uiVol * 100);
+  document.getElementById("fx-music").checked = s.music;
+  document.getElementById("fx-reduce").checked = s.reduceMotion;
+}
+function fxSet(){
+  Sfx.configure({ sound: document.getElementById("fx-sound").checked, uiVol: (+document.getElementById("fx-vol").value) / 100,
+                  music: document.getElementById("fx-music").checked, reduceMotion: document.getElementById("fx-reduce").checked });
+}
+async function quitApp(){
+  try { const T = window.__TAURI__;
+    if (T && T.process && T.process.exit) { await T.process.exit(0); return; }
+    if (T && T.window) { const w = (T.window.getCurrentWindow || T.window.getCurrent)(); if (w && w.close) { await w.close(); return; } }
+  } catch(e) {}
+  try { window.close(); } catch(e) {}
+}
+async function uninstallApp(){
+  if (!await Dialog.confirmDanger("Die App wird geschlossen und die Windows-Deinstallation geöffnet.",
+      { title: "D&D Virtual Tabletop deinstallieren?", icon: "🗑", okText: "Deinstallieren" })) return;
+  try { const T = window.__TAURI__;
+    if (T && T.shell && T.shell.open) { try { await T.shell.open("ms-settings:appsfeatures"); } catch(e) {} setTimeout(quitApp, 1500); return; }
+  } catch(e) {}
+  await Dialog.alert("Bitte deinstalliere die App über die Windows-Einstellungen (Apps & Features).", { title: "Deinstallation", okText: "Verstanden" });
+}
+// Rückweg zum Launcher, Mitspielen nur in der eigenen Installation, Design aus dem Launcher
+(function(){
+  try {
+    const home = Theme.launcherUrl(), own = ["localhost","127.0.0.1"].includes(location.hostname);
+    const b = document.getElementById("btn-launcher");
+    if (home && !(own && home.startsWith(location.origin))) {
+      b.classList.remove("hidden");
+      if (!own) b.innerHTML = '<span class="hl-ic">⬅</span>Zurück zu meinem Spiel';
+    }
+    if (!own) document.getElementById("btn-join").classList.add("hidden");
+    if (sessionStorage.getItem("vtt_open") === "design") { sessionStorage.removeItem("vtt_open"); setTimeout(() => DesignStudio.open(), 150); }
+  } catch (e) {}
+  fetch("/api/server/info").then(r => r.json()).then(i => { document.getElementById("hub-version").textContent = "Version " + (i.version || "–"); }).catch(() => {});
+})();
+// Bewegter Hintergrund + Ankunft nach dem Intro
+window.addEventListener("load", () => {
+  try { FX.ambient(); } catch(e) {}
+  const arrived = (typeof FX !== "undefined") && FX.reveal();
+  try { FX.stagger(document.getElementById("hub-links"), arrived ? 3 : 0); } catch(e) {}
+});
+</script>
 </body>
 </html>

@@ -16,7 +16,7 @@ from game_state import (get_session, all_sessions, session_safe_copy,
 api_bp = Blueprint("api", __name__)
 
 # Programmversion – wird später für die automatische Update-Prüfung genutzt.
-APP_VERSION = "0.1.2"
+APP_VERSION = "0.2.0"
 
 # Uploads landen im beschreibbaren Datenverzeichnis (wichtig für die gebündelte Exe).
 from config import app_data_dir
@@ -42,12 +42,24 @@ def _is_local_request():
     addr = (request.remote_addr or "").strip()
     return addr in ("127.0.0.1", "::1", "localhost") and not request.headers.get("X-Forwarded-For")
 
+def _app_header():
+    """Anfrage kommt von unserer eigenen Oberfläche (Launcher oder Spielseite)?
+    Eine fremde Webseite kann diesen Kopf nicht setzen, ohne dass der Browser
+    vorher nachfragt (CORS) – und das erlauben wir fremden Seiten nicht."""
+    return request.headers.get("X-VTT-App") == "1"
+
 def _owner_guard():
     """Besitzer-Prinzip (config.OWNER_ONLY): Verwalten nur am eigenen PC.
+    Am eigenen PC genügt Anmeldung ODER die App-Kennung (der Launcher ist
+    nicht angemeldet – wer an diesem PC sitzt, ist der Besitzer).
     Gibt eine Fehler-Antwort zurück oder None, wenn alles in Ordnung ist."""
     from config import Config
-    if getattr(Config, "OWNER_ONLY", False) and not _is_local_request():
-        return jsonify({"error": "Das kann nur der Besitzer dieser Installation an seinem eigenen PC ändern."}), 403
+    if getattr(Config, "OWNER_ONLY", False):
+        if not _is_local_request():
+            return jsonify({"error": "Das kann nur der Besitzer dieser Installation an seinem eigenen PC ändern."}), 403
+        if _app_header() or _require_login():
+            return None
+        return jsonify({"error": "Bitte anmelden"}), 401
     if not _require_login():
         return jsonify({"error": "Bitte anmelden"}), 401
     return None
@@ -306,6 +318,15 @@ def sessions():
     accessible = [s for s in all_sessions() if can_access_session(s, user)]
     return jsonify(accessible)
 
+def _session_preview(s):
+    """Vorschau für die Kampagnen-Karten: Bild + Name der aktuellen Karte."""
+    try:
+        m = active_map(s) if s.get("maps") else None
+    except Exception:
+        m = None
+    return {"cover": (m or {}).get("url") or "", "map_name": (m or {}).get("name", ""),
+            "map_count": len(s.get("maps") or {})}
+
 @api_bp.route("/api/sessions/my", methods=["GET"])
 def my_sessions():
     user = _require_login()
@@ -313,6 +334,7 @@ def my_sessions():
     return jsonify([{
         "id":s["id"], "name":s["name"], "visibility":s.get("visibility","private"),
         "invited_count":len(s.get("invited_users",[])), "dm_online":is_dm_online(s),
+        **_session_preview(s),
     } for s in sessions_owned_by(user)])
 
 @api_bp.route("/api/sessions/joinable", methods=["GET"])
@@ -325,14 +347,14 @@ def joinable_sessions():
         seen.add(s["id"])
         out.append({"id":s["id"],"name":s["name"],"owner":s.get("owner",""),
                     "visibility":s.get("visibility","private"),"dm_online":is_dm_online(s),
-                    "invited":True,"joinable":is_dm_online(s)})
+                    "invited":True,"joinable":is_dm_online(s), **_session_preview(s)})
     for s in public_sessions():
         if s["id"] in seen or s.get("owner")==user: continue
         seen.add(s["id"])
         dm_on = is_dm_online(s)
         out.append({"id":s["id"],"name":s["name"],"owner":s.get("owner",""),
                     "visibility":"public","dm_online":dm_on,
-                    "invited":False,"joinable":dm_on})
+                    "invited":False,"joinable":dm_on, **_session_preview(s)})
     return jsonify(out)
 
 @api_bp.route("/api/session/<sid>")
@@ -488,7 +510,7 @@ def get_char(cid):
 # die Seiten der eigenen Installation sie hierher; der Launcher holt sie ab
 # und gibt sie beim Beitreten mit (siehe theme.js → Handover).
 PROFILE_KEYS = ("vtt_theme_ui", "vtt_theme_table", "vtt_dice_sets", "vtt_dice3d",
-                "vtt_dice_sound", "vtt_dice_volume")
+                "vtt_dice_sound", "vtt_dice_volume", "vtt_hidden_designs", "vtt_designs", "vtt_fx")
 
 def _profile_path():
     from game_state import _BASE_DIR
@@ -507,13 +529,15 @@ def profile():
     if getattr(Config, "OWNER_ONLY", False) and not _is_local_request():
         return jsonify({"error": "Nur am eigenen PC"}), 403
     if request.method == "PUT":
+        if not _app_header():
+            return jsonify({"error": "Nur aus der App"}), 403
         import json as _json, time as _time
         d = request.get_json(silent=True) or {}
         keys = {k: str(v)[:400_000] for k, v in (d.get("keys") or {}).items() if k in PROFILE_KEYS and v is not None}
         prof = {"keys": keys, "updated": _time.time()}
         p = _profile_path(); p.parent.mkdir(parents=True, exist_ok=True)
         tmp = p.with_suffix(".tmp"); tmp.write_text(_json.dumps(prof, ensure_ascii=False), encoding="utf-8"); tmp.replace(p)
-        return jsonify({"ok": True})
+        return jsonify({"ok": True, "updated": prof["updated"]})
     return jsonify(_read_profile())
 
 @api_bp.route("/api/profile/bundle", methods=["GET"])
@@ -651,6 +675,21 @@ def _pack_error(e, code=400):
 def packs_list():
     return jsonify(packs.list_packs())
 
+@api_bp.route("/api/packs/<pid>/contents", methods=["GET"])
+def packs_contents(pid):
+    """Übersicht für den Launcher: nur Namen + kurze Beschreibung je Kategorie,
+    keine Regeldetails."""
+    from game_state import get_library
+    out = {}
+    for cat, entries in get_library().items():
+        items = [{"name": e.get("name", ""), "description": str(e.get("description") or "")[:160],
+                  "parent": e.get("parent_class_name", "")}
+                 for e in entries.values() if (e.get("source") or "eigene") == pid]
+        if items:
+            out[cat] = sorted(items, key=lambda x: x["name"].lower())
+    return jsonify(out)
+
+
 @api_bp.route("/api/packs/<pid>/enabled", methods=["POST"])
 def packs_enable(pid):
     g = _owner_guard()
@@ -674,7 +713,9 @@ def packs_remove(pid):
 
 @api_bp.route("/api/packs/export", methods=["POST"])
 def packs_export():
-    if not _require_login(): return _pack_error("Bitte anmelden", 401)
+    # Exportieren = Teilen: angemeldete Spieler ODER der Launcher am eigenen PC
+    if not (_require_login() or (_is_local_request() and _app_header())):
+        return _pack_error("Bitte anmelden", 401)
     d = request.get_json(silent=True) or {}
     # Paket-Ids tragen den Ersteller („thomas.sternenpfad"), damit zwei
     # gleich benannte Pakete verschiedener Spieler sich nicht überschreiben.

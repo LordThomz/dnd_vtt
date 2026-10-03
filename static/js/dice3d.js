@@ -84,6 +84,7 @@ const Dice3D = (() => {
     borderWidth: 8,
     edges:       "none",                        // Kantenfärbung: none | subtle | bold
     edgeColor:   "#f0d79c",
+    numberGlow:  0,                             // Zahlen leuchten (0 = aus … 1 = stark)
   };
 
 
@@ -130,6 +131,8 @@ const Dice3D = (() => {
     } catch (e) {}
   }
   function getSets()       { if (!_sets) _loadSets(); return _sets; }
+  /** Nur die im Launcher nicht ausgeblendeten Sets (das aktive immer dabei). */
+  function getVisibleSets(){ const all = getSets(); const v = all.filter(s => !s.hidden || s.id === _activeSetId); return v.length ? v : all; }
   function getActiveSet()  { if (!_sets) _loadSets(); return _sets.find(s => s.id === _activeSetId) || _sets[0]; }
   function setActiveSet(id){ if (!_sets) _loadSets(); if (_sets.some(s => s.id === id)) { _activeSetId = id; _saveSets(); } }
   function saveSet(set)    { if (!_sets) _loadSets(); const i = _sets.findIndex(s => s.id === set.id); if (i > -1) _sets[i] = set; else _sets.push(set); _saveSets(); }
@@ -246,22 +249,30 @@ const Dice3D = (() => {
   }
 
   const _symQCache = new Map();
-  /** Symmetrie-Drehung (Merkmal from → to) als THREE.Quaternion. */
-  function _symQuat(sides, from, to) {
+  /** Alle Symmetrie-Drehungen (Merkmal from → to) als THREE.Quaternion. */
+  function _symQuats(sides, from, to) {
     const key = sides + ":" + from + ">" + to;
     if (_symQCache.has(key)) return _symQCache.get(key);
-    let q = null;
-    const R = DiceGeometry.symmetry(sides, from, to, DIE_RADIUS);
-    if (R) {
-      const m = new THREE.Matrix4().set(
-        R[0], R[1], R[2], 0,
-        R[3], R[4], R[5], 0,
-        R[6], R[7], R[8], 0,
-        0,    0,    0,    1);
-      q = new THREE.Quaternion().setFromRotationMatrix(m);
-    }
-    _symQCache.set(key, q);
-    return q;
+    const list = DiceGeometry.symmetries(sides, from, to, DIE_RADIUS).map(R =>
+      new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().set(
+        R[0], R[1], R[2], 0,  R[3], R[4], R[5], 0,  R[6], R[7], R[8], 0,  0, 0, 0, 1)));
+    _symQCache.set(key, list);
+    return list;
+  }
+
+  // Leserichtung: Die Zahl soll am Ende GERADE zum Betrachter stehen.
+  // Die Kamera schaut leicht schräg von vorn → „oben" auf dem Bildschirm ist
+  // die Welt-Richtung −Z.
+  const SCREEN_UP = new THREE.Vector3(0, 0, -1);
+  /** Drehwinkel um die senkrechte Achse, der die Zahl aufrichtet. */
+  function _yawToUpright(sides, faceIdx, quat) {
+    const up = DiceGeometry.build(sides, DIE_RADIUS).faces[faceIdx].up;
+    const u = new THREE.Vector3(up[0], up[1], up[2]).applyQuaternion(quat);
+    u.y = 0;
+    if (u.lengthSq() < 1e-6) return 0;
+    u.normalize();
+    // Drehung um +Y, die u auf SCREEN_UP bringt
+    return Math.atan2(u.z * SCREEN_UP.x - u.x * SCREEN_UP.z, u.x * SCREEN_UP.x + u.z * SCREEN_UP.z);
   }
 
   /** Welches Merkmal (Fläche bzw. beim W4 Ecke) zeigt nach oben – und wie genau? */
@@ -470,6 +481,18 @@ const Dice3D = (() => {
     return { ok, steps: step, frames, impacts, landed };
   }
 
+  /** Letzter Schritt, in dem sich der Würfel noch sichtbar bewegt. */
+  function _restStep(f, steps) {
+    const L = (steps - 1) * 7;
+    for (let k = steps - 1; k > 0; k--) {
+      const o = k * 7;
+      const dp = Math.abs(f[o] - f[L]) + Math.abs(f[o+1] - f[L+1]) + Math.abs(f[o+2] - f[L+2]);
+      const dq = 1 - Math.abs(f[o+3]*f[L+3] + f[o+4]*f[L+4] + f[o+5]*f[L+5] + f[o+6]*f[L+6]);
+      if (dp > 0.01 || dq > 1e-5) return k + 1;
+    }
+    return 1;
+  }
+
   /** Simulieren, bis ein sauberer Wurf dabei ist (normalerweise der erste). */
   function _planRoll(specs, seed, bounds) {
     let sim = null;
@@ -477,13 +500,34 @@ const Dice3D = (() => {
       sim = _simulate(specs, (seed + t * 7919) >>> 0, bounds);
       if (sim.ok) break;
     }
-    // Beschriftung drehen, damit die Zielzahl oben landet
+    // Beschriftung drehen, damit die Zielzahl oben landet – und dabei unter
+    // allen gleichwertigen Drehungen die wählen, bei der die Zahl am Ende am
+    // geradesten steht. Den kleinen Rest drehen wir WÄHREND des Rollens
+    // unmerklich heraus (yaw), statt den liegenden Würfel nachzudrehen.
+    const qEnd = new THREE.Quaternion(), qTry = new THREE.Quaternion();
     const fixes = specs.map((spec, i) => {
+      const o = (sim.steps - 1) * 7, f = sim.frames[i];
+      qEnd.set(f[o+3], f[o+4], f[o+5], f[o+6]);
       const landed = sim.landed[i].idx;
-      if (spec.value == null) return { quat: null, value: _featureToValue(spec.sides, landed) };
-      const want = _valueToFeature(spec.sides, spec.value);
-      if (want < 0 || want === landed) return { quat: null, value: spec.value };
-      return { quat: _symQuat(spec.sides, want, landed), value: spec.value };
+      const restStep = _restStep(sim.frames[i], sim.steps);
+      if (spec.sides === 4) {          // W4: Zahl an der Spitze, keine „Leserichtung"
+        const want = spec.value == null ? landed : _valueToFeature(4, spec.value);
+        const q = (want < 0 || want === landed) ? null : (_symQuats(4, want, landed)[0] || null);
+        return { quat: q, value: spec.value == null ? _featureToValue(4, landed) : spec.value, yaw: 0, restStep };
+      }
+      const want = spec.value == null ? landed : _valueToFeature(spec.sides, spec.value);
+      let cands = (want < 0) ? [null] : (want === landed ? [null] : []);
+      if (want >= 0) cands = cands.concat(_symQuats(spec.sides, want, landed));
+      if (!cands.length) cands = [null];
+      const shownFace = (want < 0) ? landed : want;
+      let best = { quat: null, yaw: 0, abs: Infinity };
+      for (const c of cands) {
+        qTry.copy(qEnd); if (c) qTry.multiply(c);
+        const yaw = _yawToUpright(spec.sides, shownFace, qTry);
+        if (Math.abs(yaw) < best.abs) best = { quat: c, yaw, abs: Math.abs(yaw) };
+      }
+      return { quat: best.quat, yaw: best.yaw, restStep,
+               value: spec.value == null ? _featureToValue(spec.sides, landed) : spec.value };
     });
     return Object.assign(sim, { fixes });
   }
@@ -626,7 +670,9 @@ const Dice3D = (() => {
       this.clear();
       const meshes = specs.map(s => this.makeDie(s.sides, s.style));
       const fixQ = plan.fixes.map(f => f.quat);
-      const tmp = new THREE.Quaternion();
+      const tmp = new THREE.Quaternion(), yawQ = new THREE.Quaternion();
+      const Y = new THREE.Vector3(0, 1, 0);
+      const ease = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
       const last = plan.steps - 1;
       let nextImpact = 0;
       const t0 = performance.now();
@@ -640,6 +686,11 @@ const Dice3D = (() => {
           tmp.set(f[o1+3], f[o1+4], f[o1+5], f[o1+6]);
           m.quaternion.slerp(tmp, a);
           if (fixQ[i]) m.quaternion.multiply(fixQ[i]);   // Beschriftung mitdrehen
+          const fx = plan.fixes[i];
+          if (fx.yaw) {   // Zahl aufrichten – verteilt über die Zeit, in der er sich noch bewegt
+            yawQ.setFromAxisAngle(Y, fx.yaw * ease(stepF / Math.max(1, fx.restStep)));
+            m.quaternion.premultiply(yawQ);
+          }
         });
       };
       apply(0);
@@ -672,9 +723,19 @@ const Dice3D = (() => {
       const loop = () => {
         if (!this._running) return;
         this._raf = requestAnimationFrame(loop);
-        if (this._preview && !this._dragging) {
-          this._preview.rotation.y += 0.007;
-          this._preview.rotation.x = Math.sin(performance.now() / 2600) * 0.18;
+        if (this._preview) {
+          // Neigung = eigene Neigung des Nutzers + sanftes Schaukeln. Das
+          // Schaukeln wird ADDIERT (früher überschrieb es die Neigung → der
+          // Würfel sprang nach dem Loslassen zurück).
+          const p = this._preview;
+          if (!this._dragging) {
+            // Schwung nach dem Loslassen, läuft in die Grunddrehung aus
+            this._velY = (this._velY ?? 0.007) * 0.94 + 0.007 * 0.06;
+            this._velX = (this._velX ?? 0) * 0.94;
+            p.rotation.y += this._velY;
+            this._userX = (this._userX ?? 0) + this._velX;
+          }
+          p.rotation.x = (this._userX ?? 0) + Math.sin(performance.now() / 2600) * 0.12;
         }
         if (this._frameFn) this._frameFn();
         this.renderer.render(this.scene, this.camera);
@@ -714,8 +775,10 @@ const Dice3D = (() => {
       const move = (e) => {
         if (!this._dragging || !this._preview) return;
         const p = e.touches ? e.touches[0] : e;
-        this._preview.rotation.y += (p.clientX - px) * 0.012;
-        this._preview.rotation.x += (p.clientY - py) * 0.012;
+        const dx = (p.clientX - px) * 0.012, dy = (p.clientY - py) * 0.012;
+        this._preview.rotation.y += dx;
+        this._userX = (this._userX ?? 0) + dy;
+        this._velY = dx; this._velX = dy;      // Schwung für das Loslassen merken
         px = p.clientX; py = p.clientY;
         e.preventDefault();
       };
@@ -960,6 +1023,7 @@ const Dice3D = (() => {
         return `<span class="chip"><b>W${d.sides}</b>${_esc(v)}</span>`;
       }).join("") + `</div>`;
     }
+    if (isCrit || isFail) { try { window.dispatchEvent(new CustomEvent("vtt:crit", { detail: { kind: isCrit ? "crit" : "fail" } })); } catch (e) {} }
     if (isCrit) html += `<div class="tag">Kritischer Erfolg</div>`;
     if (isFail) html += `<div class="tag">Patzer</div>`;
     el.innerHTML = html;
@@ -1067,6 +1131,37 @@ const Dice3D = (() => {
     } catch (e) {}
   }
 
+  /** Vorschaubild eines Würfels als data:-URL (für Set-Karten in Werkstatt
+   *  und Launcher). EIN unsichtbarer Renderer wird wiederverwendet – viele
+   *  einzelne 3D-Kontexte wären langsam (Browser erlauben nur ~16 gleichzeitig). */
+  let _snapStage = null, _snapSize = 0, _snapQueue = Promise.resolve();
+  function snapshot(sides, style, size) {
+    size = size || 160;
+    const job = async () => {
+      if (!_librariesReady()) return null;
+      if (DiceMaterial.ensureFonts) { try { await DiceMaterial.ensureFonts(); } catch (e) {} }
+      if (!_snapStage || _snapSize !== size) {
+        if (_snapStage) { try { _snapStage.dispose(); } catch (e) {} _snapStage.__host.remove(); }
+        const host = document.createElement("div");
+        Object.assign(host.style, { position: "fixed", left: "-10000px", top: "0", width: size + "px", height: size + "px" });
+        document.body.appendChild(host);
+        _snapStage = new Stage(host, { previewMode: true, camDist: 6.2, preserve: true });
+        _snapStage.__host = host; _snapSize = size;
+      }
+      const st = _snapStage;
+      st.clear();
+      const mesh = st.makeDie(+sides || 20, Object.assign({}, DEFAULT_DIE_STYLE, style || {}));
+      mesh.rotation.set(0.55, -0.35, 0.1);
+      st.renderer.render(st.scene, st.camera);
+      const url = st.renderer.domElement.toDataURL("image/webp", 0.85);
+      st.clear();
+      return url;
+    };
+    const p = _snapQueue.then(job, job);        // nacheinander, nie gleichzeitig
+    _snapQueue = p.catch(() => null);
+    return p.catch(() => null);
+  }
+
   /** Nur für automatische Tests: Simulation ohne Darstellung. */
   function _selfTest(sides, value, seed) {
     const specs = _expandSpecs([{ sides, value }]);
@@ -1076,8 +1171,10 @@ const Dice3D = (() => {
       const o = (plan.steps - 1) * 7, f = plan.frames[i];
       q.set(f[o+3], f[o+4], f[o+5], f[o+6]);
       if (plan.fixes[i].quat) q.multiply(plan.fixes[i].quat);
+      if (plan.fixes[i].yaw) q.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), plan.fixes[i].yaw));
       const top = _topFeature(s.sides, q);
-      return { sides: s.sides, want: s.value, shown: _featureToValue(s.sides, top.idx), flat: top.dot, ok: plan.ok, steps: plan.steps };
+      const tilt = s.sides === 4 ? 0 : Math.abs(_yawToUpright(s.sides, top.idx, q)) * 180 / Math.PI;
+      return { sides: s.sides, want: s.value, shown: _featureToValue(s.sides, top.idx), flat: top.dot, ok: plan.ok, steps: plan.steps, tilt };
     });
   }
 
@@ -1087,10 +1184,10 @@ const Dice3D = (() => {
   // ══════════════════════════════════════════════════════════════════════
 
   return {
-    roll, testRoll, preview, stopPreview, preload, showFinalResult,
+    roll, testRoll, preview, stopPreview, preload, showFinalResult, snapshot,
     setEnabled, isEnabled,
     getStyle, setStyle,
-    getSets, getActiveSet, setActiveSet, saveSet, deleteSet, newSet,
+    getSets, getVisibleSets, getActiveSet, setActiveSet, saveSet, deleteSet, newSet,
     DEFAULT_DIE_STYLE, PRESETS, applyPreset, _selfTest,
   };
 })();

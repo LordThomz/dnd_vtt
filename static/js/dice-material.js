@@ -186,6 +186,46 @@ const DiceMaterial = (() => {
       defaultNumber: "#3a2412",
     },
 
+    pearl: {
+      label: "Perlmutt", icon: "🐚",
+      params: {
+        metalness: 0.0, roughness: 0.28,
+        clearcoat: 0.9, clearcoatRoughness: 0.12,
+        iridescence: 1.0, iridescenceIOR: 1.35, iridescenceThicknessRange: [180, 520],
+        sheen: 0.6, sheenRoughness: 0.35, envMapIntensity: 0.45,
+      },
+      texture: "smooth",
+      sound: "plastic",
+      defaultColor: "#f2ece4",
+      defaultNumber: "#5a4a6a",
+    },
+
+    holo: {
+      label: "Holografisch", icon: "🌈",
+      params: {
+        metalness: 0.85, roughness: 0.22,
+        iridescence: 1.0, iridescenceIOR: 1.8, iridescenceThicknessRange: [120, 900],
+        clearcoat: 0.6, clearcoatRoughness: 0.1, envMapIntensity: 0.7,
+      },
+      texture: "smooth",
+      sound: "metal",
+      engraved: true,
+      defaultColor: "#c8ccd8",
+      defaultNumber: "#121420",
+    },
+
+    obsidian: {
+      label: "Obsidian", icon: "🖤",
+      params: {
+        metalness: 0.15, roughness: 0.06,
+        clearcoat: 1.0, clearcoatRoughness: 0.03, envMapIntensity: 0.8,
+      },
+      texture: "smooth",
+      sound: "glass",
+      defaultColor: "#0d0b10",
+      defaultNumber: "#d9b46a",
+    },
+
   };
 
   // ── Oberflächen-Texturen ────────────────────────────────────────────────
@@ -834,7 +874,7 @@ const DiceMaterial = (() => {
     _drawBackground(ctx, style);
     _drawPattern(ctx, style.pattern, style.color || "#d4b578", style.accentColor || "#ffffff");
     _drawBorder(ctx, style, face.layout);
-    _drawEdges(ctx, style, face.layout);
+    if (!face.bevel) _drawEdges(ctx, style, face.layout);   // mit Kantenstreifen: echte Kanten
     _drawNumbers(ctx, face, style, "color");
     const tex = new THREE.CanvasTexture(c);
     if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
@@ -853,7 +893,7 @@ const DiceMaterial = (() => {
       // Bei durchsichtigen Würfeln ist die Farbtextur kaum zu sehen – Kanten
       // und Rahmen leuchten deshalb zusätzlich selbst (wirkt wie Neon-Linien).
       _drawBorder(ctx, style, face.layout);
-      _drawEdges(ctx, style, face.layout);
+      if (!face.bevel) _drawEdges(ctx, style, face.layout);
       // Leuchtet in Zahlenfarbe
       _drawNumbers(ctx, face, Object.assign({}, style, { _maskColor: style.numberColor || "#ffffff" }), "mask");
     } else {
@@ -890,7 +930,7 @@ const DiceMaterial = (() => {
     const maps = _surfaceMaps(surf.texture, surf.bumpScale);
 
     const faces = geo.layout.map((layout, fi) => ({
-      sides, layout,
+      sides, layout, bevel: !!geo.bevel,
       label: _labelText(sides, geo.values[fi]),
       cornerLabels: sides === 4 ? layout.cornerIds.map(id => geo.values[id]) : null,
     }));
@@ -916,9 +956,31 @@ const DiceMaterial = (() => {
         params.emissiveIntensity = 0.55;
         params.attenuationColor = new THREE.Color(style.color || "#a8d8e8");
       }
+      // Leuchtende Zahlen (für jede Oberfläche): Zahl als Leuchtkarte
+      const glow = Math.max(0, Math.min(1, +style.numberGlow || 0));
+      if (glow > 0 && !surf.seeThrough) {
+        params.emissive = new THREE.Color(0xffffff);
+        params.emissiveMap = _maskMap(face, style, "glow");
+        params.emissiveIntensity = 0.25 + glow * 1.4;
+      }
       const M = THREE.MeshPhysicalMaterial || THREE.MeshStandardMaterial;
       return new M(params);
     });
+
+    // Material der abgerundeten Kanten: Kantenfarbe, sonst ein Hauch dunkler
+    // als der Körper. Bei Glas/Kristall leuchten gefärbte Kanten (Neon-Look).
+    if (geo.bevel) {
+      const M = THREE.MeshPhysicalMaterial || THREE.MeshStandardMaterial;
+      const hasEdge = style.edges && style.edges !== "none";
+      const base = hasEdge ? (style.edgeColor || "#f0d79c") : _darken(style.color || "#d4b578", 0.08);
+      const ep = Object.assign({}, surf.params, { color: new THREE.Color(base), side: THREE.FrontSide });
+      if (maps.roughnessMap) ep.roughnessMap = maps.roughnessMap;
+      if (hasEdge && style.edges === "bold") { ep.metalness = Math.max(ep.metalness || 0, 0.6); ep.roughness = Math.min(ep.roughness ?? .5, .3); }
+      if (surf.seeThrough && hasEdge) {
+        ep.transmission = 0; ep.emissive = new THREE.Color(base); ep.emissiveIntensity = style.edges === "bold" ? 1.1 : .6;
+      }
+      mats.push(new M(ep));
+    }
 
     _matCache.set(key, mats);
     while (_matCache.size > MAT_CACHE_MAX) {
@@ -936,6 +998,17 @@ const DiceMaterial = (() => {
       m.dispose();
     });
   }
+  /** Kleine Vorschau eines Musters (für die Werkstatt). */
+  function patternPreview(pattern, color, accent, size) {
+    size = size || 96;
+    const c = document.createElement("canvas"); c.width = c.height = size;
+    const ctx = c.getContext("2d");
+    ctx.setTransform(size / TEX, 0, 0, size / TEX, 0, 0);
+    _drawBackground(ctx, { color: color || "#3a3550" });
+    try { _drawPattern(ctx, pattern, color || "#3a3550", accent || "#ffffff"); } catch (e) {}
+    return c.toDataURL();
+  }
+
   function clearCache() { _matCache.forEach(_disposeMats); _matCache.clear(); }
 
   /** Zahlenwert → Beschriftung (W100: „00", „10" …). */
@@ -972,7 +1045,7 @@ const DiceMaterial = (() => {
   }
 
   return {
-    build, makeFaceTexture, ensureFonts, clearCache, EDGE_STYLES,
+    build, makeFaceTexture, ensureFonts, clearCache, EDGE_STYLES, patternPreview,
     SURFACES, PATTERNS, PRESET_COLORS,
     contrast: _contrast,
   };

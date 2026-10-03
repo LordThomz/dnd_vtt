@@ -48,10 +48,24 @@ const Tokens = (() => {
 
   function render() {
     if(!layer) return;
+    // Alte Positionen merken → nach dem Neuaufbau weich hingleiten (FLIP)
+    const before = {};
+    layer.querySelectorAll(".token[data-token-id]").forEach(el => {
+      before[el.dataset.tokenId] = [parseFloat(el.style.left) || 0, parseFloat(el.style.top) || 0];
+    });
     layer.innerHTML="";
     const all = State.getActiveMapTokens();
     const visible = all.filter(t => _isVisibleToMe(t));
     visible.forEach(t=>buildEl(t));
+    const calm = document.documentElement.classList.contains("fx-reduce");
+    if (!calm) layer.querySelectorAll(".token[data-token-id]").forEach(el => {
+      const b = before[el.dataset.tokenId]; if (!b || !el.animate) return;
+      const dx = b[0] - (parseFloat(el.style.left) || 0), dy = b[1] - (parseFloat(el.style.top) || 0);
+      const dist = Math.hypot(dx, dy);
+      if (dist > 0.5 && dist < 4000)
+        el.animate([{ transform: `translate(${dx}px,${dy}px)` }, { transform: "translate(0,0)" }],
+                   { duration: Math.min(600, 220 + dist * .35), easing: "cubic-bezier(.2,.8,.2,1)" });
+    });
     dbg("rendered", visible.length, "of", all.length, "tokens");
   }
 

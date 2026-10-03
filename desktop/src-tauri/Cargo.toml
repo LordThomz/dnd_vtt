@@ -1,6 +1,6 @@
 [package]
 name = "vtt-desktop"
-version = "0.1.2"
+version = "0.2.0"
 description = "Virtual Tabletop – Desktop-App"
 authors = ["Thomas"]
 edition = "2021"

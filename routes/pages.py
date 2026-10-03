@@ -16,15 +16,16 @@ def index():
     u = flask_session.get("username")
     if not u or not get_user(u):
         return render_template("login.html")
-    # Eingeloggt -> zum App-Menü (Spielen / Einstellungen / Updates / Beenden)
-    return render_template("menu.html", current_user=get_user(u))
+    # Eingeloggt → Startbildschirm (Hauptmenü und Spielen sind zusammengelegt)
+    return render_template("index.html", current_user=get_user(u))
 
 @pages_bp.route("/menu")
 def menu():
     u = flask_session.get("username")
     if not u or not get_user(u):
         return redirect("/login")
-    return render_template("menu.html", current_user=get_user(u))
+    # Das frühere Hauptmenü ist im Startbildschirm aufgegangen
+    return render_template("index.html", current_user=get_user(u))
 
 @pages_bp.route("/play")
 def play():

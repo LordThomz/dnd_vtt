@@ -63,6 +63,16 @@ Wenn hier `OK` erscheint, ist alles bereit. Committe und pushe die Änderungen m
 
 ---
 
+## Wenn du Dateien von außen übernimmst (z. B. eine Zip von Claude)
+
+Beim Überkopieren werden `desktop/src-tauri/tauri.conf.json` und `desktop/src/config.js` ersetzt – dein Schlüssel und dein Repository stehen dann nicht mehr drin. Danach deshalb immer:
+```
+python tools/release.py --repo DEIN-NAME/dnd_vtt
+python tools/release.py --pubkey %USERPROFILE%\.tauri\vtt.key.pub
+python tools/release.py --check
+```
+Dateien, die in der neuen Version gelöscht wurden, entfernt das Kopieren nicht – darauf weist die Übergabe jeweils hin.
+
 ## Ein Update veröffentlichen (jedes Mal)
 
 1. Versionsnummer erhöhen (überall gleichzeitig):

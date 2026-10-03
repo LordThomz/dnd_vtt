@@ -117,6 +117,10 @@ const Socket = (() => {
             Jukebox.fireTrigger("heal");
           }
         }
+        // Für die Animation (schwebende Zahl, Aufblitzen) – siehe fx.js
+        if(d.updates && typeof d.updates.hp==="number" && typeof tok.hp==="number" && d.updates.hp!==tok.hp){
+          try{ window.dispatchEvent(new CustomEvent("vtt:hp",{detail:{id:d.token_id, delta:d.updates.hp-tok.hp}})); }catch(e){}
+        }
         Object.assign(tok, d.updates);
       }
       dispatch("tokens_changed");

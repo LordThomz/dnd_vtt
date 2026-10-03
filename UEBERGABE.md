@@ -227,6 +227,24 @@ Persönliche Einstellungen (Würfel-Sets, Designs) spiegelt `theme.js` auf der e
 
 Das Repository und damit der öffentliche Installer enthalten **nur SRD-5.1-Inhalte** (CC-BY-4.0, Namensnennung in `LIZENZ-SRD.txt`). Inhalte aus dem Player's Handbook oder anderen Büchern werden **nur privat als `.vttpack`** geteilt und gehören nie in `data/library` oder die `_DEFAULT_*`-Listen in `routes/api.py`. Neue Grundregel-Inhalte erreichen bestehende Installationen automatisch (`packs._sync_basis`).
 
+## Aufteilung Launcher / Spiel (seit 03.10.2026)
+
+**Jede Einstellung gibt es nur an einer Stelle.** Der Launcher *verwaltet* (Erweiterungen an/aus, importieren, exportieren; Würfel-Sets und Designs ein-/ausblenden, importieren, exportieren). Das Spiel *benutzt und bearbeitet* (Kampagnen, Mitspielen, Charaktere, Bibliothek im Detail, Würfel-Werkstatt, Design-Studio). Neue Funktionen bitte genau einer Seite zuordnen.
+
+Würfel-Sets und Designs liegen im Profil der Installation (`/api/profile`, `data/profile.json`); Seiten bekommen es per `window.__VTT_PROFILE__`. Verwaltende Anfragen des Launchers senden `X-VTT-App: 1`.
+
+## Designs (seit 03.10.2026)
+
+Designs sind Dateien (`.vttdesign`, Logik in `static/js/design-runtime.js`). Eingebaut sind nur Arkanum und Arkaner Tisch (`themes.css`); alle weiteren liegen im Katalog `designs/` (+ `designs/index.json`) und werden im Launcher heruntergeladen. **Neues Katalog-Design:** Datei in `designs/` legen, Eintrag in `index.json`, pushen – fertig, ohne App-Update. Erlaubte Variablen stehen in `DesignRuntime.UI_VARS`/`TABLE_VARS`.
+
+## Animationen, Klänge, Symbole (seit 03.10.2026)
+
+`fx.js`/`fx.css` hängen sich automatisch an Knöpfe, Fenster, Listen, Chat und Spieltisch. Eigene Ereignisse: `vtt:hp` (Schaden/Heilung), `vtt:crit` (kritisch/Patzer). Klänge entstehen in `sfx.js` (keine Dateien). Emojis in Bedienelementen ersetzt `icons.js` durch Lucide-Symbole – **neue Symbole dort in ICONS/EMOJI ergänzen**. `sfx.js` und `icons.js` liegen zusätzlich als identische Kopie in `desktop/src/` (Launcher) – bei Änderungen beide anpassen.
+
+## Startbildschirm & Spieltisch-Layout (seit 03.10.2026)
+
+Hauptmenü und Spielen-Seite sind ein Startbildschirm (`templates/index.html`, Routen `/`, `/menu`, `/play`). `menu.html` gibt es nicht mehr. Am Spieltisch verschiebt ein Skript in `table.html` die Werkzeuggruppen aus der Kopfzeile in `#tool-dock`; das Aussehen steht in `static/css/table-layout.css`. **Neue Werkzeuge** einfach wie bisher als `.tb-btn` in eine `.tb-group` der Kopfzeile schreiben – sie landen automatisch im Dock. **Neue Reiter** als `.p-tab` mit `.t-icon` und Beschriftung anlegen – die Beschriftung wird zum Tooltip der Schiene.
+
 ## 6. Was als Nächstes zu tun ist
 
 ### Priorität 1 – Würfel: erledigt am 30.09. (siehe AENDERUNGEN.txt)

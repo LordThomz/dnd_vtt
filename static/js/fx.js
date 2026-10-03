@@ -159,6 +159,15 @@ const FX = (() => {
     const rgb = n => (cs.getPropertyValue(n).trim() || "212,181,120");
     const cols = [rgb("--gold-rgb"), rgb("--arcane-rgb"), rgb("--gold-rgb")];
     let W = 0, H = 0, parts = [];
+    const _sprites = {};
+    function sprite(c) {
+      if (_sprites[c]) return _sprites[c];
+      const sc = document.createElement("canvas"); sc.width = sc.height = 64;
+      const sx = sc.getContext("2d"), g = sx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      g.addColorStop(0, `rgba(${c},1)`); g.addColorStop(1, `rgba(${c},0)`);
+      sx.fillStyle = g; sx.fillRect(0, 0, 64, 64);
+      return (_sprites[c] = sc);
+    }
     const dpr = Math.min(2, devicePixelRatio || 1);
     function resize() {
       W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
@@ -173,21 +182,22 @@ const FX = (() => {
     function frame(now) {
       const dt = Math.min(50, now - last) / 16.7; last = now;
       if (!document.hidden && !reduced()) {
-        ctx.clearRect(0, 0, W, H);
+        ctx.globalAlpha = 1; ctx.clearRect(0, 0, W, H);
         for (const p of parts) {
           p.x += p.vx * dt; p.y += p.vy * dt; p.ph += .02 * dt;
           if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
           if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10;
-          const a = p.a * (.6 + .4 * Math.sin(p.ph));
-          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-          g.addColorStop(0, `rgba(${p.c},${a})`); g.addColorStop(1, `rgba(${p.c},0)`);
-          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 4, 0, 6.283); ctx.fill();
+          // vorgezeichnetes Leuchtpunkt-Bild kopieren statt jedes Mal einen
+          // Farbverlauf zu erzeugen (spart Speicher-Aufräumarbeit → kein Stocken)
+          ctx.globalAlpha = p.a * (.6 + .4 * Math.sin(p.ph));
+          const sp = sprite(p.c), d = p.r * 8;
+          ctx.drawImage(sp, p.x - d / 2, p.y - d / 2, d, d);
         }
       }
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
-    window.addEventListener("vtt:theme", () => { cols[0] = cols[2] = rgb("--gold-rgb"); cols[1] = rgb("--arcane-rgb"); resize(); });
+    window.addEventListener("vtt:theme", () => { cols[0] = cols[2] = rgb("--gold-rgb"); cols[1] = rgb("--arcane-rgb"); for (const k in _sprites) delete _sprites[k]; resize(); });
   }
 
   // ── Ankunft nach dem Intro ──────────────────────────────────────────────

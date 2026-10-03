@@ -709,11 +709,32 @@ const Dice3D = (() => {
       });
     }
 
-    showStatic(sides, style) {
-      this.clear();
-      const mesh = this.makeDie(sides, style);
-      this._preview = mesh;
+    /** Einzelwürfel zeigen (Werkstatt, Design-Studio).
+     *  Ruckelfrei: Der bisherige Würfel dreht sich weiter, während der neue in
+     *  kleinen Zeitscheiben entsteht (Texturen + Shader). Erst wenn alles
+     *  fertig ist, wird getauscht – mit derselben Drehung, kein Zurückspringen.
+     *  Kommt währenddessen eine neuere Änderung, wird die alte verworfen. */
+    async showStatic(sides, style) {
+      const token = (this._showToken = (this._showToken || 0) + 1);
       this.start();
+      const g = DiceGeometry.build(sides, DIE_RADIUS);
+      const mats = await DiceMaterial.buildAsync(sides, g, style, this.renderer, () => token !== this._showToken);
+      if (!mats || token !== this._showToken) return null;
+      const mesh = new THREE.Mesh(g.geometry, mats);
+      mesh.castShadow = true; mesh.userData.sides = sides;
+      const old = this._preview;
+      if (old) { mesh.rotation.copy(old.rotation); mesh.position.copy(old.position); }
+      // Shader vorab übersetzen (sonst stockt das erste Bild mit dem neuen Material)
+      mesh.visible = false; this.scene.add(mesh);
+      try {
+        if (this.renderer.compileAsync) await this.renderer.compileAsync(mesh, this.camera, this.scene);
+        else this.renderer.compile(this.scene, this.camera);
+      } catch (e) {}
+      if (token !== this._showToken) { this.scene.remove(mesh); return null; }
+      if (old) { mesh.rotation.copy(old.rotation); this.scene.remove(old); }
+      mesh.visible = true;
+      this.meshes = this.meshes.filter(m => m !== old); this.meshes.push(mesh);
+      this._preview = mesh;
       return mesh;
     }
 
@@ -1100,7 +1121,7 @@ const Dice3D = (() => {
         entry = { stage, host };
         _previews.set(canvas, entry);
       }
-      entry.stage.showStatic(+sides, style);
+      return entry.stage.showStatic(+sides, style);
     } catch (e) {
       _diag("Vorschau konnte nicht laden (F12 für Details).", e);
     }

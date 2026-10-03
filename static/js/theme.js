@@ -250,8 +250,67 @@ const Theme = (() => {
     return d;
   }
 
+  // ══════════════════════════════════════════════════════════════════════
+  //  LADESCHLEIER – Seiten erscheinen erst, wenn sie wirklich fertig sind
+  // ══════════════════════════════════════════════════════════════════════
+  //  Ein Schleier im Design der App liegt ab dem ersten Bild über der Seite
+  //  (html::before / ::after – braucht kein HTML und ist sofort da). Er
+  //  verschwindet weich, wenn: Seite geladen + Schriften fertig + alle
+  //  angemeldeten Wartepunkte erledigt (Theme.hold(promise)). Höchstens 6 s.
+  //  Beim Verlassen blendet er wieder ein → ruhige Übergänge.
+  const _holds = [];
+  function hold(p) { if (p && p.then) _holds.push(p.catch(() => {})); }
+  /** Läuft, sobald die Seite sichtbar ist (für Arbeit, die warten kann). */
+  function whenReady(fn) {
+    if (!document.documentElement.classList.contains("vtt-veil")) return void setTimeout(fn, 0);
+    window.addEventListener("vtt:ready", () => setTimeout(fn, 200), { once: true });
+  }
+  (function veil() {
+    const css = document.createElement("style");
+    css.textContent = `
+      html.vtt-veil::before { content: ""; position: fixed; inset: 0; z-index: 2147483000; pointer-events: none;
+        background: var(--bg-deep); background-image: var(--backdrop); opacity: 1; transition: opacity .38s ease; }
+      html.vtt-veil::after { content: ""; position: fixed; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+        z-index: 2147483001; pointer-events: none; border-radius: 50%; border: 2px solid rgba(var(--gold-rgb), .15);
+        border-top-color: var(--gold); border-right-color: var(--arcane); opacity: 0;
+        animation: vtt-spin .9s linear infinite, vtt-spin-in .3s ease .45s forwards; transition: opacity .25s ease; }
+      html.vtt-veil.vtt-ready::before, html.vtt-veil.vtt-ready::after { opacity: 0 !important; }
+      html.vtt-leaving::before { content: ""; position: fixed; inset: 0; z-index: 2147483000; pointer-events: none;
+        background: var(--bg-deep); background-image: var(--backdrop); animation: vtt-leave .2s ease forwards; }
+      @keyframes vtt-spin { to { transform: rotate(360deg); } }
+      @keyframes vtt-spin-in { to { opacity: 1; } }
+      @keyframes vtt-leave { from { opacity: 0; } to { opacity: 1; } }`;
+    (document.head || document.documentElement).appendChild(css);
+    const html = document.documentElement;
+    html.classList.add("vtt-veil");
+    const loaded = new Promise(r => { if (document.readyState === "complete") r(); else window.addEventListener("load", r, { once: true }); });
+    const fonts = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    const all = async () => {
+      await Promise.all([loaded, fonts]);
+      let n = -1; while (n !== _holds.length) { n = _holds.length; await Promise.all(_holds.slice()); }   // auch spät angemeldete
+    };
+    const reveal = () => {
+      if (html.classList.contains("vtt-ready")) return;
+      // setTimeout statt requestAnimationFrame: bei hoher Last bleiben Bilder
+      // aus – der Schleier soll trotzdem zuverlässig verschwinden.
+      setTimeout(() => {
+        html.classList.add("vtt-ready");
+        setTimeout(() => html.classList.remove("vtt-veil", "vtt-ready"), 450);
+        try { window.dispatchEvent(new CustomEvent("vtt:ready")); } catch (e) {}
+      }, 30);
+    };
+    Promise.race([all(), new Promise(r => setTimeout(r, 6000))]).then(reveal);
+    // Beim Verlassen weich abblenden (bei Datei-Downloads bleibt die Seite – dann wieder weg)
+    window.addEventListener("beforeunload", () => {
+      html.classList.add("vtt-leaving");
+      setTimeout(() => html.classList.remove("vtt-leaving"), 2500);
+    });
+    // Zurück-Navigation aus dem Browser-Cache: Schleier nicht hängen lassen
+    window.addEventListener("pageshow", e => { if (e.persisted) { html.classList.remove("vtt-leaving"); reveal(); } });
+  })();
+
   _injectDesigns();
   apply();
-  return { get, set, apply, tableVars, launcherUrl, visible, isHidden, installed, preview, endPreview, saveDesign,
+  return { hold, whenReady, get, set, apply, tableVars, launcherUrl, visible, isHidden, installed, preview, endPreview, saveDesign,
            get UI() { return _list("ui"); }, get TABLE() { return _list("table"); } };
 })();

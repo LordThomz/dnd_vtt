@@ -919,69 +919,61 @@ const DiceMaterial = (() => {
   const _matCache = new Map();
   const MAT_CACHE_MAX = 24;                  // «STELLSCHRAUBE» wie viele Sätze im Speicher bleiben
 
-  function build(sides, geo, style) {
-    const key = sides + "|" + JSON.stringify(style);
-    if (_matCache.has(key)) {
-      const hit = _matCache.get(key);
-      _matCache.delete(key); _matCache.set(key, hit);   // als „zuletzt benutzt" markieren
-      return hit;
-    }
+  // ── Bausteine: ein Flächen-Material, das Kanten-Material ─────────────────
+  function _prep(sides, geo, style) {
     const surf = SURFACES[style.surface] || SURFACES.plastic;
     const maps = _surfaceMaps(surf.texture, surf.bumpScale);
-
     const faces = geo.layout.map((layout, fi) => ({
       sides, layout, bevel: !!geo.bevel,
       label: _labelText(sides, geo.values[fi]),
       cornerLabels: sides === 4 ? layout.cornerIds.map(id => geo.values[id]) : null,
     }));
-
-    const mats = faces.map(face => {
-      const params = Object.assign({
-        color: new THREE.Color(0xffffff),   // neutral – die Farbe steckt in der Textur
-        map: makeFaceTexture(face, style),
-        side: THREE.FrontSide,
-      }, surf.params);
-
-      if (maps.roughnessMap) params.roughnessMap = maps.roughnessMap;
-      if (maps.bumpScale > 0) { params.bumpMap = maps.bumpMap; params.bumpScale = maps.bumpScale; }
-
-      if (surf.engraved) {
-        params.bumpMap = _maskMap(face, style, "engrave");
-        params.bumpScale = -0.08;          // negativ = vertieft
-      }
-      if (surf.seeThrough) {
-        params.side = THREE.DoubleSide;
-        params.emissive = new THREE.Color(0xffffff);
-        params.emissiveMap = _maskMap(face, style, "glow");
-        params.emissiveIntensity = 0.55;
-        params.attenuationColor = new THREE.Color(style.color || "#a8d8e8");
-      }
-      // Leuchtende Zahlen (für jede Oberfläche): Zahl als Leuchtkarte
-      const glow = Math.max(0, Math.min(1, +style.numberGlow || 0));
-      if (glow > 0 && !surf.seeThrough) {
-        params.emissive = new THREE.Color(0xffffff);
-        params.emissiveMap = _maskMap(face, style, "glow");
-        params.emissiveIntensity = 0.25 + glow * 1.4;
-      }
-      const M = THREE.MeshPhysicalMaterial || THREE.MeshStandardMaterial;
-      return new M(params);
-    });
-
-    // Material der abgerundeten Kanten: Kantenfarbe, sonst ein Hauch dunkler
-    // als der Körper. Bei Glas/Kristall leuchten gefärbte Kanten (Neon-Look).
-    if (geo.bevel) {
-      const M = THREE.MeshPhysicalMaterial || THREE.MeshStandardMaterial;
-      const hasEdge = style.edges && style.edges !== "none";
-      const base = hasEdge ? (style.edgeColor || "#f0d79c") : _darken(style.color || "#d4b578", 0.08);
-      const ep = Object.assign({}, surf.params, { color: new THREE.Color(base), side: THREE.FrontSide });
-      if (maps.roughnessMap) ep.roughnessMap = maps.roughnessMap;
-      if (hasEdge && style.edges === "bold") { ep.metalness = Math.max(ep.metalness || 0, 0.6); ep.roughness = Math.min(ep.roughness ?? .5, .3); }
-      if (surf.seeThrough && hasEdge) {
-        ep.transmission = 0; ep.emissive = new THREE.Color(base); ep.emissiveIntensity = style.edges === "bold" ? 1.1 : .6;
-      }
-      mats.push(new M(ep));
+    return { surf, maps, faces };
+  }
+  function _faceMat(face, style, surf, maps) {
+    const params = Object.assign({
+      color: new THREE.Color(0xffffff),   // neutral – die Farbe steckt in der Textur
+      map: makeFaceTexture(face, style),
+      side: THREE.FrontSide,
+    }, surf.params);
+    if (maps.roughnessMap) params.roughnessMap = maps.roughnessMap;
+    if (maps.bumpScale > 0) { params.bumpMap = maps.bumpMap; params.bumpScale = maps.bumpScale; }
+    if (surf.engraved) {
+      params.bumpMap = _maskMap(face, style, "engrave");
+      params.bumpScale = -0.08;          // negativ = vertieft
     }
-
+    if (surf.seeThrough) {
+      params.side = THREE.DoubleSide;
+      params.emissive = new THREE.Color(0xffffff);
+      params.emissiveMap = _maskMap(face, style, "glow");
+      params.emissiveIntensity = 0.55;
+      params.attenuationColor = new THREE.Color(style.color || "#a8d8e8");
+    }
+    // Leuchtende Zahlen (für jede Oberfläche): Zahl als Leuchtkarte
+    const glow = Math.max(0, Math.min(1, +style.numberGlow || 0));
+    if (glow > 0 && !surf.seeThrough) {
+      params.emissive = new THREE.Color(0xffffff);
+      params.emissiveMap = _maskMap(face, style, "glow");
+      params.emissiveIntensity = 0.25 + glow * 1.4;
+    }
+    const M = THREE.MeshPhysicalMaterial || THREE.MeshStandardMaterial;
+    return new M(params);
+  }
+  // Material der abgerundeten Kanten: Kantenfarbe, sonst ein Hauch dunkler
+  // als der Körper. Bei Glas/Kristall leuchten gefärbte Kanten (Neon-Look).
+  function _bevelMat(style, surf, maps) {
+    const M = THREE.MeshPhysicalMaterial || THREE.MeshStandardMaterial;
+    const hasEdge = style.edges && style.edges !== "none";
+    const base = hasEdge ? (style.edgeColor || "#f0d79c") : _darken(style.color || "#d4b578", 0.08);
+    const ep = Object.assign({}, surf.params, { color: new THREE.Color(base), side: THREE.FrontSide });
+    if (maps.roughnessMap) ep.roughnessMap = maps.roughnessMap;
+    if (hasEdge && style.edges === "bold") { ep.metalness = Math.max(ep.metalness || 0, 0.6); ep.roughness = Math.min(ep.roughness ?? .5, .3); }
+    if (surf.seeThrough && hasEdge) {
+      ep.transmission = 0; ep.emissive = new THREE.Color(base); ep.emissiveIntensity = style.edges === "bold" ? 1.1 : .6;
+    }
+    return new M(ep);
+  }
+  function _remember(key, mats) {
     _matCache.set(key, mats);
     while (_matCache.size > MAT_CACHE_MAX) {
       const oldest = _matCache.keys().next().value;
@@ -989,6 +981,50 @@ const DiceMaterial = (() => {
       _matCache.delete(oldest);
     }
     return mats;
+  }
+  function _cached(key) {
+    if (!_matCache.has(key)) return null;
+    const hit = _matCache.get(key);
+    _matCache.delete(key); _matCache.set(key, hit);   // als „zuletzt benutzt" markieren
+    return hit;
+  }
+
+  function build(sides, geo, style) {
+    const key = sides + "|" + JSON.stringify(style);
+    const hit = _cached(key); if (hit) return hit;
+    const { surf, maps, faces } = _prep(sides, geo, style);
+    const mats = faces.map(face => _faceMat(face, style, surf, maps));
+    if (geo.bevel) mats.push(_bevelMat(style, surf, maps));
+    return _remember(key, mats);
+  }
+
+  /**
+   * Wie build(), aber in kleinen Zeitscheiben (höchstens ~8 ms am Stück),
+   * damit laufende Animationen nicht ruckeln. Mit renderer werden die
+   * Texturen gleich nach und nach auf die Grafikkarte geladen.
+   * isStale(): gibt true zurück, wenn das Ergebnis nicht mehr gebraucht wird
+   * (z.B. weil inzwischen eine neuere Änderung kam) → Abbruch ohne Rest.
+   */
+  async function buildAsync(sides, geo, style, renderer, isStale) {
+    const key = sides + "|" + JSON.stringify(style);
+    const hit = _cached(key); if (hit) return hit;
+    const { surf, maps, faces } = _prep(sides, geo, style);
+    const mats = [];
+    const yieldFrame = () => new Promise(r => requestAnimationFrame(() => r()));
+    let t0 = performance.now();
+    for (const face of faces) {
+      if (isStale && isStale()) { _disposeMats(mats); return null; }
+      const m = _faceMat(face, style, surf, maps);
+      if (renderer && renderer.initTexture) {
+        ["map", "emissiveMap", "bumpMap"].forEach(k => { if (m[k]) try { renderer.initTexture(m[k]); } catch (e) {} });
+      }
+      mats.push(m);
+      if (performance.now() - t0 > 8) { await yieldFrame(); t0 = performance.now(); }
+    }
+    if (geo.bevel) mats.push(_bevelMat(style, surf, maps));
+    if (isStale && isStale()) { _disposeMats(mats); return null; }
+    const again = _cached(key); if (again) { _disposeMats(mats); return again; }   // inzwischen anderswo gebaut
+    return _remember(key, mats);
   }
 
   function _disposeMats(mats) {
@@ -1045,7 +1081,7 @@ const DiceMaterial = (() => {
   }
 
   return {
-    build, makeFaceTexture, ensureFonts, clearCache, EDGE_STYLES, patternPreview,
+    build, buildAsync, makeFaceTexture, ensureFonts, clearCache, EDGE_STYLES, patternPreview,
     SURFACES, PATTERNS, PRESET_COLORS,
     contrast: _contrast,
   };

@@ -4,6 +4,9 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>D&amp;D</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="preload" href="/static/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/cinzel-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/crimson-pro-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/static/css/fonts.css">
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/design-studio.css">
@@ -2160,6 +2163,8 @@ const CampaignPacks = (() => {
 <script src="/static/js/icons.js"></script>
 <script src="/static/js/fx.js"></script>
 <script>
+  // Ladeschleier: erst zeigen, wenn der Spielstand vom Server da ist
+  try { Theme.hold(new Promise(r => { document.addEventListener("dnd:full_state", r, { once: true }); setTimeout(r, 3000); })); } catch (e) {}
   // ── Neues Layout: Werkzeug-Dock + Symbol-Schiene (table-layout.css) ──────
   (function(){
     // 1) Werkzeuggruppen aus der Kopfzeile in das schwebende Dock verschieben.

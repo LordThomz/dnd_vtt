@@ -9,6 +9,34 @@ Zusammenfassung aller Einträge unten seit 0.1.x:
   • Inhaltspakete, Besitzer-Prinzip, Charakter mitbringen
 
 ────────────────────────────────────────────────────────────
+  FLÜSSIGER: LADESCHLEIER + RUCKELFREIE WERKSTATT – 3. Oktober (0.2.0)
+────────────────────────────────────────────────────────────
+SEITENWECHSEL
+  • Ladeschleier im App-Design (theme.js): Jede Seite erscheint erst, wenn
+    Seite, Schriften und angemeldete Wartepunkte fertig sind (höchstens 6 s);
+    beim Verlassen blendet er weich ein → kein halb geladener Zwischenstand
+  • Theme.hold(promise): Seiten melden, worauf gewartet wird
+    (Spieltisch: Spielstand vom Server; Werkstatt: erster fertiger Würfel)
+  • Theme.whenReady(fn): Arbeit, die warten kann, erst danach erledigen
+  • Wichtigste Schriften werden vorgeladen → kein Nachspringen des Layouts
+
+WÜRFEL-WERKSTATT
+  • Vorschau-Würfel wird im Hintergrund neu gebaut (DiceMaterial.buildAsync:
+    Zeitscheiben, Texturen schrittweise auf die Grafikkarte, Shader vorab
+    übersetzt); der alte dreht weiter, Tausch erst wenn fertig – mit
+    derselben Drehung (kein Zurückspringen mehr)
+  • Veraltete Zwischenstände (z. B. beim Ziehen des Farbreglers) werden
+    verworfen
+  • Stil-Vorschaubilder entstehen erst nach dem Laden, nacheinander mit
+    Pausen, und werden dauerhaft gemerkt (nur einmal erzeugt)
+  • Stil-Galerie wird bei Änderungen nicht mehr neu aufgebaut
+
+SONSTIGES
+  • Hintergrund-Partikel: vorgezeichnete Leuchtpunkte statt eines neuen
+    Farbverlaufs pro Partikel und Bild (weniger Speicher-Aufräumen)
+
+
+────────────────────────────────────────────────────────────
   NEUER STARTBILDSCHIRM + NEUES SPIELTISCH-LAYOUT – 3. Oktober (0.2.0)
 ────────────────────────────────────────────────────────────
 STARTBILDSCHIRM (Hauptmenü und Spielen-Seite zusammengelegt)

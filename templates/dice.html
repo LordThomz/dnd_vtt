@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Würfel-Werkstatt · D&amp;D Virtual Tabletop</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="preload" href="/static/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/cinzel-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/crimson-pro-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/static/css/fonts.css">
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/design-studio.css">
@@ -278,6 +281,7 @@ function persist() {
   clearTimeout(thumbT); thumbT = setTimeout(makeThumb, 1400);
 }
 async function makeThumb() {
+  if (document.documentElement.classList.contains("vtt-veil")) return void Theme.whenReady(makeThumb);
   try { const url = await Dice3D.snapshot(20, set.dice[20], 140); if (url) { set.thumb = url; Dice3D.saveSet(set); renderSetSelect(); } } catch (e) {}
 }
 function snapshot() { return JSON.stringify(set.dice); }
@@ -346,20 +350,34 @@ function surprise() {
 }
 
 // ── Vorschau-Bilder für Stile und Muster ───────────────────────────────────
-// Stil-Vorschauen: für die Sitzung merken (nicht bei jedem Neuzeichnen rendern)
-const _thumbCache = (() => { try { return JSON.parse(sessionStorage.getItem("vtt_style_thumbs") || "{}"); } catch (e) { return {}; } })();
-async function fillPresetThumbs(root) {
-  for (const img of root.querySelectorAll("img[data-thumb]")) {
-    const id = img.dataset.thumb;
-    if (!_thumbCache[id]) {
-      const p = presetList().find(x => x.id === id); if (!p) continue;
-      _thumbCache[id] = await Dice3D.snapshot(20, p.style, 120);
-      try { sessionStorage.setItem("vtt_style_thumbs", JSON.stringify(_thumbCache)); } catch (e) {}
+// Stil-Vorschauen: einmal erzeugen und DAUERHAFT merken (je Stil + Aussehen).
+// Sie entstehen erst, wenn die Seite fertig ist, eins nach dem anderen mit
+// Pausen – so ruckelt beim Öffnen der Werkstatt nichts.
+const THUMB_KEY = "vtt_style_thumbs_v1";
+const _thumbCache = (() => { try { return JSON.parse(localStorage.getItem(THUMB_KEY) || "{}"); } catch (e) { return {}; } })();
+const _thumbId = p => p.id + ":" + JSON.stringify(p.style).length + ":" + (JSON.stringify(p.style).split("").reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 7));
+let _thumbRun = null;
+function fillPresetThumbs(root) {
+  // Vorhandene sofort einsetzen …
+  root.querySelectorAll("img[data-thumb]").forEach(img => {
+    const p = presetList().find(x => x.id === img.dataset.thumb);
+    if (p && _thumbCache[_thumbId(p)]) img.src = _thumbCache[_thumbId(p)];
+  });
+  // … fehlende nach dem Laden nacheinander erzeugen
+  if (_thumbRun) return;
+  _thumbRun = new Promise(done => Theme.whenReady(async () => {
+    for (const p of presetList()) {
+      const id = _thumbId(p);
+      if (!_thumbCache[id]) {
+        _thumbCache[id] = await Dice3D.snapshot(20, p.style, 120);
+        try { localStorage.setItem(THUMB_KEY, JSON.stringify(_thumbCache)); } catch (e) {}
+        document.querySelectorAll(`img[data-thumb="${p.id}"]`).forEach(img => { img.src = _thumbCache[id] || ""; });
+        await new Promise(r => setTimeout(r, 140));          // Luft für die Animation
+      }
     }
-    img.src = _thumbCache[id] || "";
-  }
+    _thumbRun = null; done();
+  }));
 }
-
 // ── Darstellung ─────────────────────────────────────────────────────────────
 function renderRail() {
   document.getElementById("die-rail").innerHTML = SIDES.map(s =>
@@ -442,12 +460,22 @@ function renderInspector() {
        <div class="row"><span>Lautstärke</span><input type="range" min="0" max="100" value="${Math.round(DiceSound.getVolume() * 100)}" oninput="DiceSound.setVolume(this.value/100)"></div>
        <div class="lbl">Der Klang richtet sich nach dem Material.</div>`);
   const insp = document.getElementById("insp"), y = insp.scrollTop;
-  insp.innerHTML = html; insp.scrollTop = y;
-  insp.querySelectorAll("details.sec").forEach(d => d.addEventListener("toggle", () => {
-    d.open ? openSecs.add(d.dataset.sec) : openSecs.delete(d.dataset.sec);
-    if (d.open) { fillPresetThumbs(d); fillPatternThumbs(d); }
-  }));
-  fillPresetThumbs(insp); fillPatternThumbs(insp);
+  // Die Stil-Galerie ändert sich nie – sie bleibt stehen, statt bei jeder
+  // Änderung 14 Vorschaubilder neu einzusetzen (das ruckelte).
+  const keepStyles = insp.querySelector('details[data-sec="style"]');
+  insp.innerHTML = html;
+  const fresh = insp.querySelector('details[data-sec="style"]');
+  if (keepStyles && fresh) fresh.replaceWith(keepStyles);
+  insp.scrollTop = y;
+  insp.querySelectorAll("details.sec").forEach(d => {
+    if (d.dataset.bound) return; d.dataset.bound = "1";
+    d.addEventListener("toggle", () => {
+      d.open ? openSecs.add(d.dataset.sec) : openSecs.delete(d.dataset.sec);
+      if (d.open) { fillPresetThumbs(d); fillPatternThumbs(d); }
+    });
+  });
+  if (!keepStyles) fillPresetThumbs(insp);
+  fillPatternThumbs(insp);
 }
 const _patCache = {};
 function fillPatternThumbs(root) {
@@ -482,10 +510,12 @@ document.getElementById("ic-roll").innerHTML = ic("dices");
 document.getElementById("ic-rollall").innerHTML = ic("dices");
 document.getElementById("ic-sound").innerHTML = ic("volume-2");
 window.addEventListener("vtt:dice-set", () => loadSet((Dice3D.getActiveSet() || {}).id));
-(async () => {
+Theme.hold((async () => {
   if (window.DiceMaterial && DiceMaterial.ensureFonts) { try { await DiceMaterial.ensureFonts(); } catch (e) {} }
   loadSet((Dice3D.getActiveSet() || {}).id);
-})();
+  // Erste Vorschau gleich anstoßen und den Ladeschleier darauf warten lassen
+  try { Theme.hold(Dice3D.preview(current, styleOf(current), canvas)); } catch (e) {}
+})());
 </script>
 <script src="/static/js/design-studio.js"></script>
 <script src="/static/js/sfx.js"></script>

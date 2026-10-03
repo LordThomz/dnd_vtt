@@ -16,7 +16,7 @@ from game_state import (get_session, all_sessions, session_safe_copy,
 api_bp = Blueprint("api", __name__)
 
 # Programmversion – wird später für die automatische Update-Prüfung genutzt.
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.1.1"
 
 # Uploads landen im beschreibbaren Datenverzeichnis (wichtig für die gebündelte Exe).
 from config import app_data_dir

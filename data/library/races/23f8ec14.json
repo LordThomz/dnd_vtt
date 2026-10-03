@@ -1,0 +1,31 @@
+{
+  "name": "Mensch",
+  "size": "Mittel",
+  "speed": 30,
+  "darkvision": 0,
+  "asi": "+1 auf alle Werte",
+  "languages": "Gemeinsprache, +1 weitere",
+  "traits": [
+    {
+      "id": "t0",
+      "name": "Vielseitig",
+      "description": "Menschen sind anpassungsfähig und ehrgeizig.",
+      "choices": []
+    },
+    {
+      "id": "t1",
+      "name": "Zusätzliche Sprache.",
+      "description": "Zusätzliche Sprache.",
+      "choices": []
+    },
+    {
+      "id": "t2",
+      "name": "Zusätzliche Fertigkeit (Standard-Regeln)",
+      "description": "Zusätzliche Fertigkeit (Standard-Regeln) oder ein Talent (Variant-Regel).",
+      "choices": []
+    }
+  ],
+  "description": "Die vielseitigste und am weitesten verbreitete Rasse.",
+  "id": "23f8ec14",
+  "source": "basis"
+}

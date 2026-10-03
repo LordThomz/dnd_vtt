@@ -1,0 +1,189 @@
+{
+  "name": "Barbar",
+  "hd": "d12",
+  "primary": "str",
+  "spellcaster": false,
+  "armor": "Leichte & mittlere Rüstung, Schilde",
+  "weapons": "Einfache & Kriegswaffen",
+  "tools": "",
+  "saves": "STR, KON",
+  "skill_count": 2,
+  "skill_options": "Athletik, Einschüchtern, Naturkunde, Tierführung, Wahrnehmung, Überleben",
+  "description": "Ein wilder Krieger, angetrieben von primitiver Wut.",
+  "level_features": {
+    "1": [
+      {
+        "id": "f1_0",
+        "name": "Wut",
+        "description": "2/Tag, +2 Schaden, Resistenz Hieb/Stich/Wucht.",
+        "choices": []
+      },
+      {
+        "id": "f1_1",
+        "name": "Ungerüstete Verteidigung",
+        "description": "RK = 10 + GES-Mod + KON-Mod",
+        "choices": []
+      }
+    ],
+    "2": [
+      {
+        "id": "f2_0",
+        "name": "Rücksichtsloser Angriff",
+        "description": "Vorteil auf STR-Angriffe, Angreifer haben Vorteil gegen dich.",
+        "choices": []
+      },
+      {
+        "id": "f2_1",
+        "name": "Gefahrensinn",
+        "description": "Vorteil auf GES-RW gegen sichtbare Effekte.",
+        "choices": []
+      }
+    ],
+    "3": [
+      {
+        "id": "f3_0",
+        "name": "Primärer Pfad (Unterklasse wählen)",
+        "description": "Primärer Pfad (Unterklasse wählen)",
+        "choices": []
+      }
+    ],
+    "4": [
+      {
+        "id": "f4_0",
+        "name": "Ability Score Improvement",
+        "description": "Ability Score Improvement",
+        "choices": []
+      }
+    ],
+    "5": [
+      {
+        "id": "f5_0",
+        "name": "Extraangriff. Schnelle Bewegung (+10 ft)",
+        "description": "Extraangriff. Schnelle Bewegung (+10 ft).",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Pfad-Merkmal",
+        "description": "Pfad-Merkmal",
+        "choices": []
+      }
+    ],
+    "7": [
+      {
+        "id": "f7_0",
+        "name": "Feral Instinct (Vorteil auf Initiative)",
+        "description": "Feral Instinct (Vorteil auf Initiative)",
+        "choices": []
+      }
+    ],
+    "8": [
+      {
+        "id": "f8_0",
+        "name": "ASI",
+        "description": "ASI",
+        "choices": []
+      }
+    ],
+    "9": [
+      {
+        "id": "f9_0",
+        "name": "Brutal Critical (1 Würfel)",
+        "description": "Brutal Critical (1 Würfel)",
+        "choices": []
+      }
+    ],
+    "10": [
+      {
+        "id": "f10_0",
+        "name": "Pfad-Merkmal",
+        "description": "Pfad-Merkmal",
+        "choices": []
+      }
+    ],
+    "11": [
+      {
+        "id": "f11_0",
+        "name": "Relentless Rage",
+        "description": "Relentless Rage",
+        "choices": []
+      }
+    ],
+    "12": [
+      {
+        "id": "f12_0",
+        "name": "ASI",
+        "description": "ASI",
+        "choices": []
+      }
+    ],
+    "13": [
+      {
+        "id": "f13_0",
+        "name": "Brutal Critical (2)",
+        "description": "Brutal Critical (2)",
+        "choices": []
+      }
+    ],
+    "14": [
+      {
+        "id": "f14_0",
+        "name": "Pfad-Merkmal",
+        "description": "Pfad-Merkmal",
+        "choices": []
+      }
+    ],
+    "15": [
+      {
+        "id": "f15_0",
+        "name": "Persistent Rage",
+        "description": "Persistent Rage",
+        "choices": []
+      }
+    ],
+    "16": [
+      {
+        "id": "f16_0",
+        "name": "ASI",
+        "description": "ASI",
+        "choices": []
+      }
+    ],
+    "17": [
+      {
+        "id": "f17_0",
+        "name": "Brutal Critical (3)",
+        "description": "Brutal Critical (3)",
+        "choices": []
+      }
+    ],
+    "18": [
+      {
+        "id": "f18_0",
+        "name": "Indomitable Might",
+        "description": "Indomitable Might",
+        "choices": []
+      }
+    ],
+    "19": [
+      {
+        "id": "f19_0",
+        "name": "ASI",
+        "description": "ASI",
+        "choices": []
+      }
+    ],
+    "20": [
+      {
+        "id": "f20_0",
+        "name": "Primal Champion",
+        "description": "STR/KON werden +4 (max 24)",
+        "choices": []
+      }
+    ]
+  },
+  "id": "355d8402",
+  "source": "basis"
+}

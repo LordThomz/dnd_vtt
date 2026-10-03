@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bibliothek · D&amp;D</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/design-studio.css">
+<script src="/static/js/theme.js"></script>
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/dialog.css">
+<style>
+body{overflow-y:auto;min-height:100vh;}
+.container{max-width:1240px;margin:0 auto;padding:24px 18px 60px;position:relative;z-index:2;}
+header{text-align:center;margin-bottom:18px;}
+h1{
+  font-family:'Cinzel Decorative',serif;font-size:2.2rem;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold-light),var(--gold-dark));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:.05em;margin-bottom:4px;
+}
+.subtitle{color:var(--text-dim);letter-spacing:.2em;font-family:var(--font-display);font-size:.75rem;text-transform:uppercase;}
+.nav-btn{position:fixed;top:18px;left:18px;z-index:10;}
+
+.cat-tabs{
+  display:flex;gap:3px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;
+  padding:4px;width:fit-content;margin-left:auto;margin-right:auto;max-width:100%;
+}
+.cat-tab{
+  padding:8px 14px;border-radius:6px;cursor:pointer;
+  font-family:var(--font-display);font-size:.78rem;color:var(--text-dim);
+  transition:all .15s;white-space:nowrap;
+}
+.cat-tab:hover{color:var(--text);background:rgba(var(--hi-rgb),.03);}
+.cat-tab.active{background:var(--gold-dark);color:var(--bg-deep);font-weight:600;}
+
+.layout{display:grid;grid-template-columns:300px 1fr;gap:16px;}
+@media(max-width:860px){.layout{grid-template-columns:1fr;}}
+
+.lib-list-panel{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.lib-list-panel h3{font-family:var(--font-display);font-size:.9rem;color:var(--gold);margin-bottom:10px;letter-spacing:.05em;}
+.search-box{
+  width:100%;background:var(--bg-dark);border:1px solid var(--border);
+  border-radius:6px;padding:7px 10px;color:var(--text);font-size:.86rem;
+  margin-bottom:10px;outline:none;
+}
+.search-box:focus{border-color:var(--gold-dark);}
+
+.lib-item{
+  display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--border);
+  border-radius:7px;margin-bottom:4px;cursor:pointer;transition:all .14s;
+  background:var(--bg-dark);
+}
+.lib-item:hover{border-color:var(--gold-dark);transform:translateX(2px);}
+.lib-item.active{border-color:var(--gold);background:rgba(var(--gold-rgb),.06);}
+.lib-item-info{flex:1;min-width:0;}
+.li-name{font-family:var(--font-display);color:var(--gold);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.li-meta{font-size:.7rem;color:var(--text-dim);}
+.empty-list{color:var(--text-dim);font-style:italic;text-align:center;padding:22px;font-size:.84rem;}
+
+.editor{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:22px;}
+.editor h2{font-family:var(--font-display);color:var(--gold);font-size:1.15rem;margin-bottom:14px;}
+
+.section{margin-bottom:18px;}
+.section-title{
+  font-family:var(--font-display);font-size:.68rem;color:var(--gold-dark);
+  letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--border);
+  padding-bottom:4px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;
+}
+.row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.row>div{flex:1;min-width:120px;}
+.field-label{display:block;font-family:var(--font-display);font-size:.62rem;letter-spacing:.1em;
+  color:var(--gold-dark);text-transform:uppercase;margin-bottom:4px;}
+input,textarea,select{
+  width:100%;background:var(--bg-dark);border:1px solid var(--border);
+  border-radius:5px;padding:7px 10px;color:var(--text);
+  font-family:var(--font-body);font-size:.9rem;outline:none;
+  transition:border-color .14s;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--gold-dark);}
+textarea{resize:vertical;min-height:60px;}
+
+.buttons{display:flex;gap:8px;margin-top:20px;}
+
+.empty-editor{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;
+  padding:70px 20px;text-align:center;
+}
+.empty-editor .icon{font-size:3.2rem;margin-bottom:10px;}
+.empty-editor h2{font-family:var(--font-display);color:var(--gold);}
+.empty-editor p{color:var(--text-dim);margin-top:8px;font-size:.9rem;}
+
+/* ── Traits / Features list ── */
+.traits-list{display:flex;flex-direction:column;gap:6px;}
+.trait-card{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;
+}
+.trait-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.trait-head input{flex:1;font-family:var(--font-display);font-size:.88rem;color:var(--gold);padding:5px 8px;}
+.trait-body textarea{min-height:48px;font-size:.82rem;}
+.icon-btn{
+  background:var(--bg-panel);border:1px solid var(--border);color:var(--text);
+  border-radius:5px;padding:4px 9px;cursor:pointer;font-size:.85rem;
+  transition:all .12s;flex-shrink:0;
+}
+.icon-btn:hover{border-color:var(--gold);color:var(--gold);}
+.icon-btn.danger:hover{border-color:var(--red);color:var(--red-soft);}
+.add-trait-btn{
+  background:var(--bg-dark);border:1px dashed var(--gold-dark);color:var(--gold);
+  padding:8px 12px;border-radius:6px;cursor:pointer;width:100%;
+  font-family:var(--font-display);font-size:.85rem;transition:all .12s;margin-top:4px;
+}
+.add-trait-btn:hover{background:rgba(var(--gold-rgb),.08);border-style:solid;}
+
+/* ── Choices sub-list ── */
+.choices-section{
+  margin-top:8px;padding-top:6px;border-top:1px dashed var(--border);
+}
+.choices-label{font-size:.62rem;color:var(--gold-dark);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;font-family:var(--font-display);}
+.choice-row{
+  display:flex;gap:5px;margin-bottom:4px;align-items:center;
+  background:var(--bg-panel);padding:5px 7px;border-radius:5px;border:1px solid var(--border);
+}
+.choice-row select,.choice-row input{font-size:.78rem;padding:3px 6px;}
+.choice-row .choice-type{min-width:110px;max-width:150px;}
+.choice-row .choice-count{width:50px;}
+.choice-row .choice-options{flex:1;}
+
+/* ── Level features for classes/subclasses ── */
+.level-row{
+  display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;padding:10px;
+}
+.level-num{
+  flex-shrink:0;width:54px;padding:6px;
+  background:var(--bg-deep);border:1px solid var(--gold-dark);border-radius:5px;
+  font-family:var(--font-display);font-size:.8rem;color:var(--gold);text-align:center;align-self:flex-start;
+}
+.level-body{flex:1;display:flex;flex-direction:column;gap:6px;}
+.level-feature{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:5px;padding:8px;
+}
+
+/* ── Misc UI ── */
+.help-text{font-size:.75rem;color:var(--text-dim);margin-top:4px;font-style:italic;}
+hr{border:none;border-top:1px solid var(--border);margin:12px 0;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="stars"></div>
+
+<a href="/" class="btn btn-secondary nav-btn">← Zurück</a>
+
+<div class="container">
+  <header>
+    <h1>📚 Bibliothek</h1>
+    <div class="subtitle">Homebrew · Regeln · Inhalte</div>
+    <button onclick="PackManager.open({onChange: loadLibrary, readOnly: !isOwner})" title="Inhaltspakete verwalten, importieren, teilen" style="position:fixed;top:18px;right:168px;z-index:10;background:var(--bg-panel2);border:1px solid var(--gold-dark);color:var(--gold);padding:9px 16px;border-radius:10px;cursor:pointer;font-size:.9rem">📦 Pakete</button>
+    <button onclick="refreshLibrary()" id="lib-refresh-btn" title="Neueste Einträge vom Server holen" style="position:fixed;top:18px;right:18px;z-index:10;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));color:var(--gold,var(--gold));padding:9px 16px;border-radius:10px;cursor:pointer;font-size:.9rem">🔄 Aktualisieren</button>
+  </header>
+  <script src="/static/js/dialog.js"></script>
+<script>
+  // Holt die neuesten Bibliotheks-Einträge vom Server (z. B. wenn ein Freund
+  // etwas Neues erstellt hat), ohne die ganze Seite neu zu laden.
+  async function refreshLibrary(){
+    const btn=document.getElementById("lib-refresh-btn");
+    const old=btn.textContent;
+    btn.textContent="⏳ Lädt …"; btn.disabled=true;
+    try{
+      await loadLibrary();
+      btn.textContent="✅ Aktuell";
+    }catch(e){
+      btn.textContent="⚠️ Fehler";
+    }
+    setTimeout(()=>{ btn.textContent=old; btn.disabled=false; }, 1400);
+  }
+  </script>
+
+  <div class="cat-tabs" id="cat-tabs"></div>
+
+  <div class="layout">
+    <div class="lib-list-panel">
+      <h3 id="list-title">Einträge</h3>
+      <div class="src-filter" id="src-filter"></div>
+      <input type="text" class="search-box" id="search-box" placeholder="🔍 Suchen…" oninput="renderList()">
+      <div id="lib-list"></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="newEntry()">✨ Neu</button>
+      <button class="btn btn-secondary" style="width:100%;margin-top:5px;font-size:.78rem" onclick="seedDefaults()" title="Lädt Standard-D&D-Inhalte in die Bibliothek.">📥 Standards laden</button>
+    </div>
+
+    <div id="editor-container">
+      <div class="empty-editor" id="empty-editor">
+        <div class="icon">📚</div>
+        <h2>Bibliothek</h2>
+        <p>Wähle einen Eintrag oder erstelle einen neuen.</p>
+      </div>
+      <div class="editor" id="editor" style="display:none">
+        <h2 id="editor-title">Neu</h2>
+        <input type="hidden" id="f-id">
+        <div id="editor-body"></div>
+        <div class="buttons">
+          <button class="btn btn-primary" style="flex:1" onclick="saveEntry()">💾 Speichern</button>
+          <button class="btn btn-secondary" onclick="deleteEntry()">🗑 Löschen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// CATEGORY CONFIG
+// ══════════════════════════════════════════════════════════════════════
+const CATEGORIES = [
+  {id:"races",       icon:"🧬", label:"Völker"},
+  {id:"classes",     icon:"⚔️", label:"Klassen"},
+  {id:"subclasses",  icon:"📜", label:"Subklassen"},
+  {id:"backgrounds", icon:"📖", label:"Hintergründe"},
+  {id:"feats",       icon:"⭐", label:"Talente"},
+  {id:"spells",      icon:"✨", label:"Zauber"},
+  {id:"attacks",     icon:"🎯", label:"Angriffe"},
+  {id:"items",       icon:"🎒", label:"Gegenstände"},
+  {id:"magic_items", icon:"🔮", label:"Magische Ggst."},
+  {id:"conditions",  icon:"💫", label:"Zustände"},
+  {id:"monsters",    icon:"🐉", label:"Monster"},
+];
+
+// Available choice types (for dynamic choice fields in traits)
+const CHOICE_TYPES = [
+  {id:"language",    label:"Sprache wählen"},
+  {id:"skill",       label:"Fertigkeit wählen"},
+  {id:"ability",     label:"Attribut wählen"},
+  {id:"tool",        label:"Werkzeug wählen"},
+  {id:"cantrip",     label:"Zaubertrick wählen"},
+  {id:"spell",       label:"Zauber wählen"},
+  {id:"feat",        label:"Talent wählen"},
+  {id:"subclass",    label:"Subklasse wählen"},
+  {id:"fighting_style", label:"Kampfstil wählen"},
+  {id:"damage_resistance", label:"Schadens-Resistenz"},
+  {id:"damage_type", label:"Schadenstyp"},
+  {id:"weapon",      label:"Waffe wählen"},
+  {id:"armor_type",  label:"Rüstungsart wählen"},
+  {id:"custom",      label:"Eigene Optionen"},
+];
+
+const SKILLS = ["Akrobatik","Arkana","Athletik","Auftreten","Einschüchtern","Einsicht","Ermitteln","Fingerfertigkeit","Geschichte","Heilkunde","Heimlichkeit","Naturkunde","Religion","Tierführung","Täuschung","Überleben","Überzeugung","Wahrnehmung"];
+const LANGUAGES = ["Gemeinsprache","Zwergisch","Elfisch","Riesisch","Gnomisch","Goblin","Halblingisch","Orkisch","Abyssal","Himmlisch","Drakonisch","Infernal","Primordial","Sylvan","Unterirdisch","Tiefenrede"];
+const ABILITIES = ["Stärke","Geschicklichkeit","Konstitution","Intelligenz","Weisheit","Charisma"];
+const DAMAGE_TYPES = ["Hieb","Stich","Wucht","Säure","Kälte","Feuer","Blitz","Gift","Psychisch","Schall","Strahlend","Energie"];
+const FIGHTING_STYLES = ["Verteidigung","Duellieren","Zweihandkampf","Schutz","Schleuder","Zweiwaffenkampf","Bogenschützen"];
+
+// ══════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════
+let currentCat = "races";
+let library = {};
+let currentId = null;
+let editState = {};  // working copy of current entry being edited
+
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2200);}
+function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function uid(){return "x"+Math.random().toString(36).slice(2,9);}
+
+// ══════════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════════
+function renderCatTabs(){
+  document.getElementById("cat-tabs").innerHTML = CATEGORIES.map(c=>
+    `<div class="cat-tab ${c.id===currentCat?"active":""}" data-cat="${c.id}" onclick="switchCat('${c.id}')">${c.icon} ${c.label}</div>`
+  ).join("");
+}
+
+// Quellen (Inhaltspakete) – siehe packs.py / pack-manager.js
+let packs = [], srcFilter = "";
+const srcName = id => (packs.find(p => p.id === id) || {}).name || id;
+async function loadPacks(){
+  try { packs = await (await fetch("/api/packs")).json(); } catch(e){ packs = []; }
+}
+function renderSrcFilter(){
+  const box = document.getElementById("src-filter");
+  const inCat = {};
+  Object.values(library[currentCat]||{}).forEach(e => { const s=e.source||"eigene"; inCat[s]=(inCat[s]||0)+1; });
+  const used = packs.filter(p => inCat[p.id]);
+  if (used.length < 2) { box.innerHTML = ""; if(srcFilter && !inCat[srcFilter]) srcFilter=""; return; }
+  box.innerHTML = `<button class="${srcFilter===""?"on":""}" onclick="setSrcFilter('')">Alle</button>` +
+    used.map(p => `<button class="${srcFilter===p.id?"on":""} ${p.enabled?"":"off-pack"}" title="${p.enabled?"":"Paket ist abgeschaltet"}" onclick="setSrcFilter('${esc(p.id)}')">${esc(p.name)} · ${inCat[p.id]}</button>`).join("");
+}
+function setSrcFilter(id){ srcFilter = id; renderList(); }
+
+// Besitzer-Prinzip: Über das Netzwerk verbundene Spieler sehen die
+// Bibliothek nur an (und können Pakete herunterladen), ändern aber nichts.
+let isOwner = true;
+async function applyOwnerMode(){
+  try { isOwner = (await (await fetch("/api/server/info")).json()).is_owner !== false; } catch(e){}
+  if (isOwner) return;
+  document.querySelectorAll('[onclick="newEntry()"],[onclick^="seedDefaults"],[onclick="saveEntry()"],[onclick="deleteEntry()"]').forEach(b=>b.style.display="none");
+  document.querySelector("header").insertAdjacentHTML("beforeend",
+    `<div style="margin-top:10px;font-size:.85rem;color:var(--text-dim)">👁 Nur ansehen – das ist die Bibliothek des Spielers, mit dessen Server du verbunden bist.</div>`);
+}
+applyOwnerMode();
+
+async function loadLibrary(){
+  await loadPacks();
+  const res = await fetch("/api/library");
+  library = await res.json();
+  // Ensure all categories exist in client-side object
+  CATEGORIES.forEach(c=>{ if(!library[c.id]) library[c.id]={}; });
+  const total = Object.values(library).reduce((s,cat)=>s+Object.keys(cat||{}).length,0);
+  if(total === 0) await seedDefaults(true);
+  renderList();
+}
+
+async function seedDefaults(silent){
+  try {
+    const res = await fetch("/api/library/seed_defaults",{method:"POST"});
+    const data = await res.json();
+    if(data.library) library = data.library;
+    CATEGORIES.forEach(c=>{ if(!library[c.id]) library[c.id]={}; });
+    if(!silent){
+      toast(data.seeded ? "📥 Standards geladen!" : "ℹ️ Standards schon geladen");
+    }
+    renderList();
+  } catch(e){ if(!silent) toast("❌ Fehler"); }
+}
+
+function switchCat(cat){
+  currentCat = cat;
+  currentId = null;
+  editState = {};
+  renderCatTabs();
+  const catDef = CATEGORIES.find(c=>c.id===cat);
+  document.getElementById("list-title").textContent = catDef?`${catDef.icon} ${catDef.label}`:"Einträge";
+  document.getElementById("editor").style.display="none";
+  document.getElementById("empty-editor").style.display="block";
+  renderList();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// LIST VIEW
+// ══════════════════════════════════════════════════════════════════════
+function renderList(){
+  const search = (document.getElementById("search-box").value||"").toLowerCase();
+  renderSrcFilter();
+  const entries = Object.values(library[currentCat]||{}).filter(e=>
+    (!search || (e.name||"").toLowerCase().includes(search)) &&
+    (!srcFilter || (e.source||"eigene") === srcFilter)
+  ).sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+  const list = document.getElementById("lib-list");
+  if(!entries.length){
+    list.innerHTML = `<div class="empty-list">Noch nichts hier.<br>Klicke „✨ Neu" zum Erstellen.</div>`;
+    return;
+  }
+  list.innerHTML = entries.map(e=>`
+    <div class="lib-item ${e.id===currentId?"active":""}" onclick="selectEntry('${e.id}')">
+      <div class="lib-item-info">
+        <div class="li-name">${esc(e.name||"Unbenannt")}<span class="src-badge ${esc(e.source||"eigene")}">${esc(srcName(e.source||"eigene"))}</span></div>
+        <div class="li-meta">${esc(listMeta(e))}</div>
+      </div>
+    </div>`).join("");
+}
+
+function listMeta(e){
+  switch(currentCat){
+    case "races":       return [e.size||"Mittel", `${e.speed||30}ft`, e.darkvision?`DV ${e.darkvision}ft`:""].filter(Boolean).join(" · ");
+    case "classes":     return [`TW ${e.hd||"d8"}`, (e.primary||"").toUpperCase(), e.spellcaster?"Zauberwirker":""].filter(Boolean).join(" · ");
+    case "subclasses":  {const p=library.classes?.[e.parent_class];return [(p?.name)||e.parent_class_name||"—", `ab Lvl ${e.start_level||3}`].filter(Boolean).join(" · ");}
+    case "backgrounds": return [e.skill_prof||"", e.tool_prof||""].filter(Boolean).join(" · ");
+    case "feats":       return e.prerequisite ? `Voraussetzung: ${e.prerequisite}` : "";
+    case "spells":      return [e.level===0?"Zaubertrick":`Stufe ${e.level}`, e.school||""].filter(Boolean).join(" · ");
+    case "attacks":     return [e.attack_type||"", e.damage?`${e.damage} ${e.damage_type||""}`:""].filter(Boolean).join(" · ");
+    case "items":       return [e.category||"", e.weight?`${e.weight}lb`:""].filter(Boolean).join(" · ");
+    case "magic_items": return [e.rarity||"", e.requires_attunement?"🔗 Einstimmung":""].filter(Boolean).join(" · ");
+    case "conditions":  return "";
+    case "monsters":    return [e.size||"", `HG ${e.cr||"—"}`, `${e.hp||"?"} HP`].filter(Boolean).join(" · ");
+    default: return "";
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// NEW / SELECT
+// ══════════════════════════════════════════════════════════════════════
+function newEntry(){
+  editState = makeDefault(currentCat);
+  currentId = null;
+  renderEditor();
+}
+function selectEntry(id){
+  const e = library[currentCat]?.[id];
+  if(!e) return;
+  currentId = id;
+  editState = JSON.parse(JSON.stringify(e));  // deep clone to avoid mutating live data
+  normalizeState();
+  renderList();
+  renderEditor();
+}
+
+function normalizeState(){
+  // Ensure traits/features are arrays of objects
+  if (typeof editState.traits === "string") {
+    editState.traits = parseTextToTraits(editState.traits);
+  }
+  if (!Array.isArray(editState.traits)) editState.traits = [];
+  editState.traits.forEach(t=>{ if(!t.id) t.id = uid(); if(!Array.isArray(t.choices)) t.choices=[]; });
+
+  if (editState.level_features && typeof editState.level_features === "object") {
+    for(const lvl in editState.level_features){
+      const v = editState.level_features[lvl];
+      if (typeof v === "string") {
+        editState.level_features[lvl] = parseTextToTraits(v);
+      }
+      if (!Array.isArray(editState.level_features[lvl])) editState.level_features[lvl] = [];
+      editState.level_features[lvl].forEach(f=>{ if(!f.id) f.id = uid(); if(!Array.isArray(f.choices)) f.choices=[]; });
+    }
+  } else {
+    editState.level_features = {};
+  }
+}
+
+function parseTextToTraits(text){
+  const result = [];
+  text.split("\n").forEach((line,i)=>{
+    line = line.trim();
+    if(!line) return;
+    if(line.includes(":")){
+      const [n,...rest] = line.split(":");
+      result.push({id:uid(), name:n.trim(), description:rest.join(":").trim(), choices:[]});
+    } else {
+      result.push({id:uid(), name:line.substring(0,40), description:line, choices:[]});
+    }
+  });
+  return result;
+}
+
+function makeDefault(cat){
+  const base = {id:null, name:"", description:"", traits:[]};
+  switch(cat){
+    case "races":       return {...base, size:"Mittel", speed:30, darkvision:0, asi:"", languages:""};
+    case "classes":     return {...base, hd:"d10", primary:"str", spellcaster:false, armor:"", weapons:"", tools:"", saves:"", skill_count:2, skill_options:"", level_features:{}};
+    case "subclasses":  return {...base, parent_class:"", parent_class_name:"", start_level:3, level_features:{}};
+    case "backgrounds": return {...base, skill_prof:"", tool_prof:"", language_count:0, equipment:"", feature_name:"", feature_desc:"", suggestions:{personality:"", ideals:"", bonds:"", flaws:""}};
+    case "feats":       return {...base, prerequisite:"", asi:""};
+    case "spells":      return {...base, level:0, school:"Evocation", casting_time:"1 Aktion", range:"", duration:"Sofort", components:"V, S", ritual:false, concentration:false, damage:"", damage_type:"", save:"", classes:""};
+    case "attacks":     return {...base, attack_type:"Nahkampf", hit_bonus:0, damage:"1d6", damage_type:"Hieb", range:"5", extra:"", effect:"", effect_dur:""};
+    case "items":       return {...base, category:"Sonstiges", weight:0, cost:"", ac_bonus:0, damage:"", damage_type:"", properties:""};
+    case "magic_items": return {...base, item_category:"Wunderbarer Gegenstand", rarity:"Ungewöhnlich", requires_attunement:false, attunement_restriction:""};
+    case "conditions":  return {...base};
+    case "monsters":    return {...base, size:"Mittel", type:"Humanoid", alignment:"Neutral", cr:"1", ac:12, hp:10, speed:"30 ft.", str:10, dex:10, con:10, int:10, wis:10, cha:10, skills:"", resistances:"", immunities:"", senses:"", actions:[]};
+    default:            return base;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// EDITOR RENDER
+// ══════════════════════════════════════════════════════════════════════
+function renderEditor(){
+  document.getElementById("empty-editor").style.display="none";
+  document.getElementById("editor").style.display="block";
+  document.getElementById("f-id").value = editState.id || "";
+  const catDef = CATEGORIES.find(c=>c.id===currentCat);
+  document.getElementById("editor-title").textContent = editState.id
+    ? `${catDef?.icon} Bearbeite: ${editState.name||"(unbenannt)"}`
+    : `${catDef?.icon} Neuer Eintrag (${catDef?.label})`;
+  const body = document.getElementById("editor-body");
+  // Quelle anzeigen. Einträge aus importierten Paketen werden bei einem
+  // Paket-Update ersetzt – darauf hinweisen, damit niemand umsonst editiert.
+  const src = editState.source || "eigene";
+  const pk = packs.find(p => p.id === src);
+  const srcInfo = `<div style="margin:-4px 0 14px;font-size:.85rem;color:var(--text-dim)">Quelle: <span class="src-badge ${esc(src)}">${esc(srcName(src))}</span>
+    ${pk && !pk.builtin ? ` – Änderungen gehen beim nächsten Update dieses Pakets verloren.` : ""}</div>`;
+  body.innerHTML = srcInfo + renderCommonFields() + renderCatFields();
+  bindCommonInputs();
+}
+
+function renderCommonFields(){
+  return `
+    <div class="section">
+      <div class="row">
+        <div style="flex:2"><label class="field-label">Name</label>
+          <input id="f-name" value="${esc(editState.name||"")}" placeholder="Name eingeben…"></div>
+      </div>
+      <label class="field-label">Beschreibung</label>
+      <textarea id="f-description" rows="3" placeholder="Beschreibung / Flavor-Text…">${esc(editState.description||"")}</textarea>
+    </div>
+  `;
+}
+
+function bindCommonInputs(){
+  document.getElementById("f-name").oninput = e => editState.name = e.target.value;
+  document.getElementById("f-description").oninput = e => editState.description = e.target.value;
+}
+
+function renderCatFields(){
+  switch(currentCat){
+    case "races":       return renderRaceFields();
+    case "classes":     return renderClassFields();
+    case "subclasses":  return renderSubclassFields();
+    case "backgrounds": return renderBackgroundFields();
+    case "feats":       return renderFeatFields();
+    case "spells":      return renderSpellFields();
+    case "attacks":     return renderAttackFields();
+    case "items":       return renderItemFields();
+    case "magic_items": return renderMagicItemFields();
+    case "conditions":  return renderConditionFields();
+    case "monsters":    return renderMonsterFields();
+    default: return "";
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// CATEGORY FIELDS
+// ══════════════════════════════════════════════════════════════════════
+function renderRaceFields(){
+  setTimeout(bindRaceInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Volks-Grundlagen</div>
+      <div class="row">
+        <div><label class="field-label">Größe</label>
+          <select id="f-size">
+            ${["Winzig","Klein","Mittel","Groß","Riesig"].map(s=>`<option ${editState.size===s?"selected":""}>${s}</option>`).join("")}
+          </select></div>
+        <div><label class="field-label">Geschwindigkeit (ft)</label>
+          <input type="number" id="f-speed" value="${editState.speed||30}"></div>
+        <div><label class="field-label">Dunkelsicht (ft)</label>
+          <input type="number" id="f-darkvision" value="${editState.darkvision||0}"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Attributs-Bonus (Beschreibungstext)</label>
+          <input id="f-asi" value="${esc(editState.asi||"")}" placeholder="+2 STR, +1 KON"></div>
+        <div><label class="field-label">Sprachen (kommasepariert)</label>
+          <input id="f-languages" value="${esc(editState.languages||"")}" placeholder="Gemeinsprache, Elfisch"></div>
+      </div>
+    </div>
+    ${renderTraitsSection("Volks-Eigenschaften", editState.traits)}
+  `;
+}
+function bindRaceInputs(){
+  ["size","speed","darkvision","asi","languages"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => {
+      const v = e.target.value;
+      editState[k] = (k==="speed"||k==="darkvision") ? (parseInt(v)||0) : v;
+    };
+  });
+}
+
+function renderClassFields(){
+  setTimeout(bindClassInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Klassen-Grundlagen</div>
+      <div class="row">
+        <div><label class="field-label">Trefferwürfel</label>
+          <select id="f-hd">${["d6","d8","d10","d12"].map(h=>`<option ${editState.hd===h?"selected":""}>${h}</option>`).join("")}</select></div>
+        <div><label class="field-label">Primäres Attribut</label>
+          <select id="f-primary">${["str","dex","con","int","wis","cha"].map(s=>`<option value="${s}" ${editState.primary===s?"selected":""}>${s.toUpperCase()}</option>`).join("")}</select></div>
+        <div><label class="field-label">Zauberwirker?</label>
+          <select id="f-spellcaster"><option value="false" ${!editState.spellcaster?"selected":""}>Nein</option><option value="true" ${editState.spellcaster?"selected":""}>Ja</option></select></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Rüstungskundig</label>
+          <input id="f-armor" value="${esc(editState.armor||"")}" placeholder="Leichte & mittlere Rüstung, Schilde"></div>
+        <div><label class="field-label">Waffenkundig</label>
+          <input id="f-weapons" value="${esc(editState.weapons||"")}" placeholder="Einfache & Kriegswaffen"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Werkzeuge</label>
+          <input id="f-tools" value="${esc(editState.tools||"")}" placeholder="—"></div>
+        <div><label class="field-label">Rettungswürfe</label>
+          <input id="f-saves" value="${esc(editState.saves||"")}" placeholder="STR, KON"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Anzahl Fertigkeiten</label>
+          <input type="number" id="f-skill_count" value="${editState.skill_count||2}"></div>
+        <div style="flex:2"><label class="field-label">Fertigkeits-Auswahl</label>
+          <input id="f-skill_options" value="${esc(editState.skill_options||"")}" placeholder="* = alle, oder: Athletik, Einschüchtern, …"></div>
+      </div>
+    </div>
+    ${renderLevelFeaturesSection("Level-Freischaltungen", editState.level_features)}
+  `;
+}
+function bindClassInputs(){
+  ["hd","primary","spellcaster","armor","weapons","tools","saves","skill_count","skill_options"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => {
+      const v = e.target.value;
+      if(k==="spellcaster") editState[k] = v==="true";
+      else if(k==="skill_count") editState[k] = parseInt(v)||2;
+      else editState[k] = v;
+    };
+  });
+}
+
+function renderSubclassFields(){
+  setTimeout(bindSubclassInputs, 0);
+  const classOptions = Object.values(library.classes||{})
+    .sort((a,b)=>(a.name||"").localeCompare(b.name||""))
+    .map(c=>`<option value="${c.id}" ${editState.parent_class===c.id?"selected":""}>${esc(c.name)}</option>`).join("");
+  return `
+    <div class="section">
+      <div class="section-title">Subklassen-Grundlagen</div>
+      <div class="row">
+        <div><label class="field-label">Zugehörige Klasse</label>
+          <select id="f-parent_class"><option value="">— wählen —</option>${classOptions}</select></div>
+        <div><label class="field-label">Ab Level</label>
+          <input type="number" id="f-start_level" min="1" max="20" value="${editState.start_level||3}"></div>
+      </div>
+    </div>
+    ${renderLevelFeaturesSection("Features pro Level", editState.level_features)}
+  `;
+}
+function bindSubclassInputs(){
+  ["parent_class","start_level"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => {
+      const v = e.target.value;
+      if(k==="start_level") editState[k] = parseInt(v)||3;
+      else {
+        editState[k] = v;
+        if(k==="parent_class"){
+          const cls = library.classes?.[v];
+          editState.parent_class_name = cls?.name || "";
+        }
+      }
+    };
+  });
+}
+
+function renderBackgroundFields(){
+  setTimeout(bindBackgroundInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Hintergrund</div>
+      <div class="row">
+        <div><label class="field-label">Fertigkeiten</label>
+          <input id="f-skill_prof" value="${esc(editState.skill_prof||"")}" placeholder="Einsicht, Religion"></div>
+        <div><label class="field-label">Werkzeuge</label>
+          <input id="f-tool_prof" value="${esc(editState.tool_prof||"")}" placeholder="Handwerkszeug"></div>
+        <div><label class="field-label">Zusätzl. Sprachen</label>
+          <input type="number" id="f-language_count" value="${editState.language_count||0}"></div>
+      </div>
+      <label class="field-label">Startausrüstung</label>
+      <textarea id="f-equipment" rows="2" placeholder="Heiliges Symbol, Gebetsbuch, Priestergewand, 15 GP">${esc(editState.equipment||"")}</textarea>
+      <div class="row" style="margin-top:10px">
+        <div><label class="field-label">Merkmal Name</label>
+          <input id="f-feature_name" value="${esc(editState.feature_name||"")}" placeholder="Schutz der Kirche"></div>
+      </div>
+      <label class="field-label">Merkmal Beschreibung</label>
+      <textarea id="f-feature_desc" rows="3" placeholder="Beschreibung der besonderen Fähigkeit…">${esc(editState.feature_desc||"")}</textarea>
+    </div>
+    ${renderTraitsSection("Erweiterte Wahlmöglichkeiten (optional)", editState.traits)}
+  `;
+}
+function bindBackgroundInputs(){
+  ["skill_prof","tool_prof","language_count","equipment","feature_name","feature_desc"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = e => editState[k] = k==="language_count" ? parseInt(e.target.value)||0 : e.target.value;
+  });
+}
+
+function renderFeatFields(){
+  setTimeout(bindFeatInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Talent</div>
+      <div class="row">
+        <div><label class="field-label">Voraussetzung</label>
+          <input id="f-prerequisite" value="${esc(editState.prerequisite||"")}" placeholder="STR 13"></div>
+        <div><label class="field-label">Attributs-Bonus</label>
+          <input id="f-asi" value="${esc(editState.asi||"")}" placeholder="+1 STR (oder Wahl)"></div>
+      </div>
+    </div>
+    ${renderTraitsSection("Effekte des Talents", editState.traits)}
+  `;
+}
+function bindFeatInputs(){
+  ["prerequisite","asi"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = e => editState[k] = e.target.value;
+  });
+}
+
+function renderSpellFields(){
+  setTimeout(bindSpellInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Zauber-Grundlagen</div>
+      <div class="row">
+        <div><label class="field-label">Stufe</label>
+          <select id="f-level">${[0,1,2,3,4,5,6,7,8,9].map(n=>`<option value="${n}" ${editState.level===n?"selected":""}>${n===0?"Zaubertrick":n+". Stufe"}</option>`).join("")}</select></div>
+        <div><label class="field-label">Schule</label>
+          <select id="f-school">${["Abjuration","Conjuration","Divination","Enchantment","Evocation","Illusion","Necromancy","Transmutation"].map(s=>`<option ${editState.school===s?"selected":""}>${s}</option>`).join("")}</select></div>
+        <div><label class="field-label">Zauberzeit</label>
+          <input id="f-casting_time" value="${esc(editState.casting_time||"1 Aktion")}"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Reichweite</label><input id="f-range" value="${esc(editState.range||"")}" placeholder="60 ft"></div>
+        <div><label class="field-label">Dauer</label><input id="f-duration" value="${esc(editState.duration||"")}"></div>
+        <div><label class="field-label">Komponenten</label><input id="f-components" value="${esc(editState.components||"")}" placeholder="V, S, M"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Schaden</label><input id="f-damage" value="${esc(editState.damage||"")}" placeholder="3d6"></div>
+        <div><label class="field-label">Schadens-Typ</label><input id="f-damage_type" value="${esc(editState.damage_type||"")}"></div>
+        <div><label class="field-label">Rettungswurf</label><input id="f-save" value="${esc(editState.save||"")}" placeholder="GES ½"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Klassen (wer darf)</label><input id="f-classes" value="${esc(editState.classes||"")}" placeholder="Magier, Hexer"></div>
+        <div><label style="display:flex;align-items:center;gap:6px;margin-top:18px">
+          <input type="checkbox" id="f-ritual" ${editState.ritual?"checked":""} style="width:auto"> Rituell</label></div>
+        <div><label style="display:flex;align-items:center;gap:6px;margin-top:18px">
+          <input type="checkbox" id="f-concentration" ${editState.concentration?"checked":""} style="width:auto"> Konzentration</label></div>
+      </div>
+    </div>
+  `;
+}
+function bindSpellInputs(){
+  ["level","school","casting_time","range","duration","components","damage","damage_type","save","classes"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => editState[k] = k==="level" ? parseInt(e.target.value) : e.target.value;
+  });
+  ["ritual","concentration"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.onchange = e => editState[k] = e.target.checked;
+  });
+}
+
+function renderAttackFields(){
+  setTimeout(bindAttackInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Angriff</div>
+      <div class="row">
+        <div><label class="field-label">Typ</label>
+          <select id="f-attack_type">${["Nahkampf","Fernkampf","Zauber","Besonders"].map(t=>`<option ${editState.attack_type===t?"selected":""}>${t}</option>`).join("")}</select></div>
+        <div><label class="field-label">Trefferbonus</label><input type="number" id="f-hit_bonus" value="${editState.hit_bonus||0}"></div>
+        <div><label class="field-label">Reichweite (ft)</label><input id="f-range" value="${esc(editState.range||"")}" placeholder="5 / 20"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Schaden</label><input id="f-damage" value="${esc(editState.damage||"")}" placeholder="1d8+3"></div>
+        <div><label class="field-label">Schadens-Typ</label><input id="f-damage_type" value="${esc(editState.damage_type||"")}"></div>
+        <div><label class="field-label">Zusatz</label><input id="f-extra" value="${esc(editState.extra||"")}" placeholder="+1d6 Feuer"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Wirkt bei Treffer</div>
+      <div style="font-size:.76rem;color:var(--text-dim);margin-bottom:8px">
+        Trifft der Angriff, bekommt das Ziel diesen Zustand automatisch –
+        und er verschwindet von selbst, wenn die Dauer abgelaufen ist.
+      </div>
+      <div class="row">
+        <div><label class="field-label">Statuseffekt</label>
+          <select id="f-effect">
+            <option value="">— kein Effekt —</option>
+            ${Object.entries(LIB_CONDITIONS).map(([k,v]) =>
+              `<option value="${k}" ${editState.effect===k?"selected":""}>${v.icon} ${v.label}</option>`).join("")}
+          </select></div>
+        <div style="flex:2"><label class="field-label">Dauer</label>
+          <select id="f-effect_dur">
+            <option value="">— wählen —</option>
+            <option value="until_my_next_turn_end"     ${editState.effect_dur==="until_my_next_turn_end"?"selected":""}>bis Ende meines nächsten Zuges</option>
+            <option value="until_target_next_turn_end" ${editState.effect_dur==="until_target_next_turn_end"?"selected":""}>bis Ende des Zuges des Ziels</option>
+            <option value="rounds:1"  ${editState.effect_dur==="rounds:1"?"selected":""}>1 Runde</option>
+            <option value="rounds:3"  ${editState.effect_dur==="rounds:3"?"selected":""}>3 Runden</option>
+            <option value="rounds:10" ${editState.effect_dur==="rounds:10"?"selected":""}>10 Runden (1 Minute)</option>
+            <option value="permanent" ${editState.effect_dur==="permanent"?"selected":""}>bis er entfernt wird</option>
+          </select></div>
+      </div>
+    </div>
+  `;
+}
+
+// Die Zustände, die ein Angriff auslösen kann (wie in der Sitzung)
+const LIB_CONDITIONS = {
+  blinded:{icon:"🙈",label:"Blind"}, charmed:{icon:"💕",label:"Bezaubert"},
+  deafened:{icon:"🔇",label:"Taub"}, exhausted:{icon:"😴",label:"Erschöpft"},
+  frightened:{icon:"😱",label:"Verängstigt"}, grappled:{icon:"🤝",label:"Gepackt"},
+  incapacitated:{icon:"💤",label:"Kampfunfähig"}, invisible:{icon:"👻",label:"Unsichtbar"},
+  paralyzed:{icon:"⚡",label:"Gelähmt"}, petrified:{icon:"🗿",label:"Versteinert"},
+  poisoned:{icon:"🤢",label:"Vergiftet"}, prone:{icon:"⬇️",label:"Liegend"},
+  restrained:{icon:"⛓",label:"Festgesetzt"}, stunned:{icon:"💫",label:"Betäubt"},
+  unconscious:{icon:"💔",label:"Bewusstlos"}, dead:{icon:"☠️",label:"Tot"},
+};
+
+function bindAttackInputs(){
+  ["attack_type","hit_bonus","range","damage","damage_type","extra",
+   "effect","effect_dur"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => editState[k] = k==="hit_bonus" ? parseInt(e.target.value)||0 : e.target.value;
+  });
+}
+
+function renderItemFields(){
+  setTimeout(bindItemInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Gegenstand</div>
+      <div class="row">
+        <div><label class="field-label">Kategorie</label>
+          <select id="f-category">${["Waffe","Rüstung","Werkzeug","Verbrauchsgut","Ausrüstung","Sonstiges"].map(c=>`<option ${editState.category===c?"selected":""}>${c}</option>`).join("")}</select></div>
+        <div><label class="field-label">Gewicht (lb)</label><input type="number" step="0.1" id="f-weight" value="${editState.weight||0}"></div>
+        <div><label class="field-label">Kosten</label><input id="f-cost" value="${esc(editState.cost||"")}" placeholder="15 gp"></div>
+        <div><label class="field-label">🛡 RK-Bonus</label><input type="number" id="f-ac_bonus" value="${editState.ac_bonus||0}"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Schaden</label><input id="f-damage" value="${esc(editState.damage||"")}" placeholder="1d8"></div>
+        <div><label class="field-label">Schadens-Typ</label><input id="f-damage_type" value="${esc(editState.damage_type||"")}"></div>
+        <div><label class="field-label">Eigenschaften</label><input id="f-properties" value="${esc(editState.properties||"")}" placeholder="Vielseitig, Leicht"></div>
+      </div>
+    </div>
+  `;
+}
+function bindItemInputs(){
+  ["category","weight","cost","ac_bonus","damage","damage_type","properties"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => {
+      const v = e.target.value;
+      if(k==="weight") editState[k] = parseFloat(v)||0;
+      else if(k==="ac_bonus") editState[k] = parseInt(v)||0;
+      else editState[k] = v;
+    };
+  });
+}
+
+function renderMagicItemFields(){
+  setTimeout(bindMagicItemInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Magischer Gegenstand</div>
+      <div class="row">
+        <div><label class="field-label">Kategorie</label>
+          <select id="f-item_category">${["Wunderbarer Gegenstand","Waffe","Rüstung","Ring","Stab","Stab (magisch)","Trank","Rolle","Schlüssel"].map(c=>`<option ${editState.item_category===c?"selected":""}>${c}</option>`).join("")}</select></div>
+        <div><label class="field-label">Seltenheit</label>
+          <select id="f-rarity">${["Gewöhnlich","Ungewöhnlich","Selten","Sehr selten","Legendär","Artefakt"].map(r=>`<option ${editState.rarity===r?"selected":""}>${r}</option>`).join("")}</select></div>
+      </div>
+      <div class="row">
+        <div><label style="display:flex;align-items:center;gap:6px;margin-top:18px">
+          <input type="checkbox" id="f-requires_attunement" ${editState.requires_attunement?"checked":""} style="width:auto"> 🔗 Erfordert Einstimmung</label></div>
+        <div><label class="field-label">Einstimmungs-Voraussetzung</label>
+          <input id="f-attunement_restriction" value="${esc(editState.attunement_restriction||"")}" placeholder="z.B. nur Magier"></div>
+      </div>
+    </div>
+    ${renderTraitsSection("Eigenschaften & Effekte", editState.traits)}
+  `;
+}
+function bindMagicItemInputs(){
+  ["item_category","rarity","attunement_restriction"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => editState[k] = e.target.value;
+  });
+  const a = document.getElementById("f-requires_attunement");
+  if(a) a.onchange = e => editState.requires_attunement = e.target.checked;
+}
+
+function renderConditionFields(){
+  return `<div class="section"><div class="section-title">Zustand</div>
+    <p class="help-text">Füge die Effekte als Eigenschaften hinzu (z.B. "Bewegung: halbiert", "Rettungswürfe: Nachteil").</p></div>
+    ${renderTraitsSection("Effekte des Zustands", editState.traits)}`;
+}
+
+function renderMonsterFields(){
+  setTimeout(bindMonsterInputs, 0);
+  return `
+    <div class="section">
+      <div class="section-title">Monster-Statblock</div>
+      <div class="row">
+        <div><label class="field-label">Größe</label>
+          <select id="f-size">${["Winzig","Klein","Mittel","Groß","Riesig","Gigantisch"].map(s=>`<option ${editState.size===s?"selected":""}>${s}</option>`).join("")}</select></div>
+        <div><label class="field-label">Typ</label>
+          <input id="f-type" value="${esc(editState.type||"")}" placeholder="Humanoid, Bestie …"></div>
+        <div><label class="field-label">Gesinnung</label>
+          <input id="f-alignment" value="${esc(editState.alignment||"")}"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">HG</label><input id="f-cr" value="${esc(editState.cr||"1")}"></div>
+        <div><label class="field-label">RK</label><input type="number" id="f-ac" value="${editState.ac||12}"></div>
+        <div><label class="field-label">HP</label><input type="number" id="f-hp" value="${editState.hp||10}"></div>
+        <div><label class="field-label">Bewegung</label><input id="f-speed" value="${esc(editState.speed||"30 ft.")}"></div>
+      </div>
+      <div class="row">
+        ${["str","dex","con","int","wis","cha"].map(s=>`
+          <div><label class="field-label">${s.toUpperCase()}</label><input type="number" id="f-${s}" value="${editState[s]||10}"></div>
+        `).join("")}
+      </div>
+      <div class="row">
+        <div><label class="field-label">Fertigkeiten</label><input id="f-skills" value="${esc(editState.skills||"")}"></div>
+        <div><label class="field-label">Resistenzen</label><input id="f-resistances" value="${esc(editState.resistances||"")}"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Immunitäten</label><input id="f-immunities" value="${esc(editState.immunities||"")}"></div>
+        <div><label class="field-label">Sinne</label><input id="f-senses" value="${esc(editState.senses||"")}" placeholder="Dunkelsicht 60 ft, Passive Wahrnehmung 13"></div>
+      </div>
+    </div>
+    ${renderTraitsSection("Aktionen & Eigenschaften", editState.traits)}
+  `;
+}
+function bindMonsterInputs(){
+  ["size","type","alignment","cr","ac","hp","speed","str","dex","con","int","wis","cha","skills","resistances","immunities","senses"].forEach(k=>{
+    const el = document.getElementById(`f-${k}`); if(!el) return;
+    el.oninput = el.onchange = e => {
+      const v = e.target.value;
+      if(["ac","hp","str","dex","con","int","wis","cha"].includes(k)) editState[k] = parseInt(v)||0;
+      else editState[k] = v;
+    };
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// TRAITS SECTION (shared: Race traits, Magic-item effects, Feat effects, …)
+// ══════════════════════════════════════════════════════════════════════
+function renderTraitsSection(title, traits){
+  traits = traits || [];
+  return `
+    <div class="section">
+      <div class="section-title">
+        <span>${title}</span>
+        <span style="color:var(--text-dim);font-size:.6rem;font-weight:normal">${traits.length} Eintrag${traits.length===1?"":"e"}</span>
+      </div>
+      <div class="traits-list" id="traits-list">
+        ${traits.map((t,i)=>renderTraitCard(t, i, "trait")).join("")}
+      </div>
+      <button class="add-trait-btn" onclick="addTrait()">+ Neue Eigenschaft hinzufügen</button>
+    </div>
+  `;
+}
+
+function renderTraitCard(t, idx, prefix){
+  const tid = t.id || (t.id = uid());
+  return `
+    <div class="trait-card" data-trait-id="${tid}">
+      <div class="trait-head">
+        <input type="text" placeholder="Name der Eigenschaft…" value="${esc(t.name||"")}" oninput="updateTraitField('${prefix}','${tid}','name',this.value)">
+        <button class="icon-btn" onclick="moveTrait('${prefix}','${tid}',-1)" title="Nach oben">↑</button>
+        <button class="icon-btn" onclick="moveTrait('${prefix}','${tid}',1)" title="Nach unten">↓</button>
+        <button class="icon-btn danger" onclick="removeTrait('${prefix}','${tid}')" title="Löschen">✕</button>
+      </div>
+      <div class="trait-body">
+        <textarea placeholder="Beschreibung / Effekt…" oninput="updateTraitField('${prefix}','${tid}','description',this.value)">${esc(t.description||"")}</textarea>
+      </div>
+      ${renderChoicesSection(t, tid, prefix)}
+    </div>
+  `;
+}
+
+function renderChoicesSection(t, tid, prefix){
+  const choices = t.choices || [];
+  return `
+    <div class="choices-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span class="choices-label">🎯 Auswahlmöglichkeiten (optional)</span>
+        <button class="icon-btn" onclick="addChoice('${prefix}','${tid}')" title="Auswahl hinzufügen">+ Wahl</button>
+      </div>
+      ${choices.length === 0 ? '<div class="help-text">Keine Auswahl nötig. Klicke „+ Wahl" um z.B. Sprache, Skill oder Zauber zur Auswahl anzubieten.</div>' : ""}
+      ${choices.map((c,i)=>renderChoiceRow(c, i, tid, prefix)).join("")}
+    </div>
+  `;
+}
+
+function renderChoiceRow(choice, idx, tid, prefix){
+  const cid = choice.id || (choice.id = uid());
+  const customVal = choice.type === "custom" ? (choice.options||[]).join(", ") : "";
+  const needsOptions = choice.type === "custom";
+  return `
+    <div class="choice-row" data-choice-id="${cid}">
+      <select class="choice-type" onchange="updateChoice('${prefix}','${tid}','${cid}','type',this.value)">
+        ${CHOICE_TYPES.map(ct=>`<option value="${ct.id}" ${choice.type===ct.id?"selected":""}>${ct.label}</option>`).join("")}
+      </select>
+      <input type="number" class="choice-count" min="1" max="10" title="Anzahl wählbarer Einträge"
+             value="${choice.count||1}" onchange="updateChoice('${prefix}','${tid}','${cid}','count',parseInt(this.value)||1)">
+      ${needsOptions ? `<input class="choice-options" placeholder="Option1, Option2, Option3" value="${esc(customVal)}"
+           oninput="updateChoice('${prefix}','${tid}','${cid}','options',this.value.split(',').map(s=>s.trim()).filter(Boolean))">` : `<input class="choice-options" placeholder="Label (optional): z.B. ,Wähle deinen Drachentyp'" value="${esc(choice.label||"")}"
+           oninput="updateChoice('${prefix}','${tid}','${cid}','label',this.value)">`}
+      <button class="icon-btn danger" onclick="removeChoice('${prefix}','${tid}','${cid}')" title="Auswahl entfernen">✕</button>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// TRAIT manipulation
+// ══════════════════════════════════════════════════════════════════════
+function _findTraitList(prefix){
+  if (prefix === "trait") return editState.traits;
+  // prefix like "level:5" points into editState.level_features["5"]
+  if (prefix.startsWith("level:")) {
+    const lvl = prefix.split(":")[1];
+    if (!editState.level_features[lvl]) editState.level_features[lvl] = [];
+    return editState.level_features[lvl];
+  }
+  return null;
+}
+
+function addTrait(){
+  editState.traits.push({id:uid(), name:"", description:"", choices:[]});
+  renderEditor();
+}
+function updateTraitField(prefix, tid, field, value){
+  const list = _findTraitList(prefix); if (!list) return;
+  const t = list.find(x=>x.id===tid); if (!t) return;
+  t[field] = value;
+}
+function removeTrait(prefix, tid){
+  const list = _findTraitList(prefix); if (!list) return;
+  const idx = list.findIndex(x=>x.id===tid); if (idx<0) return;
+  list.splice(idx, 1);
+  renderEditor();
+}
+function moveTrait(prefix, tid, delta){
+  const list = _findTraitList(prefix); if (!list) return;
+  const idx = list.findIndex(x=>x.id===tid); if (idx<0) return;
+  const newIdx = idx + delta;
+  if (newIdx<0 || newIdx>=list.length) return;
+  [list[idx], list[newIdx]] = [list[newIdx], list[idx]];
+  renderEditor();
+}
+
+function addChoice(prefix, tid){
+  const list = _findTraitList(prefix); if (!list) return;
+  const t = list.find(x=>x.id===tid); if (!t) return;
+  if (!t.choices) t.choices = [];
+  t.choices.push({id:uid(), type:"language", count:1, label:"", options:[]});
+  renderEditor();
+}
+function updateChoice(prefix, tid, cid, field, value){
+  const list = _findTraitList(prefix); if (!list) return;
+  const t = list.find(x=>x.id===tid); if (!t) return;
+  const c = t.choices?.find(x=>x.id===cid); if (!c) return;
+  c[field] = value;
+  // If type changed to/from 'custom', re-render so the options input swaps
+  if (field === "type") renderEditor();
+}
+function removeChoice(prefix, tid, cid){
+  const list = _findTraitList(prefix); if (!list) return;
+  const t = list.find(x=>x.id===tid); if (!t) return;
+  if (!t.choices) return;
+  t.choices = t.choices.filter(c=>c.id!==cid);
+  renderEditor();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// LEVEL FEATURES (classes, subclasses)
+// ══════════════════════════════════════════════════════════════════════
+function renderLevelFeaturesSection(title, levelFeatures){
+  levelFeatures = levelFeatures || {};
+  let html = `<div class="section">
+    <div class="section-title"><span>${title}</span></div>
+    <p class="help-text">Klicke auf ein Level, um Features hinzuzufügen. Jedes Feature kann eigene Auswahlmöglichkeiten haben (z.B. "Kampfstil wählen").</p>`;
+  for (let lvl=1; lvl<=20; lvl++){
+    const features = levelFeatures[String(lvl)] || [];
+    html += `<div class="level-row">
+      <div class="level-num">Lvl ${lvl}</div>
+      <div class="level-body">
+        ${features.map(f=>renderTraitCard(f, 0, `level:${lvl}`)).join("")}
+        <button class="add-trait-btn" onclick="addLevelFeature(${lvl})">+ Feature bei Stufe ${lvl} hinzufügen</button>
+      </div>
+    </div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+function addLevelFeature(lvl){
+  const key = String(lvl);
+  if (!editState.level_features[key]) editState.level_features[key] = [];
+  editState.level_features[key].push({id:uid(), name:"", description:"", choices:[]});
+  renderEditor();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SAVE & DELETE
+// ══════════════════════════════════════════════════════════════════════
+async function saveEntry(){
+  // editState already contains everything (we update it on input)
+  if (!editState.name || !editState.name.trim()){
+    toast("⚠️ Name fehlt"); return;
+  }
+  const res = await fetch(`/api/library/${currentCat}`, {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(editState),
+  });
+  const saved = await res.json();
+  if (saved.error){ toast("❌ " + saved.error); return; }
+  editState.id = saved.id;
+  currentId = saved.id;
+  await loadLibrary();
+  toast("💾 Gespeichert!");
+}
+
+async function deleteEntry(){
+  if (!editState.id) return;
+  if (!await Dialog.confirmDanger(`Der Eintrag „${editState.name || "Unbenannt"}“ wird gelöscht.`,
+      {title:"Eintrag löschen?", icon:"📚",
+       hint:"Alle Spieler nutzen dieselbe Bibliothek – der Eintrag verschwindet für alle."})) return;
+  await fetch(`/api/library/${currentCat}/${editState.id}`, {method:"DELETE"});
+  currentId = null;
+  editState = {};
+  document.getElementById("editor").style.display="none";
+  document.getElementById("empty-editor").style.display="block";
+  await loadLibrary();
+  toast("🗑 Gelöscht");
+}
+
+// Boot
+renderCatTabs();
+loadLibrary();
+</script>
+<script src="/static/js/dice-presets.js"></script>
+<script src="/static/js/design-studio.js"></script>
+<script src="/static/js/pack-manager.js"></script>
+<footer style="max-width:1200px;margin:30px auto 20px;padding:0 20px;font-size:.72rem;line-height:1.5;color:var(--text-dim);text-align:center">
+  Die „Grundregeln (SRD 5.1)" enthalten Material aus dem System Reference Document 5.1 von Wizards of the Coast LLC,
+  lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/legalcode" target="_blank" style="color:var(--text-dim)">CC-BY-4.0</a>.
+  Kompatibel mit der 5. Edition, keine Verbindung zu Wizards of the Coast.
+</footer>
+</body>
+</html>

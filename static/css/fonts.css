@@ -1,0 +1,103 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Schriften – LOKAL eingebunden.
+
+   Wichtig: Die App lief bisher über Google Fonts. In der Desktop-App gibt es
+   aber oft keine Internetverbindung, dann fielen alle Schriften auf die
+   Systemvorgabe zurück. Deshalb liegen sie jetzt im Projekt.
+
+   Nebeneffekt: Die Würfel-Zahlen können jetzt wirklich in verschiedenen
+   Schriften erscheinen – vorher wurden sie mangels Schrift alle gleich
+   dargestellt.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Cinzel: die Überschriften-Schrift des Spiels ───────────────────────── */
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/static/fonts/cinzel-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/static/fonts/cinzel-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/static/fonts/cinzel-latin-700-normal.woff2') format('woff2');
+}
+
+/* Cinzel Decorative wird an einigen Stellen benutzt – auf Cinzel abbilden,
+   damit nichts kaputtgeht, wenn die Zierschrift fehlt. */
+@font-face {
+  font-family: 'Cinzel Decorative';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/static/fonts/cinzel-latin-700-normal.woff2') format('woff2');
+}
+
+/* ── Crimson Pro: Fließtext ─────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/static/fonts/crimson-pro-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/static/fonts/crimson-pro-latin-600-normal.woff2') format('woff2');
+}
+
+/* ── Zusätzliche Schriften für die Würfel-Zahlen ────────────────────────── */
+
+/* Uncial Antiqua – altertümlich, wie aus einem Zauberbuch */
+@font-face {
+  font-family: 'Uncial Antiqua';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/static/fonts/uncial-antiqua-latin-400-normal.woff2') format('woff2');
+}
+
+/* Orbitron – technisch, kantig, passt zum arkanen Muster */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/static/fonts/orbitron-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/static/fonts/orbitron-latin-700-normal.woff2') format('woff2');
+}
+
+/* JetBrains Mono – klar und gut lesbar, auch in klein */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/static/fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/static/fonts/jetbrains-mono-latin-700-normal.woff2') format('woff2');
+}

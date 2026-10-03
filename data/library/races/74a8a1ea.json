@@ -1,0 +1,25 @@
+{
+  "name": "Gnom",
+  "size": "Klein",
+  "speed": 25,
+  "darkvision": 60,
+  "asi": "+2 INT",
+  "languages": "Gemeinsprache, Gnomisch",
+  "traits": [
+    {
+      "id": "t0",
+      "name": "Dunkelsicht 60 ft.",
+      "description": "Dunkelsicht 60 ft.",
+      "choices": []
+    },
+    {
+      "id": "t1",
+      "name": "Gnomische List",
+      "description": "Vorteil auf INT-, WEI- und CHA-Rettungswürfe gegen Magie.",
+      "choices": []
+    }
+  ],
+  "description": "Kleine, kluge Tüftler und Illusionisten.",
+  "id": "74a8a1ea",
+  "source": "basis"
+}

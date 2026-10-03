@@ -1,0 +1,42 @@
+{
+  "name": "Weg der offenen Hand",
+  "parent_class_name": "Mönch",
+  "start_level": 3,
+  "description": "Meister des waffenlosen Kampfes, die Gegner mit gezielten Schlägen aus dem Gleichgewicht bringen.",
+  "level_features": {
+    "3": [
+      {
+        "id": "f3_0",
+        "name": "Technik der offenen Hand",
+        "description": "Trifft ein Angriff aus dem Schlaghagel, wähle: GES-Rettungswurf oder liegend; STR-Rettungswurf oder 15 ft weggestoßen; oder bis Ende deines nächsten Zuges keine Reaktionen.",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Ganzheit des Körpers",
+        "description": "Als Aktion TP in Höhe der dreifachen Mönchsstufe zurückgewinnen. Einmal pro langer Rast.",
+        "choices": []
+      }
+    ],
+    "11": [
+      {
+        "id": "f11_0",
+        "name": "Gelassenheit",
+        "description": "Am Ende einer langen Rast erhältst du bis zur nächsten langen Rast die Wirkung von Heiligtum (SG 8 + WEI + Übungsbonus).",
+        "choices": []
+      }
+    ],
+    "17": [
+      {
+        "id": "f17_0",
+        "name": "Bebende Handfläche",
+        "description": "3 Ki nach einem waffenlosen Treffer: unmerkliche Schwingungen für Tage = Mönchsstufe. Als Aktion beenden: KON-Rettungswurf, bei Misserfolg 0 TP, bei Erfolg 10W10 nekrotischer Schaden.",
+        "choices": []
+      }
+    ]
+  },
+  "id": "b468d1a5",
+  "source": "basis"
+}

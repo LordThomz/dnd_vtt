@@ -1,0 +1,31 @@
+{
+  "name": "Drachenblut",
+  "size": "Mittel",
+  "speed": 30,
+  "darkvision": 0,
+  "asi": "+2 STR, +1 CHA",
+  "languages": "Gemeinsprache, Drakonisch",
+  "traits": [
+    {
+      "id": "t0",
+      "name": "Drachen-Abstammung",
+      "description": "Wähle einen Drachentyp (Feuer, Kälte, Blitz, Säure, Gift).",
+      "choices": []
+    },
+    {
+      "id": "t1",
+      "name": "Atem-Waffe",
+      "description": "2W6 Schaden gemäß Drachentyp (Rettungswurf).",
+      "choices": []
+    },
+    {
+      "id": "t2",
+      "name": "Resistenz",
+      "description": "gegen den zugehörigen Schadenstyp.",
+      "choices": []
+    }
+  ],
+  "description": "Stolze Nachfahren der großen Drachen.",
+  "id": "f3d2f2d5",
+  "source": "basis"
+}

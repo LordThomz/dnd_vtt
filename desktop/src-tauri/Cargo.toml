@@ -1,0 +1,22 @@
+[package]
+name = "vtt-desktop"
+version = "0.1.0"
+description = "Virtual Tabletop – Desktop-App"
+authors = ["Thomas"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-updater = "2"   # Updates über GitHub Releases (siehe UPDATES.md)
+tauri-plugin-process = "2"   # Neustart nach dem Update
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+# Standardmäßig aktiviert; von der Tauri-CLI genutzt.
+custom-protocol = ["tauri/custom-protocol"]

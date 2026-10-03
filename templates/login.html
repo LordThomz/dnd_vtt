@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anmelden · D&amp;D</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/design-studio.css">
+<script src="/static/js/theme.js"></script>
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/dialog.css">
+<style>
+body{overflow-y:auto;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;}
+/* Arkaner Hintergrund: Tiefenverlauf + feines Leuchtgitter */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(var(--arcane-rgb),.08), transparent 70%),
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(var(--violet-rgb),.07), transparent 70%),
+    linear-gradient(180deg, var(--bg-deep), var(--bg-deep));}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;
+  background-image:linear-gradient(rgba(var(--arcane-rgb),.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(var(--arcane-rgb),.04) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,#000,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,#000,transparent 75%);}
+.auth-container{position:relative;z-index:2;width:100%;max-width:480px;}
+header{text-align:center;margin-bottom:26px;}
+.crest{display:inline-block;font-size:3.5rem;filter:drop-shadow(0 0 20px rgba(var(--gold-rgb),.5));margin-bottom:8px;}
+h1{font-family:'Cinzel Decorative',serif;font-size:2.6rem;font-weight:900;letter-spacing:.08em;
+  background:linear-gradient(135deg,var(--gold-dark) 0%,var(--gold-light) 40%,var(--gold) 60%,var(--gold-dark) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+.subtitle{color:var(--text-dim);letter-spacing:.4em;font-family:var(--font-display);font-size:.78rem;text-transform:uppercase;}
+.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg-panel);border:1px solid var(--gold-dark);border-radius:10px;padding:4px;}
+.tab{flex:1;padding:10px 14px;text-align:center;border-radius:6px;cursor:pointer;font-family:var(--font-display);color:var(--text-dim);transition:all .15s;font-size:.88rem;}
+.tab.active{background:var(--gold-dark);color:var(--bg-deep);font-weight:600;}
+.tab:hover:not(.active){color:var(--text);}
+.card{background:linear-gradient(160deg,var(--bg-panel2),var(--bg-panel));border:1px solid var(--border);border-radius:14px;padding:28px;position:relative;
+  box-shadow:0 10px 40px rgba(var(--shade-rgb),.5),inset 0 1px 0 rgba(var(--hi-rgb),.03),0 0 30px rgba(var(--arcane-rgb),.06);}
+.card::before{content:"";position:absolute;inset:0;border-radius:14px;padding:1px;pointer-events:none;
+  background:linear-gradient(160deg,rgba(var(--arcane-rgb),.3),transparent 40%,transparent 60%,rgba(var(--gold-rgb),.2));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;}
+.card h2{font-family:'Cinzel Decorative',serif;color:var(--gold-light);font-size:1.3rem;margin-bottom:4px;}
+.card .hint{color:var(--text-dim);font-size:.85rem;margin-bottom:18px;}
+.form-group{margin-bottom:12px;}
+.form-group label{display:block;font-family:var(--font-display);font-size:.68rem;color:var(--gold-dark);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg-dark);border:1px solid var(--gold-dark);
+  border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--font-body);font-size:.95rem;outline:none;transition:border-color .14s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.color-pick{display:flex;gap:6px;flex-wrap:wrap;}
+.color-swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .12s, border-color .12s;}
+.color-swatch:hover{transform:scale(1.1);}
+.color-swatch.active{border-color:#fff;box-shadow:0 0 10px currentColor;}
+.error{color:var(--red-soft);font-size:.82rem;margin-top:8px;min-height:18px;}
+.submit-btn{width:100%;margin-top:12px;padding:12px;font-size:.95rem;}
+.divider{text-align:center;margin:12px 0;color:var(--text-dim);font-family:var(--font-display);font-size:.72rem;letter-spacing:.12em;}
+.info-box{background:var(--bg-dark);border-left:3px solid var(--gold-dark);padding:10px 12px;border-radius:4px;font-size:.8rem;color:var(--text-dim);margin-bottom:14px;}
+.fun-fields{margin-top:12px;padding-top:14px;border-top:1px dashed var(--gold-dark);}
+.fun-fields-title{font-family:var(--font-display);color:var(--gold-dark);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;text-align:center;}
+.btn{padding:10px 18px;border-radius:8px;border:1px solid var(--gold-dark);cursor:pointer;font-family:var(--font-display);font-size:.88rem;transition:all .15s;}
+.btn-primary{background:var(--gold-dark);color:var(--bg-deep);font-weight:600;border:none;}
+.btn-primary:hover{background:var(--gold);}
+.btn-secondary{background:transparent;color:var(--text);}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg-panel);border:1px solid var(--gold);color:var(--text);padding:12px 20px;border-radius:8px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
+#toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div><div class="stars"></div>
+<div class="auth-container">
+  <header>
+    <div class="crest">⚔️</div>
+    <h1>D&amp;D</h1>
+    <p class="subtitle">Virtual Tabletop</p>
+  </header>
+  <div class="tabs">
+    <div class="tab active" id="tab-login" onclick="switchTab('login')">🗝️ Anmelden</div>
+    <div class="tab" id="tab-register" onclick="switchTab('register')">✨ Registrieren</div>
+  </div>
+
+  <div class="card" id="card-login">
+    <h2>Willkommen zurück!</h2>
+    <p class="hint">Melde dich an, um deine Charaktere und Kampagnen zu sehen.</p>
+    <div class="info-box">💡 Standardkonto: Benutzer <strong>Thomas</strong>, Passwort <strong>thomas</strong></div>
+    <div class="form-group"><label>Benutzername</label>
+      <input type="text" id="login-user" placeholder="Thomas" onkeydown="if(event.key==='Enter')document.getElementById('login-pw').focus()"></div>
+    <div class="form-group"><label>Passwort</label>
+      <input type="password" id="login-pw" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="error" id="login-error"></div>
+    <label style="display:flex;align-items:center;gap:8px;margin:4px 0 12px;color:var(--text-dim,var(--text-dim));font-size:.9rem;cursor:pointer">
+      <input type="checkbox" id="login-remember" checked style="width:16px;height:16px;cursor:pointer">
+      Auf diesem Gerät angemeldet bleiben
+    </label>
+    <button class="btn btn-primary submit-btn" onclick="doLogin()">🗝️ Anmelden</button>
+    <div class="divider">oder</div>
+    <button class="btn btn-secondary submit-btn" onclick="doGuest()">👤 Als Gast beitreten</button>
+    <p class="hint" style="text-align:center;margin-top:12px">Noch kein Konto? <span style="color:var(--gold,var(--gold));cursor:pointer;text-decoration:underline" onclick="switchTab('register')">Jetzt registrieren</span></p>
+  </div>
+
+  <div class="card" id="card-register" style="display:none">
+    <h2>Werde ein Abenteurer!</h2>
+    <p class="hint">Erstelle deinen Account und leg los.</p>
+    <div class="form-group"><label>Benutzername (zum Anmelden) *</label>
+      <input type="text" id="reg-user" placeholder="z.B. Aragorn42" minlength="3" maxlength="20"></div>
+    <div class="two-col">
+      <div class="form-group"><label>Anzeigename *</label><input type="text" id="reg-display" placeholder="Frodo"></div>
+      <div class="form-group"><label>Spitzname</label><input type="text" id="reg-nick" placeholder="Pöteli"></div>
+    </div>
+    <div class="form-group"><label>E-Mail (optional)</label><input type="email" id="reg-email" placeholder="du@example.com"></div>
+    <div class="form-group"><label>Passwort * (min. 4 Zeichen)</label><input type="password" id="reg-pw" minlength="4"></div>
+    <div class="form-group"><label>Passwort wiederholen *</label><input type="password" id="reg-pw2"></div>
+    <div class="fun-fields">
+      <div class="fun-fields-title">🎲 Lustige Extras (optional)</div>
+      <div class="two-col">
+        <div class="form-group"><label>Lieblings-Klasse</label>
+          <select id="reg-class"><option value="">— wählen —</option>
+            <option>Barbar</option><option>Barde</option><option>Kleriker</option><option>Druide</option>
+            <option>Kämpfer</option><option>Mönch</option><option>Paladin</option><option>Waldläufer</option>
+            <option>Schurke</option><option>Hexenmeister</option><option>Hexer</option><option>Magier</option></select></div>
+        <div class="form-group"><label>Lieblings-Volk</label>
+          <select id="reg-race"><option value="">— wählen —</option>
+            <option>Mensch</option><option>Elf</option><option>Zwerg</option><option>Halbling</option>
+            <option>Drachenblut</option><option>Gnom</option><option>Halb-Elf</option><option>Halb-Ork</option><option>Tiefling</option></select></div>
+      </div>
+      <div class="form-group"><label>Deine Glückszahl</label><input type="number" id="reg-lucky" placeholder="7" min="1" max="100"></div>
+      <div class="form-group"><label>Kurze Bio</label><textarea id="reg-bio" rows="2" placeholder="Ein Satz über dich…"></textarea></div>
+      <div class="form-group"><label>Avatar-Farbe</label>
+        <div class="color-pick" id="color-pick">
+          <div class="color-swatch active" data-color="#c9a96e" style="background:var(--gold)"></div>
+          <div class="color-swatch" data-color="#7ab8d4" style="background:var(--blue-soft)"></div>
+          <div class="color-swatch" data-color="#a57ac9" style="background:#a57ac9"></div>
+          <div class="color-swatch" data-color="#7ac9a5" style="background:#7ac9a5"></div>
+          <div class="color-swatch" data-color="#c97a7a" style="background:#c97a7a"></div>
+          <div class="color-swatch" data-color="#c9c27a" style="background:#c9c27a"></div>
+          <div class="color-swatch" data-color="#d4a0c0" style="background:#d4a0c0"></div>
+          <div class="color-swatch" data-color="#e87070" style="background:var(--red-soft)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="error" id="reg-error"></div>
+    <button class="btn btn-primary submit-btn" onclick="doRegister()">✨ Account erstellen</button>
+    <button class="btn btn-secondary submit-btn" onclick="switchTab('login')" style="margin-top:8px">← Zurück zur Anmeldung</button>
+    <div class="divider">oder</div>
+    <button class="btn btn-secondary submit-btn" onclick="switchTab('login')">🗝️ Ich habe schon einen Account</button>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="/static/js/dialog.js"></script>
+<script>
+let chosenColor = "#c9a96e";
+function switchTab(t){
+  document.getElementById("tab-login").classList.toggle("active", t==="login");
+  document.getElementById("tab-register").classList.toggle("active", t==="register");
+  document.getElementById("card-login").style.display = t==="login"?"block":"none";
+  document.getElementById("card-register").style.display = t==="register"?"block":"none";
+}
+document.querySelectorAll(".color-swatch").forEach(s=>{
+  s.onclick = ()=>{document.querySelectorAll(".color-swatch").forEach(x=>x.classList.remove("active"));s.classList.add("active");chosenColor=s.dataset.color;};
+});
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2400);}
+async function doGuest(){
+  const name = await Dialog.prompt("Unter welchem Namen möchtest du beitreten?", "Gast",
+    {title:"Als Gast beitreten", icon:"👤", okText:"Beitreten",
+     placeholder:"z. B. Elandra"});
+  if(name===null) return;
+  try{
+    const res=await fetch("/api/auth/guest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name||"Gast"})});
+    const data=await res.json();
+    if(!res.ok||data.error){toast(data.error||"Fehler");return;}
+    window.location.href="/";
+  }catch(e){toast("Netzwerkfehler");}
+}
+async function doLogin(){
+  const user=document.getElementById("login-user").value.trim();
+  const pw=document.getElementById("login-pw").value;
+  const remember=document.getElementById("login-remember")?.checked ?? true;
+  const err=document.getElementById("login-error");err.textContent="";
+  if(!user||!pw){err.textContent="Bitte beide Felder ausfüllen.";return;}
+  try{
+    const res=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:user,password:pw,remember:remember})});
+    const data=await res.json();
+    if(!res.ok||data.error){err.textContent=data.error||"Fehler";return;}
+    window.location.href="/";
+  }catch(e){err.textContent="Netzwerkfehler";}
+}
+async function doRegister(){
+  const err=document.getElementById("reg-error");err.textContent="";
+  const pw=document.getElementById("reg-pw").value, pw2=document.getElementById("reg-pw2").value;
+  if(pw!==pw2){err.textContent="Passwörter stimmen nicht überein.";return;}
+  const body={
+    username:document.getElementById("reg-user").value.trim(), password:pw,
+    display_name:document.getElementById("reg-display").value.trim(),
+    nickname:document.getElementById("reg-nick").value.trim(),
+    email:document.getElementById("reg-email").value.trim(),
+    favorite_class:document.getElementById("reg-class").value,
+    favorite_race:document.getElementById("reg-race").value,
+    lucky_number:parseInt(document.getElementById("reg-lucky").value)||0,
+    bio:document.getElementById("reg-bio").value.trim(), avatar_color:chosenColor,
+  };
+  if(!body.username||!body.password||!body.display_name){err.textContent="Pflichtfelder fehlen (*).";return;}
+  try{
+    const res=await fetch("/api/auth/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(!res.ok||data.error){err.textContent=data.error||"Fehler";return;}
+    // Account erstellt -> zurück zum Login, damit man sich bewusst anmeldet.
+    // Der Server hat beim Registrieren evtl. schon eingeloggt; wir loggen aus,
+    // damit der Login-Schritt sauber durchlaufen wird.
+    try { await fetch("/api/auth/logout",{method:"POST"}); } catch(e){}
+    switchTab("login");
+    const le=document.getElementById("login-error");
+    le.style.color="#7ddb9a";
+    le.textContent="✅ Account erstellt! Bitte melde dich jetzt an.";
+    document.getElementById("login-user").value=body.username;
+    document.getElementById("login-pw").focus();
+  }catch(e){err.textContent="Netzwerkfehler";}
+}
+</script>
+<script src="/static/js/dice-presets.js"></script>
+<script src="/static/js/design-studio.js"></script>
+<script>
+// Erster Start einer neuen Installation: noch kein Konto → direkt zur Registrierung
+fetch("/api/auth/has_users").then(r => r.json()).then(d => {
+  if (d && d.has_users === false) {
+    switchTab("register");
+    const c = document.getElementById("card-register");
+    if (c) c.insertAdjacentHTML("afterbegin",
+      `<p style="margin-bottom:14px;color:var(--arcane);text-align:center">✨ Willkommen! Lege dein Konto an – es gehört zu dieser Installation.</p>`);
+  }
+}).catch(() => {});
+</script>
+</body>
+</html>

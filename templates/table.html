@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D&amp;D</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/design-studio.css">
+<script src="/static/js/theme.js"></script>
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/dialog.css">
+<link rel="stylesheet" href="/static/css/table.css">
+<script src="/static/lib/socket.io.min.js"></script>
+</head>
+<body data-session="{{ session_id }}" data-role="{{ role }}" data-username="{{ username }}" data-char-id="{{ char_id }}">
+
+<div id="topbar">
+  <button class="tb-btn back-btn" id="btn-leave-session" data-tip="Sitzung verlassen" onclick="leaveToMenu()" style="font-size:1.1rem">←</button>
+  <span class="logo">⚔️ D&amp;D</span>
+  <span class="session-badge">{{ session_id }}</span>
+  <span class="role-badge {{ role }}">{{ role|upper }}</span>
+
+  <!-- NORMAL-MODUS: Spiel-Werkzeuge -->
+  <div class="tb-group mode-normal">
+    <button class="tb-btn" id="tool-measure"    data-tool="measure"    data-tip="Messen (M)">📏</button>
+    <button class="tb-btn" id="tool-draw"       data-tool="draw"       data-tip="Zeichnen (D)">✏️</button>
+    <button class="tb-btn" id="tool-ping"       data-tool="ping"       data-tip="Ping (P)">📍</button>
+    <button class="tb-btn active" id="tool-dice3d" data-tip="3D-Würfel an/aus" onclick="toggleDice3D()">🎲</button>
+    <button class="tb-btn" id="tool-design" data-tip="Design-Studio" onclick="DesignStudio.open()">🎨</button>
+  </div>
+
+  <!-- NORMAL-MODUS: Zeichnungen entfernen -->
+  <div class="tb-group mode-normal">
+    {% if role=='gm' %}
+    <button class="tb-btn" data-tip="Alle Zeichnungen entfernen (alle Spieler)" onclick="clearDrawings('all')">🧹</button>
+    {% else %}
+    <button class="tb-btn" data-tip="Meine Zeichnungen entfernen" onclick="clearDrawings('mine')">🧹</button>
+    {% endif %}
+  </div>
+
+  {% if role=='gm' %}
+  <!-- BAUMODUS-UMSCHALTER (nur DM) -->
+  <div class="tb-group">
+    <button class="tb-btn" id="tool-build-mode" data-tip="Baumodus an/aus" onclick="toggleBuildMode()">🔨</button>
+  </div>
+
+  <!-- BAUMODUS: Bau-Werkzeuge (nur im Baumodus UND auf der Bau-Ebene aktiv) -->
+  <div class="tb-group mode-build" style="display:none">
+    <button class="tb-btn build-tool" id="tool-wall" data-tip="Wände zeichnen" onclick="toggleWallTool()">🧱</button>
+    <select id="wall-type-select" class="build-tool" title="Wandtyp" style="display:none;background:var(--bg-dark);border:1px solid var(--gold-dark);color:var(--text);border-radius:5px;font-size:.7rem;padding:2px">
+      <option value="opaque">🧱 Wand</option>
+      <option value="door">🚪 Tür</option>
+      <option value="window">🪟 Fenster</option>
+    </select>
+    <button class="tb-btn build-tool" id="tool-door" data-tip="Tür öffnen/schließen" onclick="toggleDoorTool()">🚪</button>
+    <button class="tb-btn build-tool" id="tool-wall-erase" data-tip="Einzelne Wand/Tür/Fenster löschen" onclick="toggleWallErase()">🩹</button>
+    <button class="tb-btn build-tool" data-tip="Alle Wände löschen" onclick="clearAllWalls()">🗑️</button>
+  </div>
+  {% endif %}
+
+  <div class="tb-group" id="draw-color-group" style="display:none;align-items:center;gap:4px">
+    <label style="font-family:var(--font-display);font-size:.6rem;color:var(--text-dim)">Farbe</label>
+    <input type="color" id="draw-color-pick" value="#e8cc94" style="width:28px;height:24px;border:none;background:none;cursor:pointer;padding:0">
+  </div>
+  <div id="users-row"></div>
+</div>
+
+<div id="main">
+  <div id="map-area" data-dice-area>
+    <div id="map-viewport">
+      <img id="map-img" src="" alt="" draggable="false">
+      <canvas id="grid-canvas"></canvas>
+      <canvas id="fog-canvas"></canvas>
+      <canvas id="vision-canvas"></canvas>
+      <canvas id="draw-canvas"></canvas>
+      <canvas id="measure-canvas"></canvas>
+      <div id="tokens-layer"></div>
+    </div>
+    <canvas id="weather-canvas" style="pointer-events:none;position:absolute;top:0;left:0;z-index:8"></canvas>
+    <div id="measure-hud"></div>
+
+    {% if role=='gm' %}
+    <!-- EBENEN-PANEL unten links (nur im Baumodus sichtbar) -->
+    <div id="layer-panel" style="display:none;flex-direction:column;position:absolute;bottom:10px;left:10px;background:rgba(var(--panel-rgb),.92);border:1px solid var(--gold-dark);border-radius:10px;padding:10px;z-index:40;min-width:150px">
+      <div style="font-family:var(--font-display);font-size:.7rem;color:var(--gold);margin-bottom:8px;text-align:center;letter-spacing:.05em">EBENEN</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="layer-btn active-layer" data-layer="token" onclick="setLayer('token')" style="display:flex;align-items:center;gap:8px;background:var(--bg-panel2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;cursor:pointer;font-size:.82rem;text-align:left;width:100%">🎭 Tokens</button>
+        <button class="layer-btn" data-layer="build" onclick="setLayer('build')" style="display:flex;align-items:center;gap:8px;background:var(--bg-panel2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;cursor:pointer;font-size:.82rem;text-align:left;width:100%">🧱 Bauen</button>
+        <button class="layer-btn" data-layer="background" onclick="setLayer('background')" style="display:flex;align-items:center;gap:8px;background:var(--bg-panel2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;cursor:pointer;font-size:.82rem;text-align:left;width:100%">🖼️ Hintergrund</button>
+      </div>
+      <div id="layer-hint" style="font-size:.68rem;color:var(--text-dim);margin-top:8px;line-height:1.4"></div>
+    </div>
+    {% endif %}
+
+    {% if role=='gm' %}
+    <!-- KARTEN-KNOPF oben rechts + aufklappender Karten-Browser -->
+    <button id="maps-dropdown-btn" onclick="toggleMapsDropdown()" style="position:absolute;top:10px;right:10px;z-index:42;background:rgba(var(--panel-rgb),.92);border:1px solid var(--gold-dark);color:var(--gold);padding:8px 14px;border-radius:8px;cursor:pointer;font-family:var(--font-display);font-size:.78rem;display:flex;align-items:center;gap:6px">🗺️ <span id="active-map-label">Karten</span> ▾</button>
+    <!-- Karten-Browser: klappt von oben herunter, größer und mit Ordner-Navigation -->
+    <div id="maps-folder-bar" style="display:none;position:absolute;top:52px;left:10px;right:10px;z-index:41;background:rgba(var(--panel-rgb),.97);border:1px solid var(--gold-dark);border-radius:12px;padding:16px;max-height:75vh;overflow-y:auto;box-shadow:0 10px 40px rgba(var(--shade-rgb),.6)"></div>
+    {% endif %}
+
+    <!-- Steuerungs-Hinweise unten rechts (neben dem Menü) -->
+    <div id="controls-hud" style="position:absolute;bottom:10px;right:10px;background:rgba(var(--panel-rgb),.82);backdrop-filter:blur(4px);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:var(--font-display);font-size:.68rem;color:var(--text-dim);z-index:30;line-height:1.5;pointer-events:none">
+      <div><span style="color:var(--gold)">Rechtsklick</span> + ziehen = Karte schwenken</div>
+      <div><span style="color:var(--gold)">Links/Rechts auf Token</span> = Token bewegen</div>
+      <div><span style="color:var(--gold)">Mausrad</span> = Zoom</div>
+    </div>
+  </div>
+
+  <!-- DM-Inspektor: Charakterbogen eines Spielers/Gegners ansehen.
+       Liegt links vom normalen Panel, damit der DM beides zugleich sieht. -->
+  <div id="inspect-panel">
+    <div class="insp-head">
+      <div class="insp-avatar" id="insp-avatar">🧙</div>
+      <div class="insp-title">
+        <div class="insp-name" id="insp-name">—</div>
+        <div class="insp-sub"  id="insp-sub">—</div>
+      </div>
+      <button class="insp-close" onclick="closeInspector()" title="Schließen">✕</button>
+    </div>
+    <div class="insp-modebar">
+      <div class="insp-switch">
+        <button id="insp-mode-view" class="on" onclick="setInspectorMode(false)" title="Ansehen und würfeln">👁 Ansehen</button>
+        <button id="insp-mode-edit" onclick="setInspectorMode(true)" title="Werte ändern">✏️ Bearbeiten</button>
+      </div>
+    </div>
+    <div class="insp-tabs">
+      <button class="insp-tab on" id="insp-tab-sheet"     onclick="setInspectorTab('sheet')"     title="Charakterbogen">🧙 Bogen</button>
+      <button class="insp-tab"    id="insp-tab-attacks"   onclick="setInspectorTab('attacks')"   title="Angriffe">🗡️ Angriffe</button>
+      <button class="insp-tab"    id="insp-tab-inventory" onclick="setInspectorTab('inventory')" title="Inventar">🎒 Inventar</button>
+    </div>
+    <div class="insp-body" id="insp-body">
+      <div class="insp-empty">Kein Charakter ausgewählt.</div>
+    </div>
+  </div>
+
+  <div id="right-panel">
+    <div id="panel-resize-handle"></div>
+    <button id="panel-toggle-btn" onclick="togglePanel()" title="Panel ein/ausklappen">◀</button>
+
+    <div class="panel-tabs">
+      <div class="p-tab active" data-tab="chat"><span class="t-icon">💬</span>Chat</div>
+      <div class="p-tab" data-tab="init"><span class="t-icon">⚔️</span>Init</div>
+      {% if role!='gm' %}
+      <div class="p-tab" data-tab="char"><span class="t-icon">🧙</span>Charakter</div>
+      <div class="p-tab" data-tab="attacks"><span class="t-icon">🗡️</span>Angriffe</div>
+      <div class="p-tab" data-tab="inventory"><span class="t-icon">🎒</span>Inventar</div>
+      {% endif %}
+      <div class="p-tab" data-tab="notes"><span class="t-icon">📜</span>Notizen</div>
+      <div class="p-tab" data-tab="journal"><span class="t-icon">📖</span>Journal</div>
+      {% if role=='gm' %}
+      <div class="p-tab" data-tab="roster"><span class="t-icon">👥</span>Spieler</div>
+      <div class="p-tab" data-tab="enemies"><span class="t-icon">🐉</span>Gegner</div>
+      <div class="p-tab" data-tab="music"><span class="t-icon">✨</span>Effekte</div>
+      <div class="p-tab" data-tab="gmsettings"><span class="t-icon">⚙️</span>DM</div>
+      {% endif %}
+    </div>
+
+    <!-- CHAT -->
+    <div class="tab-pane active" id="tab-chat">
+      <div id="chat-messages"></div>
+      <div class="chat-footer">
+        <div class="quick-rolls">
+          <span style="font-family:var(--font-display);font-size:.58rem;color:var(--text-dim);align-self:center;margin-right:2px">WÜRFEL:</span>
+          <button class="qr-btn" onclick="Chat.quickRoll('1d20')">d20</button>
+          <button class="qr-btn" onclick="Chat.quickRoll('1d12')">d12</button>
+          <button class="qr-btn" onclick="Chat.quickRoll('1d10')">d10</button>
+          <button class="qr-btn" onclick="Chat.quickRoll('1d8')">d8</button>
+          <button class="qr-btn" onclick="Chat.quickRoll('1d6')">d6</button>
+          <button class="qr-btn" onclick="Chat.quickRoll('1d4')">d4</button>
+          <button class="qr-btn" onclick="Chat.quickRoll('2d20kh1')">ADV</button>
+          <button class="qr-btn" onclick="Chat.quickRoll('2d20kl1')">DIS</button>
+          <button class="qr-btn" onclick="Modals.openDice()">…</button>
+        </div>
+        <div class="chat-input-row">
+          <textarea id="chat-input" rows="1" placeholder="/roll 2d6+3 · /gmroll · /me …"></textarea>
+          <button id="chat-send-btn" onclick="Chat.send()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INITIATIVE -->
+    <div class="tab-pane" id="tab-init">
+      <div class="pane-scroll" id="init-list" style="flex:1"></div>
+      <div class="init-footer">
+        <button class="btn btn-gold btn-sm" onclick="Character.rollInitiative()" style="flex:1">🎲 Initiative würfeln</button>
+        <button class="btn btn-dark btn-sm" onclick="endTurn()" style="flex:1">⏭ Zug beenden</button>
+      </div>
+      <label class="init-confirm-toggle" style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:.72rem;color:var(--text-dim);cursor:pointer">
+        <input type="checkbox" id="init-confirm-chk" checked style="width:auto">
+        Vor „Zug beenden" nachfragen
+      </label>
+      <label class="init-confirm-toggle" style="display:flex;align-items:center;gap:6px;padding:0 10px 4px;font-size:.72rem;color:var(--text-dim);cursor:pointer">
+        <input type="checkbox" id="turn-popup-chk" checked style="width:auto">
+        „Du bist dran"-Popup anzeigen
+      </label>
+      {% if role=='gm' %}
+      <div class="init-footer" style="border-top:none;padding-top:0">
+        <input id="init-name-inp" placeholder="Name…" style="flex:2">
+        <input id="init-roll-inp" placeholder="Init" type="number" style="flex:1">
+        <input id="init-hp-inp"   placeholder="HP"   type="number" style="flex:1">
+        <button class="btn btn-gold btn-xs" onclick="gmAddInit()">+</button>
+      </div>
+      <div class="init-footer" style="border-top:none;padding-top:0">
+        <button class="btn btn-danger btn-sm" onclick="resetInitiative()" style="flex:1">🔄 Initiative zurücksetzen</button>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- CHARAKTER (overview) -->
+    {% if role!='gm' %}
+    <div class="tab-pane" id="tab-char">
+      <div class="pane-scroll">
+
+        <!-- Umschalter: Spielen (nur würfeln) / Bearbeiten (Werte ändern) -->
+        <div class="cb-modebar">
+          <span class="cb-mode-title">Charakterbogen</span>
+          <div class="cb-switch">
+            <button id="cb-mode-play" class="on" onclick="setSheetMode('play')" title="Nur ansehen und würfeln">🎲 Spielen</button>
+            <button id="cb-mode-edit" onclick="setSheetMode('edit')" title="Werte bearbeiten">✏️ Bearbeiten</button>
+          </div>
+        </div>
+
+        <!-- ── SPIELEN: alles auf einen Blick, alles anklickbar zum Würfeln ── -->
+        <div class="cb-view on" id="cb-view-play">
+          <div id="char-overview"></div>
+          <div class="char-section" style="margin-top:10px">
+            <div class="char-section-lbl">Eigene Zustände</div>
+            <div id="player-conds-grid" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px"></div>
+          </div>
+        </div>
+
+        <!-- ── BEARBEITEN: hier werden die Werte gepflegt ─────────────────── -->
+        <div class="cb-view" id="cb-view-edit">
+
+          <!-- Kopf: Bild + Name/Klasse -->
+          <div style="display:flex;gap:12px;align-items:center;margin:2px 0 12px">
+            <div id="char-pic-area" class="char-pic-area" onclick="document.getElementById('char-pic-input').click()" title="Bild hochladen">
+              <span style="font-size:2rem;color:var(--text-dim)">🧙</span>
+            </div>
+            <input type="file" id="char-pic-input" accept="image/*" style="display:none" onchange="uploadCharPic(this)">
+            <div style="flex:1">
+              <input class="char-input" id="cs-charname" placeholder="Charaktername" style="font-family:var(--font-display);font-size:.95rem;color:var(--gold);margin-bottom:4px">
+              <div style="display:flex;gap:4px">
+                <input class="char-input" id="cs-class" placeholder="Klasse" style="flex:1">
+                <input class="char-input" id="cs-race"  placeholder="Rasse"  style="flex:1">
+                <input class="char-input" id="cs-level" placeholder="Lvl" type="number" value="1" style="width:48px">
+              </div>
+            </div>
+          </div>
+
+          <!-- Trefferpunkte, Rüstung, Bewegung -->
+          <div class="char-section">
+            <div class="char-section-lbl">Trefferpunkte &amp; Kampfwerte</div>
+            <div class="hp-block">
+              <div class="hp-readout"><span id="cs-hp">20</span> / <span id="cs-maxhp">20</span></div>
+              <div class="hp-bar"><div class="hp-fill" id="cs-hpfill" style="width:100%"></div></div>
+              <div class="hp-inputs">
+                <div><input id="cs-hp-inp" type="number" value="20" oninput="Character.onHpChange()"><label>Akt. HP</label></div>
+                <div><input id="cs-maxhp-inp" type="number" value="20" oninput="Character.onHpChange()"><label>Max HP</label></div>
+                <div><input id="cs-ac-inp" type="number" value="10" onchange="onManualAcEdit()"><label>Rüstung <span id="ac-auto-badge" onclick="toggleAutoAc()" style="cursor:pointer;font-size:.55rem;color:var(--gold)" title="Automatische RK-Berechnung an/aus">🔄auto</span></label></div>
+                <div><input id="cs-speed-inp" type="number" value="30"><label>BW ft</label></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Attribute & Kampf -->
+          <details class="char-details" open>
+            <summary>⚔️ Attribute &amp; Kampf</summary>
+            <div class="char-section" style="border:none;padding-top:6px">
+              <div style="display:flex;gap:5px;margin-bottom:8px">
+                <div style="flex:1"><label class="field-label">Initiative Bonus</label><input class="char-input" id="cs-init-bonus-inp" type="number" value="0"></div>
+                <div style="flex:1"><label class="field-label">Sichtweite (ft, 0=∞)</label><input class="char-input" id="cs-vision-inp" type="number" value="0"></div>
+              </div>
+              <div class="stat-grid" id="stat-grid"></div>
+            </div>
+          </details>
+
+          <!-- Fertigkeiten: hier nur die Übung setzen -->
+          <details class="char-details">
+            <summary>🎯 Geübte Fertigkeiten</summary>
+            <div class="char-section" style="border:none;padding-top:6px">
+              <div style="font-size:.7rem;color:var(--text-dim);margin-bottom:4px">◉ anklicken = geübt. Gewürfelt wird im Spielen-Modus.</div>
+              <div id="skills-list"></div>
+            </div>
+          </details>
+
+          <!-- Ausrüstung & Hintergrund -->
+          <details class="char-details">
+            <summary>🎒 Ausrüstung &amp; Hintergrund</summary>
+            <div class="char-section" style="border:none;padding-top:6px">
+              <div class="char-section-lbl">Ausrüstung</div>
+              <textarea class="char-textarea" id="cs-equipment" rows="3"></textarea>
+              <div class="char-section-lbl" style="margin-top:8px">Hintergrundgeschichte</div>
+              <textarea class="char-textarea" id="cs-backstory" rows="4"></textarea>
+            </div>
+          </details>
+
+          <div style="display:flex;gap:6px;padding:10px 0 8px">
+            <button class="btn btn-gold" style="flex:1" onclick="Character.saveSheet()">💾 Speichern</button>
+            <button class="btn btn-dark btn-sm" onclick="exportChar()" title="Charakter exportieren">📤</button>
+          </div>
+          <div style="padding-bottom:14px">
+            <button class="btn btn-dark btn-sm" style="width:100%" onclick="Character.autoGenerateSpellSlots()" title="Erzeugt Zauberplätze nach der Vollzauberer-Tabelle für dein Level">✨ Zauberplätze automatisch generieren</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ANGRIFFE -->
+    <div class="tab-pane" id="tab-charsheet-removed" style="display:none"></div>
+    <div class="tab-pane" id="tab-attacks">
+      <div class="pane-scroll" id="attacks-list" style="flex:1"></div>
+      <div style="padding:8px;border-top:1px solid var(--border);flex-shrink:0">
+
+        {% if role=='gm' %}
+        <!-- Eigene Angriffe erstellen darf nur der DM. Spieler laden sie
+             aus der Bibliothek. -->
+        <details class="char-details" style="margin-bottom:6px">
+          <summary>+ Neuer Angriff / Zauber</summary>
+          <div style="padding-top:8px">
+            <div style="display:flex;gap:5px;margin-bottom:5px">
+              <input class="char-input" id="atk-name" placeholder="Name" style="flex:2">
+              <select class="char-input" id="atk-type" style="flex:1">
+                <option>Nahkampf</option><option>Fernkampf</option><option>Zauber</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:5px;margin-bottom:5px">
+              <div style="flex:1"><label class="field-label">Bonus</label><input class="char-input" id="atk-hit" type="number" value="0"></div>
+              <div style="flex:2"><label class="field-label">Schaden</label><input class="char-input" id="atk-dmg" placeholder="1d8+3"></div>
+              <div style="flex:1"><label class="field-label">Typ</label><input class="char-input" id="atk-dmgtype" placeholder="Hieb"></div>
+            </div>
+            <div style="display:flex;gap:5px;margin-bottom:6px">
+              <input class="char-input" id="atk-range" placeholder="Reichweite" style="flex:1">
+              <input class="char-input" id="atk-notes" placeholder="Notiz" style="flex:2">
+            </div>
+            <div style="display:flex;gap:5px;margin-bottom:6px" id="atk-save-row">
+              <div style="flex:2"><label class="field-label">Rettungswurf (nur Zauber)</label>
+                <select class="char-input" id="atk-save-type">
+                  <option value="">— kein —</option>
+                  <option>Stärke</option><option>Geschicklichkeit</option><option>Konstitution</option>
+                  <option>Intelligenz</option><option>Weisheit</option><option>Charisma</option>
+                </select>
+              </div>
+              <div style="flex:1"><label class="field-label">SG</label><input class="char-input" id="atk-save-dc" type="number" placeholder="13"></div>
+            </div>
+
+            <!-- Statuseffekt, den ein Treffer auslöst -->
+            <div class="char-section-lbl" style="margin:8px 0 4px">Wirkt bei Treffer</div>
+            <div style="display:flex;gap:5px;margin-bottom:6px">
+              <select class="char-input" id="atk-effect" style="flex:2">
+                <option value="">— kein Effekt —</option>
+              </select>
+              <select class="char-input" id="atk-effect-dur" style="flex:2" title="Wie lange hält der Effekt?">
+                <option value="">Dauer …</option>
+                <option value="until_my_next_turn_end">bis Ende meines nächsten Zuges</option>
+                <option value="until_target_next_turn_end">bis Ende des Zuges des Ziels</option>
+                <option value="rounds:1">1 Runde</option>
+                <option value="rounds:3">3 Runden</option>
+                <option value="rounds:10">10 Runden (1 Min.)</option>
+                <option value="permanent">bis er entfernt wird</option>
+              </select>
+            </div>
+
+            <button class="btn btn-gold" style="width:100%;margin-bottom:5px" onclick="Character.addAttack()">🗡 Hinzufügen</button>
+          </div>
+        </details>
+        {% endif %}
+
+        <button class="btn btn-dark" style="width:100%" onclick="openLibraryPicker('attacks')">📚 Aus Bibliothek wählen</button>
+      </div>
+    </div>
+
+    <!-- INVENTAR -->
+    <div class="tab-pane" id="tab-inventory">
+      <div class="pane-scroll">
+        <div class="char-section-lbl">🎒 Inventar</div>
+        <div id="inventory-list" style="margin-top:6px"></div>
+      </div>
+      <div style="padding:8px;border-top:1px solid var(--border);flex-shrink:0">
+        <button class="btn btn-gold" style="width:100%" onclick="openLibraryPicker('items')">📚 Gegenstand hinzufügen</button>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- NOTIZEN -->
+    <div class="tab-pane" id="tab-notes">
+      <div class="pane-scroll" id="notes-container" style="padding:8px"></div>
+      {% if role!='gm' %}
+      <div style="padding:8px;border-top:1px solid var(--border);flex-shrink:0">
+        <input class="form-input" id="note-title" placeholder="Titel der Notiz" style="margin-bottom:5px">
+        <textarea class="form-input" id="note-content" rows="3" placeholder="Deine Notiz…" style="margin-bottom:5px"></textarea>
+        <div style="display:flex;gap:5px;align-items:center">
+          <label style="flex:1;display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--text-dim);cursor:pointer">
+            <input type="checkbox" id="note-shared" style="width:auto"> mit allen teilen
+          </label>
+          <button class="btn btn-gold btn-sm" onclick="createNote()">📝 Speichern</button>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- JOURNAL / WIKI -->
+    <div class="tab-pane" id="tab-journal">
+      <div style="padding:6px 8px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;gap:5px;align-items:center">
+        <input class="form-input" id="journal-search" placeholder="🔍 Journal durchsuchen…" style="flex:1" oninput="renderJournalList()">
+        {% if role=='gm' %}<button class="btn btn-gold btn-sm" onclick="newJournalEntry()">+ Neu</button>{% endif %}
+      </div>
+      <div class="pane-scroll" id="journal-list"></div>
+      <div id="journal-viewer" style="display:none;flex-direction:column;flex:1;overflow:hidden"></div>
+    </div>
+
+    {% if role=='gm' %}
+    <!-- ROSTER (Spieler) -->
+    <div class="tab-pane" id="tab-roster">
+      <div style="padding:8px;border-bottom:1px solid var(--border);flex-shrink:0">
+        <button class="btn btn-dark btn-sm" style="width:100%" onclick="resetExploration()" title="Setzt die aufgedeckte Erinnerung DIESER Karte für alle Spieler zurück">🔦 Erkundung dieser Karte zurücksetzen</button>
+      </div>
+      <div class="pane-scroll" id="roster-list"></div>
+      <div style="padding:8px;border-top:1px solid var(--border);flex-shrink:0;font-size:.75rem;color:var(--text-dim);text-align:center">
+        👥 Alle Spieler die je beigetreten sind
+      </div>
+    </div>
+
+    <!-- GEGNER -->
+    <div class="tab-pane" id="tab-enemies">
+      <div style="padding:6px 8px;border-bottom:1px solid var(--border);display:flex;gap:5px;flex-shrink:0">
+        <button class="btn btn-danger btn-sm" onclick="Modals.openEnemyCreate()" style="flex:1">🐉 Neuer Gegner</button>
+        <button class="btn btn-dark btn-sm" onclick="promptCreateEnemyFolder()">📁 Ordner</button>
+      </div>
+      <div class="pane-scroll" id="enemy-list"></div>
+    </div>
+
+    <!-- KARTEN -->
+    <!-- Karten-Editor-Overlay (wird über den Bearbeiten-Knopf einer Karte geöffnet) -->
+    <div id="map-editor-overlay" style="display:none;position:fixed;inset:0;background:rgba(var(--shade-rgb),.7);z-index:250;align-items:center;justify-content:center">
+      <div style="background:var(--bg-panel2);border:1px solid var(--gold-dark);border-radius:16px;padding:24px;width:92%;max-width:520px;max-height:90vh;overflow-y:auto">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h2 style="color:var(--gold);font-family:Cinzel,serif;font-size:1.1rem" id="me-title">Karte bearbeiten</h2>
+          <button class="btn btn-dark btn-sm" onclick="closeMapEditor()">✕</button>
+        </div>
+
+        <!-- Bild hochladen -->
+        <div style="margin-bottom:14px">
+          <label class="field-label">🖼️ Kartenbild</label>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:4px">
+            <button class="btn btn-gold btn-sm" onclick="document.getElementById('me-file-input').click()">Bild hochladen</button>
+            <input type="file" id="me-file-input" accept="image/*" style="display:none" onchange="uploadMapImageFor(this)">
+            <span id="me-image-status" style="font-size:.75rem;color:var(--text-dim)">—</span>
+          </div>
+        </div>
+
+        <!-- Raster -->
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <div style="flex:1;min-width:90px"><label class="field-label">Rasterfarbe</label>
+            <select class="char-input" id="gs-color">
+              <option value="theme">Tisch-Design</option><option value="gold">Gold</option><option value="white">Weiß</option>
+              <option value="brown">Braun</option><option value="black">Schwarz</option>
+            </select></div>
+          <div style="flex:1;min-width:60px"><label class="field-label">Deckkraft</label>
+            <input class="char-input" id="gs-opacity" type="number" min="0.05" max="1" step="0.05" value="0.35"></div>
+          <div style="flex:1;min-width:60px"><label class="field-label">Feldgröße</label>
+            <input class="char-input" id="gs-gridsize" type="number" value="50"></div>
+          <div style="flex:1;min-width:80px"><label class="field-label">Rastertyp</label>
+            <select class="char-input" id="gs-gridtype">
+              <option value="square">▦ Quadrat</option><option value="hex">⬡ Hexagon</option><option value="none">∅ Kein Raster</option>
+            </select></div>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px">
+          <div style="flex:1;min-width:80px"><label class="field-label">Breite (Felder)</label>
+            <input class="char-input" id="gs-cols" type="number" min="10" max="200" value="40"></div>
+          <div style="flex:1;min-width:80px"><label class="field-label">Höhe (Felder)</label>
+            <input class="char-input" id="gs-rows" type="number" min="10" max="200" value="30"></div>
+        </div>
+        <div style="margin-top:8px">
+          <label class="field-label">🗺️ Kartentyp (Standard-Sichtweite)</label>
+          <select class="char-input" id="gs-maptype" style="width:100%">
+            <option value="combat">⚔️ Kampfkarte (200 ft Sicht)</option>
+            <option value="exploration">🧭 Erkundungskarte (400 ft Sicht)</option>
+          </select>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.82rem;cursor:pointer">
+          <input type="checkbox" id="gs-darkness" style="width:auto">
+          🌑 Dunkelheit (Spieler sehen nur mit Nachtsicht/Lichtquellen)
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.82rem;cursor:pointer">
+          <input type="checkbox" id="gs-explore" checked style="width:auto">
+          🔦 Erkundungsmodus (gesehene Bereiche bleiben schwach sichtbar)
+        </label>
+
+        <div style="display:flex;gap:6px;margin-top:16px">
+          <button class="btn btn-gold" style="flex:1" onclick="applyMapSettings();closeMapEditor()">⚙️ Speichern</button>
+          <button class="btn btn-dark" onclick="closeMapEditor()">Abbrechen</button>
+        </div>
+        <button class="btn btn-dark btn-sm" style="width:100%;margin-top:6px" onclick="resetMapImage()" title="Kartenbild wieder auf die volle Kartengröße strecken">🖼 Bild auf volle Karte zurücksetzen</button>
+      </div>
+    </div>
+
+    <!-- (versteckt) Alte Karten-Liste – wird für die Ordner-Navigation im Karten-Knopf genutzt -->
+    <div class="tab-pane" id="tab-maps" style="display:none">
+      <div class="pane-scroll" id="maps-list"></div>
+    </div>
+
+    <!-- EFFEKTE (Wetter + Musik) -->
+    <div class="tab-pane" id="tab-music">
+      <div style="padding:8px;border-bottom:1px solid var(--border);flex-shrink:0">
+        <div style="font-family:var(--font-display);font-size:.72rem;color:var(--gold);margin-bottom:6px">🌦️ Wettereffekte</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <button class="btn btn-dark btn-xs" style="flex:1" onclick="setWeather('none')">☀️ Klar</button>
+          <button class="btn btn-dark btn-xs" style="flex:1" onclick="setWeather('rain')">🌧️ Regen</button>
+          <button class="btn btn-dark btn-xs" style="flex:1" onclick="setWeather('snow')">❄️ Schnee</button>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+          <button class="btn btn-dark btn-xs" style="flex:1" onclick="setWeather('fog')">🌫️ Nebel</button>
+          <button class="btn btn-dark btn-xs" style="flex:1" onclick="setWeather('leaves')">🍂 Blätter</button>
+          <button class="btn btn-dark btn-xs" style="flex:1" onclick="setWeather('ash')">🔥 Funken</button>
+        </div>
+      </div>
+      <div style="padding:6px 8px;font-family:var(--font-display);font-size:.72rem;color:var(--gold);flex-shrink:0">🎵 Musik &amp; Soundeffekte</div>
+      <div class="pane-scroll">
+        <div id="preset-tracks"></div>
+      </div>
+      <div style="padding:8px;border-top:1px solid var(--border);flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+          <label style="font-family:var(--font-display);font-size:.65rem;color:var(--text-dim);white-space:nowrap">🎵 Musik</label>
+          <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="0.5" oninput="Jukebox.setVolume(this.value)" style="flex:1">
+          <span id="vol-pct" style="font-family:var(--font-display);font-size:.7rem;color:var(--text-dim)">50%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <label style="font-family:var(--font-display);font-size:.65rem;color:var(--text-dim);white-space:nowrap">🔊 Effekte</label>
+          <input type="range" id="sfx-slider" min="0" max="1" step="0.05" value="0.7" oninput="Jukebox.setSfxVolume(this.value)" style="flex:1">
+          <span id="sfx-pct" style="font-family:var(--font-display);font-size:.7rem;color:var(--text-dim)">70%</span>
+        </div>
+        <div id="now-playing" style="font-size:.75rem;color:var(--gold);font-family:var(--font-display);margin-bottom:6px;min-height:14px"></div>
+        <div style="display:flex;gap:5px;margin-bottom:5px">
+          <label class="btn btn-dark btn-sm" style="flex:1;text-align:center;cursor:pointer">+ Musik laden
+            <input type="file" accept="audio/*" multiple onchange="Jukebox.loadMusic(this.files)" style="display:none"></label>
+          <label class="btn btn-dark btn-sm" style="flex:1;text-align:center;cursor:pointer">+ Effekt laden
+            <input type="file" accept="audio/*" multiple onchange="Jukebox.loadSfx(this.files)" style="display:none"></label>
+        </div>
+        <button class="btn btn-dark btn-sm" style="width:100%" onclick="Jukebox.stop()">⏹ Musik stoppen</button>
+      </div>
+    </div>
+
+    <!-- DM EINSTELLUNGEN -->
+    <div class="tab-pane" id="tab-gmsettings">
+      <div id="gm-settings-panel"></div>
+      <!-- Welche Inhaltspakete in dieser Kampagne gelten (packs.py) -->
+      <div style="padding:12px 10px;border-top:1px solid var(--border)">
+        <div style="font:700 .72rem/1 var(--font-display);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">📦 Inhalte dieser Kampagne</div>
+        <div id="camp-packs" style="font-size:.85rem;color:var(--text-dim)">Lade …</div>
+      </div>
+      <div style="padding:10px;border-top:1px solid var(--border)">
+        <button class="btn btn-gold btn-sm" style="width:100%" onclick="Socket.emit('force_save',{session_id:State.session_id});UI.toast('💾 Gespeichert!')">💾 Jetzt speichern</button>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-backdrop" id="token-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="Modals.closeToken()">✕</button>
+    <h3>🧙 Token bearbeiten</h3>
+    <input type="hidden" id="tm-id">
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <div style="flex:2"><label class="field-label">Name</label><input class="form-input" id="tm-name"></div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <div style="flex:1"><label class="field-label">❤️ HP</label><input class="form-input" id="tm-hp" type="number"></div>
+      <div style="flex:1"><label class="field-label">Max HP</label><input class="form-input" id="tm-maxhp" type="number"></div>
+      <div style="flex:1"><label class="field-label">🛡 RK</label><input class="form-input" id="tm-ac" type="number"></div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <div style="flex:1"><label class="field-label">💨 BW ft</label><input class="form-input" id="tm-speed" type="number"></div>
+      <div style="flex:1"><label class="field-label">👁 Sicht ft</label><input class="form-input" id="tm-vision" type="number"></div>
+      <div style="flex:1"><label class="field-label">🔍 Wahrnehmung</label><input class="form-input" id="tm-perception" type="number" placeholder="10"></div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;align-items:flex-end">
+      <div style="flex:1"><label class="field-label">🔦 Helles Licht ft</label><input class="form-input" id="tm-light-bright" type="number" placeholder="0"></div>
+      <div style="flex:1"><label class="field-label">🕯 Dämmriges Licht ft</label><input class="form-input" id="tm-light-dim" type="number" placeholder="0"></div>
+      <button class="btn btn-dark btn-sm" onclick="Modals.setTorch()" title="Fackel: 20 ft hell, 20 ft dämmrig">🔥</button>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;align-items:flex-end">
+      <div style="flex:1"><label class="field-label">🌙 Nachtsicht (60 ft im Dunkeln)</label>
+        <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:6px;cursor:pointer;font-size:.85rem">
+          <input type="checkbox" id="tm-darkvision" style="width:auto"> Nachtsicht aktiv
+        </label>
+      </div>
+      <div style="flex:1"><label class="field-label">👁 Sichtweite ft (leer=Standard)</label><input class="form-input" id="tm-vision-override" type="number" placeholder="Karten-Standard"></div>
+    </div>
+    <label class="field-label">Zustände</label>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 12px" id="tm-conds"></div>
+
+    <label class="field-label">Zusätzliche Statusbalken (max. 2)</label>
+    <div id="tm-bars" style="display:flex;flex-direction:column;gap:6px;margin:5px 0 8px"></div>
+    <button class="btn btn-dark btn-sm" style="width:100%;margin-bottom:12px" onclick="Modals.addTokenBar()">+ Balken hinzufügen (z.B. Mana, Temp-TP)</button>
+
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-gold" style="flex:1" onclick="Modals.saveToken()">💾 Speichern</button>
+      <button class="btn btn-danger btn-sm" id="tm-del-btn" onclick="Modals.deleteToken()">🗑</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="dice-modal">
+  <div class="modal" style="max-width:340px">
+    <button class="modal-close" onclick="Modals.closeDice()">✕</button>
+    <h3>🎲 Würfelwurf</h3>
+    <input class="form-input" id="dice-formula" placeholder="1d20" style="margin-bottom:10px" onkeydown="if(event.key==='Enter')Modals.rollFromModal(false)">
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px">
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='1d20'">d20</button>
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='1d12'">d12</button>
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='1d10'">d10</button>
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='1d8'">d8</button>
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='1d6'">d6</button>
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='1d4'">d4</button>
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='2d20kh1'">Vorteil</button>
+      <button class="qr-btn" onclick="document.getElementById('dice-formula').value='2d20kl1'">Nachteil</button>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-gold" style="flex:1" onclick="Modals.rollFromModal(false)">🎲 Würfeln</button>
+      <button class="btn btn-danger" style="flex:1" onclick="Modals.rollFromModal(true)">👁 GM-Wurf</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="handout-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="Modals.closeHandout()">✕</button>
+    <h3 id="hm-title"></h3>
+    <div id="hm-content" style="font-size:.95rem;line-height:1.65;color:var(--text);white-space:pre-wrap"></div>
+  </div>
+</div>
+
+{% if role=='gm' %}
+<div class="modal-backdrop" id="enemy-modal">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="Modals.closeEnemyCreate()">✕</button>
+    <h3 id="enemy-modal-title">🐉 Neuen Gegner erstellen</h3>
+    <input type="hidden" id="em-id">
+    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-end">
+      <div id="em-pic-area" style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(var(--crimson-rgb),.5);background:#2a0a0a;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0" onclick="document.getElementById('em-pic-input').click()">
+        <span id="em-pic-placeholder" style="font-size:1.8rem">🐉</span>
+        <img id="em-pic-preview" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%">
+      </div>
+      <input type="file" id="em-pic-input" accept="image/*" style="display:none" onchange="previewEnemyPic(this)">
+      <div style="flex:1">
+        <div style="display:flex;gap:6px;margin-bottom:5px">
+          <div style="flex:2"><label class="field-label">Name</label><input class="form-input" id="em-name"></div>
+          <div style="flex:1"><label class="field-label">HG/CR</label><input class="form-input" id="em-cr" placeholder="1/4"></div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <div style="flex:1"><label class="field-label">Ordner</label>
+            <select class="form-input" id="em-folder"></select></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <div style="flex:1"><label class="field-label">❤️ HP</label><input class="form-input" id="em-hp" type="number"></div>
+      <div style="flex:1"><label class="field-label">🛡 RK</label><input class="form-input" id="em-ac" type="number"></div>
+      <div style="flex:1"><label class="field-label">💨 BW</label><input class="form-input" id="em-speed" type="number" value="30"></div>
+      <div style="flex:1"><label class="field-label">⚡ Init +</label><input class="form-input" id="em-initbonus" type="number" value="0"></div>
+    </div>
+    <div class="char-section-lbl" style="margin-bottom:5px">Attribute</div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:8px">
+      <div style="text-align:center"><label class="field-label">STR</label><input class="form-input" id="em-str" type="number" value="10" style="text-align:center;padding:4px"></div>
+      <div style="text-align:center"><label class="field-label">GES</label><input class="form-input" id="em-dex" type="number" value="10" style="text-align:center;padding:4px"></div>
+      <div style="text-align:center"><label class="field-label">KON</label><input class="form-input" id="em-con" type="number" value="10" style="text-align:center;padding:4px"></div>
+      <div style="text-align:center"><label class="field-label">INT</label><input class="form-input" id="em-int" type="number" value="10" style="text-align:center;padding:4px"></div>
+      <div style="text-align:center"><label class="field-label">WEI</label><input class="form-input" id="em-wis" type="number" value="10" style="text-align:center;padding:4px"></div>
+      <div style="text-align:center"><label class="field-label">CHA</label><input class="form-input" id="em-cha" type="number" value="10" style="text-align:center;padding:4px"></div>
+    </div>
+
+    <!-- Steckbrief: Art, Größe, Gesinnung -->
+    <details class="char-details">
+      <summary>📇 Steckbrief</summary>
+      <div style="padding-top:8px">
+        <div style="display:flex;gap:5px;margin-bottom:8px">
+          <div style="flex:2"><label class="field-label">Art</label>
+            <input class="form-input" id="em-type" placeholder="z. B. Humanoid, Untot"></div>
+          <div style="flex:1"><label class="field-label">Größe</label>
+            <select class="form-input" id="em-size">
+              <option value="T">Winzig</option><option value="S">Klein</option>
+              <option value="M" selected>Mittelgroß</option><option value="L">Groß</option>
+              <option value="H">Riesig</option><option value="G">Gigantisch</option>
+            </select></div>
+        </div>
+        <div style="display:flex;gap:5px;margin-bottom:8px">
+          <div style="flex:2"><label class="field-label">Gesinnung</label>
+            <input class="form-input" id="em-alignment" placeholder="z. B. Chaotisch böse"></div>
+          <div style="flex:1"><label class="field-label">Stufe</label>
+            <input class="form-input" id="em-level" type="number" value="1" min="1"
+                   title="Bestimmt den Übungsbonus"></div>
+        </div>
+        <label class="field-label">Sinne</label>
+        <input class="form-input" id="em-senses" placeholder="z. B. Dunkelsicht 60 ft" style="margin-bottom:8px">
+        <label class="field-label">Sprachen</label>
+        <input class="form-input" id="em-languages" placeholder="z. B. Gemeinsprache, Orkisch" style="margin-bottom:8px">
+        <label class="field-label">Resistenzen &amp; Immunitäten</label>
+        <input class="form-input" id="em-resistances" placeholder="z. B. Immun gegen Gift">
+      </div>
+    </details>
+
+    <!-- Übungen: Rettungswürfe und Fertigkeiten -->
+    <details class="char-details">
+      <summary>🎯 Übungen</summary>
+      <div style="padding-top:8px">
+        <label class="field-label">Geübte Rettungswürfe</label>
+        <div id="em-saves" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px"></div>
+        <label class="field-label">Geübte Fertigkeiten</label>
+        <div id="em-skills" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+    </details>
+
+    <!-- Besondere Fähigkeiten -->
+    <details class="char-details">
+      <summary>✦ Besondere Fähigkeiten</summary>
+      <div style="padding-top:8px">
+        <div id="em-traits-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+        <button class="btn btn-dark btn-sm" style="width:100%" onclick="Modals.addEnemyTrait()">+ Fähigkeit hinzufügen</button>
+      </div>
+    </details>
+
+    <!-- Beute / Ausrüstung -->
+    <details class="char-details">
+      <summary>🎒 Beute &amp; Ausrüstung</summary>
+      <div style="padding-top:8px">
+        <div id="em-inv-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+        <button class="btn btn-dark btn-sm" style="width:100%" onclick="Modals.addEnemyItem()">+ Gegenstand hinzufügen</button>
+      </div>
+    </details>
+
+    <label class="field-label" style="margin-top:10px">Notizen (nur für dich)</label>
+    <textarea class="form-input" id="em-notes" rows="3" style="margin-bottom:10px"></textarea>
+    <button class="btn btn-danger" style="width:100%" onclick="Modals.saveEnemy()">🐉 Speichern</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="create-map-modal">
+  <div class="modal" style="max-width:460px;max-height:88vh;overflow-y:auto">
+    <button class="modal-close" onclick="document.getElementById('create-map-modal').classList.remove('open')">✕</button>
+    <h3>🗺️ Neue Karte</h3>
+    <label class="field-label">Karten-Name</label>
+    <input class="form-input" id="new-map-name" placeholder="Dungeon Ebene 1" style="margin-bottom:10px">
+
+    <!-- Bild direkt beim Erstellen -->
+    <label class="field-label">🖼️ Kartenbild (optional)</label>
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
+      <button class="btn btn-dark btn-sm" onclick="document.getElementById('new-map-file').click()">Bild wählen</button>
+      <input type="file" id="new-map-file" accept="image/*" style="display:none" onchange="pickNewMapImage(this)">
+      <span id="new-map-img-status" style="font-size:.72rem;color:var(--text-dim)">Kein Bild</span>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <div style="flex:1">
+        <label class="field-label">Breite (Felder)</label>
+        <input class="form-input" id="new-map-cols" type="number" min="10" max="200" value="40">
+      </div>
+      <div style="flex:1">
+        <label class="field-label">Höhe (Felder)</label>
+        <input class="form-input" id="new-map-rows" type="number" min="10" max="200" value="30">
+      </div>
+    </div>
+
+    <!-- Rastereinstellungen -->
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:90px">
+        <label class="field-label">Rasterfarbe</label>
+        <select class="form-input" id="new-map-color">
+          <option value="theme">Tisch-Design</option><option value="gold">Gold</option><option value="white">Weiß</option>
+          <option value="brown">Braun</option><option value="black">Schwarz</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:80px">
+        <label class="field-label">Deckkraft</label>
+        <input class="form-input" id="new-map-opacity" type="number" min="0.05" max="1" step="0.05" value="0.35">
+      </div>
+      <div style="flex:1;min-width:90px">
+        <label class="field-label">Rastertyp</label>
+        <select class="form-input" id="new-map-gridtype">
+          <option value="square">▦ Quadrat</option><option value="hex">⬡ Hexagon</option><option value="none">∅ Keins</option>
+        </select>
+      </div>
+    </div>
+
+    <label class="field-label">🗺️ Kartentyp</label>
+    <select class="form-input" id="new-map-type" style="margin-bottom:10px">
+      <option value="combat">⚔️ Kampfkarte (200 ft Sicht)</option>
+      <option value="exploration">🧭 Erkundungskarte (400 ft Sicht)</option>
+    </select>
+
+    <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.82rem;cursor:pointer">
+      <input type="checkbox" id="new-map-darkness" style="width:auto"> 🌑 Dunkelheit
+    </label>
+    <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.82rem;cursor:pointer">
+      <input type="checkbox" id="new-map-explore" checked style="width:auto"> 🔦 Erkundungsmodus
+    </label>
+
+    <div style="font-size:.72rem;color:var(--text-dim);margin-bottom:10px">Ein Feld = 5 ft. Alles lässt sich später über ⚙️ ändern.</div>
+    <button class="btn btn-gold" style="width:100%" onclick="createNewMap()">🗺️ Erstellen</button>
+  </div>
+</div>
+{% endif %}
+
+<!-- Library Picker Modal -->
+<div class="modal-backdrop" id="lib-picker-modal">
+  <div class="modal" style="max-width:640px;max-height:80vh;display:flex;flex-direction:column">
+    <button class="modal-close" onclick="document.getElementById('lib-picker-modal').classList.remove('open')">✕</button>
+    <h3 id="lib-picker-title">📚 Bibliothek</h3>
+    <input type="text" class="form-input" id="lib-picker-search" placeholder="🔍 Suchen…" style="margin-bottom:10px" oninput="renderLibPicker()">
+    <div id="lib-picker-list" style="flex:1;overflow-y:auto;padding-right:4px"></div>
+  </div>
+</div>
+
+<div id="ctx-menu"></div>
+<div id="toast"></div>
+
+<!-- Angriffs-Ziel-Auswahl -->
+<div class="modal-backdrop" id="attack-target-modal" style="z-index:500">
+  <div class="modal" style="max-width:380px">
+    <button class="modal-close" onclick="closeAttackTarget()">✕</button>
+    <h2 id="att-title" style="font-family:'Cinzel Decorative',serif;color:var(--arcane);margin-bottom:4px">Ziel wählen</h2>
+    <p id="att-sub" style="color:var(--text-dim);font-size:.82rem;margin-bottom:12px">Wen greifst du an?</p>
+    <div id="att-target-list" style="max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+</div>
+
+<!-- Zug-Popup: erscheint, wenn ein neuer Zug beginnt -->
+<div class="modal-backdrop" id="turn-popup" style="z-index:500">
+  <div class="modal" style="max-width:340px;text-align:center">
+    <div id="turn-popup-icon" style="font-size:2.6rem;margin-bottom:6px">⚔️</div>
+    <h2 id="turn-popup-title" style="font-family:'Cinzel Decorative',serif;color:var(--arcane);margin-bottom:6px">Neuer Zug</h2>
+    <p id="turn-popup-body" style="color:var(--text);font-size:1rem;margin-bottom:16px">—</p>
+    <button class="btn btn-gold" style="width:100%" onclick="document.getElementById('turn-popup').classList.remove('open')">OK</button>
+  </div>
+</div>
+
+<script src="/static/js/dialog.js"></script>
+<script src="/static/js/state.js"></script>
+<script src="/static/js/socket.js"></script>
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/inspector.js"></script>
+<script src="/static/js/map.js"></script>
+<script src="/static/js/tokens.js"></script>
+<script src="/static/js/chat.js"></script>
+<script src="/static/js/character.js"></script>
+<script src="/static/js/modals.js"></script>
+<script src="/static/js/journal.js"></script>
+<script src="/static/js/notes.js"></script>
+<script src="/static/js/weather.js"></script>
+<!-- 3D-Würfel: KOMPLETT EIGENE Engine (Three.js + cannon-es).
+     Reihenfolge zwingend: erst die Bibliotheken, dann die Bausteine
+     (Geometrie + Material), dann die Engine (dice3d.js), die beides nutzt. -->
+<script src="/static/lib/three.min.js"></script>
+<script src="/static/lib/cannon-es.min.js"></script>
+<script src="/static/lib/RoomEnvironment.js"></script>
+<script src="/static/js/dice-sound.js"></script>
+<script src="/static/js/dice-geometry.js"></script>
+<script src="/static/js/dice-material.js"></script>
+<script src="/static/js/dice-presets.js"></script>
+<script src="/static/js/dice3d.js"></script>
+
+<script>
+// Zurück zur Kampagnen-Übersicht (Bibliothek, Sessions, Charaktere).
+// Beim Seitenwechsel trennt sich die Verbindung von selbst.
+async function leaveToMenu(){
+  const isGM = "{{ role }}" === "gm";
+  const msg = isGM
+    ? "Sitzung verlassen? Die Sitzung bleibt bestehen, ist für Spieler aber nicht erreichbar, solange du weg bist."
+    : "Sitzung verlassen? Du verlässt die laufende Sitzung.";
+  if(!await Dialog.confirm(msg, {title:"Sitzung verlassen", icon:"🚪", okText:"Verlassen"})) return;
+  window.location.href = "/play";
+}
+
+(async function boot(){
+  State.session_id  = "{{ session_id }}";
+  State.role        = "{{ role }}";
+  State.username    = "{{ username }}";
+  State.my_char_id  = "{{ char_id }}";
+
+  // Load current user (account name + avatar color)
+  try {
+    const res = await fetch("/api/auth/me");
+    const data = await res.json();
+    if (data.logged_in && data.user){
+      State.account_username = data.user.username;
+      State.my_color = data.user.avatar_color || "#c9a96e";
+      if (!State.username) State.username = data.user.display_name || data.user.username;
+    }
+  } catch(e){}
+  if (!State.my_color){
+    const pal=["#c9a96e","#7ab8d4","#a57ac9","#7ac9a5","#c97a7a","#c9c27a","#d4a0c0"];
+    State.my_color = pal[Math.floor(Math.random()*pal.length)];
+  }
+
+  Tabs.init(); ContextMenu.init(); Toolbar.init();
+  MapModule.init(); Tokens.init(); Chat.init(); Character.init();
+  Modals.initBackdropClose(); Jukebox.render();
+  if(typeof Weather!=="undefined") Weather.init();
+
+  document.addEventListener("dnd:full_state",      ()=>{ renderUsers();renderInitiative();renderHandouts();renderEnemies();renderGMSettings();renderMapsPanel();renderRoster(); if(typeof renderJournalList==="function") renderJournalList(); if(typeof renderNotes==="function") renderNotes(); if(typeof renderInventory==="function") renderInventory(); });
+  document.addEventListener("dnd:notes_changed", ()=>{ if(typeof renderNotes==="function") renderNotes(); });
+  document.addEventListener("dnd:tokens_changed",  ()=>{ Tokens.render(); if(typeof Character!=="undefined") Character.updateOverview(); buildPlayerCondsGrid(); if(State.isGM) renderRoster(); });
+  document.addEventListener("dnd:initiative_changed",renderInitiative);
+  document.addEventListener("dnd:turn_changed", showTurnPopup);
+  document.addEventListener("dnd:handouts_changed", renderHandouts);
+  document.addEventListener("dnd:journal_changed",  ()=>{ if(typeof renderJournalList==="function") renderJournalList(); });
+  document.addEventListener("dnd:enemies_changed",  ()=>{ renderEnemies(); updateEnemyFolderSelect(); });
+  document.addEventListener("dnd:maps_list_changed",renderMapsPanel);
+  document.addEventListener("dnd:map_switched",     renderMapsPanel);
+  document.addEventListener("dnd:map_switched",     ()=>{ if(typeof Tokens!=="undefined") Tokens.render(); if(typeof MapModule!=="undefined"){ MapModule.drawVision(); MapModule.drawWalls(); } });
+  // Grid-/Erkundungs-Einstellungen der aktiven Karte in die UI spiegeln
+  const _syncMapSettingsUI = ()=>{
+    const m = State.map || {};
+    const setV=(id,v)=>{const el=document.getElementById(id);if(el&&v!==undefined&&v!==null)el.value=v;};
+    setV("gs-color", m.grid_color||"theme");
+    setV("gs-opacity", m.grid_opacity??0.35);
+    setV("gs-gridsize", m.grid_size||50);
+    const _gs = m.grid_size||50;
+    setV("gs-cols", Math.round((m.width||2000)/_gs));
+    setV("gs-rows", Math.round((m.height||1500)/_gs));
+    setV("gs-gridtype", m.grid_type||"square");
+    setV("gs-maptype", m.map_type||"combat");
+    const dk=document.getElementById("gs-darkness"); if(dk) dk.checked=!!m.darkness;
+    const ex=document.getElementById("gs-explore");
+    if(ex) ex.checked = m.explore_mode !== false;
+  };
+  document.addEventListener("dnd:full_state",  _syncMapSettingsUI);
+  document.addEventListener("dnd:map_settings", _syncMapSettingsUI);
+  document.addEventListener("dnd:map_switched", _syncMapSettingsUI);
+  document.addEventListener("dnd:users_changed",    ()=>{ renderUsers(); if(State.isGM) renderRoster(); });
+  document.addEventListener("dnd:roster_changed",   ()=>{ if(State.isGM) renderRoster(); });
+  document.addEventListener("dnd:settings_changed", ()=>{ renderGMSettings(); Tokens.render(); });
+  document.addEventListener("dnd:map_ping",         e=>MapModule.createPingAt(e.detail.x,e.detail.y));
+
+  // Char-change approval popup (DM only)
+  document.addEventListener("dnd:char_change_request", e=>{
+    const d = e.detail; if (!State.isGM) return;
+    const _e = s => String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const popup = document.createElement("div");
+    popup.style.cssText = "position:fixed;top:80px;right:20px;z-index:9000;background:var(--bg-panel);border:2px solid var(--gold);border-radius:12px;padding:18px 20px;width:340px;box-shadow:0 8px 30px rgba(0,0,0,.6)";
+    popup.innerHTML = `
+      <div style="font-family:var(--font-display);color:var(--gold);font-size:1rem;margin-bottom:8px">🔄 Charakterwechsel-Anfrage</div>
+      <div style="font-size:.88rem;margin-bottom:10px;color:var(--text)"><strong>${_e(d.display_name)}</strong> möchte wechseln:
+        <div style="margin:6px 0;padding:6px 10px;background:var(--bg-dark);border-radius:6px">
+          <span style="color:var(--red-soft)">${_e(d.old_char_name)}</span> → <span style="color:var(--green-soft)">${_e(d.new_char_name)}</span></div></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" style="flex:1" onclick="approveCharChange('${d.request_id}');this.closest('div[style]').remove()">✅ Genehmigen</button>
+        <button class="btn btn-danger" style="flex:1" onclick="denyCharChange('${d.request_id}');this.closest('div[style]').remove()">❌ Ablehnen</button>
+      </div>`;
+    document.body.appendChild(popup);
+    setTimeout(()=>popup.remove(), 60000);
+  });
+
+  initPanelResize();
+  Socket.init();
+
+  setTimeout(()=>{
+    document.dispatchEvent(new CustomEvent("dnd:chat_message",{detail:{msg:{
+      id:"sys0",author:"System",role:"system",color:"#4a7fa5",
+      text:`Willkommen {{ username }}! Tippe /roll 1d20 oder nutze die Würfel-Buttons.`,
+      type:"system",timestamp:Date.now()/1000,
+    }}}));
+  },800);
+})();
+
+function approveCharChange(requestId){
+  Socket.emit("char_change_approve",{session_id:State.session_id, request_id:requestId});
+  UI.toast("✅ Charakterwechsel genehmigt");
+}
+function denyCharChange(requestId){
+  Socket.emit("char_change_deny",{session_id:State.session_id, request_id:requestId});
+  UI.toast("❌ Charakterwechsel abgelehnt");
+}
+function togglePanel(){
+  const p=document.getElementById("right-panel");
+  const btn=document.getElementById("panel-toggle-btn");
+  p.classList.toggle("collapsed");
+  btn.textContent=p.classList.contains("collapsed")?"▶":"◀";
+}
+function initPanelResize(){
+  const handle=document.getElementById("panel-resize-handle");
+  const panel=document.getElementById("right-panel");
+  let resizing=false, startX=0, startW=0;
+  handle.addEventListener("mousedown",e=>{resizing=true;startX=e.clientX;startW=panel.offsetWidth;e.preventDefault();});
+  document.addEventListener("mousemove",e=>{
+    if(!resizing) return;
+    const newW=Math.max(240,Math.min(680,startW-(e.clientX-startX)));
+    panel.style.width=newW+"px"; panel.style.transition="none";
+  });
+  document.addEventListener("mouseup",()=>{resizing=false; panel.style.transition="";});
+}
+
+async function uploadMap(input){
+  if(!input.files[0]) return;
+  const fd=new FormData(); fd.append("file",input.files[0]);
+  try{
+    const res=await fetch(`/upload/map/${State.session_id}`,{method:"POST",body:fd});
+    const data=await res.json();
+    if(data.url){
+      Socket.emit("map_image_set",{session_id:State.session_id, map_id:State.active_map_id, url:data.url});
+      UI.toast("🗺️ Karte hochgeladen!");
+    } else {
+      UI.toast("❌ Upload fehlgeschlagen");
+    }
+  }catch(e){ UI.toast("❌ Upload-Fehler"); }
+}
+
+function gmAddInit(){
+  const name=document.getElementById("init-name-inp")?.value||"?";
+  const init=parseInt(document.getElementById("init-roll-inp")?.value)||0;
+  const hp=parseInt(document.getElementById("init-hp-inp")?.value)||0;
+  Socket.emit("initiative_add",{session_id:State.session_id,name,init,hp,max_hp:hp});
+  ["init-name-inp","init-roll-inp","init-hp-inp"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+}
+
+function createHandout(){
+  Socket.emit("handout_create",{session_id:State.session_id,
+    title:document.getElementById("ho-title")?.value||"Handout",
+    content:document.getElementById("ho-content")?.value||"",
+    visible_to:document.getElementById("ho-vis")?.value||"all"});
+  ["ho-title","ho-content"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  UI.toast("📜 Handout erstellt");
+}
+
+function applyMapSettings(){
+  const gs = parseInt(document.getElementById("gs-gridsize")?.value||"50");
+  const cols = parseInt(document.getElementById("gs-cols")?.value)||0;
+  const rows = parseInt(document.getElementById("gs-rows")?.value)||0;
+  const settings = {
+    grid_color:document.getElementById("gs-color")?.value||"theme",
+    grid_opacity:parseFloat(document.getElementById("gs-opacity")?.value||"0.35"),
+    grid_size:gs,
+    grid_type:document.getElementById("gs-gridtype")?.value||"square",
+    map_type:document.getElementById("gs-maptype")?.value||"combat",
+    darkness:document.getElementById("gs-darkness")?.checked || false,
+    explore_mode:document.getElementById("gs-explore")?.checked !== false,
+  };
+  // Nur wenn KEINE Bildkarte gesetzt ist, darf die Feldgröße die Maße bestimmen
+  if (cols>0) settings.width  = cols*gs;
+  if (rows>0) settings.height = rows*gs;
+  Socket.emit("map_settings",{session_id:State.session_id,settings});
+  UI.toast("⚙️ Karte aktualisiert");
+}
+
+function toggleAutoAc(){
+  const cur = Character.sheet._auto_ac !== false;
+  Character.sheet._auto_ac = !cur;
+  const badge = document.getElementById("ac-auto-badge");
+  if (badge){
+    badge.textContent = Character.sheet._auto_ac ? "🔄auto" : "✋manuell";
+    badge.style.color = Character.sheet._auto_ac ? "var(--gold)" : "var(--text-dim)";
+  }
+  if (Character.sheet._auto_ac){ recomputeACFromEquipment(); }
+  Character.saveSheet();
+  UI.toast(Character.sheet._auto_ac ? "🔄 RK wird automatisch berechnet" : "✋ RK manuell");
+}
+function onManualAcEdit(){
+  // Wenn der Nutzer die RK von Hand ändert, Auto-AC deaktivieren
+  if (Character.sheet._auto_ac !== false){
+    Character.sheet._auto_ac = false;
+    const badge = document.getElementById("ac-auto-badge");
+    if (badge){ badge.textContent = "✋manuell"; badge.style.color = "var(--text-dim)"; }
+  }
+}
+
+function toggleWallTool(){
+  // Nur im Baumodus UND auf der Bau-Ebene erlaubt
+  if(!_buildToolsAllowed()){ UI.toast("Nur auf der Bau-Ebene möglich"); return; }
+  if(State.activeTool==="wall"){ Toolbar.setTool("none"); }
+  else { Toolbar.setTool("wall"); if(MapModule.startWallTool) MapModule.startWallTool(); }
+}
+function toggleDoorTool(){
+  if(!_buildToolsAllowed()){ UI.toast("Nur auf der Bau-Ebene möglich"); return; }
+  if(State.activeTool==="door-toggle"){ Toolbar.setTool("none"); }
+  else { Toolbar.setTool("door-toggle"); UI.toast("🚪 Klicke auf eine Tür zum Öffnen/Schließen"); }
+}
+async function resetInitiative(){
+  if(!await Dialog.confirmDanger("Alle Einträge der Initiative-Reihenfolge werden entfernt.",
+      {title:"Initiative zurücksetzen?", icon:"🔄", okText:"Zurücksetzen"})) return;
+  Socket.emit("initiative_clear",{session_id:State.session_id});
+  UI.toast("🔄 Initiative zurückgesetzt");
+}
+
+// ── Angriffssystem: Ziel-Auswahl ──────────────────────────────────────────
+let _pendingAttack = null;
+
+function openAttackTargetPicker(attack){
+  _pendingAttack = attack;
+  const hasSave = !!attack.save_type;
+  document.getElementById("att-title").textContent = attack.name;
+  document.getElementById("att-sub").textContent = hasSave
+    ? `Rettungswurf (${attack.save_type}, SG ${attack.save_dc||10}) – Ziel wählen`
+    : "Auf wen zielst du?";
+
+  // Sichtbare Ziele sammeln (alle Tokens auf aktiver Karte, die ich sehe, außer ich selbst)
+  const myTok = State.getMyToken();
+  const targets = State.getActiveMapTokens().filter(t=>{
+    if (myTok && t.id===myTok.id) return false;       // nicht sich selbst
+    if (!Tokens.isVisibleToMe(t)) return false;        // nur sichtbare
+    return true;
+  });
+
+  const list = document.getElementById("att-target-list");
+  if (!targets.length){
+    list.innerHTML = `<div style="color:var(--text-dim);text-align:center;padding:20px;font-style:italic">Keine sichtbaren Ziele in Reichweite.</div>`;
+  } else {
+    // Gegner zuerst, dann Verbündete
+    targets.sort((a,b)=>(b.is_enemy?1:0)-(a.is_enemy?1:0));
+    list.innerHTML = targets.map(t=>{
+      const icon = t.is_enemy ? "🐉" : "🛡";
+      const tag  = t.is_enemy ? '<span style="color:var(--red);font-size:.66rem">Gegner</span>'
+                              : '<span style="color:var(--arcane);font-size:.66rem">Verbündeter</span>';
+      const acInfo = (State.isGM || t.show_ac_to_players) ? `RK ${t.ac||10}` : "RK ?";
+      return `<button class="att-target-btn" onclick="executeAttackOn('${t.id}')">
+        <span style="font-size:1.2rem">${icon}</span>
+        <span style="flex:1;text-align:left">
+          <span style="color:var(--gold);font-family:var(--font-display)">${esc(t.name||"?")}</span><br>
+          <span style="font-size:.68rem;color:var(--text-dim)">${tag} · ${acInfo}</span>
+        </span>
+        <span style="color:var(--arcane)">▸</span>
+      </button>`;
+    }).join("");
+  }
+  document.getElementById("attack-target-modal").classList.add("open");
+}
+
+function closeAttackTarget(){
+  document.getElementById("attack-target-modal").classList.remove("open");
+  _pendingAttack = null;
+}
+
+function executeAttackOn(targetId){
+  const a = _pendingAttack;
+  if (!a){ closeAttackTarget(); return; }
+  const hasSave = !!a.save_type;
+  // Greift ein Gegner an? (Der DM kann Angriffe für Gegner-Tokens auslösen.)
+  const attackerTok = a.attacker_token_id ? State.tokens[a.attacker_token_id] : null;
+  const attackerIsEnemy = attackerTok ? !!attackerTok.is_enemy : false;
+  const payload = {
+    session_id: State.session_id,
+    attacker_name: a.attacker_name || Character.sheet?.name || State.username,
+    attack_name: a.name,
+    target_id: targetId,
+    attacker_is_enemy: attackerIsEnemy,
+    // Wer greift an? Wird gebraucht, damit Effekte wie "bis Ende meines
+    // nächsten Zuges" wissen, auf wessen Zug sie warten.
+    attacker_token_id: a.attacker_token_id || (State.getMyToken()?.id || ""),
+    // Statuseffekt, den ein Treffer auslöst
+    effect: a.effect || "",
+    effect_dur: a.effect_dur || "",
+  };
+  if (hasSave){
+    payload.save_type = a.save_type;
+    payload.save_dc = a.save_dc || 10;
+  } else {
+    payload.hit_bonus = a.hit_bonus || 0;
+  }
+  Socket.emit("attack_roll", payload);
+  closeAttackTarget();
+  Tabs.switchTo("chat");
+}
+
+function showTurnPopup(){
+  // Popup-Einstellung beachten
+  if(document.getElementById("turn-popup-chk")?.checked === false) return;
+  const ci = State.current_turn_index||0;
+  const cur = State.initiative[ci];
+  if(!cur) return;
+  const isMine = cur.owner_char_id===State.my_char_id || cur.char_id===State.my_char_id;
+  // Nur anzeigen, wenn man WIRKLICH selbst am Zug ist
+  // (DM gilt als "selbst dran" bei seinen Gegner-Tokens / DM-gesteuerten Einträgen)
+  let showIt = false;
+  if(State.isGM){
+    // DM: Popup nur bei Einträgen, die KEINEM Spieler gehören (also seine Gegner/NSCs)
+    const belongsToPlayer = !!cur.owner_char_id && Object.values(State.roster||{}).some(r=>r.char_id===cur.owner_char_id);
+    showIt = !belongsToPlayer;
+  } else {
+    showIt = isMine;
+  }
+  if(!showIt) return;
+
+  const icon = document.getElementById("turn-popup-icon");
+  const title = document.getElementById("turn-popup-title");
+  const body = document.getElementById("turn-popup-body");
+  if(!icon||!title||!body) return;
+  if(!State.isGM){
+    icon.textContent = "⚔️";
+    title.textContent = "Du bist am Zug!";
+    body.innerHTML = `<strong style="color:var(--gold)">${esc(cur.name||"Dein Charakter")}</strong> ist an der Reihe.`;
+  } else {
+    icon.textContent = cur.is_enemy ? "🐉" : "🎭";
+    title.textContent = "Dein Zug (DM)";
+    body.innerHTML = `<strong style="color:var(--gold)">${esc(cur.name||"?")}</strong> ist an der Reihe.`;
+  }
+  document.getElementById("turn-popup").classList.add("open");
+}
+
+async function endTurn(){
+  const ask = document.getElementById("init-confirm-chk")?.checked !== false;
+  // Prüfen, ob der Spieler überhaupt dran ist (nur relevant für Spieler)
+  if(!State.isGM){
+    const ci = State.current_turn_index||0;
+    const cur = State.initiative[ci];
+    const mine = cur && (cur.owner_char_id===State.my_char_id || cur.char_id===State.my_char_id);
+    if(!mine){ UI.toast("⚠️ Du bist gerade nicht am Zug"); return; }
+  }
+  if(ask && !await Dialog.confirm("Der Zug wird an den nächsten Kämpfer weitergegeben.",
+      {title:"Zug beenden?", icon:"⏭️", okText:"Beenden"})) return;
+  Socket.emit("initiative_next",{session_id:State.session_id});
+}
+
+function resetMapImage(){
+  Socket.emit("map_settings",{session_id:State.session_id,settings:{image_x:0,image_y:0,image_w:0,image_h:0}});
+  UI.toast("🖼 Kartenbild auf volle Karte zurückgesetzt");
+}
+
+function toggleMapEditor(){
+  if(typeof MapModule==="undefined") return;
+  const active = MapModule.toggleMapEditor();
+  document.getElementById("tool-map-edit")?.classList.toggle("active", active);
+  UI.toast(active ? "📐 Karten-Editor aktiv – Bild ziehen/skalieren" : "📐 Karten-Editor beendet");
+}
+
+function toggleWallErase(){
+  if(!_buildToolsAllowed()){ UI.toast("Nur auf der Bau-Ebene möglich"); return; }
+  if(State.activeTool==="wall-erase"){ Toolbar.setTool("none"); }
+  else { Toolbar.setTool("wall-erase"); UI.toast("🩹 Klicke auf eine Wand/Tür/Fenster zum Löschen"); }
+}
+async function clearAllWalls(){
+  if(!_buildToolsAllowed()){ UI.toast("Nur auf der Bau-Ebene möglich"); return; }
+  if(!await Dialog.confirmDanger("Alle Wände dieser Karte werden entfernt.",
+      {title:"Wände löschen?", icon:"🧱"})) return;
+  Socket.emit("wall_clear",{session_id:State.session_id, map_id:State.active_map_id});
+  UI.toast("🗑️ Wände gelöscht");
+}
+
+// ── Baumodus & Ebenen ──────────────────────────────────────────────────────
+// Der Baumodus (nur DM) blendet die Spiel-Werkzeuge aus und die Bau-Werkzeuge
+// ein. Unten links erscheint das Ebenen-Panel (Hintergrund / Bauen / Tokens).
+let _buildMode = false;
+let _activeLayer = "token";
+
+function toggleBuildMode(){
+  _buildMode = !_buildMode;
+  document.getElementById("tool-build-mode")?.classList.toggle("active", _buildMode);
+  // Werkzeug-Gruppen umschalten (das MUSS immer passieren)
+  document.querySelectorAll(".mode-normal").forEach(g => g.style.display = _buildMode ? "none" : "");
+  document.querySelectorAll(".mode-build").forEach(g => g.style.display = _buildMode ? "" : "none");
+  // Ebenen-Panel zeigen/verstecken
+  const lp = document.getElementById("layer-panel");
+  if(lp) lp.style.display = _buildMode ? "flex" : "none";
+  // Alles Weitere abgesichert, damit ein Fehler das Umschalten nicht blockiert
+  try {
+    if(_buildMode){
+      setLayer(_activeLayer);
+      if(typeof UI!=="undefined" && UI.toast) UI.toast("🔨 Baumodus aktiv");
+    } else {
+      if(typeof Toolbar!=="undefined" && Toolbar.setTool) Toolbar.setTool("none");
+      if(typeof MapModule!=="undefined" && MapModule.isMapEditActive && MapModule.isMapEditActive()){
+        MapModule.toggleMapEditor();
+        document.getElementById("tool-map-edit")?.classList.remove("active");
+      }
+      _setTokenInteractivity(true);
+      if(typeof UI!=="undefined" && UI.toast) UI.toast("Baumodus beendet");
+    }
+  } catch(e){ console.error("Baumodus:", e); }
+}
+
+function setLayer(layer){
+  _activeLayer = layer;
+  // Aktiven Knopf markieren
+  document.querySelectorAll(".layer-btn").forEach(b=>{
+    const on = b.dataset.layer===layer;
+    b.style.borderColor = on ? "var(--gold)" : "var(--border)";
+    b.style.background = on ? "rgba(212,181,120,.15)" : "var(--bg-panel2)";
+  });
+  const hint = document.getElementById("layer-hint");
+  try {
+    // Immer erst alle aktiven Werkzeuge abschalten
+    if(typeof Toolbar!=="undefined" && Toolbar.setTool) Toolbar.setTool("none");
+    if(typeof MapModule!=="undefined" && MapModule.stopWallTool) MapModule.stopWallTool();
+    document.querySelectorAll("#tool-wall,#tool-door,#tool-wall-erase").forEach(b=>b.classList.remove("active"));
+    const wallSel=document.getElementById("wall-type-select"); if(wallSel) wallSel.style.display="none";
+
+    const mapEditActive = (typeof MapModule!=="undefined" && MapModule.isMapEditActive && MapModule.isMapEditActive());
+
+    // Bau-Werkzeuge (Wände/Türen/Fenster) NUR auf der Bau-Ebene anzeigen
+    const buildTools = document.querySelectorAll(".mode-build .build-tool");
+    buildTools.forEach(t => t.style.display = (layer==="build") ? "" : "none");
+
+    if(layer==="background"){
+      // Nur Bild anpassen möglich
+      if(typeof MapModule!=="undefined" && MapModule.toggleMapEditor && !mapEditActive){ MapModule.toggleMapEditor(); }
+      if(hint) hint.textContent = "Nur das Hintergrundbild lässt sich anpassen (ziehen/skalieren).";
+      _setTokenInteractivity(false);
+    } else if(layer==="build"){
+      // Nur Wände/Türen/Fenster – Bild fix, Tokens gesperrt
+      if(mapEditActive){ MapModule.toggleMapEditor(); }
+      if(hint) hint.textContent = "Nur Wände, Türen und Fenster (Werkzeuge oben).";
+      _setTokenInteractivity(false);
+    } else { // token
+      // Nur Tokens – Bild fix, keine Bau-Werkzeuge
+      if(mapEditActive){ MapModule.toggleMapEditor(); }
+      if(hint) hint.textContent = "Nur Tokens bewegen/setzen. Bild und Wände bleiben fix.";
+      _setTokenInteractivity(true);
+    }
+  } catch(e){ console.error("setLayer:", e); }
+}
+
+// Prüft, ob ein Bau-Werkzeug gerade erlaubt ist (nur im Baumodus + Bau-Ebene).
+function _buildToolsAllowed(){
+  return _buildMode && _activeLayer==="build";
+}
+
+// Schaltet die Klickbarkeit der Token-Ebene um (auf anderen Ebenen sollen
+// Tokens nicht versehentlich verschoben werden).
+function _setTokenInteractivity(on){
+  const tl = document.getElementById("tokens-layer");
+  if(tl) tl.style.pointerEvents = on ? "" : "none";
+}
+
+// ── Zeichnungen entfernen ───────────────────────────────────────────────────
+// Spieler entfernen ihre eigenen Zeichnungen, der DM kann alle entfernen.
+async function clearDrawings(scope){
+  if(scope==="all"){
+    if(!await Dialog.confirmDanger("Die Zeichnungen aller Spieler werden entfernt.",
+      {title:"Alle Zeichnungen löschen?", icon:"🧹"})) return;
+    Socket.emit("drawing_clear",{session_id:State.session_id, scope:"all"});
+    UI.toast("🧹 Alle Zeichnungen entfernt");
+  } else {
+    Socket.emit("drawing_clear",{session_id:State.session_id, scope:"mine", username:State.username});
+    UI.toast("🧹 Deine Zeichnungen entfernt");
+  }
+}
+
+// ── Karten-Leiste mit echter Ordner-Navigation ─────────────────────────────
+let _mapsBarOpen = false;
+let _currentFolderId = null;  // null = oberste Ebene, sonst Ordner-ID
+
+function toggleMapsDropdown(){
+  _mapsBarOpen = !_mapsBarOpen;
+  const bar = document.getElementById("maps-folder-bar");
+  if(!bar) return;
+  if(_mapsBarOpen){
+    // _currentFolderId NICHT zurücksetzen – wir landen wieder im zuletzt
+    // geöffneten Ordner. Nur prüfen, ob dieser Ordner noch existiert.
+    if(_currentFolderId!==null){
+      const still = (State.map_folders||[]).some(f=>f.id===_currentFolderId);
+      if(!still) _currentFolderId = null;
+    }
+    renderMapsBrowser();
+    bar.style.display = "block";
+  } else {
+    bar.style.display = "none";
+  }
+}
+
+// Zeichnet den Karten-Browser: aktueller Ordner mit Unterordnern + Karten.
+function renderMapsBrowser(){
+  const bar = document.getElementById("maps-folder-bar");
+  if(!bar) return;
+  const folders = State.map_folders || [];
+  const maps = State.maps || {};
+
+  // Welche Ordner/Karten gehören in die aktuelle Ebene?
+  let subFolders, mapList, title, parentId;
+  if(_currentFolderId===null){
+    subFolders = folders.filter(f => !(f.parent_id||""));
+    const inFolders = new Set(folders.flatMap(f=>f.map_ids||[]));
+    mapList = Object.values(maps).filter(m=>!inFolders.has(m.id));
+    title = "Alle Karten";
+    parentId = null;
+  } else {
+    const cur = folders.find(f=>f.id===_currentFolderId);
+    subFolders = folders.filter(f => (f.parent_id||"")===_currentFolderId);
+    const ids = cur ? (cur.map_ids||[]) : [];
+    mapList = ids.map(id=>maps[id]).filter(Boolean);
+    title = cur ? cur.name : "Ordner";
+    parentId = cur ? (cur.parent_id||null) : null;
+  }
+
+  let html = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">`;
+  // Zurück-Knopf, wenn in einem Ordner
+  if(_currentFolderId!==null){
+    html += `<button class="btn btn-dark btn-sm" onclick="mapsGoTo(${parentId===null?'null':`'${parentId}'`})">← Zurück</button>`;
+  }
+  html += `<span style="font-family:var(--font-display);color:var(--gold);font-size:1rem;flex:1">${_currentFolderId!==null?'📁 ':''}${esc(title)}</span>`;
+  // Aktionen
+  html += `<button class="btn btn-gold btn-sm" onclick="Modals.openCreateMap('${_currentFolderId||''}')" title="Neue Karte hier">➕ Karte</button>`;
+  // Unterordner erstellen nur, wenn man in einem Ordner ist; sonst Ordner erstellen
+  html += `<button class="btn btn-dark btn-sm" onclick="createFolderHere()" title="${_currentFolderId!==null?'Unterordner':'Ordner'} erstellen">📁 ${_currentFolderId!==null?'Unterordner':'Ordner'}</button>`;
+  html += `</div>`;
+
+  // Grid mit Ordnern und Karten (größere Kacheln)
+  html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px">`;
+
+  // Unterordner-Kacheln
+  subFolders.forEach(f=>{
+    const count = (f.map_ids||[]).length;
+    const subCount = folders.filter(x=>(x.parent_id||"")===f.id).length;
+    html += `<div onclick="mapsGoTo('${f.id}')" style="cursor:pointer;background:var(--bg-panel2);border:1px solid var(--border);border-radius:10px;padding:16px 12px;text-align:center;transition:border-color .15s" onmouseover="this.style.borderColor='var(--gold-dark)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:2rem">📁</div>
+      <div style="font-size:.85rem;color:var(--text);margin-top:6px;font-weight:600">${esc(f.name)}</div>
+      <div style="font-size:.7rem;color:var(--text-dim);margin-top:2px">${count} Karten${subCount?`, ${subCount} Ordner`:''}</div>
+    </div>`;
+  });
+
+  // Karten-Kacheln (Ansehen = nur DM, Für alle = alle springen mit, Bearbeiten)
+  mapList.forEach(m=>{
+    const isActive  = m.id===State.active_map_id;    // Karte, auf der die Spieler sind
+    const isViewing = m.id===(State.viewing_map_id||State.active_map_id); // was der DM ansieht
+    const thumb = m.image_url ? `background-image:url('${m.image_url}')` : '';
+    const cls = "mapcard" + (isActive ? " is-active" : (isViewing ? " is-viewing" : ""));
+    html += `<div class="${cls}">
+      ${isActive?`<div class="mapcard-badge active">● AKTIV</div>`:''}
+      ${(!isActive&&isViewing)?`<div class="mapcard-badge viewing">👁 ANSICHT</div>`:''}
+      <div class="mapcard-thumb" style="${thumb}"></div>
+      <div class="mapcard-body">
+        <div class="mapcard-name">${esc(m.name)}</div>
+        <div class="mapcard-actions">
+          <button class="mapcard-act" onclick="previewMap('${m.id}')" title="Ansehen – nur du siehst diese Karte">👁</button>
+          <button class="mapcard-act${isActive?'':' primary'}" onclick="activateMap('${m.id}')"
+                  title="${isActive?'Diese Karte ist für alle aktiv':'Für alle aktivieren – alle Spieler springen mit'}" ${isActive?'disabled':''}>${isActive?'✓':'▶'}</button>
+          <button class="mapcard-act" onclick="openMapEditor('${m.id}')" title="Karte bearbeiten">⚙️</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  if(!subFolders.length && !mapList.length){
+    html += `<div style="grid-column:1/-1;color:var(--text-dim);text-align:center;padding:20px;font-style:italic">Dieser Ordner ist leer.</div>`;
+  }
+  html += `</div>`;
+
+  bar.innerHTML = html;
+}
+
+// In einen Ordner navigieren (oder zurück zur obersten Ebene mit null)
+function mapsGoTo(folderId){
+  _currentFolderId = folderId;
+  renderMapsBrowser();
+}
+
+// Ordner/Unterordner im aktuellen Kontext erstellen
+async function createFolderHere(){
+  const name = await Dialog.prompt(
+    _currentFolderId!==null ? "Wie soll der Unterordner heißen?" : "Wie soll der Ordner heißen?",
+    "", {title: _currentFolderId!==null ? "Neuer Unterordner" : "Neuer Ordner",
+         icon:"📁", okText:"Anlegen", placeholder:"z. B. Verliese"});
+  if(!name || !name.trim()) return;
+  Socket.emit("map_folder_create", {
+    session_id: State.session_id,
+    name: name.trim(),
+    parent_id: _currentFolderId || ""
+  });
+  // Nach kurzer Zeit neu rendern (State wird per Socket aktualisiert)
+  setTimeout(()=>renderMapsBrowser(), 300);
+}
+
+// Zeigt am Karten-Knopf, welche Karte gerade aktiv ist (und ob der DM
+// gerade eine andere Karte in der Vorschau ansieht).
+function updateActiveMapLabel(){
+  const lbl = document.getElementById("active-map-label");
+  if(!lbl) return;
+  const active = State.maps?.[State.active_map_id];
+  const viewing = State.viewing_map_id && State.viewing_map_id!==State.active_map_id
+                ? State.maps?.[State.viewing_map_id] : null;
+  if(viewing){
+    lbl.innerHTML = `<span style="color:var(--arcane,var(--arcane))">👁 ${esc(viewing.name)}</span>`;
+  } else if(active){
+    lbl.textContent = active.name;
+  } else {
+    lbl.textContent = "Karten";
+  }
+}
+document.addEventListener("dnd:map_switched", updateActiveMapLabel);
+document.addEventListener("dnd:maps_list_changed", updateActiveMapLabel);
+document.addEventListener("dnd:full_state", updateActiveMapLabel);
+
+// Karte NUR für den DM öffnen (Vorschau/Bearbeiten). Spieler bleiben, wo sie sind.
+function previewMap(mapId){
+  Socket.emit("map_preview",{session_id:State.session_id, map_id:mapId});
+  UI.toast("👁 Karte geöffnet (nur du siehst sie)");
+  setTimeout(()=>{ if(_mapsBarOpen) renderMapsBrowser(); }, 250);
+}
+
+// Karte für ALLE aktivieren – die ganze Session springt darauf.
+function activateMap(mapId){
+  if(mapId===State.active_map_id) return;
+  Socket.emit("map_switch",{session_id:State.session_id, map_id:mapId});
+  UI.toast("▶ Karte für alle aktiviert");
+  setTimeout(()=>{ if(_mapsBarOpen) renderMapsBrowser(); }, 250);
+}
+
+// Alt-Name beibehalten (falls noch irgendwo verwendet)
+function switchToMap(mapId){ activateMap(mapId); }
+
+// Karten-Editor öffnen und mit den Werten der Karte füllen
+let _editingMapId = null;
+function openMapEditor(mapId){
+  _editingMapId = mapId;
+  const m = State.maps[mapId];
+  if(!m) return;
+  document.getElementById("me-title").textContent = "Karte bearbeiten: " + m.name;
+  document.getElementById("me-image-status").textContent = m.image_url ? "Bild vorhanden" : "Kein Bild";
+  // Rasterwerte laden
+  const set=(id,val)=>{ const e=document.getElementById(id); if(e!=null && val!=null) e.value=val; };
+  set("gs-color", m.grid_color||"theme");
+  set("gs-opacity", m.grid_opacity!=null?m.grid_opacity:0.35);
+  set("gs-gridsize", m.grid_size||50);
+  set("gs-gridtype", m.grid_type||"square");
+  set("gs-cols", m.cols||40);
+  set("gs-rows", m.rows||30);
+  set("gs-maptype", m.map_type||"combat");
+  const dk=document.getElementById("gs-darkness"); if(dk) dk.checked=!!m.darkness;
+  const ex=document.getElementById("gs-explore"); if(ex) ex.checked=m.exploration!==false;
+  document.getElementById("map-editor-overlay").style.display="flex";
+}
+function closeMapEditor(){
+  document.getElementById("map-editor-overlay").style.display="none";
+  _editingMapId=null;
+}
+// Bild für die gerade bearbeitete Karte hochladen
+function uploadMapImageFor(input){
+  if(!input.files || !input.files[0]) return;
+  const file=input.files[0];
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const mapId=_editingMapId||State.active_map_id;
+    Socket.emit("map_image_set",{session_id:State.session_id, map_id:mapId, image_url:e.target.result});
+    document.getElementById("me-image-status").textContent="Bild hochgeladen ✓";
+    UI.toast("🖼️ Kartenbild gesetzt");
+  };
+  reader.readAsDataURL(file);
+}
+
+// Klick außerhalb schließt die Leiste.
+// WICHTIG: Beim Navigieren in Ordner wird der Inhalt neu gezeichnet, wodurch
+// das geklickte Element aus dem DOM verschwindet. Dann darf NICHT geschlossen
+// werden – deshalb prüfen wir, ob das Ziel überhaupt noch im Dokument ist.
+document.addEventListener("click",(e)=>{
+  const bar=document.getElementById("maps-folder-bar");
+  const btn=document.getElementById("maps-dropdown-btn");
+  if(!bar||!btn) return;
+  if(!_mapsBarOpen || bar.style.display==="none") return;
+  // Ziel nicht mehr im DOM (z.B. durch Neu-Rendern)? -> nicht schließen.
+  if(!document.body.contains(e.target)) return;
+  // Klick im Panel, auf dem Knopf oder in einem geöffneten Modal? -> nicht schließen.
+  if(bar.contains(e.target) || btn.contains(e.target)) return;
+  if(e.target.closest && e.target.closest(".modal-backdrop, #map-editor-overlay")) return;
+  _mapsBarOpen=false;
+  bar.style.display="none";
+});
+
+// Hilfsfunktion: char_id zu einem Token finden
+function _charIdOfToken(tokenId){
+  const t = State.tokens[tokenId];
+  return t ? (t.owner_char_id||"") : "";
+}
+
+function setPerceptionMod(tokenId, mod, sliderEl){
+  mod = parseFloat(mod);
+  const cid = _charIdOfToken(tokenId);
+  if(cid) Socket.emit("vision_set",{session_id:State.session_id,char_id:cid,perception_mod:mod});
+  if(!sliderEl && typeof renderRoster==="function") setTimeout(renderRoster, 150);
+}
+
+// Exakte Sichtweite in Fuß setzen (leer = Standard der Karte nutzen). GLOBAL pro Charakter.
+function setVisionOverride(tokenId, val){
+  const v = val==="" ? null : Math.max(0, parseInt(val)||0);
+  const cid = _charIdOfToken(tokenId);
+  if(cid) Socket.emit("vision_set",{session_id:State.session_id,char_id:cid,vision_override:v});
+  setTimeout(renderRoster, 150);
+}
+// Sichtweite auf Karten-Standard zurücksetzen (Override löschen + Modifikator auf 100%). GLOBAL.
+function resetVision(tokenId){
+  const cid = _charIdOfToken(tokenId);
+  if(cid) Socket.emit("vision_set",{session_id:State.session_id,char_id:cid,vision_override:null,perception_mod:1});
+  UI.toast("↺ Sichtweite auf Standard zurückgesetzt (alle Karten)");
+  setTimeout(renderRoster, 150);
+}
+// Hinweis: Den Wahrnehmungswurf macht der SPIELER auf seinem Charakterbogen
+// (Skill "Wahrnehmung"). Der Server leitet daraus den Sicht-Modifikator ab.
+// Der DM kann die Sichtweite hier nur manuell setzen oder zurücksetzen.
+
+// Öffnet das Würfel-Menü: Set wechseln, Werkstatt öffnen, Würfel aus/an.
+function toggleDice3D(){
+  if(typeof Dice3D==="undefined") return;
+  openDiceMenu();
+}
+
+function openDiceMenu(){
+  const old = document.getElementById("dice-menu-backdrop");
+  if(old){ old.remove(); return; }   // zweiter Klick schließt wieder
+
+  const sets   = Dice3D.getSets();
+  const active = Dice3D.getActiveSet();
+  const on     = Dice3D.isEnabled();
+
+  const bd = document.createElement("div");
+  bd.id = "dice-menu-backdrop";
+  bd.className = "dlg-backdrop";
+
+  bd.innerHTML = `
+    <div class="dlg" style="max-width:400px">
+      <div class="dlg-head">
+        <div class="dlg-icon">🎲</div>
+        <div class="dlg-title">Würfel</div>
+      </div>
+      <div class="dlg-body">
+        <div class="dice-toggle-row">
+          <div>
+            <div style="font-size:.88rem;color:var(--text-bright);font-weight:600">3D-Würfel</div>
+            <div style="font-size:.74rem;color:var(--text-dim)">Zeigt die Würfe als rollende Würfel</div>
+          </div>
+          <div class="toggle-switch ${on?"on":""}" id="dice-toggle" onclick="_diceToggleFromMenu(this)"></div>
+        </div>
+
+        <div class="dice-set-title">Würfel-Set</div>
+        <div class="dice-set-list" id="dice-set-list">
+          ${sets.map(s => `
+            <button class="dice-set-item ${s.id===active.id?"on":""}"
+                    onclick="_pickDiceSet('${s.id}')">
+              <span class="dice-set-dot" style="background:${(s.dice&&s.dice[20]&&s.dice[20].color)||"#d4b578"}"></span>
+              <span style="flex:1;text-align:left">${_escDice(s.name)}</span>
+              ${s.id===active.id ? `<span style="color:var(--gold)">✓</span>` : ""}
+            </button>`).join("")}
+        </div>
+      </div>
+      <div class="dlg-foot">
+        <button class="dlg-btn" onclick="_closeDiceMenu()">Schließen</button>
+        <button class="dlg-btn primary" onclick="openDiceWorkshop()">🔧 Werkstatt</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(bd);
+  requestAnimationFrame(()=>bd.classList.add("open"));
+  bd.addEventListener("mousedown", e => { if(e.target===bd) _closeDiceMenu(); });
+}
+
+function _closeDiceMenu(){
+  const bd = document.getElementById("dice-menu-backdrop");
+  if(!bd) return;
+  bd.classList.remove("open");
+  setTimeout(()=>bd.remove(), 180);
+}
+
+// Öffnet die Würfel-Werkstatt und merkt sich, dass wir aus dieser Sitzung
+// kommen. Der Zurück-Knopf dort führt dann wieder hierher – man verlässt
+// die Sitzung also nicht.
+function openDiceWorkshop(){
+  window.location.href = "/dice?from=" + encodeURIComponent(State.session_id);
+}
+function _diceToggleFromMenu(el){
+  const on = !Dice3D.isEnabled();
+  Dice3D.setEnabled(on);
+  el.classList.toggle("on", on);
+  document.getElementById("tool-dice3d")?.classList.toggle("active", on);
+  UI.toast(on ? "🎲 3D-Würfel an" : "🎲 3D-Würfel aus");
+}
+function _pickDiceSet(id){
+  Dice3D.setActiveSet(id);
+  // Auswahl sichtbar machen
+  document.querySelectorAll("#dice-set-list .dice-set-item").forEach(b => b.classList.remove("on"));
+  const sets = Dice3D.getSets();
+  const set = sets.find(s => s.id===id);
+  UI.toast(`🎲 Set „${set?set.name:"?"}“ gewählt`);
+  _closeDiceMenu();
+}
+function _escDice(s){
+  return String(s ?? "").replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function setWeather(type){
+  if(typeof Weather!=="undefined") Weather.set(type);
+  Socket.emit("weather_set",{session_id:State.session_id, weather:type});
+}
+
+function resetExploration(scope){
+  const mapId = scope==="all" ? "*" : State.active_map_id;
+  Socket.emit("reset_exploration",{session_id:State.session_id, map_id:mapId});
+  UI.toast(scope==="all" ? "🔄 Erkundung aller Karten zurückgesetzt" : "🔄 Erkundung dieser Karte zurückgesetzt");
+}
+
+// Bild für die neue Karte vormerken (wird nach dem Erstellen gesetzt)
+let _newMapImageData = null;
+function pickNewMapImage(input){
+  if(!input.files || !input.files[0]) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    _newMapImageData = e.target.result;
+    document.getElementById("new-map-img-status").textContent = "Bild gewählt ✓";
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function createNewMap(){
+  const name=document.getElementById("new-map-name")?.value||"Neue Karte";
+  const cols=parseInt(document.getElementById("new-map-cols")?.value)||40;
+  const rows=parseInt(document.getElementById("new-map-rows")?.value)||30;
+  const folderId = window._createMapTargetFolder || "";
+  // Alle Karteneinstellungen direkt beim Erstellen mitgeben
+  const settings = {
+    grid_color:   document.getElementById("new-map-color")?.value || "theme",
+    grid_opacity: parseFloat(document.getElementById("new-map-opacity")?.value) || 0.35,
+    grid_type:    document.getElementById("new-map-gridtype")?.value || "square",
+    map_type:     document.getElementById("new-map-type")?.value || "combat",
+    darkness:     !!document.getElementById("new-map-darkness")?.checked,
+    exploration:  document.getElementById("new-map-explore")?.checked !== false,
+  };
+  const imageData = _newMapImageData;   // kann null sein
+
+  Socket.emit("map_create",{
+    session_id:State.session_id, name, cols, rows,
+    folder_id:folderId, settings:settings, image_url:imageData||""
+  });
+  document.getElementById("create-map-modal").classList.remove("open");
+  // Formular zurücksetzen
+  _newMapImageData = null;
+  const st=document.getElementById("new-map-img-status"); if(st) st.textContent="Kein Bild";
+  const nm=document.getElementById("new-map-name"); if(nm) nm.value="";
+  UI.toast("🗺️ Karte erstellt");
+  setTimeout(()=>{ if(typeof renderMapsBrowser==="function" && _mapsBarOpen) renderMapsBrowser(); }, 400);
+}
+
+async function promptCreateEnemyFolder(){
+  const name=await Dialog.prompt("Wie soll der Ordner heißen?", "",
+    {title:"Neuer Ordner", icon:"📁", okText:"Anlegen"});
+  if(name) Socket.emit("enemy_folder_create",{session_id:State.session_id,name});
+}
+
+function preloadAllScenes(){
+  if(MapModule.preloadMaps) MapModule.preloadMaps();
+  Socket.emit("preload_maps",{session_id:State.session_id});
+  UI.toast("⏬ Szenen werden bei allen Spielern vorgeladen");
+}
+
+async function promptCreateMapFolder(){
+  const name=await Dialog.prompt("Wie soll der Ordner heißen?", "",
+    {title:"Neuer Ordner", icon:"📁", okText:"Anlegen"});
+  if(name) Socket.emit("map_folder_create",{session_id:State.session_id,name});
+}
+async function addSubfolder(parentId){
+  const name=await Dialog.prompt("Wie soll der Unterordner heißen?", "",
+    {title:"Neuer Unterordner", icon:"📁", okText:"Anlegen"});
+  if(name) Socket.emit("map_folder_create",{session_id:State.session_id,name,parent_id:parentId});
+}
+async function renameFolder(folderId){
+  const f=(State.map_folders||[]).find(x=>x.id===folderId);
+  const name=await Dialog.prompt("Neuer Name des Ordners:", f?f.name:"",
+    {title:"Ordner umbenennen", icon:"✏️", okText:"Umbenennen"});
+  if(name) Socket.emit("map_folder_rename",{session_id:State.session_id,folder_id:folderId,name});
+}
+async function deleteFolder(folderId){
+  if(!await Dialog.confirmDanger("Der Ordner und alle Unterordner werden gelöscht.",
+      {title:"Ordner löschen?", icon:"🗑", hint:"Die enthaltenen Karten bleiben erhalten."})) return;
+  Socket.emit("map_folder_delete",{session_id:State.session_id,folder_id:folderId});
+}
+
+function toggleFogTool(which){
+  if(State.activeTool===which) Toolbar.setTool("none");
+  else Toolbar.setTool(which);
+}
+
+function exportChar(){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(Character.sheet,null,2)],{type:"application/json"}));
+  a.download=(Character.sheet.name||"character")+".json"; a.click();
+}
+
+async function uploadCharPic(input){
+  if(!input.files[0]) return;
+  // Upload to server so it survives restart
+  const fd=new FormData(); fd.append("file",input.files[0]);
+  const res=await fetch("/upload/character",{method:"POST",body:fd});
+  const data=await res.json();
+  if(data.url){
+    const area=document.getElementById("char-pic-area");
+    area.innerHTML=`<img src="${data.url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    if(Character.sheet) Character.sheet.pic_url=data.url;
+    Character.saveSheet();
+    UI.toast("🖼️ Bild hochgeladen");
+  }
+}
+
+function previewEnemyPic(input){
+  if(!input.files[0]) return;
+  // Upload to server
+  const fd=new FormData(); fd.append("file",input.files[0]);
+  fetch("/upload/enemy/"+State.session_id,{method:"POST",body:fd})
+    .then(r=>r.json()).then(data=>{
+      if(data.url){
+        document.getElementById("em-pic-placeholder").style.display="none";
+        const img=document.getElementById("em-pic-preview");
+        img.src=data.url; img.style.display="block";
+        img.dataset.serverUrl=data.url;
+      }
+    });
+}
+
+// Charakterbogen: zwischen Spielen (nur würfeln) und Bearbeiten umschalten.
+// Der gewählte Modus bleibt über Sitzungen hinweg erhalten.
+function setSheetMode(mode){
+  const isEdit = (mode === "edit");
+  document.getElementById("cb-view-play")?.classList.toggle("on", !isEdit);
+  document.getElementById("cb-view-edit")?.classList.toggle("on",  isEdit);
+  document.getElementById("cb-mode-play")?.classList.toggle("on", !isEdit);
+  document.getElementById("cb-mode-edit")?.classList.toggle("on",  isEdit);
+  try { localStorage.setItem("vtt_sheet_mode", isEdit ? "edit" : "play"); } catch(e){}
+  // Beim Wechsel in den Spielen-Modus die Anzeige mit den bearbeiteten
+  // Werten auffrischen, damit man sofort sieht, was man geändert hat.
+  if (!isEdit && window.Character?.updateOverview) Character.updateOverview();
+}
+// Zuletzt gewählten Modus wiederherstellen.
+(function restoreSheetMode(){
+  let m = "play";
+  try { m = localStorage.getItem("vtt_sheet_mode") || "play"; } catch(e){}
+  document.addEventListener("DOMContentLoaded", ()=>setSheetMode(m));
+})();
+
+function buildPlayerCondsGrid(){
+  const grid=document.getElementById("player-conds-grid"); if(!grid) return;
+  const myToken=State.getMyToken();
+  const active=(myToken?.conditions||[]);
+  grid.innerHTML=Object.entries(Tokens.CONDITIONS).map(([k,v])=>`
+    <div class="cond-toggle ${active.includes(k)?"on":""}" onclick="togglePlayerCond('${k}',this)" data-cond="${k}">${v} ${k}</div>`).join("");
+}
+
+function togglePlayerCond(cond,el){
+  const myToken=State.getMyToken(); if(!myToken){UI.toast("Du hast noch keinen Token");return;}
+  el.classList.toggle("on");
+  const conds=[...document.querySelectorAll("#player-conds-grid .cond-toggle.on")].map(e=>e.dataset.cond);
+  Socket.emit("token_update",{session_id:State.session_id,token_id:myToken.id,updates:{conditions:conds}});
+}
+
+// Deutsche Namen der Zustände (für Auswahllisten und Chat-Meldungen)
+const COND_LABELS = {
+  blinded:"Blind", charmed:"Bezaubert", deafened:"Taub", exhausted:"Erschöpft",
+  frightened:"Verängstigt", grappled:"Gepackt", incapacitated:"Kampfunfähig",
+  invisible:"Unsichtbar", paralyzed:"Gelähmt", petrified:"Versteinert",
+  poisoned:"Vergiftet", prone:"Liegend", restrained:"Festgesetzt",
+  stunned:"Betäubt", unconscious:"Bewusstlos", dead:"Tot",
+};
+
+/** Füllt die Auswahl "Wirkt bei Treffer" im Angriffs-Editor. */
+function fillEffectSelect(){
+  const sel = document.getElementById("atk-effect");
+  if(!sel) return;   // Spieler haben den Editor gar nicht
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">— kein Effekt —</option>` +
+    Object.entries(Tokens.CONDITIONS).map(([k, icon]) =>
+      `<option value="${k}">${icon} ${COND_LABELS[k] || k}</option>`).join("");
+  sel.value = cur;
+}
+document.addEventListener("DOMContentLoaded", fillEffectSelect);
+
+function updateEnemyFolderSelect(){
+  const sel=document.getElementById("em-folder"); if(!sel) return;
+  sel.innerHTML=(State.enemy_folders||[]).map(f=>`<option value="${f.id}">${f.name}</option>`).join("");
+}
+
+// ── Library picker ────────────────────────────────────────────────────────
+let libCache = {items:{}, spells:{}, attacks:{}};
+let libPickerCategory = "items";
+
+async function openLibraryPicker(category){
+  libPickerCategory = category;
+  const titles = {items:"📚 Gegenstand wählen", spells:"✨ Zauber wählen", attacks:"⚔️ Angriff wählen"};
+  document.getElementById("lib-picker-title").textContent = titles[category] || "Bibliothek";
+  document.getElementById("lib-picker-search").value = "";
+  document.getElementById("lib-picker-modal").classList.add("open");
+  try {
+    const res = await fetch("/api/library?session=" + encodeURIComponent(State.session_id || ""));
+    libCache = await res.json();
+  } catch(e) { libCache = {items:{},spells:{},attacks:{}}; }
+  renderLibPicker();
+}
+
+function renderLibPicker(){
+  const cat = libPickerCategory;
+  const search = (document.getElementById("lib-picker-search").value||"").toLowerCase();
+  const list = document.getElementById("lib-picker-list");
+  const entries = Object.values(libCache[cat]||{}).filter(e=>
+    !search || (e.name||"").toLowerCase().includes(search) || (e.description||"").toLowerCase().includes(search)
+  );
+  if (!entries.length) {
+    list.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-dim);font-style:italic">
+      Keine Einträge in der Bibliothek.<br><br>
+      <a href="/library" target="_blank" style="color:var(--gold);text-decoration:underline">→ Bibliothek öffnen und Einträge erstellen</a>
+    </div>`;
+    return;
+  }
+  list.innerHTML = entries.map(e=>{
+    const statsDisplay = formatLibEntryStats(cat, e);
+    return `<div class="lib-picker-item" onclick="pickLibraryEntry('${e.id}')">
+      <div style="font-family:var(--font-display);color:var(--gold);font-size:.9rem;margin-bottom:2px">${esc(e.name)}</div>
+      ${statsDisplay?`<div style="font-size:.78rem;color:var(--text);margin-bottom:3px">${statsDisplay}</div>`:""}
+      ${e.description?`<div style="font-size:.78rem;color:var(--text-dim);font-style:italic">${esc(e.description).substring(0,160)}</div>`:""}
+    </div>`;
+  }).join("");
+}
+
+function formatLibEntryStats(cat, e){
+  if (cat==="items") {
+    const parts=[];
+    if (e.category) parts.push(`<span style="color:var(--text-dim)">${esc(e.category)}</span>`);
+    if (e.weight) parts.push(`⚖️ ${e.weight}`);
+    if (e.cost) parts.push(`💰 ${esc(e.cost)}`);
+    if (e.ac_bonus) parts.push(`🛡 +${e.ac_bonus}`);
+    if (e.damage) parts.push(`🗡 ${esc(e.damage)} ${esc(e.damage_type||"")}`);
+    return parts.join(" · ");
+  } else if (cat==="spells") {
+    const parts=[];
+    if (e.level!=null) parts.push(`Lvl ${e.level}`);
+    if (e.school) parts.push(esc(e.school));
+    if (e.casting_time) parts.push(`⏱ ${esc(e.casting_time)}`);
+    if (e.range) parts.push(`📏 ${esc(e.range)}`);
+    if (e.damage) parts.push(`💥 ${esc(e.damage)}`);
+    return parts.join(" · ");
+  } else if (cat==="attacks") {
+    const parts=[];
+    if (e.attack_type) parts.push(esc(e.attack_type));
+    if (e.hit_bonus!=null) parts.push(`+${e.hit_bonus} tref.`);
+    if (e.damage) parts.push(`🗡 ${esc(e.damage)} ${esc(e.damage_type||"")}`);
+    if (e.range) parts.push(`📏 ${esc(e.range)}ft`);
+    return parts.join(" · ");
+  }
+  return "";
+}
+
+function pickLibraryEntry(eid){
+  const entry = libCache[libPickerCategory]?.[eid];
+  if (!entry) return;
+  if (libPickerCategory === "items") {
+    if (!Character.sheet.inventory) Character.sheet.inventory = [];
+    Character.sheet.inventory.push({
+      id: (crypto.randomUUID?.() || Math.random().toString(36).slice(2,10)),
+      library_id: eid,
+      name: entry.name,
+      category: entry.category || "",
+      weight: entry.weight || 0,
+      cost: entry.cost || "",
+      ac_bonus: entry.ac_bonus || 0,
+      damage: entry.damage || "",
+      damage_type: entry.damage_type || "",
+      description: entry.description || "",
+      quantity: 1,
+      equipped: false,
+    });
+    Character.saveSheet();
+    renderInventory();
+    UI.toast(`🎒 "${entry.name}" zum Inventar hinzugefügt`);
+  } else if (libPickerCategory === "attacks" || libPickerCategory === "spells") {
+    if (!Character.sheet.attacks) Character.sheet.attacks = [];
+    Character.sheet.attacks.push({
+      id: (crypto.randomUUID?.() || Math.random().toString(36).slice(2,10)),
+      name: entry.name,
+      type: libPickerCategory === "spells" ? "Zauber" : (entry.attack_type || "Nahkampf"),
+      hit_bonus: entry.hit_bonus || 0,
+      damage: entry.damage || "",
+      damage_type: entry.damage_type || "",
+      notes: entry.description || "",
+      range: entry.range || "",
+      spell_level: entry.level,
+      // Statuseffekt, der in der Bibliothek hinterlegt wurde
+      effect: entry.effect || "",
+      effect_dur: entry.effect_dur || "",
+    });
+    Character.saveSheet();
+    if (typeof Character.updateAttacksList === "function") Character.updateAttacksList();
+    UI.toast(`⚔️ "${entry.name}" zu Angriffen hinzugefügt`);
+  }
+  document.getElementById("lib-picker-modal").classList.remove("open");
+}
+
+// ── Inventory render ──────────────────────────────────────────────────────
+function renderInventory(){
+  const panel = document.getElementById("inventory-list"); if (!panel) return;
+  const inv = Character.sheet?.inventory || [];
+  if (!inv.length) {
+    panel.innerHTML = `<div style="color:var(--text-dim);text-align:center;padding:20px;font-style:italic">Dein Inventar ist leer…<br><br>Klicke unten, um Gegenstände hinzuzufügen.</div>`;
+    return;
+  }
+  let totalWeight = 0;
+  panel.innerHTML = inv.map((it, idx)=>{
+    const w = (parseFloat(it.weight)||0) * (it.quantity||1);
+    totalWeight += w;
+    return `<div class="inv-item ${it.equipped?"equipped":""}">
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--font-display);font-size:.88rem;color:var(--gold)">
+          ${esc(it.name)} ${it.quantity>1?`<span style="color:var(--text-dim);font-size:.75rem">×${it.quantity}</span>`:""}
+          ${it.equipped?`<span style="color:var(--green);font-size:.7rem;margin-left:4px">[AUSGERÜSTET]</span>`:""}
+        </div>
+        <div style="font-size:.74rem;color:var(--text-dim)">
+          ${it.category?esc(it.category)+" · ":""}${w?`⚖️ ${w.toFixed(1)}`:""}
+          ${it.ac_bonus?`· 🛡 +${it.ac_bonus}`:""}
+          ${it.damage?`· 🗡 ${esc(it.damage)} ${esc(it.damage_type||"")}`:""}
+        </div>
+        ${it.description?`<div style="font-size:.72rem;color:var(--text-dim);font-style:italic;margin-top:2px">${esc(it.description).substring(0,120)}</div>`:""}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0">
+        <button class="btn btn-gold btn-xs" onclick="toggleEquip(${idx})">${it.equipped?"Ablegen":"Anlegen"}</button>
+        <div style="display:flex;gap:2px">
+          <button class="btn btn-dark btn-xs" onclick="changeQty(${idx},1)">+</button>
+          <button class="btn btn-dark btn-xs" onclick="changeQty(${idx},-1)">−</button>
+        </div>
+        <button class="btn btn-danger btn-xs" onclick="removeInvItem(${idx})">🗑</button>
+      </div>
+    </div>`;
+  }).join("");
+  const carry = computeCarryStatus();
+  const pct = Math.min(100, (carry.total / Math.max(1, carry.capacity)) * 100);
+  const barColor = carry.status==="over" ? "#c0392b" : carry.status==="heavy" ? "#e67e22" : carry.status==="light" ? "#c9a96e" : "#4a8a5a";
+  panel.innerHTML += `<div style="margin-top:8px;padding:8px 10px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px">
+    <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px">
+      <span style="color:var(--text-dim)">Traglast ${carry.label?`· <strong style="color:${barColor}">${carry.label}</strong>`:""}</span>
+      <span style="color:var(--gold)">${carry.total.toFixed(1)} / ${carry.capacity} lb</span>
+    </div>
+    <div style="height:6px;background:var(--bg-deep);border-radius:3px;overflow:hidden">
+      <div style="height:100%;width:${pct}%;background:${barColor};transition:width .3s"></div>
+    </div>
+    ${carry.status==="over"?`<div style="font-size:.7rem;color:var(--red-soft);margin-top:4px">Bewegungsrate −10 ft, Nachteil auf STR/GES/KON-Würfe</div>`:""}
+    ${carry.status==="heavy"?`<div style="font-size:.7rem;color:#e69a5a;margin-top:4px">Bewegungsrate −10 ft</div>`:""}
+  </div>`;
+}
+
+function toggleEquip(idx){
+  if (!Character.sheet.inventory[idx]) return;
+  Character.sheet.inventory[idx].equipped = !Character.sheet.inventory[idx].equipped;
+  recomputeACFromEquipment();
+  Character.saveSheet();
+  renderInventory();
+}
+
+function changeQty(idx, delta){
+  const it = Character.sheet.inventory[idx]; if (!it) return;
+  it.quantity = Math.max(1, (it.quantity||1) + delta);
+  Character.saveSheet();
+  renderInventory();
+}
+
+async function removeInvItem(idx){
+  if (!await Dialog.confirmDanger("Der Gegenstand wird aus dem Inventar entfernt.",
+      {title:"Gegenstand entfernen?", icon:"🎒", okText:"Entfernen"})) return;
+  Character.sheet.inventory.splice(idx, 1);
+  recomputeACFromEquipment();
+  Character.saveSheet();
+  renderInventory();
+}
+
+function recomputeACFromEquipment(){
+  // Echte AC-Berechnung: ausgerüstete Rüstung setzt Basis-AC + Dex-Limit,
+  // Schilde und andere Gegenstände addieren Boni.
+  const inv = Character.sheet?.inventory || [];
+  const dexMod = Math.floor(((Character.sheet?.stats?.dex || 10) - 10) / 2);
+
+  let armorBase = null;      // gesetzt durch ausgerüstete Rüstung (armor_base)
+  let dexCap = Infinity;     // max. Dex-Bonus (armor_dex_cap)
+  let flatBonus = 0;         // Schild + magische Boni (ac_bonus)
+
+  inv.forEach(it => {
+    if (!it.equipped) return;
+    if (it.armor_base){                     // ein Rüstungsstück
+      armorBase = parseInt(it.armor_base) || 10;
+      if (it.armor_dex_cap !== undefined && it.armor_dex_cap !== "" && it.armor_dex_cap !== null){
+        dexCap = parseInt(it.armor_dex_cap);
+      }
+    }
+    flatBonus += parseInt(it.ac_bonus) || 0;
+  });
+
+  let computed;
+  if (armorBase !== null){
+    computed = armorBase + Math.min(dexMod, dexCap) + flatBonus;
+  } else {
+    // Keine Rüstung: 10 + Dex + Boni (z.B. nur Schild)
+    computed = 10 + dexMod + flatBonus;
+  }
+  Character.sheet._equipment_ac_bonus = flatBonus;
+  Character.sheet._computed_ac = computed;
+  // AC im Sheet aktualisieren, wenn Auto-AC aktiv
+  if (Character.sheet._auto_ac !== false){
+    Character.sheet.ac = computed;
+    const acInp = document.getElementById("cs-ac-inp");
+    if (acInp) acInp.value = computed;
+  }
+}
+
+// Traglast nach D&D 5e: Tragfähigkeit = Stärke × 15 (Pfund)
+function computeCarryStatus(){
+  const inv = Character.sheet?.inventory || [];
+  let total = 0;
+  inv.forEach(it => { total += (parseFloat(it.weight)||0) * (it.quantity||1); });
+  const str = Character.sheet?.stats?.str || 10;
+  const capacity = str * 15;
+  const heavyThreshold = str * 5;   // ab hier "schwer beladen" (Var.-Regel)
+  let status = "normal", label = "";
+  if (total > capacity){ status = "over"; label = "⚠️ ÜBERLADEN"; }
+  else if (total > str * 10){ status = "heavy"; label = "🐢 Stark belastet"; }
+  else if (total > heavyThreshold){ status = "light"; label = "Belastet"; }
+  return { total, capacity, status, label };
+}
+
+</script>
+<script src="/static/js/design-studio.js"></script>
+<script>
+// ── Kampagnen-Pakete (nur DM) ──────────────────────────────────────────────
+// null = alle aktiven Pakete; sonst Liste der erlaubten Paket-Ids.
+const CampaignPacks = (() => {
+  let state = { packs: null, all: [] };
+  const box = () => document.getElementById("camp-packs");
+  const escH = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  async function load(){
+    if (!box()) return;
+    try { state = await (await fetch(`/api/sessions/${State.session_id}/packs`)).json(); render(); }
+    catch(e){ box().textContent = "Konnte Pakete nicht laden."; }
+  }
+  function render(){
+    const active = state.all.filter(p => p.enabled);
+    const all = state.packs === null;
+    box().innerHTML = `
+      <label style="display:flex;gap:8px;align-items:center;cursor:pointer;color:var(--text);margin-bottom:6px">
+        <input type="checkbox" id="cp-all" ${all ? "checked" : ""} style="accent-color:var(--gold)"> Alle aktiven Pakete erlauben</label>
+      <div style="${all ? "opacity:.45;pointer-events:none" : ""};display:flex;flex-direction:column;gap:3px;margin-left:4px">
+        ${active.map(p => `<label style="display:flex;gap:8px;align-items:center;cursor:pointer;color:var(--text)">
+          <input type="checkbox" data-cp="${escH(p.id)}" ${all || (state.packs||[]).includes(p.id) ? "checked" : ""} style="accent-color:var(--gold)">
+          ${escH(p.name)} <span style="color:var(--text-dim);font-size:.78rem">(${p.total})</span></label>`).join("")}
+      </div>
+      <div style="margin-top:8px;font-size:.78rem">Gilt für Charakter-Builder und Bibliotheks-Auswahl am Tisch.
+        <a href="/library" target="_blank" style="color:var(--arcane)">Pakete verwalten →</a></div>`;
+    box().querySelector("#cp-all").onchange = e => save(e.target.checked ? null : active.map(p => p.id));
+    box().querySelectorAll("[data-cp]").forEach(cb => cb.onchange = () =>
+      save(Array.from(box().querySelectorAll("[data-cp]:checked")).map(x => x.dataset.cp)));
+  }
+  async function save(list){
+    try {
+      const r = await fetch(`/api/sessions/${State.session_id}/packs`, { method: "PUT",
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ packs: list }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "Fehler");
+      state = d; render(); UI.toast("📦 Kampagnen-Inhalte gespeichert");
+    } catch(e){ UI.toast("⚠️ " + e.message); load(); }
+  }
+  document.addEventListener("click", e => { if (e.target.closest('[data-tab="gmsettings"]')) load(); });
+  return { load };
+})();
+</script>
+</body>
+</html>

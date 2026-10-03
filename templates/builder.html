@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Charakter-Builder · D&amp;D</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/design-studio.css">
+<script src="/static/js/theme.js"></script>
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/dialog.css">
+<style>
+body{overflow-y:auto;min-height:100vh;}
+.container{max-width:1100px;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:2;}
+.nav-btn{position:fixed;top:18px;left:18px;z-index:10;}
+
+header{text-align:center;margin-bottom:18px;}
+h1{
+  font-family:'Cinzel Decorative',serif;font-size:2rem;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold-light),var(--gold-dark));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:.05em;margin-bottom:4px;
+}
+.subtitle{color:var(--text-dim);letter-spacing:.2em;font-family:var(--font-display);font-size:.76rem;text-transform:uppercase;}
+
+/* ── Saved character chooser at top ── */
+.saved-chars{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;margin-bottom:18px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.saved-chars-label{font-family:var(--font-display);color:var(--gold-dark);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;}
+.saved-chars-scroll{flex:1;display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;}
+.saved-char-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+  padding:6px 12px;cursor:pointer;white-space:nowrap;transition:all .14s;
+  flex-shrink:0;
+}
+.saved-char-chip:hover{border-color:var(--gold-dark);}
+.saved-char-chip.active{border-color:var(--gold);background:rgba(var(--gold-rgb),.08);}
+.saved-char-chip img,.saved-char-chip .chip-ph{width:26px;height:26px;border-radius:50%;object-fit:cover;}
+.chip-ph{background:linear-gradient(135deg,var(--bg-panel2),var(--bg-dark));display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.saved-char-chip .cname{font-family:var(--font-display);color:var(--gold);font-size:.82rem;}
+
+/* ── Step nav ── */
+.step-nav{
+  display:flex;gap:2px;background:var(--bg-panel);border:1px solid var(--border);
+  border-radius:12px;padding:6px;margin-bottom:22px;overflow-x:auto;
+}
+.step-item{
+  flex:1;min-width:110px;display:flex;align-items:center;gap:8px;
+  padding:10px 14px;cursor:pointer;border-radius:8px;
+  transition:all .15s;color:var(--text-dim);
+}
+.step-item:hover{color:var(--text);background:var(--bg-mid);}
+.step-item.active{background:var(--gold-dark);color:var(--bg-deep);}
+.step-item.active .step-num{background:var(--bg-deep);color:var(--gold);}
+.step-num{
+  width:26px;height:26px;border-radius:50%;background:var(--bg-dark);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;font-family:var(--font-display);
+  font-size:.8rem;font-weight:700;flex-shrink:0;
+}
+.step-label{font-family:var(--font-display);font-size:.82rem;font-weight:500;letter-spacing:.04em;}
+
+/* ── Step panels ── */
+.step-panel{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;
+  padding:26px;min-height:400px;
+  display:none;
+}
+.step-panel.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.step-title{
+  font-family:'Cinzel Decorative',serif;font-size:1.5rem;color:var(--gold-light);
+  margin-bottom:6px;letter-spacing:.04em;
+}
+.step-subtitle{color:var(--text-dim);font-size:.92rem;margin-bottom:22px;}
+
+/* ── Grid layouts ── */
+.row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.row>div{flex:1;min-width:120px;}
+.field-label{display:block;font-family:var(--font-display);font-size:.62rem;letter-spacing:.1em;
+  color:var(--gold-dark);text-transform:uppercase;margin-bottom:4px;}
+input,textarea,select{
+  width:100%;background:var(--bg-dark);border:1px solid var(--border);
+  border-radius:5px;padding:7px 10px;color:var(--text);
+  font-family:var(--font-body);font-size:.9rem;outline:none;
+  transition:border-color .14s;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--gold-dark);}
+textarea{resize:vertical;min-height:70px;}
+
+/* ── Portrait + Home ── */
+.home-layout{display:grid;grid-template-columns:180px 1fr;gap:24px;}
+@media(max-width:720px){.home-layout{grid-template-columns:1fr;}}
+.portrait-box{
+  width:170px;height:170px;border-radius:50%;border:3px solid var(--border);
+  background:var(--bg-dark);display:flex;align-items:center;justify-content:center;
+  overflow:hidden;cursor:pointer;transition:border-color .15s;
+  justify-self:center;
+}
+.portrait-box:hover{border-color:var(--gold-dark);}
+.portrait-box img{width:100%;height:100%;object-fit:cover;}
+
+/* ── Options cards (race/class) ── */
+.option-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:10px;margin-bottom:14px;
+}
+.option-card{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;cursor:pointer;transition:all .15s;
+}
+.option-card:hover{border-color:var(--gold-dark);transform:translateY(-1px);}
+.option-card.active{
+  border-color:var(--gold);background:rgba(var(--gold-rgb),.08);
+  box-shadow:0 0 0 2px rgba(var(--gold-rgb),.15);
+}
+.oc-name{font-family:var(--font-display);color:var(--gold);font-size:.95rem;margin-bottom:3px;}
+.oc-meta{font-size:.76rem;color:var(--text-dim);line-height:1.4;}
+
+/* ── Abilities ── */
+.method-tabs{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap;}
+.method-tab{
+  padding:8px 16px;background:var(--bg-dark);border:1px solid var(--border);
+  border-radius:6px;cursor:pointer;font-family:var(--font-display);font-size:.82rem;
+  color:var(--text-dim);transition:all .14s;
+}
+.method-tab:hover{color:var(--text);}
+.method-tab.active{background:var(--gold-dark);color:var(--bg-deep);border-color:var(--gold-dark);}
+
+.stats-editor{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px;
+}
+@media(max-width:620px){.stats-editor{grid-template-columns:repeat(3,1fr);}}
+.stat-card{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:10px;
+  padding:14px 8px 10px;text-align:center;transition:all .15s;
+}
+.stat-card.high{border-color:rgba(var(--green-rgb),.5);}
+.stat-card .sc-label{font-family:var(--font-display);font-size:.62rem;letter-spacing:.08em;color:var(--text-dim);text-transform:uppercase;}
+.stat-card .sc-val{
+  font-family:var(--font-display);font-size:1.8rem;color:var(--gold);margin:2px 0;
+  background:transparent;border:none;text-align:center;width:100%;
+}
+.stat-card .sc-mod{
+  font-family:var(--font-display);font-size:.95rem;color:var(--gold-light);
+  padding:3px 10px;border:1px solid var(--border);border-radius:10px;display:inline-block;
+  margin-top:4px;
+}
+.stat-card .sc-btn{
+  display:inline-block;width:22px;height:22px;background:var(--bg-panel2);
+  border:1px solid var(--border);border-radius:50%;cursor:pointer;color:var(--gold);
+  font-size:.85rem;line-height:20px;text-align:center;margin:0 2px;
+}
+.stat-card .sc-btn:hover{border-color:var(--gold);}
+
+.array-pool{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center;
+  padding:12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+}
+.array-chip{
+  width:44px;height:44px;border-radius:50%;background:var(--bg-panel);
+  border:2px solid var(--gold-dark);display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:1rem;color:var(--gold);cursor:pointer;transition:all .14s;
+}
+.array-chip:hover{transform:scale(1.06);}
+.array-chip.used{opacity:0.35;cursor:default;}
+
+.point-buy-info{
+  text-align:center;padding:8px 14px;background:var(--bg-dark);
+  border:1px solid var(--gold-dark);border-radius:6px;margin-bottom:14px;
+  font-family:var(--font-display);color:var(--gold);
+}
+.point-buy-info strong{font-size:1.3rem;}
+
+/* ── Abilities bonuses (race/background) ── */
+.ability-bonus-row{
+  display:flex;align-items:center;gap:10px;margin-bottom:8px;
+  padding:10px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;
+}
+
+/* ── Skills checkboxes ── */
+.skills-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;
+  margin-top:8px;
+}
+.skill-check{
+  display:flex;align-items:center;gap:8px;padding:6px 10px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;
+  cursor:pointer;transition:all .12s;
+}
+.skill-check:hover{border-color:var(--gold-dark);}
+.skill-check.on{border-color:var(--gold);background:rgba(var(--gold-rgb),.07);}
+.skill-check .box{
+  width:16px;height:16px;border-radius:3px;border:1.5px solid var(--text-dim);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  color:var(--gold);font-size:.75rem;
+}
+.skill-check.on .box{background:var(--gold);border-color:var(--gold);color:var(--bg-deep);}
+.skill-check .name{flex:1;font-size:.86rem;}
+.skill-check .stat-tag{font-family:var(--font-display);font-size:.62rem;color:var(--text-dim);}
+
+/* ── Spells selection ── */
+.spell-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px;
+  margin-top:8px;max-height:340px;overflow-y:auto;
+  padding:4px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+}
+.spell-pick-item{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;
+  border:1px solid transparent;border-radius:5px;cursor:pointer;transition:all .12s;
+}
+.spell-pick-item:hover{background:var(--bg-mid);}
+.spell-pick-item.on{border-color:var(--gold);background:rgba(var(--gold-rgb),.05);}
+.spell-pick-item .box{
+  width:16px;height:16px;border-radius:3px;border:1.5px solid var(--text-dim);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  color:var(--gold);font-size:.75rem;
+}
+.spell-pick-item.on .box{background:var(--gold);border-color:var(--gold);color:var(--bg-deep);}
+.spell-pick-item .sp-name{flex:1;font-size:.86rem;color:var(--text);}
+.spell-pick-item .sp-level{font-size:.72rem;color:var(--text-dim);font-family:var(--font-display);}
+
+/* ── Bottom actions ── */
+.step-actions{
+  display:flex;justify-content:space-between;gap:10px;
+  margin-top:22px;padding-top:18px;border-top:1px solid var(--border);
+}
+.step-actions .grow{flex:1;}
+.step-complete{
+  text-align:center;padding:34px 20px;
+  background:linear-gradient(135deg,rgba(var(--gold-rgb),.1),rgba(var(--blue-rgb),.1));
+  border:1px solid var(--gold-dark);border-radius:12px;margin-bottom:16px;
+}
+.step-complete .big-icon{font-size:3.6rem;margin-bottom:10px;}
+.step-complete h2{font-family:'Cinzel Decorative',serif;color:var(--gold-light);font-size:1.6rem;margin-bottom:6px;}
+
+/* ── Character summary (step 7) ── */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px;}
+.summary-card{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:14px;
+}
+.summary-card .sc-head{font-family:var(--font-display);font-size:.65rem;color:var(--gold-dark);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.summary-card .sc-value{font-family:var(--font-display);color:var(--gold-light);font-size:1.2rem;}
+
+/* Equipment list */
+.equip-line{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;margin-bottom:5px;
+}
+.equip-line input[type="text"]{flex:1;}
+/* ── Level features preview ── */
+.level-features-scroll{
+  max-height:320px;overflow-y:auto;padding:8px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+}
+.level-feature-card{
+  display:flex;gap:10px;padding:10px;margin-bottom:5px;
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:6px;
+}
+.lf-lvl{
+  flex-shrink:0;min-width:60px;padding:6px 10px;
+  font-family:var(--font-display);font-size:.8rem;color:var(--gold);
+  background:var(--bg-deep);border:1px solid var(--gold-dark);border-radius:5px;
+  text-align:center;
+}
+.lf-content{flex:1;font-size:.85rem;color:var(--text);line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="stars"></div>
+
+<a href="/" class="btn btn-secondary nav-btn">← Zurück</a>
+
+<div class="container">
+  <header>
+    <button onclick="backFromBuilder()" style="position:absolute;left:20px;top:20px;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));color:var(--gold,var(--gold));padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.9rem">← Zurück</button>
+    <h1>🧙 Charakter-Builder</h1>
+    <div class="subtitle">Dein Held, Schritt für Schritt</div>
+  </header>
+  <script src="/static/js/dialog.js"></script>
+<script>
+  async function backFromBuilder(){
+    // Falls ungespeicherte Eingaben: kurz nachfragen.
+    if(await Dialog.confirm("Nicht gespeicherte Änderungen gehen verloren.",
+        {title:"Charakter-Builder verlassen?", icon:"🚪", okText:"Verlassen"})){
+      window.location.href = "/play";
+    }
+  }
+  </script>
+
+  <!-- Saved characters chooser -->
+  <div class="saved-chars">
+    <span class="saved-chars-label">Meine Charaktere:</span>
+    <div class="saved-chars-scroll" id="saved-chars-list"></div>
+    <button class="btn btn-primary" style="padding:8px 14px;font-size:.78rem" onclick="newCharacter()">+ Neu</button>
+  </div>
+
+  <!-- Step nav -->
+  <div class="step-nav">
+    <div class="step-item active" data-step="1" onclick="goStep(1)"><div class="step-num">1</div><div class="step-label">Home</div></div>
+    <div class="step-item" data-step="2" onclick="goStep(2)"><div class="step-num">2</div><div class="step-label">Volk</div></div>
+    <div class="step-item" data-step="3" onclick="goStep(3)"><div class="step-num">3</div><div class="step-label">Klasse</div></div>
+    <div class="step-item" data-step="4" onclick="goStep(4)"><div class="step-num">4</div><div class="step-label">Attribute</div></div>
+    <div class="step-item" data-step="5" onclick="goStep(5)"><div class="step-num">5</div><div class="step-label">Beschreibung</div></div>
+    <div class="step-item" data-step="6" onclick="goStep(6)"><div class="step-num">6</div><div class="step-label">Ausrüstung</div></div>
+    <div class="step-item" data-step="7" onclick="goStep(7)"><div class="step-num">7</div><div class="step-label">Fertig</div></div>
+  </div>
+
+  <!-- ═══════════ STEP 1 — HOME ═══════════ -->
+  <div class="step-panel active" id="step-1">
+    <div class="step-title">⚙️ Grundeinstellungen</div>
+    <div class="step-subtitle">Name, Bild, Quellen und Regeln für deinen Charakter.</div>
+
+    <div class="home-layout">
+      <div>
+        <label class="field-label" style="text-align:center;display:block">Portrait</label>
+        <div class="portrait-box" id="portrait-box" onclick="document.getElementById('portrait-input').click()">
+          <span id="portrait-placeholder" style="font-size:3rem;color:var(--text-dim)">🧙</span>
+          <img id="portrait-img" style="display:none" alt="">
+        </div>
+        <input type="file" id="portrait-input" accept="image/*" style="display:none" onchange="uploadPortrait(this)">
+      </div>
+
+      <div>
+        <div class="row">
+          <div style="flex:2"><label class="field-label">Charaktername</label><input id="f-name" placeholder="Thorin Eisenschild…"></div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label class="field-label">Fortschrittstyp</label>
+            <select id="f-progression">
+              <option value="milestone">Milestone (empfohlen)</option>
+              <option value="xp">Erfahrungspunkte (XP)</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">🎲 Würfeln im Browser</label>
+            <select id="f-dice_rolling">
+              <option value="true">Aktiviert</option><option value="false">Deaktiviert</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" id="f-optional_features" style="width:auto;margin:0" checked>
+            <span style="font-size:.9rem">✨ Optional Features (Tasha's Cauldron) aktivieren</span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div style="flex:2">
+            <label class="field-label">Quellen / Content</label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
+              <label class="skill-check on" style="padding:6px 12px"><div class="box">✓</div><span class="name">Player's Handbook</span></label>
+              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Xanathar's Guide</span></label>
+              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Tasha's Cauldron</span></label>
+              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Critical Role</span></label>
+              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">Eberron</span></label>
+              <label class="skill-check" style="padding:6px 12px" onclick="this.classList.toggle('on')"><div class="box"></div><span class="name">MTG / Strixhaven</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-actions"><div></div><button class="btn btn-primary" onclick="goStep(2)">Weiter: Volk →</button></div>
+  </div>
+
+  <!-- ═══════════ STEP 2 — RACE ═══════════ -->
+  <div class="step-panel" id="step-2">
+    <div class="step-title">🧬 Volk</div>
+    <div class="step-subtitle">Wähle das Volk deines Charakters. Jedes Volk hat einzigartige Eigenschaften.</div>
+
+    <label class="field-label">Volk</label>
+    <div class="option-grid" id="race-grid"></div>
+
+    <div id="race-details" style="display:none">
+      <div style="padding:14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;margin-bottom:14px">
+        <div id="race-info"></div>
+      </div>
+
+      <label class="field-label">Ability Score Bonus verteilen (Tasha's: frei wählbar)</label>
+      <div class="ability-bonus-row">
+        <span style="font-size:.88rem">+2 auf:</span>
+        <select id="f-race_asi_2" style="flex:1">
+          <option value="str">Stärke</option><option value="dex">Geschicklichkeit</option>
+          <option value="con">Konstitution</option><option value="int">Intelligenz</option>
+          <option value="wis">Weisheit</option><option value="cha">Charisma</option>
+        </select>
+        <span style="font-size:.88rem">+1 auf:</span>
+        <select id="f-race_asi_1" style="flex:1">
+          <option value="str">Stärke</option><option value="dex" selected>Geschicklichkeit</option>
+          <option value="con">Konstitution</option><option value="int">Intelligenz</option>
+          <option value="wis">Weisheit</option><option value="cha">Charisma</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="step-actions">
+      <button class="btn btn-secondary" onclick="goStep(1)">← Zurück</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Weiter: Klasse →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 3 — CLASS ═══════════ -->
+  <div class="step-panel" id="step-3">
+    <div class="step-title">⚔️ Klasse</div>
+    <div class="step-subtitle">Das Herzstück deines Charakters – was er tun kann.</div>
+
+    <label class="field-label">Klasse</label>
+    <div class="option-grid" id="class-grid"></div>
+
+    <div id="class-details" style="display:none">
+      <div class="row">
+        <div>
+          <label class="field-label">Stufe</label>
+          <input type="number" id="f-level" min="1" max="20" value="1" oninput="updateClassLevelEffects()">
+        </div>
+        <div>
+          <label class="field-label">Unterklasse</label>
+          <select id="f-subclass"></select>
+        </div>
+        <div>
+          <label class="field-label">Trefferwürfel</label>
+          <input id="f-hit_dice" readonly>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <label class="field-label">Fertigkeiten (wähle je nach Klasse)</label>
+        <div id="skills-grid" class="skills-grid"></div>
+      </div>
+
+      <div id="spells-section" style="margin-top:18px;display:none">
+        <label class="field-label">Zauber wählen</label>
+        <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:6px">Zaubertricks und Zauber der Stufe 1 aus der Bibliothek:</p>
+        <div id="spell-grid" class="spell-grid"></div>
+      </div>
+    </div>
+
+    <div class="step-actions">
+      <button class="btn btn-secondary" onclick="goStep(2)">← Zurück</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Weiter: Attribute →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 4 — ABILITIES ═══════════ -->
+  <div class="step-panel" id="step-4">
+    <div class="step-title">🎲 Attribute</div>
+    <div class="step-subtitle">Wie stark, klug oder charismatisch ist dein Charakter?</div>
+
+    <div class="method-tabs">
+      <div class="method-tab active" data-method="standard" onclick="setAbilityMethod('standard')">Standard Array</div>
+      <div class="method-tab" data-method="pointbuy" onclick="setAbilityMethod('pointbuy')">Point Buy</div>
+      <div class="method-tab" data-method="rolled" onclick="setAbilityMethod('rolled')">Würfeln (4d6↓)</div>
+      <div class="method-tab" data-method="manual" onclick="setAbilityMethod('manual')">Manuell</div>
+    </div>
+
+    <div id="method-info" style="padding:10px 14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;margin-bottom:14px;font-size:.85rem;color:var(--text-dim)"></div>
+
+    <div id="array-pool-wrap" style="display:none">
+      <label class="field-label">Verfügbare Werte – ziehe sie auf die Attribute</label>
+      <div class="array-pool" id="array-pool"></div>
+    </div>
+
+    <div id="pointbuy-wrap" style="display:none">
+      <div class="point-buy-info">Verbleibend: <strong id="pb-remaining">27</strong> / 27 Punkte</div>
+    </div>
+
+    <div class="stats-editor" id="stats-editor"></div>
+
+    <div style="text-align:center;font-size:.82rem;color:var(--text-dim);margin-top:8px" id="stats-note"></div>
+
+    <div class="step-actions">
+      <button class="btn btn-secondary" onclick="goStep(3)">← Zurück</button>
+      <button class="btn btn-primary" onclick="goStep(5)">Weiter: Beschreibung →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 5 — DESCRIPTION ═══════════ -->
+  <div class="step-panel" id="step-5">
+    <div class="step-title">📖 Beschreibung</div>
+    <div class="step-subtitle">Hintergrund, Gesinnung, Aussehen – das was deinen Helden ausmacht.</div>
+
+    <div class="row">
+      <div>
+        <label class="field-label">Hintergrund</label>
+        <select id="f-background" onchange="onBackgroundChange()">
+          <option value="">— wählen —</option>
+        </select>
+        <div id="bg-details" style="margin-top:6px"></div>
+      </div>
+      <div>
+        <label class="field-label">Gesinnung</label>
+        <select id="f-alignment">
+          <option value="">— wählen —</option>
+          <option>Rechtschaffen Gut</option><option>Neutral Gut</option><option>Chaotisch Gut</option>
+          <option>Rechtschaffen Neutral</option><option>Neutral</option><option>Chaotisch Neutral</option>
+          <option>Rechtschaffen Böse</option><option>Neutral Böse</option><option>Chaotisch Böse</option>
+        </select>
+      </div>
+    </div>
+
+    <label class="field-label" style="margin-top:12px">Persönlichkeitsmerkmale</label>
+    <textarea id="f-personality" rows="2" placeholder="z.B. Ich spreche nur wenig, höre dafür aber aufmerksam zu…"></textarea>
+
+    <label class="field-label" style="margin-top:12px">Ideale</label>
+    <textarea id="f-ideals" rows="2" placeholder="z.B. Wissen. Der Pfad zur Macht und zur Selbsterkenntnis führt über Wissen."></textarea>
+
+    <label class="field-label" style="margin-top:12px">Bindungen</label>
+    <textarea id="f-bonds" rows="2" placeholder="z.B. Mein Ziel im Leben ist es, verlorenes Wissen wiederzufinden…"></textarea>
+
+    <label class="field-label" style="margin-top:12px">Makel</label>
+    <textarea id="f-flaws" rows="2" placeholder="z.B. Ich bin zu neugierig für mein eigenes Wohlergehen…"></textarea>
+
+    <label class="field-label" style="margin-top:16px">Aussehen</label>
+    <div class="row">
+      <div style="flex:1"><label class="field-label">Alter</label><input id="f-age" type="number" value="25"></div>
+      <div style="flex:1"><label class="field-label">Größe</label><input id="f-height" placeholder="1,75 m"></div>
+      <div style="flex:1"><label class="field-label">Gewicht</label><input id="f-weight" placeholder="70 kg"></div>
+      <div style="flex:1"><label class="field-label">Augen</label><input id="f-eyes" placeholder="Blau"></div>
+      <div style="flex:1"><label class="field-label">Haare</label><input id="f-hair" placeholder="Braun"></div>
+    </div>
+
+    <label class="field-label" style="margin-top:12px">Hintergrundgeschichte</label>
+    <textarea id="f-backstory" rows="5" placeholder="Die Geschichte deines Charakters…"></textarea>
+
+    <div class="step-actions">
+      <button class="btn btn-secondary" onclick="goStep(4)">← Zurück</button>
+      <button class="btn btn-primary" onclick="goStep(6)">Weiter: Ausrüstung →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 6 — EQUIPMENT ═══════════ -->
+  <div class="step-panel" id="step-6">
+    <div class="step-title">🎒 Ausrüstung</div>
+    <div class="step-subtitle">Wähle Gegenstände aus deiner Bibliothek oder trage Ausrüstung manuell ein.</div>
+
+    <div class="row">
+      <div style="flex:1"><label class="field-label">Goldmünzen (gp)</label><input type="number" id="f-gold" value="0"></div>
+      <div style="flex:1"><label class="field-label">Silber (sp)</label><input type="number" id="f-silver" value="0"></div>
+      <div style="flex:1"><label class="field-label">Kupfer (cp)</label><input type="number" id="f-copper" value="0"></div>
+    </div>
+
+    <label class="field-label" style="margin-top:14px">🎒 Inventar</label>
+    <div id="equip-list"></div>
+
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn btn-primary" onclick="addManualEquip()">+ Manuell hinzufügen</button>
+      <button class="btn btn-secondary" onclick="openLibraryPicker()">📚 Aus Bibliothek</button>
+    </div>
+
+    <div class="step-actions">
+      <button class="btn btn-secondary" onclick="goStep(5)">← Zurück</button>
+      <button class="btn btn-primary" onclick="goStep(7)">Weiter: Abschluss →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 7 — FINAL ═══════════ -->
+  <div class="step-panel" id="step-7">
+    <div class="step-title">✅ Fertig</div>
+    <div class="step-subtitle">Fast geschafft – überprüfe deine Werte und speichere den Charakter.</div>
+
+    <div id="summary-content"></div>
+
+    <div class="step-actions">
+      <button class="btn btn-secondary" onclick="goStep(6)">← Zurück</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" onclick="exportCharacter()" id="exp-btn" style="display:none" title="Als Datei speichern, um damit in der Kampagne eines anderen DM zu spielen">📤 Exportieren</button>
+        <button class="btn btn-secondary" onclick="deleteCharacter()" id="del-btn" style="display:none">🗑 Löschen</button>
+        <button class="btn btn-primary" onclick="saveCharacter()">💾 Charakter Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Library picker modal -->
+<div class="modal-backdrop" id="lib-modal">
+  <div class="modal" style="max-width:600px;max-height:80vh;display:flex;flex-direction:column">
+    <button class="modal-close" onclick="document.getElementById('lib-modal').classList.remove('open')">✕</button>
+    <h3>📚 Gegenstand aus Bibliothek</h3>
+    <input type="text" id="lib-search" placeholder="🔍 Suchen…" oninput="renderLibPick()" style="margin-bottom:10px">
+    <div id="lib-pick-list" style="flex:1;overflow-y:auto"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── Static data ──
+const STATS = ["str","dex","con","int","wis","cha"];
+const STAT_LABEL = {str:"STR",dex:"GES",con:"KON",int:"INT",wis:"WEI",cha:"CHA"};
+const STAT_FULL = {str:"Stärke",dex:"Geschicklichkeit",con:"Konstitution",int:"Intelligenz",wis:"Weisheit",cha:"Charisma"};
+
+// Builtin arrays are now EMPTY – all races/classes/subclasses come from the library
+// (which is seeded with D&D 5e defaults on first launch, and fully editable)
+const RACES = [];
+
+const CLASSES = [];
+
+const ALL_SKILLS = [
+  {name:"Akrobatik",stat:"dex"},{name:"Arkana",stat:"int"},{name:"Athletik",stat:"str"},
+  {name:"Auftreten",stat:"cha"},{name:"Einschüchtern",stat:"cha"},{name:"Einsicht",stat:"wis"},
+  {name:"Ermitteln",stat:"int"},{name:"Fingerfertigkeit",stat:"dex"},{name:"Geschichte",stat:"int"},
+  {name:"Heilkunde",stat:"wis"},{name:"Heimlichkeit",stat:"dex"},{name:"Naturkunde",stat:"int"},
+  {name:"Überzeugung",stat:"cha"},{name:"Tierführung",stat:"wis"},{name:"Täuschung",stat:"cha"},
+  {name:"Wahrnehmung",stat:"wis"},{name:"Religion",stat:"int"},{name:"Überleben",stat:"wis"},
+];
+
+const STANDARD_ARRAY = [15,14,13,12,10,8];
+const POINTBUY_COSTS = {8:0,9:1,10:2,11:3,12:4,13:5,14:7,15:9};
+
+// ── State ──
+let sheet = defaultSheet();
+let arrayPool = [...STANDARD_ARRAY];
+let currentStep = 1;
+let library = {items:{},spells:{},attacks:{}};
+
+function defaultSheet(){
+  return {
+    id:null, pic_url:"",
+    name:"", progression:"milestone", dice_rolling:true, optional_features:true,
+    sources:["phb"],
+    race:null, race_asi_2:"str", race_asi_1:"dex",
+    class:null, subclass:"", level:1, hit_dice:"",
+    skill_profs:[], selected_spells:[],
+    stats:{str:10,dex:10,con:10,int:10,wis:10,cha:10},
+    ability_method:"standard",
+    background:"", alignment:"",
+    personality:"", ideals:"", bonds:"", flaws:"",
+    age:25, height:"", weight_lb:"", eyes:"", hair:"",
+    backstory:"",
+    gold:0, silver:0, copper:0,
+    equipment_items:[], // {name, quantity, weight, category...}
+    attacks:[], inventory:[],
+    hp:20, max_hp:20, ac:10, speed:30,
+    initiative_bonus:0, vision_range:0,
+  };
+}
+
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2400);}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function mod(v){return Math.floor((v-10)/2);}
+function fmtMod(m){return (m>=0?"+":"")+m;}
+
+// ── Init ──
+async function init(){
+  await loadLibrary();
+  await loadSavedChars();
+  renderRaces(); renderClasses(); renderStats(); updateMethodInfo();
+}
+
+async function loadLibrary(){
+  try {
+    // Kommt man über „Kampagne beitreten", gelten deren Paket-Regeln,
+    // sonst alle aktiven Pakete.
+    const _jsid = new URLSearchParams(location.search).get("join");
+    const _libUrl = _jsid ? "/api/library?session=" + encodeURIComponent(_jsid) : "/api/library?active=1";
+    library = await (await fetch(_libUrl)).json();
+    const totalEntries = Object.values(library||{}).reduce((sum,cat)=>sum + Object.keys(cat||{}).length, 0);
+    if (totalEntries === 0) {
+      // Auto-seed on first use
+      await fetch("/api/library/seed_defaults",{method:"POST"});
+      library = await (await fetch(_libUrl)).json();
+    }
+  } catch(e){}
+}
+
+async function loadSavedChars(){
+  try {
+    const chars = await (await fetch("/api/characters")).json();
+    const list = document.getElementById("saved-chars-list");
+    if (!chars.length) { list.innerHTML = '<span style="color:var(--text-dim);font-style:italic;font-size:.82rem">Noch keine gespeichert</span>'; return; }
+    list.innerHTML = chars.map(c=>`
+      <div class="saved-char-chip ${c.id===sheet.id?"active":""}" onclick="loadCharacter('${c.id}')">
+        ${c.pic_url?`<img src="${esc(c.pic_url)}">`:`<div class="chip-ph">🧙</div>`}
+        <span class="cname">${esc(c.name||"Unbenannt")}</span>
+      </div>`).join("");
+  } catch(e){}
+}
+
+function newCharacter(){
+  sheet = defaultSheet();
+  document.getElementById("f-name").value = "";
+  document.getElementById("portrait-img").style.display="none";
+  document.getElementById("portrait-placeholder").style.display="";
+  arrayPool = [...STANDARD_ARRAY];
+  document.getElementById("del-btn").style.display = "none";
+  document.getElementById("exp-btn").style.display = "none";
+  goStep(1); renderRaces(); renderClasses(); renderStats(); populateForm();
+  loadSavedChars();
+}
+
+async function loadCharacter(cid){
+  try {
+    const res = await fetch(`/api/characters/${cid}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    sheet = Object.assign(defaultSheet(), data);
+    populateForm();
+    renderRaces(); renderClasses(); renderStats();
+    document.getElementById("del-btn").style.display = "inline-flex";
+    document.getElementById("exp-btn").style.display = "inline-flex";
+    loadSavedChars();
+    toast("📂 Geladen: " + sheet.name);
+  } catch(e){ console.error(e); }
+}
+
+function populateForm(){
+  const setV = (id,v)=>{const el=document.getElementById(id);if(el)el.value=v||"";};
+  setV("f-name", sheet.name);
+  setV("f-progression", sheet.progression);
+  setV("f-dice_rolling", sheet.dice_rolling?"true":"false");
+  document.getElementById("f-optional_features").checked = sheet.optional_features;
+  setV("f-level", sheet.level);
+  setV("f-race_asi_2", sheet.race_asi_2);
+  setV("f-race_asi_1", sheet.race_asi_1);
+  setV("f-background", sheet.background);
+  setV("f-alignment", sheet.alignment);
+  setV("f-personality", sheet.personality);
+  setV("f-ideals", sheet.ideals);
+  setV("f-bonds", sheet.bonds);
+  setV("f-flaws", sheet.flaws);
+  setV("f-age", sheet.age);
+  setV("f-height", sheet.height);
+  setV("f-weight", sheet.weight_lb);
+  setV("f-eyes", sheet.eyes);
+  setV("f-hair", sheet.hair);
+  setV("f-backstory", sheet.backstory);
+  setV("f-gold", sheet.gold);
+  setV("f-silver", sheet.silver);
+  setV("f-copper", sheet.copper);
+  if (sheet.pic_url){
+    const img = document.getElementById("portrait-img");
+    img.src = sheet.pic_url; img.style.display="block";
+    document.getElementById("portrait-placeholder").style.display="none";
+  }
+  if (sheet.ability_method) setAbilityMethod(sheet.ability_method, true);
+  renderEquipList();
+}
+
+// ── Step nav ──
+function goStep(n){
+  currentStep = n;
+  document.querySelectorAll(".step-panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".step-item").forEach(p=>p.classList.remove("active"));
+  document.getElementById("step-"+n).classList.add("active");
+  document.querySelector(`.step-item[data-step="${n}"]`).classList.add("active");
+  if (n===5) populateBackgrounds();
+  if (n===7) renderSummary();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function populateBackgrounds(){
+  const sel = document.getElementById("f-background");
+  if (!sel) return;
+  const bgs = Object.values(library.backgrounds||{}).sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+  const current = sheet.background || "";
+  // Keep the first option ("— wählen —") and append library entries
+  let html = `<option value="">— wählen —</option>`;
+  bgs.forEach(b=>{
+    html += `<option value="${esc(b.name)}" ${current===b.name?"selected":""}>${esc(b.name)}</option>`;
+  });
+  sel.innerHTML = html;
+  showBackgroundDetails();
+}
+
+function onBackgroundChange(){
+  const sel = document.getElementById("f-background");
+  sheet.background = sel.value;
+  showBackgroundDetails();
+}
+
+function showBackgroundDetails(){
+  const box = document.getElementById("bg-details");
+  if (!box) return;
+  if (!sheet.background){ box.innerHTML=""; return; }
+  const bg = Object.values(library.backgrounds||{}).find(b => b.name === sheet.background);
+  if (!bg){ box.innerHTML=""; return; }
+  let html = `<div style="padding:10px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;font-size:.85rem">
+    <div style="color:var(--text-dim);margin-bottom:4px">${esc(bg.description||"")}</div>`;
+  if (bg.skill_prof)   html += `<div><strong style="color:var(--gold-dark)">Fertigkeiten:</strong> ${esc(bg.skill_prof)}</div>`;
+  if (bg.tool_prof)    html += `<div><strong style="color:var(--gold-dark)">Werkzeuge:</strong> ${esc(bg.tool_prof)}</div>`;
+  if (bg.language_count)html += `<div><strong style="color:var(--gold-dark)">Zusätzliche Sprachen:</strong> ${bg.language_count}</div>`;
+  if (bg.equipment)    html += `<div><strong style="color:var(--gold-dark)">Ausrüstung:</strong> ${esc(bg.equipment)}</div>`;
+  if (bg.feature_name) html += `<div style="margin-top:6px"><strong style="color:var(--gold)">${esc(bg.feature_name)}:</strong> ${esc(bg.feature_desc||"")}</div>`;
+  // Background traits with choices
+  const traits = Array.isArray(bg.traits) ? bg.traits : [];
+  if (traits.length){
+    traits.forEach(t=>{
+      html += `<div style="margin-top:8px;padding:6px 8px;background:var(--bg-panel);border-radius:5px">
+        <div style="font-family:var(--font-display);color:var(--gold);font-size:.85rem">${esc(t.name||"")}</div>
+        <div style="font-size:.82rem;margin-top:2px">${esc(t.description||"")}</div>
+        ${renderChoicesUI(t, `bg:${bg.id}`)}
+      </div>`;
+    });
+  }
+  html += `</div>`;
+  box.innerHTML = html;
+}
+
+// ── Portrait upload ──
+async function uploadPortrait(input){
+  if (!input.files[0]) return;
+  const fd = new FormData(); fd.append("file", input.files[0]);
+  const res = await fetch("/upload/character",{method:"POST",body:fd});
+  const data = await res.json();
+  if (data.url){
+    sheet.pic_url = data.url;
+    const img = document.getElementById("portrait-img");
+    img.src = data.url; img.style.display="block";
+    document.getElementById("portrait-placeholder").style.display="none";
+    toast("🖼️ Bild hochgeladen");
+  }
+}
+
+// ── Race ──
+function renderRaces(){
+  const grid = document.getElementById("race-grid");
+  const libRaces = Object.values(library.races || {});
+  // Library takes precedence; only show hardcoded if library is empty
+  let combined;
+  if (libRaces.length) {
+    combined = libRaces.map(r=>({
+      id: "lib:"+r.id,
+      name: r.name,
+      meta: `${r.size||"Mittel"} · ${r.speed||30}ft · ${r.asi||""}`,
+      features: r.traits || r.description || "",
+      source: "library",
+      _lib: r,
+    }));
+  } else {
+    combined = RACES.map(r=>({...r, source:"builtin"}));
+  }
+  grid.innerHTML = combined.map(r=>`
+    <div class="option-card ${sheet.race===r.id?"active":""}" onclick="selectRace('${r.id}')">
+      <div class="oc-name">${esc(r.name)}</div>
+      <div class="oc-meta">${esc(r.meta||"")}</div>
+    </div>`).join("");
+  if (sheet.race) showRaceDetails();
+}
+
+function selectRace(rid){
+  sheet.race = rid;
+  renderRaces();
+  showRaceDetails();
+}
+
+function _findRace(rid){
+  const builtin = RACES.find(r=>r.id===rid);
+  if (builtin) return builtin;
+  if (rid && rid.startsWith("lib:")) {
+    const lr = library.races?.[rid.substring(4)];
+    if (lr) return {
+      id: rid, name: lr.name,
+      features: (lr.traits || lr.description || "").replace(/\n/g, "<br>"),
+      meta: `${lr.size||"Mittel"} · ${lr.speed||30}ft`,
+      _lib: lr,
+    };
+  }
+  return null;
+}
+
+function showRaceDetails(){
+  const r = _findRace(sheet.race);
+  if (!r) return;
+  document.getElementById("race-details").style.display="block";
+  let extra = "";
+  if (r._lib){
+    if (r._lib.languages) extra += `<div style="margin-top:4px"><strong>Sprachen:</strong> ${esc(r._lib.languages)}</div>`;
+    if (r._lib.darkvision) extra += `<div><strong>Dunkelsicht:</strong> ${r._lib.darkvision} ft</div>`;
+    if (r._lib.asi) extra += `<div><strong>Attributs-Boni:</strong> ${esc(r._lib.asi)}</div>`;
+  }
+  // Render traits with interactive choices
+  const traits = r._lib?.traits || [];
+  let traitsHtml = "";
+  if (Array.isArray(traits) && traits.length){
+    traitsHtml = `<div style="margin-top:10px"><strong style="color:var(--gold-dark)">Eigenschaften:</strong>`;
+    traits.forEach(t=>{
+      traitsHtml += `<div style="padding:8px 10px;background:var(--bg-panel);border:1px solid var(--border);border-radius:6px;margin-top:6px">
+        <div style="font-family:var(--font-display);color:var(--gold);font-size:.9rem">${esc(t.name||"")}</div>
+        <div style="font-size:.83rem;margin-top:3px;color:var(--text)">${esc(t.description||"").replace(/\n/g,"<br>")}</div>
+        ${renderChoicesUI(t, `race:${r._lib?.id}`)}
+      </div>`;
+    });
+    traitsHtml += `</div>`;
+  }
+  document.getElementById("race-info").innerHTML = `
+    <div style="font-family:var(--font-display);color:var(--gold);font-size:1.1rem;margin-bottom:6px">${esc(r.name)}</div>
+    <div style="font-size:.85rem;color:var(--text-dim);margin-bottom:8px">${esc(r._lib?.description||"")}</div>
+    ${extra}
+    ${traitsHtml}
+  `;
+}
+
+// ── Generic Choice UI renderer ─────────────────────────────────────────
+// Shows pickers for each `choice` inside a trait, saves into sheet.trait_choices[sourceKey][traitId][choiceId]
+function renderChoicesUI(trait, sourceKey){
+  const choices = trait.choices || [];
+  if (!choices.length) return "";
+
+  const SKILLS = ["Akrobatik","Arkana","Athletik","Auftreten","Einschüchtern","Einsicht","Ermitteln","Fingerfertigkeit","Geschichte","Heilkunde","Heimlichkeit","Naturkunde","Religion","Tierführung","Täuschung","Überleben","Überzeugung","Wahrnehmung"];
+  const LANGUAGES = ["Gemeinsprache","Zwergisch","Elfisch","Riesisch","Gnomisch","Goblin","Halblingisch","Orkisch","Abyssal","Himmlisch","Drakonisch","Infernal","Primordial","Sylvan","Unterirdisch","Tiefenrede"];
+  const ABILITIES = ["Stärke","Geschicklichkeit","Konstitution","Intelligenz","Weisheit","Charisma"];
+  const DAMAGE_TYPES = ["Hieb","Stich","Wucht","Säure","Kälte","Feuer","Blitz","Gift","Psychisch","Schall","Strahlend","Energie"];
+  const FIGHTING_STYLES = ["Verteidigung","Duellieren","Zweihandkampf","Schutz","Schleuder","Zweiwaffenkampf","Bogenschützen"];
+
+  if (!sheet.trait_choices) sheet.trait_choices = {};
+  if (!sheet.trait_choices[sourceKey]) sheet.trait_choices[sourceKey] = {};
+  if (!sheet.trait_choices[sourceKey][trait.id]) sheet.trait_choices[sourceKey][trait.id] = {};
+
+  let html = `<div style="margin-top:8px;padding-top:6px;border-top:1px dashed var(--border)">`;
+  choices.forEach((c,ci)=>{
+    const currentVal = sheet.trait_choices[sourceKey][trait.id][c.id] || [];
+    let options = [];
+    switch(c.type){
+      case "language":         options = LANGUAGES; break;
+      case "skill":            options = SKILLS; break;
+      case "ability":          options = ABILITIES; break;
+      case "damage_type":
+      case "damage_resistance":options = DAMAGE_TYPES; break;
+      case "fighting_style":   options = FIGHTING_STYLES; break;
+      case "spell": case "cantrip":
+        options = Object.values(library.spells||{})
+          .filter(s => c.type==="cantrip" ? s.level===0 : s.level>0)
+          .map(s => s.name);
+        break;
+      case "feat":
+        options = Object.values(library.feats||{}).map(f=>f.name); break;
+      case "subclass":
+        options = Object.values(library.subclasses||{}).map(s=>s.name); break;
+      case "tool":
+        options = ["Alchemistenbedarf","Brauerbedarf","Handwerkszeug","Schmiedewerkzeug","Tischlerzeug","Würfel","Diebeswerkzeug","Spielkarten","Musikinstrument","Malerbedarf","Schmuckhandwerk","Navigator","Giftmischer"]; break;
+      case "armor_type":
+        options = ["Leichte Rüstung","Mittlere Rüstung","Schwere Rüstung","Schilde"]; break;
+      case "weapon":
+        options = ["Einfache Waffen","Kriegswaffen","Langschwert","Kurzschwert","Langbogen","Kurzbogen","Rapier","Dolch"]; break;
+      case "custom":           options = c.options || []; break;
+    }
+    const label = c.label || _choiceTypeLabel(c.type);
+    const count = c.count || 1;
+    const choiceKey = `${sourceKey}|${trait.id}|${c.id}`;
+    html += `<div style="margin-top:5px;padding:5px 7px;background:var(--bg-dark);border-radius:4px">
+      <div style="font-size:.75rem;color:var(--gold-dark);margin-bottom:3px">🎯 ${esc(label)} (${count}×)</div>`;
+    if (count === 1){
+      html += `<select data-choice-key="${choiceKey}" onchange="saveTraitChoice(this)" style="font-size:.8rem;padding:4px 6px">
+        <option value="">— wählen —</option>
+        ${options.map(o=>`<option value="${esc(o)}" ${(currentVal[0]===o)?"selected":""}>${esc(o)}</option>`).join("")}
+      </select>`;
+    } else {
+      // Multi-select: show checkboxes with limit
+      html += `<div style="display:flex;flex-wrap:wrap;gap:4px" data-choice-key="${choiceKey}" data-limit="${count}">`;
+      options.forEach(o=>{
+        const checked = currentVal.includes(o);
+        html += `<label style="display:inline-flex;align-items:center;gap:3px;padding:3px 7px;background:${checked?"rgba(201,169,110,.15)":"var(--bg-panel)"};border:1px solid ${checked?"var(--gold-dark)":"var(--border)"};border-radius:4px;font-size:.78rem;cursor:pointer">
+          <input type="checkbox" ${checked?"checked":""} style="width:auto;margin:0" onchange="saveTraitChoiceMulti(this,'${choiceKey}','${esc(o)}',${count})"> ${esc(o)}
+        </label>`;
+      });
+      html += `</div>`;
+    }
+    html += `</div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function _choiceTypeLabel(t){
+  const m = {language:"Sprache", skill:"Fertigkeit", ability:"Attribut", tool:"Werkzeug",
+             cantrip:"Zaubertrick", spell:"Zauber", feat:"Talent", subclass:"Subklasse",
+             fighting_style:"Kampfstil", damage_resistance:"Schadensresistenz", damage_type:"Schadenstyp",
+             weapon:"Waffe", armor_type:"Rüstungsart", custom:"Auswahl"};
+  return m[t] || t;
+}
+
+function saveTraitChoice(select){
+  const [sourceKey, traitId, choiceId] = select.dataset.choiceKey.split("|");
+  if (!sheet.trait_choices) sheet.trait_choices = {};
+  if (!sheet.trait_choices[sourceKey]) sheet.trait_choices[sourceKey] = {};
+  if (!sheet.trait_choices[sourceKey][traitId]) sheet.trait_choices[sourceKey][traitId] = {};
+  sheet.trait_choices[sourceKey][traitId][choiceId] = select.value ? [select.value] : [];
+}
+
+function saveTraitChoiceMulti(checkbox, choiceKey, option, limit){
+  const [sourceKey, traitId, choiceId] = choiceKey.split("|");
+  if (!sheet.trait_choices) sheet.trait_choices = {};
+  if (!sheet.trait_choices[sourceKey]) sheet.trait_choices[sourceKey] = {};
+  if (!sheet.trait_choices[sourceKey][traitId]) sheet.trait_choices[sourceKey][traitId] = {};
+  let arr = sheet.trait_choices[sourceKey][traitId][choiceId] || [];
+  if (checkbox.checked){
+    if (!arr.includes(option)){
+      if (arr.length >= limit){
+        checkbox.checked = false;
+        toast(`⚠️ Maximal ${limit} auswählbar`);
+        return;
+      }
+      arr.push(option);
+    }
+  } else {
+    arr = arr.filter(x => x !== option);
+  }
+  sheet.trait_choices[sourceKey][traitId][choiceId] = arr;
+  // Update styling
+  const label = checkbox.parentElement;
+  if (checkbox.checked){
+    label.style.background = "rgba(201,169,110,.15)";
+    label.style.borderColor = "var(--gold-dark)";
+  } else {
+    label.style.background = "var(--bg-panel)";
+    label.style.borderColor = "var(--border)";
+  }
+}
+
+// ── Class ──
+function renderClasses(){
+  const grid = document.getElementById("class-grid");
+  const libClasses = Object.values(library.classes || {});
+  let combined;
+  if (libClasses.length) {
+    combined = libClasses.map(c=>({
+      id: "lib:"+c.id,
+      name: c.name,
+      meta: c.description ? c.description.substring(0,44) : "Klasse aus Bibliothek",
+      hd: c.hd || "d8",
+      source: "library",
+      _lib: c,
+    }));
+  } else {
+    combined = CLASSES.map(c=>({...c, source:"builtin"}));
+  }
+  grid.innerHTML = combined.map(c=>`
+    <div class="option-card ${sheet.class===c.id?"active":""}" onclick="selectClass('${c.id}')">
+      <div class="oc-name">${esc(c.name)}</div>
+      <div class="oc-meta">${esc(c.meta||"")} · TW ${c.hd}</div>
+    </div>`).join("");
+  if (sheet.class) showClassDetails();
+}
+
+function selectClass(cid){
+  sheet.class = cid;
+  sheet.subclass = "";
+  sheet.skill_profs = [];
+  renderClasses();
+  showClassDetails();
+}
+
+function _findClass(cid){
+  const builtin = CLASSES.find(c=>c.id===cid);
+  if (builtin) return builtin;
+  if (cid && cid.startsWith("lib:")) {
+    const lc = library.classes?.[cid.substring(4)];
+    if (lc) {
+      const skill_options = lc.skill_options && lc.skill_options.trim() === "*"
+        ? ["*"]
+        : (lc.skill_options||"").split(",").map(s=>s.trim()).filter(Boolean);
+      return {
+        id: cid, name: lc.name,
+        meta: lc.description ? lc.description.substring(0,40) : "",
+        hd: lc.hd || "d8",
+        subclasses: [],  // lib-subclasses handled separately
+        skills: skill_options.length ? skill_options : ALL_SKILLS.map(s=>s.name),
+        skill_choices: lc.skill_count || 2,
+        spellcaster: !!lc.spellcaster,
+        save_prof: (lc.saves||"").toLowerCase().split(/[,\s]+/).filter(Boolean),
+        _lib: lc,
+      };
+    }
+  }
+  return null;
+}
+
+function _getSubclassesFor(cid){
+  // Built-in class?
+  const builtin = CLASSES.find(c=>c.id===cid);
+  if (builtin) {
+    const libSubs = Object.values(library.subclasses||{}).filter(s=>
+      // subclasses can also reference built-in class by name
+      s.parent_class_name === builtin.name || s.parent_class === cid
+    );
+    return [
+      ...builtin.subclasses.map(n=>({id:n, name:n, source:"builtin"})),
+      ...libSubs.map(s=>({id:"lib:"+s.id, name:s.name, source:"library", _lib:s})),
+    ];
+  }
+  // Library class
+  if (cid && cid.startsWith("lib:")) {
+    const libClassId = cid.substring(4);
+    return Object.values(library.subclasses||{}).filter(s=>s.parent_class===libClassId)
+      .map(s=>({id:"lib:"+s.id, name:s.name, source:"library", _lib:s}));
+  }
+  return [];
+}
+
+function showClassDetails(){
+  const c = _findClass(sheet.class);
+  if (!c) return;
+  document.getElementById("class-details").style.display="block";
+  document.getElementById("f-hit_dice").value = c.hd;
+  sheet.hit_dice = c.hd;
+
+  // Subclass dropdown
+  const sub = document.getElementById("f-subclass");
+  const availableSubs = _getSubclassesFor(sheet.class);
+  sub.innerHTML = `<option value="">— wählen (ab Lvl 3) —</option>` +
+    availableSubs.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.source==="library"?" 📚":""}</option>`).join("");
+  sub.value = sheet.subclass || "";
+  sub.onchange = ()=>{ sheet.subclass = sub.value; showClassDetails(); };
+
+  // Skills selection
+  const skillsGrid = document.getElementById("skills-grid");
+  const allowed = (c.skills && c.skills.includes("*")) ? ALL_SKILLS.map(s=>s.name) : c.skills;
+  skillsGrid.innerHTML = ALL_SKILLS.map(s=>{
+    const disabled = !allowed.includes(s.name);
+    const on = sheet.skill_profs.includes(s.name);
+    return `<div class="skill-check ${on?"on":""}" style="${disabled?'opacity:.3;cursor:not-allowed':''}" onclick="${disabled?'':`toggleSkill('${s.name}')`}">
+      <div class="box">${on?"✓":""}</div>
+      <span class="name">${esc(s.name)}</span>
+      <span class="stat-tag">${STAT_LABEL[s.stat]}</span>
+    </div>`;
+  }).join("");
+  // Skill counter hint (deduplicate)
+  document.querySelectorAll("#skill-counter-hint").forEach(h=>h.remove());
+  skillsGrid.insertAdjacentHTML("beforebegin",
+    `<div style="font-size:.8rem;color:var(--text-dim);margin-bottom:4px" id="skill-counter-hint">Wähle ${c.skill_choices} Fertigkeiten (gewählt: ${sheet.skill_profs.filter(s=>allowed.includes(s)).length}/${c.skill_choices})</div>`);
+
+  // Level features preview (if lib class)
+  renderClassLevelFeatures();
+
+  // Spells
+  const spellsSection = document.getElementById("spells-section");
+  if (c.spellcaster) {
+    spellsSection.style.display = "block";
+    renderSpellPicker();
+  } else spellsSection.style.display = "none";
+}
+
+function renderClassLevelFeatures(){
+  let container = document.getElementById("class-level-features");
+  if (!container){
+    const classDetails = document.getElementById("class-details");
+    const div = document.createElement("div");
+    div.id = "class-level-features";
+    div.style.cssText = "margin-top:20px";
+    classDetails.appendChild(div);
+    container = div;
+  }
+
+  const c = _findClass(sheet.class);
+  if (!c) { container.innerHTML=""; return; }
+  const level = parseInt(document.getElementById("f-level")?.value)||1;
+
+  // Collect all features: {lvl: [{source, name, description, choices, id}]}
+  const byLevel = {};
+  if (c._lib?.level_features) {
+    for (let [lvl, features] of Object.entries(c._lib.level_features)) {
+      if (parseInt(lvl) > level) continue;
+      if (!Array.isArray(features)) features = _textToFeatArray(features, `cls${lvl}`);
+      byLevel[lvl] = (byLevel[lvl]||[]).concat(features.map(f=>({...f, source:"class", source_name:c.name, level:lvl})));
+    }
+  }
+  if (sheet.subclass && sheet.subclass.startsWith("lib:")){
+    const sc = library.subclasses?.[sheet.subclass.substring(4)];
+    if (sc?.level_features) {
+      for (let [lvl, features] of Object.entries(sc.level_features)) {
+        if (parseInt(lvl) > level) continue;
+        if (!Array.isArray(features)) features = _textToFeatArray(features, `sc${lvl}`);
+        byLevel[lvl] = (byLevel[lvl]||[]).concat(features.map(f=>({...f, source:"subclass", source_name:sc.name, level:lvl})));
+      }
+    }
+  }
+
+  const sortedLevels = Object.keys(byLevel).sort((a,b)=>parseInt(a)-parseInt(b));
+  if (!sortedLevels.length){
+    container.innerHTML = `<label class="field-label">Level-Features</label>
+      <div style="padding:14px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;color:var(--text-dim);font-style:italic;font-size:.85rem">
+        Keine Level-Features für diese Klasse hinterlegt.<br>
+        <a href="/library" target="_blank" style="color:var(--gold)">→ In der Bibliothek definieren</a>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `<label class="field-label">Level-Features (bis Stufe ${level})</label>
+    <div class="level-features-scroll">
+      ${sortedLevels.map(lvl=>{
+        const feats = byLevel[lvl];
+        return `<div class="level-feature-card">
+          <div class="lf-lvl">Stufe ${lvl}</div>
+          <div class="lf-content">
+            ${feats.map(f=>{
+              const srcKey = `${f.source}:${c._lib?.id||"builtin"}:lvl${lvl}`;
+              const chColor = f.source==="subclass" ? "var(--gold-light)" : "var(--gold)";
+              const isASI = /ASI|Attributs|Ability Score/i.test((f.name||"")+(f.description||""));
+              return `<div style="margin-bottom:8px;padding:6px 8px;background:var(--bg-panel);border-radius:5px">
+                <strong style="color:${chColor}">${esc(f.name||"(Feature)")}:</strong>
+                <span style="font-size:.85rem">${esc(f.description||"").replace(/\n/g,"<br>")}</span>
+                ${renderChoicesUI(f, srcKey)}
+                ${isASI ? renderASIPicker(lvl, c._lib?.id||"builtin") : ""}
+              </div>`;
+            }).join("")}
+          </div>
+        </div>`;
+      }).join("")}
+    </div>`;
+}
+
+// ASI (Ability Score Improvement) picker: +2 to one, +1 to two, OR take a feat
+function renderASIPicker(lvl, classId){
+  const key = `${classId}:lvl${lvl}`;
+  if (!sheet.asi_choices) sheet.asi_choices = {};
+  const cur = sheet.asi_choices[key] || {mode:"ability", asi_mode:"split", stat1:"", stat2:"", stat_plus2:"", feat_id:""};
+  sheet.asi_choices[key] = cur;
+  const feats = Object.values(library.feats || {});
+
+  return `<div style="margin-top:8px;padding:8px;background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:6px">
+    <div style="font-size:.78rem;color:var(--gold-dark);margin-bottom:6px">📈 Attributs-Verbesserung: Wähle Modus</div>
+    <div style="display:flex;gap:6px;margin-bottom:6px">
+      <label style="display:flex;align-items:center;gap:4px;cursor:pointer;flex:1;padding:5px 8px;background:${cur.mode==='ability'?'rgba(var(--gold-rgb),.12)':'var(--bg-panel)'};border:1px solid ${cur.mode==='ability'?'var(--gold-dark)':'var(--border)'};border-radius:5px;font-size:.78rem">
+        <input type="radio" name="asi-mode-${key.replace(/:/g,"-")}" value="ability" ${cur.mode==='ability'?'checked':''} onchange="setASIMode('${key}','ability')" style="width:auto;margin:0"> Attribute verbessern
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;cursor:pointer;flex:1;padding:5px 8px;background:${cur.mode==='feat'?'rgba(var(--gold-rgb),.12)':'var(--bg-panel)'};border:1px solid ${cur.mode==='feat'?'var(--gold-dark)':'var(--border)'};border-radius:5px;font-size:.78rem">
+        <input type="radio" name="asi-mode-${key.replace(/:/g,"-")}" value="feat" ${cur.mode==='feat'?'checked':''} onchange="setASIMode('${key}','feat')" style="width:auto;margin:0"> ⭐ Talent wählen
+      </label>
+    </div>
+    ${cur.mode === "ability" ? renderASIAbilityPart(key, cur) : renderASIFeatPart(key, cur, feats)}
+  </div>`;
+}
+
+function renderASIAbilityPart(key, cur){
+  const ABILS = [["str","STR"],["dex","GES"],["con","KON"],["int","INT"],["wis","WEI"],["cha","CHA"]];
+  return `<div>
+    <div style="display:flex;gap:4px;margin-bottom:6px;font-size:.75rem">
+      <label style="flex:1;cursor:pointer;padding:4px;background:${cur.asi_mode==='split'?'rgba(var(--gold-rgb),.1)':'var(--bg-panel)'};border:1px solid var(--border);border-radius:4px">
+        <input type="radio" name="asimode-${key.replace(/:/g,"-")}" ${cur.asi_mode==='split'?'checked':''} onchange="setASISubMode('${key}','split')" style="width:auto"> +1 auf zwei
+      </label>
+      <label style="flex:1;cursor:pointer;padding:4px;background:${cur.asi_mode==='single'?'rgba(var(--gold-rgb),.1)':'var(--bg-panel)'};border:1px solid var(--border);border-radius:4px">
+        <input type="radio" name="asimode-${key.replace(/:/g,"-")}" ${cur.asi_mode==='single'?'checked':''} onchange="setASISubMode('${key}','single')" style="width:auto"> +2 auf eins
+      </label>
+    </div>
+    ${cur.asi_mode === "split" ? `
+      <div style="display:flex;gap:5px">
+        <select onchange="setASI('${key}','stat1',this.value)" style="flex:1;font-size:.78rem">
+          <option value="">+1 auf…</option>
+          ${ABILS.map(([v,l])=>`<option value="${v}" ${cur.stat1===v?'selected':''}>+1 ${l}</option>`).join("")}
+        </select>
+        <select onchange="setASI('${key}','stat2',this.value)" style="flex:1;font-size:.78rem">
+          <option value="">+1 auf…</option>
+          ${ABILS.map(([v,l])=>`<option value="${v}" ${cur.stat2===v?'selected':''}>+1 ${l}</option>`).join("")}
+        </select>
+      </div>
+    ` : `
+      <select onchange="setASI('${key}','stat_plus2',this.value)" style="font-size:.78rem">
+        <option value="">+2 auf…</option>
+        ${ABILS.map(([v,l])=>`<option value="${v}" ${cur.stat_plus2===v?'selected':''}>+2 ${l}</option>`).join("")}
+      </select>
+    `}
+  </div>`;
+}
+
+function renderASIFeatPart(key, cur, feats){
+  if (!feats.length) return `<div style="font-size:.78rem;color:var(--text-dim);font-style:italic">Keine Talente in der Bibliothek. <a href="/library" target="_blank" style="color:var(--gold)">→ Erstellen</a></div>`;
+  const selected = feats.find(f=>f.id===cur.feat_id);
+  return `<div>
+    <select onchange="setASI('${key}','feat_id',this.value)" style="font-size:.78rem;margin-bottom:6px">
+      <option value="">⭐ Talent wählen…</option>
+      ${feats.map(f=>`<option value="${f.id}" ${cur.feat_id===f.id?'selected':''}>${esc(f.name)}${f.prerequisite?` (${esc(f.prerequisite)})`:""}</option>`).join("")}
+    </select>
+    ${selected ? `
+      <div style="padding:6px 8px;background:var(--bg-panel);border:1px solid var(--border);border-radius:5px;font-size:.8rem">
+        <strong style="color:var(--gold)">${esc(selected.name)}</strong>
+        ${selected.prerequisite?`<span style="color:var(--text-dim);font-size:.72rem"> · Voraussetzung: ${esc(selected.prerequisite)}</span>`:""}
+        <div style="margin-top:4px">${esc(selected.description||"")}</div>
+        ${(selected.traits||[]).map(t=>`<div style="margin-top:4px"><strong>${esc(t.name||"")}:</strong> ${esc(t.description||"")}</div>`).join("")}
+      </div>` : ""}
+  </div>`;
+}
+
+function setASIMode(key, mode){
+  if (!sheet.asi_choices[key]) sheet.asi_choices[key] = {};
+  sheet.asi_choices[key].mode = mode;
+  renderClassLevelFeatures();
+}
+function setASISubMode(key, subMode){
+  if (!sheet.asi_choices[key]) sheet.asi_choices[key] = {};
+  sheet.asi_choices[key].asi_mode = subMode;
+  renderClassLevelFeatures();
+}
+function setASI(key, field, value){
+  if (!sheet.asi_choices[key]) sheet.asi_choices[key] = {};
+  sheet.asi_choices[key][field] = value;
+  if (field === "feat_id") renderClassLevelFeatures();  // re-render to show feat details
+}
+
+function _textToFeatArray(val, idPrefix){
+  // Backward compat: convert string → array
+  if (typeof val !== "string") return [];
+  return val.split("\n").filter(s=>s.trim()).map((line,i)=>{
+    if(line.includes(":")){
+      const [n,...rest] = line.split(":");
+      return {id:`${idPrefix}_${i}`, name:n.trim(), description:rest.join(":").trim(), choices:[]};
+    }
+    return {id:`${idPrefix}_${i}`, name:line.substring(0,40), description:line, choices:[]};
+  });
+}
+
+function updateClassLevelEffects(){
+  sheet.level = parseInt(document.getElementById("f-level").value)||1;
+  renderClassLevelFeatures();
+}
+
+function toggleSkill(name){
+  const c = _findClass(sheet.class); if (!c) return;
+  const allowed = (c.skills && c.skills.includes("*")) ? ALL_SKILLS.map(s=>s.name) : c.skills;
+  const currentChosen = sheet.skill_profs.filter(s=>allowed.includes(s)).length;
+  if (sheet.skill_profs.includes(name)){
+    sheet.skill_profs = sheet.skill_profs.filter(s=>s!==name);
+  } else {
+    if (currentChosen >= c.skill_choices) { toast("⚠️ Maximum erreicht"); return; }
+    sheet.skill_profs.push(name);
+  }
+  showClassDetails();
+}
+
+function renderSpellPicker(){
+  const grid = document.getElementById("spell-grid");
+  const spells = Object.values(library.spells||{});
+  if (!spells.length){
+    grid.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-dim);font-style:italic">
+      Keine Zauber in der Bibliothek.<br><a href="/library" target="_blank" style="color:var(--gold)">→ Bibliothek öffnen</a></div>`;
+    return;
+  }
+  grid.innerHTML = spells.map(sp=>{
+    const on = sheet.selected_spells.includes(sp.id);
+    return `<div class="spell-pick-item ${on?"on":""}" onclick="toggleSpell('${sp.id}')">
+      <div class="box">${on?"✓":""}</div>
+      <div class="sp-name">${esc(sp.name)}</div>
+      <div class="sp-level">${sp.level==0?"Trick":`Lvl ${sp.level}`}</div>
+    </div>`;
+  }).join("");
+}
+
+function toggleSpell(sid){
+  if (sheet.selected_spells.includes(sid))
+    sheet.selected_spells = sheet.selected_spells.filter(s=>s!==sid);
+  else sheet.selected_spells.push(sid);
+  renderSpellPicker();
+}
+
+// ── Abilities ──
+function setAbilityMethod(method, skipReset){
+  sheet.ability_method = method;
+  document.querySelectorAll(".method-tab").forEach(t=>t.classList.toggle("active", t.dataset.method===method));
+  const arr = document.getElementById("array-pool-wrap");
+  const pb  = document.getElementById("pointbuy-wrap");
+  arr.style.display = method==="standard" ? "block" : "none";
+  pb.style.display  = method==="pointbuy" ? "block" : "none";
+  if (!skipReset){
+    if (method==="standard"){ sheet.stats = {str:null,dex:null,con:null,int:null,wis:null,cha:null}; arrayPool = [...STANDARD_ARRAY]; }
+    else if (method==="pointbuy") sheet.stats = {str:8,dex:8,con:8,int:8,wis:8,cha:8};
+    else if (method==="manual") sheet.stats = {str:10,dex:10,con:10,int:10,wis:10,cha:10};
+    else if (method==="rolled") sheet.stats = {str:0,dex:0,con:0,int:0,wis:0,cha:0};
+  }
+  updateMethodInfo();
+  renderStats();
+  renderArrayPool();
+}
+
+function updateMethodInfo(){
+  const info = document.getElementById("method-info");
+  const notes = {
+    standard:"📐 <strong>Standard Array:</strong> Verteile die festen Werte 15, 14, 13, 12, 10, 8 auf deine Attribute. Klicke auf einen Wert im Pool und dann auf ein Attribut.",
+    pointbuy:"💰 <strong>Point Buy:</strong> Du hast 27 Punkte. Alle Werte starten bei 8. Erhöhungen kosten: 9→1, 10→2, 11→3, 12→4, 13→5, 14→7, 15→9. Maximum ist 15 (bevor Volks-Boni).",
+    rolled:"🎲 <strong>Würfeln:</strong> Klicke 'Würfeln' bei jedem Attribut, um 4d6 zu werfen und die niedrigste Zahl zu streichen.",
+    manual:"✏️ <strong>Manuell:</strong> Trage die Werte direkt ein (z.B. für Hausregeln).",
+  };
+  info.innerHTML = notes[sheet.ability_method] || "";
+}
+
+function renderArrayPool(){
+  const pool = document.getElementById("array-pool");
+  if (sheet.ability_method !== "standard") return;
+  const used = Object.values(sheet.stats).filter(v=>v!=null);
+  const available = [...STANDARD_ARRAY];
+  used.forEach(v=>{
+    const i = available.indexOf(v); if (i>-1) available.splice(i,1);
+  });
+  pool.innerHTML = STANDARD_ARRAY.map((v,idx)=>{
+    const stillAvail = available.filter(x=>x===v).length;
+    const isUsed = !available.includes(v);
+    return `<div class="array-chip ${isUsed?"used":""}">${v}</div>`;
+  }).join("");
+}
+
+function renderStats(){
+  const ed = document.getElementById("stats-editor");
+  const method = sheet.ability_method || "standard";
+  ed.innerHTML = STATS.map(s=>{
+    const val = sheet.stats[s];
+    const displayVal = val==null ? "—" : val;
+    const m = val==null ? 0 : mod(val + getRaceBonus(s));
+    const high = val!=null && (val+getRaceBonus(s)) >= 14;
+
+    let input = "";
+    if (method === "standard") {
+      input = `<div class="sc-val" style="cursor:pointer" onclick="assignFromPool('${s}')">${displayVal}</div>
+        <div style="font-size:.7rem;color:var(--text-dim);margin-top:2px">+ ${getRaceBonus(s)} Volk = ${val==null?"—":val+getRaceBonus(s)}</div>`;
+    } else if (method === "pointbuy") {
+      input = `<div style="display:flex;align-items:center;justify-content:center;gap:4px">
+        <span class="sc-btn" onclick="pbChange('${s}',-1)">−</span>
+        <span class="sc-val" style="width:auto">${val}</span>
+        <span class="sc-btn" onclick="pbChange('${s}',1)">+</span>
+      </div>
+      <div style="font-size:.7rem;color:var(--text-dim);margin-top:2px">+ ${getRaceBonus(s)} = ${val+getRaceBonus(s)}</div>`;
+    } else if (method === "rolled") {
+      input = `<input class="sc-val" type="number" value="${val||0}" onchange="sheet.stats['${s}']=parseInt(this.value)||0;renderStats();">
+        <button class="btn btn-secondary" style="padding:3px 8px;font-size:.7rem;margin-top:3px" onclick="roll4d6('${s}')">🎲 4d6↓</button>`;
+    } else {
+      input = `<input class="sc-val" type="number" value="${val||10}" onchange="sheet.stats['${s}']=parseInt(this.value)||10;renderStats();">`;
+    }
+
+    return `<div class="stat-card ${high?"high":""}">
+      <div class="sc-label">${STAT_LABEL[s]}</div>
+      ${input}
+      <div class="sc-mod">${val==null?"—":fmtMod(m)}</div>
+    </div>`;
+  }).join("");
+
+  if (method === "pointbuy") updatePBRemaining();
+}
+
+function getRaceBonus(stat){
+  let b = 0;
+  if (sheet.race_asi_2 === stat) b += 2;
+  if (sheet.race_asi_1 === stat) b += 1;
+  return b;
+}
+
+async function assignFromPool(stat){
+  if (sheet.stats[stat] != null){
+    sheet.stats[stat] = null; renderStats(); renderArrayPool(); return;
+  }
+  const used = Object.values(sheet.stats).filter(v=>v!=null);
+  const available = [...STANDARD_ARRAY];
+  used.forEach(v=>{const i=available.indexOf(v);if(i>-1)available.splice(i,1);});
+  if (!available.length) { toast("Pool leer"); return; }
+  // Auswahl als anklickbare Knöpfe – kein Abtippen von Zahlen nötig.
+  const val = await Dialog.choose(
+    "Welchen Wert möchtest du zuweisen?",
+    available.map(v => ({ value: v, label: String(v) })),
+    { title: "Wert zuweisen", icon: "🎲",
+      hint: "Noch verfügbar aus dem Standard-Array." });
+  if (val !== null && available.includes(val)){
+    sheet.stats[stat] = val; renderStats(); renderArrayPool();
+  }
+}
+
+function pbChange(stat, delta){
+  const cur = sheet.stats[stat];
+  const target = cur + delta;
+  if (target < 8 || target > 15) return;
+  // Check budget
+  const currentCost = POINTBUY_COSTS[cur];
+  const targetCost = POINTBUY_COSTS[target];
+  const totalCost = STATS.reduce((sum,s)=>sum + POINTBUY_COSTS[sheet.stats[s]],0);
+  const newTotal = totalCost - currentCost + targetCost;
+  if (newTotal > 27) { toast("⚠️ Nicht genug Punkte"); return; }
+  sheet.stats[stat] = target;
+  renderStats();
+}
+
+function updatePBRemaining(){
+  const spent = STATS.reduce((sum,s)=>sum + POINTBUY_COSTS[sheet.stats[s]],0);
+  const el = document.getElementById("pb-remaining");
+  if (el) el.textContent = 27 - spent;
+}
+
+function roll4d6(stat){
+  const rolls = [1,2,3,4].map(()=>Math.floor(Math.random()*6)+1);
+  rolls.sort((a,b)=>b-a);
+  const total = rolls[0]+rolls[1]+rolls[2]; // drop lowest
+  sheet.stats[stat] = total;
+  toast(`🎲 ${STAT_LABEL[stat]}: [${rolls.join(",")}] → ${total}`);
+  renderStats();
+}
+
+// ── Equipment step ──
+function renderEquipList(){
+  const list = document.getElementById("equip-list");
+  if (!sheet.equipment_items.length){
+    list.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-dim);font-style:italic">Noch keine Gegenstände</div>`;
+    return;
+  }
+  list.innerHTML = sheet.equipment_items.map((it,i)=>`
+    <div class="equip-line">
+      <span style="font-size:1rem">${it.category==="Waffe"?"🗡":it.category==="Rüstung"?"🛡":"📦"}</span>
+      <input type="text" value="${esc(it.name)}" onchange="sheet.equipment_items[${i}].name=this.value">
+      <input type="number" value="${it.quantity||1}" style="width:60px" onchange="sheet.equipment_items[${i}].quantity=parseInt(this.value)||1" title="Menge">
+      <button class="btn btn-secondary" style="padding:4px 8px" onclick="sheet.equipment_items.splice(${i},1);renderEquipList()">🗑</button>
+    </div>
+  `).join("");
+}
+
+function addManualEquip(){
+  sheet.equipment_items.push({name:"Neuer Gegenstand", quantity:1, category:"Sonstiges"});
+  renderEquipList();
+}
+
+// ── Library picker ──
+let libPickCache = [];
+
+async function openLibraryPicker(){
+  libPickCache = Object.values(library.items||{});
+  document.getElementById("lib-modal").classList.add("open");
+  document.getElementById("lib-search").value = "";
+  renderLibPick();
+}
+
+function renderLibPick(){
+  const search = (document.getElementById("lib-search").value||"").toLowerCase();
+  const items = libPickCache.filter(it=>!search || (it.name||"").toLowerCase().includes(search));
+  const list = document.getElementById("lib-pick-list");
+  if (!items.length){
+    list.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-dim);font-style:italic">
+      Keine Einträge. <a href="/library" target="_blank" style="color:var(--gold)">→ Bibliothek öffnen</a></div>`;
+    return;
+  }
+  list.innerHTML = items.map(it=>`
+    <div class="lib-item" style="cursor:pointer" onclick="pickFromLib('${it.id}')">
+      <div class="lib-item-info">
+        <div class="li-name" style="font-family:var(--font-display);color:var(--gold);font-size:.9rem">${esc(it.name)}</div>
+        <div class="li-meta" style="font-size:.75rem;color:var(--text-dim)">
+          ${esc(it.category||"")} ${it.weight?`· ${it.weight}lb`:""} ${it.cost?`· ${esc(it.cost)}`:""}
+          ${it.damage?`· 🗡 ${esc(it.damage)} ${esc(it.damage_type||"")}`:""}
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+function pickFromLib(iid){
+  const it = library.items[iid];
+  if (!it) return;
+  sheet.equipment_items.push({
+    library_id: iid,
+    name: it.name, quantity: 1,
+    category: it.category || "Sonstiges",
+    weight: it.weight || 0, cost: it.cost || "",
+    ac_bonus: it.ac_bonus || 0,
+    damage: it.damage || "", damage_type: it.damage_type || "",
+    description: it.description || "",
+  });
+  document.getElementById("lib-modal").classList.remove("open");
+  renderEquipList();
+  toast(`🎒 "${it.name}" hinzugefügt`);
+}
+
+// ── Summary (step 7) ──
+function renderSummary(){
+  // Pull all current form values first
+  syncFormToSheet();
+  const r = RACES.find(x=>x.id===sheet.race);
+  const c = CLASSES.find(x=>x.id===sheet.class);
+  // HP calc
+  const conMod = mod((sheet.stats.con||10) + getRaceBonus("con"));
+  const hd = parseInt((c?.hd||"d8").replace("d","")) || 8;
+  const maxHp = hd + conMod + (sheet.level-1)*(Math.floor(hd/2)+1+conMod);
+  sheet.max_hp = Math.max(1, maxHp); sheet.hp = sheet.max_hp;
+  // AC = 10 + dex mod + equip bonuses
+  const dexMod = mod((sheet.stats.dex||10) + getRaceBonus("dex"));
+  const acBonus = sheet.equipment_items.reduce((sum,it)=>sum + (parseInt(it.ac_bonus)||0), 0);
+  sheet.ac = 10 + dexMod + acBonus;
+  sheet.initiative_bonus = dexMod;
+  sheet.speed = sheet.speed || 30;
+
+  const content = document.getElementById("summary-content");
+  content.innerHTML = `
+    <div class="step-complete">
+      <div class="big-icon">⚔️</div>
+      <h2>${esc(sheet.name || "Unbenannter Held")}</h2>
+      <div style="color:var(--text-dim);margin-top:6px;font-size:.95rem">
+        ${esc(r?.name||"—")} · ${esc(c?.name||"—")} ${sheet.level}${sheet.subclass?" · "+esc(sheet.subclass):""}
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card"><div class="sc-head">❤️ Trefferpunkte</div><div class="sc-value">${sheet.max_hp}</div></div>
+      <div class="summary-card"><div class="sc-head">🛡️ Rüstungsklasse</div><div class="sc-value">${sheet.ac}</div></div>
+      <div class="summary-card"><div class="sc-head">⚡ Initiative</div><div class="sc-value">${fmtMod(sheet.initiative_bonus)}</div></div>
+      <div class="summary-card"><div class="sc-head">💨 Bewegung</div><div class="sc-value">${sheet.speed} ft</div></div>
+    </div>
+
+    <h3 style="font-family:var(--font-display);color:var(--gold);margin-top:18px;margin-bottom:8px">Attribute</h3>
+    <div class="stats-editor" style="margin-bottom:14px">
+      ${STATS.map(s=>{
+        const total = (sheet.stats[s]||10) + getRaceBonus(s);
+        return `<div class="stat-card">
+          <div class="sc-label">${STAT_LABEL[s]}</div>
+          <div class="sc-val" style="font-size:1.6rem">${total}</div>
+          <div class="sc-mod">${fmtMod(mod(total))}</div>
+        </div>`;
+      }).join("")}
+    </div>
+
+    ${sheet.skill_profs.length?`
+      <h3 style="font-family:var(--font-display);color:var(--gold);margin-top:14px;margin-bottom:6px">Geübte Fertigkeiten</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        ${sheet.skill_profs.map(s=>`<span style="padding:4px 10px;background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:20px;font-size:.8rem;color:var(--gold)">✓ ${esc(s)}</span>`).join("")}
+      </div>
+    `:""}
+
+    ${sheet.equipment_items.length?`
+      <h3 style="font-family:var(--font-display);color:var(--gold);margin-top:14px;margin-bottom:6px">Ausrüstung</h3>
+      <ul style="list-style:none;padding:0">
+        ${sheet.equipment_items.map(it=>`<li style="padding:4px 0;font-size:.88rem;color:var(--text)">• ${esc(it.name)}${it.quantity>1?` ×${it.quantity}`:""}</li>`).join("")}
+      </ul>
+    `:""}
+  `;
+}
+
+function syncFormToSheet(){
+  sheet.name           = document.getElementById("f-name")?.value || sheet.name;
+  sheet.progression    = document.getElementById("f-progression")?.value || "milestone";
+  sheet.dice_rolling   = (document.getElementById("f-dice_rolling")?.value || "true") === "true";
+  sheet.optional_features = !!document.getElementById("f-optional_features")?.checked;
+  sheet.level          = parseInt(document.getElementById("f-level")?.value)||1;
+  sheet.race_asi_2     = document.getElementById("f-race_asi_2")?.value || "str";
+  sheet.race_asi_1     = document.getElementById("f-race_asi_1")?.value || "dex";
+  sheet.background     = document.getElementById("f-background")?.value || "";
+  sheet.alignment      = document.getElementById("f-alignment")?.value || "";
+  sheet.personality    = document.getElementById("f-personality")?.value || "";
+  sheet.ideals         = document.getElementById("f-ideals")?.value || "";
+  sheet.bonds          = document.getElementById("f-bonds")?.value || "";
+  sheet.flaws          = document.getElementById("f-flaws")?.value || "";
+  sheet.age            = parseInt(document.getElementById("f-age")?.value)||25;
+  sheet.height         = document.getElementById("f-height")?.value || "";
+  sheet.weight_lb      = document.getElementById("f-weight")?.value || "";
+  sheet.eyes           = document.getElementById("f-eyes")?.value || "";
+  sheet.hair           = document.getElementById("f-hair")?.value || "";
+  sheet.backstory      = document.getElementById("f-backstory")?.value || "";
+  sheet.gold           = parseInt(document.getElementById("f-gold")?.value)||0;
+  sheet.silver         = parseInt(document.getElementById("f-silver")?.value)||0;
+  sheet.copper         = parseInt(document.getElementById("f-copper")?.value)||0;
+}
+
+// ── Save ──
+async function saveCharacter(){
+  syncFormToSheet();
+  // Also push final stats to include race bonuses
+  const finalStats = {};
+  STATS.forEach(s=>{ finalStats[s] = (sheet.stats[s]||10) + getRaceBonus(s); });
+  const payload = {
+    ...sheet,
+    stats: finalStats,
+    class:  CLASSES.find(c=>c.id===sheet.class)?.name || "",
+    race:   RACES.find(r=>r.id===sheet.race)?.name || "",
+    inventory: sheet.equipment_items.map(it=>({
+      id: Math.random().toString(36).slice(2,10),
+      library_id: it.library_id,
+      name: it.name, category: it.category||"",
+      weight: it.weight||0, cost: it.cost||"",
+      ac_bonus: it.ac_bonus||0, damage: it.damage||"", damage_type: it.damage_type||"",
+      description: it.description||"",
+      quantity: it.quantity||1, equipped: false,
+    })),
+    attacks: sheet.selected_spells.map(sid=>{
+      const sp = library.spells[sid];
+      return sp ? {id:sid, name:sp.name, type:"Zauber", hit_bonus:0, damage:sp.damage||"", damage_type:sp.damage_type||"", notes:sp.description||"", range:sp.range||"", spell_level:sp.level} : null;
+    }).filter(Boolean),
+  };
+  const res = await fetch("/api/characters",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  const saved = await res.json();
+  sheet.id = saved.id;
+  document.getElementById("del-btn").style.display = "inline-flex";
+  document.getElementById("exp-btn").style.display = "inline-flex";
+  toast("💾 Charakter gespeichert!");
+  loadSavedChars();
+
+  // Kam der Nutzer aus dem Beitreten-Fluss? Dann zurück zur Kampagne mit diesem Charakter.
+  const joinSid = new URLSearchParams(location.search).get("join");
+  if (joinSid) {
+    setTimeout(()=>{ window.location.href = `/table/${joinSid}?char_id=${saved.id}`; }, 700);
+  }
+}
+
+// Charakter als .vttchar-Datei speichern (zum Mitbringen in fremde Kampagnen)
+async function exportCharacter(){
+  if(!sheet.id){ toast("⚠️ Bitte zuerst speichern"); return; }
+  try{
+    const res = await fetch(`/api/characters/${sheet.id}/export`);
+    if(!res.ok) throw new Error((await res.json()).error || "Fehler");
+    const cd = res.headers.get("Content-Disposition")||"";
+    const name = (cd.match(/filename="([^"]+)"/)||[])[1] || "charakter.vttchar";
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    const T = window.__TAURI__;
+    if(T && T.fs && T.path){
+      const dir = await T.path.downloadDir(); await T.fs.writeFile(await T.path.join(dir, name), bytes);
+      try{ T.shell && T.shell.open && await T.shell.open(dir); }catch(e){}
+      toast("📤 Im Download-Ordner gespeichert: " + name);
+    } else {
+      const url = URL.createObjectURL(new Blob([bytes],{type:"application/json"}));
+      const a = document.createElement("a"); a.href=url; a.download=name; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url), 4000);
+      toast("📤 Exportiert: " + name);
+    }
+  }catch(e){ toast("⚠️ " + e.message); }
+}
+
+async function deleteCharacter(){
+  if (!sheet.id) return;
+  if (!await Dialog.confirmDanger(`Der Charakter „${sheet.name || "Unbenannt"}“ wird gelöscht.`,
+      {title:"Charakter löschen?", icon:"🧙", hint:"Das lässt sich nicht rückgängig machen."})) return;
+  await fetch("/api/characters/"+sheet.id, {method:"DELETE"});
+  newCharacter();
+  toast("🗑 Gelöscht");
+}
+
+init();
+</script>
+<script src="/static/js/dice-presets.js"></script>
+<script src="/static/js/design-studio.js"></script>
+</body>
+</html>

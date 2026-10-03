@@ -1,0 +1,34 @@
+{
+  "name": "College of Lore",
+  "parent_class_name": "Barde",
+  "start_level": 3,
+  "description": "Akademische Barden voller Wissen.",
+  "level_features": {
+    "3": [
+      {
+        "id": "f3_0",
+        "name": "Bonus Proficiencies (3 Fertigkeiten). Cu",
+        "description": "Bonus Proficiencies (3 Fertigkeiten). Cutting Words.",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Additional Magical Secrets.",
+        "description": "Additional Magical Secrets.",
+        "choices": []
+      }
+    ],
+    "14": [
+      {
+        "id": "f14_0",
+        "name": "Peerless Skill.",
+        "description": "Peerless Skill.",
+        "choices": []
+      }
+    ]
+  },
+  "id": "b51fcfb3",
+  "source": "basis"
+}

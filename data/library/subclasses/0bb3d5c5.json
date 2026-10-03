@@ -1,0 +1,42 @@
+{
+  "name": "Jäger",
+  "parent_class_name": "Waldläufer",
+  "start_level": 3,
+  "description": "Bollwerk zwischen der Zivilisation und den Schrecken der Wildnis.",
+  "level_features": {
+    "3": [
+      {
+        "id": "f3_0",
+        "name": "Beute des Jägers",
+        "description": "Eine Option: Kolossbezwinger (einmal pro Zug +1W8 gegen ein verletztes Ziel), Riesentöter (Reaktionsangriff, wenn dich eine große oder größere Kreatur in 5 ft angreift) oder Hordenbrecher (einmal pro Zug ein zusätzlicher Angriff gegen eine andere Kreatur neben dem Ziel).",
+        "choices": []
+      }
+    ],
+    "7": [
+      {
+        "id": "f7_0",
+        "name": "Verteidigungstaktik",
+        "description": "Eine Option: Der Horde entkommen (Gelegenheitsangriffe gegen dich mit Nachteil), Verteidigung gegen Mehrfachangriffe (+4 RK gegen weitere Angriffe derselben Kreatur in diesem Zug) oder Stählerner Wille (Vorteil gegen Verängstigung).",
+        "choices": []
+      }
+    ],
+    "11": [
+      {
+        "id": "f11_0",
+        "name": "Mehrfachangriff",
+        "description": "Eine Option: Salve (Fernkampfangriff gegen beliebig viele Kreaturen in 10 ft um einen Punkt) oder Wirbelangriff (Nahkampfangriff gegen jede Kreatur in 5 ft).",
+        "choices": []
+      }
+    ],
+    "15": [
+      {
+        "id": "f15_0",
+        "name": "Überlegene Jägerverteidigung",
+        "description": "Eine Option: Entrinnen, Gegen den Strom (verfehlt dich ein Nahkampfangriff, als Reaktion denselben Angriff gegen eine andere Kreatur richten) oder Unheimliches Ausweichen (Schaden eines sichtbaren Angreifers halbieren).",
+        "choices": []
+      }
+    ]
+  },
+  "id": "0bb3d5c5",
+  "source": "basis"
+}

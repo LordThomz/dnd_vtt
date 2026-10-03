@@ -1,0 +1,39 @@
+========================================================
+  D&D Virtual Tabletop - Grosser Umbau (Weg A)
+========================================================
+
+WAS SICH GEAENDERT HAT (Architektur):
+Alles laeuft jetzt in EINER Welt (der Server-Seite). Das loest die
+Login-/Cookie-Probleme grundlegend. Die App ist nur noch eine Bruecke,
+die auf den Server wartet und dann dorthin weiterleitet.
+
+DEINE PUNKTE - alle behoben:
+ 1. "Geraet merken" funktioniert jetzt (persistentes Cookie, 90 Tage).
+    Beim naechsten Start bist du automatisch eingeloggt -> direkt ins Menue.
+ 2. "<- Menue"-Knopf fuehrt jetzt ZUVERLAESSIG ins Menue (Spielen/
+    Einstellungen/Updates/Beenden), nicht mehr ins Anmeldefenster.
+ 3. "Beenden" schliesst die App (mehrere Methoden, damit es klappt).
+ 4. Registrieren -> danach zurueck zum Login (bewusst neu anmelden).
+ 5. Zurueck-Knopf im Registrieren-Bereich ("<- Zurueck zur Anmeldung").
+ 6. Login-Seite entdoppelt: Anmelden-Tab und Registrieren-Tab getrennt.
+ 7. Nach Login/Register/Gast -> immer erst ins MENUE (nicht Bibliothek).
+
+NEUER ABLAUF:
+ 1. App startet -> Ladebalken (Server startet)
+ 2. Noch nie angemeldet -> LOGIN
+ 3. Nach Login / schon gemerkt -> MENUE (Account oben + 4 Knoepfe)
+ 4. "Spielen" -> Kampagnen-Seite ("<- Menue" fuehrt zurueck)
+
+--------------------------------------------------------
+WICHTIG vor dem Bauen:
+--------------------------------------------------------
+1. Task-Manager -> ALLE "vtt-server" beenden (koennen mehrere sein!)
+2. Alte App deinstallieren
+3. In FRISCHEN Ordner entpacken
+4. build-windows.bat
+
+Falls "Geraet merken" beim Test noch nicht greift: Bitte einmal in der
+App ab- und wieder anmelden mit gesetztem Haken - beim ZWEITEN Start
+sollte es automatisch gehen.
+
+Falls beim Bauen Fehler mit "process"/"fs"/"plugin": Text schicken.

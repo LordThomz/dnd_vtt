@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D&amp;D Virtual Tabletop</title>
+<style>
+  :root{ --gold-bright: var(--gold-light); --violet: var(--arcane-violet); --danger: var(--red); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--font-ui);
+    background:radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 65%);
+    color:var(--text); min-height:100vh; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(var(--arcane-rgb),.05), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(var(--violet-rgb),.05), transparent 40%);
+    animation:drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift{ from{transform:translate(0,0)} to{transform:translate(-20px,15px)} }
+
+  .screen{ width:100%; max-width:460px; padding:32px; text-align:center; position:relative; z-index:1; }
+  .hidden{ display:none !important; }
+
+  .crest{ font-size:2.6rem; margin-bottom:6px; }
+  .logo{
+    font-family:var(--font-display); font-weight:700;
+    font-size:2.3rem; letter-spacing:.04em; line-height:1.1;
+    color:var(--gold); text-shadow:0 0 30px rgba(var(--gold-rgb),.4);
+  }
+  .logo .amp{ color:var(--arcane); }
+  .subtitle{
+    color:var(--arcane); font-size:.82rem; letter-spacing:.22em;
+    text-transform:uppercase; margin-top:8px; margin-bottom:36px;
+  }
+
+  .account-box{
+    display:flex; align-items:center; gap:12px;
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:12px; padding:12px 16px; margin-bottom:18px;
+  }
+  .acc-avatar{
+    width:40px; height:40px; border-radius:50%; background:var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; color:var(--on-accent); font-size:1.1rem;
+  }
+  .acc-info{ text-align:left; flex:1; }
+  .acc-name{ font-weight:600; color:var(--gold); }
+  .acc-status{ font-size:.72rem; color:var(--text-dim); }
+  .logout-mini{
+    background:transparent; border:1px solid var(--border); color:var(--text-dim);
+    padding:8px 12px; border-radius:8px; cursor:pointer; font-size:.8rem;
+  }
+  .logout-mini:hover{ border-color:var(--red-soft); color:var(--red-soft); }
+
+  .menu{ display:flex; flex-direction:column; gap:12px; }
+  .menu-btn{
+    display:flex; align-items:center; gap:14px;
+    padding:16px 22px; border-radius:12px; cursor:pointer;
+    background:linear-gradient(135deg, var(--bg-panel2), var(--bg-panel));
+    border:1px solid var(--border); color:var(--text);
+    font-size:1.02rem; font-family:var(--font-display); letter-spacing:.03em;
+    transition:all .16s ease; text-align:left;
+  }
+  .menu-btn:hover{ border-color:var(--arcane-dim);
+    box-shadow:0 0 18px rgba(var(--arcane-rgb),.15); transform:translateY(-1px); }
+  .menu-btn .mi{ font-size:1.4rem; width:28px; text-align:center; }
+  .menu-btn.primary{ background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+    color:var(--on-accent); border:none; font-weight:600; }
+  .menu-btn.primary:hover{ filter:brightness(1.08); }
+  .menu-btn .arrow{ margin-left:auto; color:var(--arcane); opacity:.6; }
+
+  .box{ background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:12px; padding:22px; margin-bottom:16px; text-align:left; }
+  .box.good{ border-color:#3a6a4a; }
+  .box-title{ font-weight:600; margin-bottom:8px; font-family:var(--font-display); }
+  .box.good .box-title{ color:var(--green-soft); }
+  .box-text{ color:var(--text-dim); font-size:.9rem; line-height:1.5; }
+  .btn{ display:inline-block; padding:11px 22px; border:none; border-radius:8px;
+    font-weight:600; font-size:.95rem; cursor:pointer; text-decoration:none;
+    background:linear-gradient(135deg,var(--gold),var(--gold-dark)); color:var(--on-accent);
+    font-family:'Segoe UI',sans-serif; }
+  .btn:hover{ filter:brightness(1.08); }
+  .btn.ghost{ background:var(--bg-panel2); color:var(--text); border:1px solid var(--border); }
+  .btn-row{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:4px; }
+  .setting{ display:flex; flex-direction:column; gap:6px; margin-bottom:16px; text-align:left; }
+  .setting label{ font-size:.8rem; color:var(--gold); letter-spacing:.05em; text-transform:uppercase; }
+  .setting input{ padding:10px 12px; background:var(--bg-deep);
+    border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:.92rem; }
+  .setting .hint{ font-size:.74rem; color:var(--text-dim); }
+</style>
+<link rel="stylesheet" href="/static/css/dialog.css">
+<script src="/static/js/dialog.js"></script>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/design-studio.css">
+<script src="/static/js/theme.js"></script>
+</head>
+<body>
+  <div class="screen">
+    <div class="crest">⚔️</div>
+    <div class="logo">D<span class="amp">&amp;</span>D Virtual Tabletop</div>
+    <div class="subtitle">Pen &amp; Paper · Online</div>
+
+    <!-- Account -->
+    <div class="account-box" id="account-box">
+      <div class="acc-avatar" id="acc-avatar">?</div>
+      <div class="acc-info">
+        <div class="acc-name" id="acc-name">...</div>
+        <div class="acc-status">Angemeldet</div>
+      </div>
+      <button class="logout-mini" onclick="openAccountEditor()" title="Account bearbeiten" style="margin-right:6px">⚙️</button>
+      <button class="logout-mini" onclick="doLogout()">Abmelden</button>
+    </div>
+
+    <!-- Account-Editor (Overlay) -->
+    <div id="account-editor" style="display:none;position:fixed;inset:0;background:rgba(var(--shade-rgb),.65);z-index:200;align-items:center;justify-content:center">
+      <div style="background:var(--bg-panel2);border:1px solid var(--gold-dark);border-radius:16px;padding:26px;width:90%;max-width:460px;max-height:88vh;overflow-y:auto;text-align:left">
+        <h2 style="color:var(--gold);font-family:Cinzel,serif;margin-bottom:18px">⚙️ Account bearbeiten</h2>
+        <div class="setting">
+          <label>Anzeigename *</label>
+          <input id="ae-display" type="text">
+        </div>
+        <div class="setting">
+          <label>Spitzname</label>
+          <input id="ae-nick" type="text">
+        </div>
+        <div class="setting">
+          <label>E-Mail</label>
+          <input id="ae-email" type="email" placeholder="du@example.com">
+        </div>
+        <div class="setting">
+          <label>Lieblingsklasse</label>
+          <select id="ae-class" style="padding:10px 12px;background:var(--bg-deep);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.92rem">
+            <option value="">— wählen —</option>
+            <option>Barbar</option><option>Barde</option><option>Kleriker</option><option>Druide</option>
+            <option>Kämpfer</option><option>Mönch</option><option>Paladin</option><option>Waldläufer</option>
+            <option>Schurke</option><option>Hexenmeister</option><option>Hexer</option><option>Magier</option>
+          </select>
+        </div>
+        <div class="setting">
+          <label>Lieblings-Volk</label>
+          <select id="ae-race" style="padding:10px 12px;background:var(--bg-deep);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.92rem">
+            <option value="">— wählen —</option>
+            <option>Mensch</option><option>Elf</option><option>Zwerg</option><option>Halbling</option>
+            <option>Drachenblut</option><option>Gnom</option><option>Halb-Elf</option><option>Halb-Ork</option><option>Tiefling</option>
+          </select>
+        </div>
+        <div class="setting">
+          <label>Glückszahl</label>
+          <input id="ae-lucky" type="number" min="1" max="100" placeholder="7">
+        </div>
+        <div class="setting">
+          <label>Kurze Bio</label>
+          <textarea id="ae-bio" rows="2" style="padding:10px 12px;background:var(--bg-deep);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.92rem;resize:vertical"></textarea>
+        </div>
+        <div class="setting">
+          <label>Deine Farbe</label>
+          <input id="ae-color" type="color" style="width:60px;height:40px;padding:2px;cursor:pointer">
+        </div>
+        <div id="ae-error" style="color:var(--red-soft);font-size:.85rem;min-height:1em;margin-top:6px"></div>
+        <div class="btn-row" style="justify-content:flex-end;margin-top:16px">
+          <button class="btn ghost" onclick="closeAccountEditor()">Abbrechen</button>
+          <button class="btn" onclick="saveAccount()">Speichern</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hauptmenü -->
+    <div id="menu" class="menu">
+      <div class="menu-btn primary" onclick="location.href='/play'">
+        <span class="mi">▶</span> Spielen <span class="arrow">→</span>
+      </div>
+      <div class="menu-btn" onclick="showSettings()">
+        <span class="mi">⚙️</span> Einstellungen <span class="arrow">→</span>
+      </div>
+      <!-- Updates laufen automatisch im Launcher (beim Start der App) -->
+      <div class="menu-btn hidden" id="btn-launcher" onclick="location.href=Theme.launcherUrl()">
+        <span class="mi">⬅</span> Zum Launcher <span class="arrow">→</span>
+      </div>
+    </div>
+
+    <!-- Einstellungen -->
+    <div id="settings" class="hidden">
+      <div class="box">
+        <div class="box-title" style="color:var(--gold)">Einstellungen</div>
+        <div class="box-text" style="margin-top:10px">Mit einem DM verbindest du dich über den <b>Launcher</b> („Bei einem DM mitspielen"). Updates installiert der Launcher beim Start automatisch.</div>
+        <input id="set-server" type="hidden">
+      </div>
+      <div class="box">
+        <div class="box-title" style="color:var(--gold)">Design</div>
+        <div class="box-text" style="margin-bottom:12px">Oberfläche, Spieltisch und Würfel – jeder Spieler wählt seinen eigenen Look.</div>
+        <button class="btn" onclick="DesignStudio.open()">🎨 Design-Studio öffnen</button>
+      </div>
+      <div class="box" style="border-color:rgba(var(--red-rgb),.45)">
+        <div class="box-title" style="color:var(--red-soft)">Programm deinstallieren</div>
+        <div class="box-text" style="margin-bottom:12px">Entfernt D&amp;D Virtual Tabletop von diesem PC (über die Windows-Einstellungen).</div>
+        <button class="btn" style="background:linear-gradient(135deg,#b03a3a,#7a2828)" onclick="uninstallApp()">🗑 Deinstallieren</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="saveServer()">Speichern</button>
+        <button class="btn ghost" onclick="showMenu()">← Zurück zum Menü</button>
+      </div>
+    </div>
+
+    <!-- Update-Ergebnis -->
+    <div id="update-result" class="hidden">
+      <div class="box good">
+        <div class="box-title" id="upd-title">Update</div>
+        <div class="box-text" id="upd-text"></div>
+      </div>
+      <div class="btn-row">
+        <button id="upd-install" class="btn hidden">⬇️ Herunterladen &amp; installieren</button>
+        <button class="btn ghost" onclick="showMenu()">← Zurück zum Menü</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const APP_VERSION = "0.1.0";
+  const currentUser = {{ current_user|tojson }};
+
+  const el = id => document.getElementById(id);
+  function showOnly(id){ ["menu","settings","update-result"].forEach(x=>el(x).classList.add("hidden")); el(id).classList.remove("hidden"); }
+  function showMenu(){ showOnly("menu"); }
+  function showSettings(){
+    try { el("set-server").value = window.localStorage.getItem("vtt_server_url") || ""; } catch(e){}
+    showOnly("settings");
+  }
+
+  // Account anzeigen
+  if(currentUser){
+    el("acc-name").textContent = currentUser.display_name || currentUser.username;
+    el("acc-avatar").textContent = (currentUser.display_name || currentUser.username)[0].toUpperCase();
+    el("acc-avatar").style.background = currentUser.avatar_color || "#c9a96e";
+  }
+
+  async function doLogout(){
+    try { await fetch("/api/auth/logout", {method:"POST"}); } catch(e){}
+    window.location.href = "/login";
+  }
+
+  // ── Account bearbeiten ───────────────────────────────────────────────────
+  function openAccountEditor(){
+    if(!currentUser) return;
+    el("ae-display").value = currentUser.display_name || "";
+    el("ae-nick").value = currentUser.nickname || "";
+    el("ae-email").value = currentUser.email || "";
+    el("ae-class").value = currentUser.favorite_class || "";
+    el("ae-race").value = currentUser.favorite_race || "";
+    el("ae-lucky").value = currentUser.lucky_number || "";
+    el("ae-bio").value = currentUser.bio || "";
+    el("ae-color").value = currentUser.avatar_color || "#c9a96e";
+    el("ae-error").textContent = "";
+    el("account-editor").style.display = "flex";
+  }
+  function closeAccountEditor(){ el("account-editor").style.display = "none"; }
+  async function saveAccount(){
+    const body = {
+      display_name: el("ae-display").value.trim(),
+      nickname: el("ae-nick").value.trim(),
+      email: el("ae-email").value.trim(),
+      favorite_class: el("ae-class").value,
+      favorite_race: el("ae-race").value,
+      lucky_number: parseInt(el("ae-lucky").value) || 0,
+      bio: el("ae-bio").value.trim(),
+      avatar_color: el("ae-color").value,
+    };
+    const err = el("ae-error"); err.textContent = "";
+    if(!body.display_name){ err.textContent = "Anzeigename darf nicht leer sein."; return; }
+    try {
+      const res = await fetch("/api/auth/update_profile", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+      const data = await res.json();
+      if(!res.ok || data.error){ err.textContent = data.error || "Fehler beim Speichern"; return; }
+      // Anzeige oben aktualisieren
+      Object.assign(currentUser, data.user);
+      el("acc-name").textContent = currentUser.display_name || currentUser.username;
+      el("acc-avatar").textContent = (currentUser.display_name || currentUser.username)[0].toUpperCase();
+      el("acc-avatar").style.background = currentUser.avatar_color || "#c9a96e";
+      closeAccountEditor();
+    } catch(e){ err.textContent = "Netzwerkfehler"; }
+  }
+
+  // Server-Adresse speichern (für nächsten App-Start)
+  function saveServer(){
+    const val = el("set-server").value.trim();
+    try {
+      if(val) window.localStorage.setItem("vtt_server_url", val);
+      else window.localStorage.removeItem("vtt_server_url");
+    } catch(e){}
+    showMenu();
+  }
+
+  // ── Updates ──────────────────────────────────────────────────────────────
+  async function checkUpdate(){
+    el("upd-title").textContent = "Suche nach Updates …";
+    el("upd-text").textContent = "Einen Moment.";
+    el("upd-install").classList.add("hidden");
+    showOnly("update-result");
+    try {
+      const res = await fetch("/api/server/check_update?version=" + encodeURIComponent(APP_VERSION), {cache:"no-store"});
+      const upd = await res.json();
+      if(upd.update_available){
+        el("upd-title").textContent = "Neue Version verfügbar";
+        el("upd-text").textContent = "Deine Version: " + upd.your_version + " · Neueste: " + upd.latest_version;
+        if(upd.installer_available){
+          const btn = el("upd-install");
+          btn.classList.remove("hidden");
+          btn.onclick = () => downloadUpdate(upd);
+        }
+      } else {
+        el("upd-title").textContent = "Alles aktuell";
+        el("upd-text").textContent = "Du hast bereits die neueste Version (" + upd.latest_version + ").";
+      }
+    } catch(e){
+      el("upd-title").textContent = "Prüfung nicht möglich";
+      el("upd-text").textContent = "Der Server ist nicht erreichbar.";
+    }
+  }
+
+  async function downloadUpdate(upd){
+    el("upd-title").textContent = "Update wird heruntergeladen …";
+    el("upd-text").textContent = "Bitte warten.";
+    el("upd-install").classList.add("hidden");
+    const url = "/api/server/download_update";
+    const fname = upd.installer_name || "DnD-Virtual-Tabletop-Update.exe";
+    try {
+      const T = window.__TAURI__;
+      if(T && T.fs && T.path){
+        const { writeFile } = T.fs;
+        const { downloadDir, join } = T.path;
+        const { open } = T.shell || {};
+        const resp = await fetch(url, {cache:"no-store"});
+        if(!resp.ok) throw new Error("HTTP " + resp.status);
+        const buf = new Uint8Array(await resp.arrayBuffer());
+        const dir = await downloadDir();
+        const full = await join(dir, fname);
+        await writeFile(full, buf);
+        if(open){ try { await open(dir); } catch(e){} }
+        el("upd-title").textContent = "Update heruntergeladen";
+        el("upd-text").innerHTML = "Die Datei <b>" + fname + "</b> liegt in deinem Download-Ordner. Bitte anklicken, um zu installieren. Danach die App neu starten.";
+      } else {
+        window.open(url, "_blank");
+        el("upd-text").textContent = "Download gestartet.";
+      }
+    } catch(e){
+      el("upd-title").textContent = "Download fehlgeschlagen";
+      el("upd-text").textContent = "Bitte später erneut versuchen.";
+    }
+  }
+
+  // ── Beenden ──────────────────────────────────────────────────────────────
+  async function quitApp(){
+    try {
+      const T = window.__TAURI__;
+      if(T){
+        // Tauri 2: process-Plugin (wenn withGlobalTauri aktiv)
+        if(T.process && T.process.exit){ await T.process.exit(0); return; }
+        // Über core.invoke den Fenster-Schließbefehl senden
+        if(T.core && T.core.invoke){
+          try { await T.core.invoke("plugin:process|exit", { code: 0 }); return; } catch(e){}
+        }
+        // Fenster-API
+        if(T.window){
+          const getW = T.window.getCurrentWindow || T.window.getCurrent;
+          if(getW){
+            const w = getW();
+            if(w){
+              if(w.destroy){ await w.destroy(); return; }
+              if(w.close){ await w.close(); return; }
+            }
+          }
+        }
+        // App-API
+        if(T.app && T.app.exit){ await T.app.exit(0); return; }
+      }
+    } catch(e){ console.error("quitApp:", e); }
+    // Letzter Fallback
+    try { window.close(); } catch(e){}
+  }
+
+  // ── Deinstallieren ───────────────────────────────────────────────────────
+  async function uninstallApp(){
+    if(!await Dialog.confirmDanger(
+        "Die App wird geschlossen und die Windows-Deinstallation geöffnet.",
+        {title:"D&D Virtual Tabletop deinstallieren?", icon:"🗑",
+         okText:"Deinstallieren"})) return;
+    try {
+      const T = window.__TAURI__;
+      if(T && T.shell && T.shell.open){
+        try { await T.shell.open("ms-settings:appsfeatures"); } catch(e){}
+        setTimeout(()=>quitApp(), 1500);
+        return;
+      }
+    } catch(e){}
+    await Dialog.alert("Bitte deinstalliere die App über die Windows-Einstellungen (Apps & Features).",
+      {title:"Deinstallation", icon:"⚙️", okText:"Verstanden"});
+  }
+</script>
+<script src="/static/js/dice-presets.js"></script>
+<script src="/static/js/design-studio.js"></script>
+<script>
+  // Rückweg zum Launcher (nur bekannt, wenn die Seite aus der App geöffnet wurde)
+  // und „Design" direkt aus dem Launcher öffnen.
+  (function(){
+    try {
+      if (Theme.launcherUrl()) document.getElementById("btn-launcher").classList.remove("hidden");
+      if (sessionStorage.getItem("vtt_open") === "design") {
+        sessionStorage.removeItem("vtt_open");
+        setTimeout(() => DesignStudio.open(), 150);
+      }
+    } catch (e) {}
+  })();
+</script>
+</body>
+</html>

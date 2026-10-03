@@ -1,0 +1,50 @@
+{
+  "name": "Leben-Domäne",
+  "parent_class_name": "Kleriker",
+  "start_level": 1,
+  "description": "Kleriker der Heilung und des Lebens.",
+  "level_features": {
+    "1": [
+      {
+        "id": "f1_0",
+        "name": "Disciple of Life (Heilzauber +2+Zauberst",
+        "description": "Disciple of Life (Heilzauber +2+Zauberstufe HP). Bonus-Zauber.",
+        "choices": []
+      }
+    ],
+    "2": [
+      {
+        "id": "f2_0",
+        "name": "Channel Divinity",
+        "description": "Preserve Life (5×Level HP verteilen).",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Blessed Healer.",
+        "description": "Blessed Healer.",
+        "choices": []
+      }
+    ],
+    "8": [
+      {
+        "id": "f8_0",
+        "name": "Divine Strike (+1W8 strahlend).",
+        "description": "Divine Strike (+1W8 strahlend).",
+        "choices": []
+      }
+    ],
+    "17": [
+      {
+        "id": "f17_0",
+        "name": "Supreme Healing (Heilzauber max. Würfel)",
+        "description": "Supreme Healing (Heilzauber max. Würfel).",
+        "choices": []
+      }
+    ]
+  },
+  "id": "4fc5a032",
+  "source": "basis"
+}

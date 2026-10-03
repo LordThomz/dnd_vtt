@@ -1,0 +1,42 @@
+{
+  "name": "Dieb",
+  "parent_class_name": "Schurke",
+  "start_level": 3,
+  "description": "Meisterdieb mit akrobatischen Fähigkeiten.",
+  "level_features": {
+    "3": [
+      {
+        "id": "f3_0",
+        "name": "Fast Hands. Second-Story Work.",
+        "description": "Fast Hands. Second-Story Work.",
+        "choices": []
+      }
+    ],
+    "9": [
+      {
+        "id": "f9_0",
+        "name": "Supreme Sneak.",
+        "description": "Supreme Sneak.",
+        "choices": []
+      }
+    ],
+    "13": [
+      {
+        "id": "f13_0",
+        "name": "Use Magic Device.",
+        "description": "Use Magic Device.",
+        "choices": []
+      }
+    ],
+    "17": [
+      {
+        "id": "f17_0",
+        "name": "Thief's Reflexes.",
+        "description": "Thief's Reflexes.",
+        "choices": []
+      }
+    ]
+  },
+  "id": "c08948c7",
+  "source": "basis"
+}

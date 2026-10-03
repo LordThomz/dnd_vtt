@@ -1,0 +1,31 @@
+{
+  "name": "Halbling",
+  "size": "Klein",
+  "speed": 25,
+  "darkvision": 0,
+  "asi": "+2 GES",
+  "languages": "Gemeinsprache, Halblingisch",
+  "traits": [
+    {
+      "id": "t0",
+      "name": "Glück",
+      "description": "1 würfelt neu.",
+      "choices": []
+    },
+    {
+      "id": "t1",
+      "name": "Tapfer",
+      "description": "Vorteil gegen Furcht.",
+      "choices": []
+    },
+    {
+      "id": "t2",
+      "name": "Halblings-Agilität",
+      "description": "Durch Felder größerer Kreaturen bewegen.",
+      "choices": []
+    }
+  ],
+  "description": "Fröhliche, neugierige Kleinvölker mit Sinn für das Gute im Leben.",
+  "id": "5fd10908",
+  "source": "basis"
+}

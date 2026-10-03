@@ -1,0 +1,8 @@
+{
+  "name": "Ringer",
+  "prereq": "STR 13",
+  "description": "Geübt im Nahkampf auf engstem Raum.",
+  "benefits": "Vorteil auf Angriffswürfe gegen eine Kreatur, die du gepackt hältst.\nAls Aktion versuchen, eine gepackte Kreatur festzusetzen (erneuter Ringkampfwurf); bei Erfolg seid ihr beide festgesetzt, bis der Griff endet.",
+  "id": "e55e4873",
+  "source": "basis"
+}

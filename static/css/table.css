@@ -1,0 +1,1276 @@
+/* table.css */
+html,body{overflow:hidden;height:100%;display:flex;flex-direction:column;}
+
+/* ── Top Bar ── */
+#topbar{height:46px;flex-shrink:0;z-index:100;background:linear-gradient(180deg,var(--bg-panel2) 0%,var(--bg-panel) 100%);border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(var(--arcane-rgb),.08),0 2px 12px rgba(var(--shade-rgb),.4);display:flex;align-items:center;gap:2px;padding:0 10px;}
+.logo{font-family:'Cinzel Decorative',serif;font-size:.85rem;color:var(--gold);margin-right:6px;white-space:nowrap;}
+.session-badge{font-family:monospace;font-size:.72rem;color:var(--text-dim);background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;padding:2px 7px;margin-right:6px;}
+.role-badge{font-family:var(--font-display);font-size:.6rem;letter-spacing:.1em;padding:2px 8px;border-radius:4px;text-transform:uppercase;margin-right:auto;}
+.role-badge.gm{background:rgba(var(--crimson-rgb),.3);color:var(--red-soft);border:1px solid rgba(var(--crimson-rgb),.5);}
+.role-badge.player{background:rgba(var(--blue-rgb),.2);color:var(--blue-soft);border:1px solid rgba(var(--blue-rgb),.4);}
+.tb-group{display:flex;align-items:center;gap:2px;padding:0 6px;border-left:1px solid var(--border);}
+.tb-btn{width:32px;height:30px;border:none;background:transparent;color:var(--text-dim);border-radius:5px;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .13s;position:relative;flex-shrink:0;}
+.tb-btn:hover{background:rgba(var(--hi-rgb),.06);color:var(--text);}
+.tb-btn.active{background:rgba(var(--arcane-rgb),.15);color:var(--arcane);box-shadow:inset 0 0 0 1px rgba(var(--arcane-rgb),.35),0 0 10px rgba(var(--arcane-rgb),.2);}
+.tb-btn[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);background:var(--bg-panel2);border:1px solid var(--border);padding:2px 7px;border-radius:4px;font-family:var(--font-display);font-size:.6rem;white-space:nowrap;pointer-events:none;z-index:600;color:var(--text);}
+#users-row{display:flex;align-items:center;gap:5px;padding:0 8px;border-left:1px solid var(--border);flex-shrink:0;}
+.user-avatar{width:26px;height:26px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:.6rem;font-weight:700;cursor:default;flex-shrink:0;position:relative;}
+.user-avatar:hover::after{content:attr(title);position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:var(--bg-panel2);border:1px solid var(--border);padding:2px 8px;border-radius:4px;font-size:.65rem;white-space:nowrap;pointer-events:none;z-index:600;}
+
+/* ── Main ── */
+#main{display:flex;flex:1;overflow:hidden;position:relative;}
+
+/* ── Map ── */
+#map-area{flex:1;position:relative;overflow:hidden;background:var(--table-bg);background-image:var(--table-bg-image);cursor:default;}
+#map-viewport{position:absolute;transform-origin:0 0;transform:translate(40px,40px) scale(1);}
+#map-img{display:block;position:absolute;top:0;left:0;user-select:none;pointer-events:none;}
+#grid-canvas,#fog-canvas,#draw-canvas,#vision-canvas,#measure-canvas{position:absolute;top:0;left:0;pointer-events:none;}
+#draw-canvas{/* pointer-events set by tool */}
+#tokens-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+#measure-hud{display:none;position:absolute;bottom:12px;left:14px;background:rgba(var(--panel-rgb),.88);border:1px solid var(--gold-dark);border-radius:6px;padding:5px 14px;font-family:var(--font-display);font-size:.82rem;color:var(--gold);pointer-events:none;z-index:60;}
+
+/* ── Tokens ── */
+.token{position:absolute;border-radius:50%;border:2.5px solid var(--gold);cursor:grab;user-select:none;overflow:visible;pointer-events:all;transition:box-shadow .15s;display:flex;align-items:center;justify-content:center;}
+.token:active{cursor:grabbing;}
+.token.selected{border-color:#fff;box-shadow:0 0 0 2px var(--gold),0 0 14px rgba(var(--gold-rgb),.55);}
+.token.enemy-token{border-color:var(--red-soft);}
+.token img{width:100%;height:100%;border-radius:50%;display:block;pointer-events:none;object-fit:cover;}
+.token-letter{font-family:var(--font-display);font-weight:700;pointer-events:none;user-select:none;}
+.token-label{position:absolute;bottom:-17px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:9px;font-family:var(--font-display);color:#fff;text-shadow:0 1px 3px #000;pointer-events:none;}
+.token-hp-bar{position:absolute;bottom:-5px;left:2px;right:2px;height:4px;border-radius:2px;background:rgba(var(--shade-rgb),.55);overflow:hidden;pointer-events:none;}
+.token-hp-fill{height:100%;transition:width .35s;}
+/* Multi-Balken-Stack (bis zu 3 Balken übereinander) */
+.token-bars{position:absolute;bottom:-6px;left:2px;right:2px;display:flex;flex-direction:column;gap:1px;pointer-events:none;}
+.token-bar{height:4px;border-radius:2px;background:rgba(var(--shade-rgb),.6);overflow:hidden;}
+.token-bar-fill{height:100%;transition:width .35s;}
+.token-conds{position:absolute;top:-6px;right:-4px;display:flex;gap:1px;flex-wrap:wrap;max-width:42px;pointer-events:none;}
+.cond-pip{font-size:9px;line-height:1;}
+.map-ping{position:absolute;width:38px;height:38px;border-radius:50%;border:3px solid var(--gold);animation:ping-anim .75s ease-out forwards;pointer-events:none;z-index:80;margin:-19px 0 0 -19px;}
+@keyframes ping-anim{0%{opacity:1;transform:scale(.4)}100%{opacity:0;transform:scale(2.2)}}
+
+/* ── Resizable Right Panel ── */
+#right-panel{
+  /* Etwas breiter, damit der Charakterbogen (Attribute, Fertigkeiten,
+     Angriffe) übersichtlich Platz hat. Weiterhin frei verstellbar. */
+  width:420px;min-width:240px;max-width:720px;
+  flex-shrink:0;
+  background:linear-gradient(180deg,var(--bg-panel2) 0%,var(--bg-panel) 100%);
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+  position:relative;
+  transition:width .2s;
+}
+#right-panel.collapsed{width:0;min-width:0;overflow:hidden;}
+#panel-resize-handle{
+  position:absolute;left:0;top:0;bottom:0;width:5px;
+  cursor:col-resize;background:transparent;z-index:10;
+  transition:background .15s;
+}
+#panel-resize-handle:hover{background:rgba(var(--gold-rgb),.3);}
+#panel-toggle-btn{
+  position:absolute;left:-28px;top:50%;transform:translateY(-50%);
+  width:28px;height:48px;background:var(--bg-panel2);border:1px solid var(--border);
+  border-right:none;border-radius:6px 0 0 6px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);font-size:.9rem;z-index:20;transition:all .15s;
+}
+#panel-toggle-btn:hover{color:var(--gold);}
+
+/* Panel tabs */
+.panel-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+.panel-tabs::-webkit-scrollbar{height:2px;}
+.p-tab{padding:9px 6px;text-align:center;font-family:var(--font-display);font-size:.52rem;letter-spacing:.03em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .14s;white-space:nowrap;flex-shrink:0;}
+.p-tab:hover{color:var(--text);}
+.p-tab.active{color:var(--arcane);border-bottom-color:var(--arcane);text-shadow:0 0 8px rgba(var(--arcane-rgb),.4);}
+.p-tab .t-icon{font-size:.92rem;display:block;margin-bottom:1px;}
+.tab-pane{display:none;flex:1;overflow:hidden;flex-direction:column;}
+.tab-pane.active{display:flex;}
+.pane-section-title{font-family:var(--font-display);font-size:.62rem;color:var(--gold-dark);letter-spacing:.14em;text-transform:uppercase;padding:8px 10px 4px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.pane-scroll{flex:1;overflow-y:auto;padding:10px;}
+
+/* ── Chat ── */
+#chat-messages{flex:1;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:5px;}
+.chat-msg{border-radius:6px;padding:6px 10px;font-size:.88rem;line-height:1.45;animation:msg-in .18s ease;}
+@keyframes msg-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.chat-msg .msg-meta{font-family:var(--font-display);font-size:.6rem;letter-spacing:.04em;margin-bottom:2px;display:flex;align-items:center;gap:6px;}
+.chat-msg .msg-time{margin-left:auto;color:var(--text-dim);font-size:.6rem;}
+.chat-msg.type-chat{background:rgba(var(--hi-rgb),.03);}
+.chat-msg.type-roll{background:rgba(var(--gold-rgb),.08);border:1px solid rgba(var(--gold-rgb),.18);}
+.chat-msg.type-gmroll{background:rgba(var(--crimson-rgb),.13);border:1px solid rgba(var(--crimson-rgb),.28);}
+.chat-msg.type-emote{background:rgba(122,90,154,.1);font-style:italic;color:#c8a8ff;}
+.chat-msg.type-system{background:rgba(var(--blue-rgb),.1);font-style:italic;color:var(--blue-soft);font-size:.82rem;}
+.roll-total{font-family:var(--font-display);font-size:1.5rem;color:var(--gold);}
+.roll-formula{font-size:.78rem;color:var(--text-dim);}
+.roll-breakdown{margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}
+.roll-die{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:5px;font-family:var(--font-display);font-size:.8rem;font-weight:700;background:var(--bg-dark);border:1px solid var(--border);}
+.roll-die.crit-max{background:rgba(var(--gold-rgb),.2);border-color:var(--gold);color:var(--gold-light);}
+.roll-die.crit-min{background:rgba(var(--crimson-rgb),.2);border-color:var(--red);color:var(--red-soft);}
+.roll-die.dropped{opacity:.35;text-decoration:line-through;}
+.roll-mod-badge{font-family:var(--font-display);font-size:.75rem;color:var(--text-dim);padding:0 4px;}
+.roll-label{font-size:.78rem;color:var(--text-dim);}
+.chat-footer{border-top:1px solid var(--border);flex-shrink:0;}
+.quick-rolls{padding:5px 8px;display:flex;flex-wrap:wrap;gap:3px;border-bottom:1px solid var(--border);}
+.qr-btn{font-family:var(--font-display);font-size:.6rem;padding:3px 7px;border-radius:4px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .13s;}
+.qr-btn:hover{border-color:var(--gold-dark);color:var(--gold);}
+.chat-input-row{display:flex;gap:6px;align-items:flex-end;padding:7px 8px;}
+#chat-input{flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--font-body);font-size:.88rem;resize:none;outline:none;max-height:72px;transition:border-color .14s;}
+#chat-input:focus{border-color:var(--gold-dark);}
+#chat-send-btn{width:32px;height:32px;background:var(--gold-dark);border:none;border-radius:6px;cursor:pointer;color:var(--bg-deep);font-size:.9rem;transition:background .14s;}
+#chat-send-btn:hover{background:var(--gold);}
+
+/* ── Initiative ── */
+.init-entry{display:flex;align-items:center;gap:8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:5px;transition:all .14s;}
+.init-entry.active-turn{border-color:var(--gold);background:rgba(var(--gold-rgb),.08);box-shadow:0 0 8px rgba(var(--gold-rgb),.2);}
+.init-num{font-family:var(--font-display);font-size:1.2rem;color:var(--gold);min-width:28px;text-align:center;}
+.init-name{font-size:.9rem;}
+.init-hp{font-size:.75rem;color:var(--text-dim);}
+.init-enemy{font-size:.65rem;color:var(--red-soft);}
+.init-del{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:.85rem;padding:1px;}
+.init-del:hover{color:var(--red-soft);}
+.init-footer{padding:7px 8px;border-top:1px solid var(--border);display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;}
+.init-footer input{background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;padding:4px 7px;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;}
+.init-footer input:focus{border-color:var(--gold-dark);}
+
+/* ── Character stat boxes ── */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+.stat-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;padding:7px 4px 5px;text-align:center;cursor:pointer;transition:all .14s;}
+.stat-box:hover{border-color:var(--gold-dark);}
+.stat-abbr{font-family:var(--font-display);font-size:.58rem;color:var(--text-dim);letter-spacing:.06em;text-transform:uppercase;}
+.stat-mod{font-family:var(--font-display);font-size:1.3rem;color:var(--gold);line-height:1.1;}
+.stat-val{font-size:.72rem;color:var(--text-dim);}
+.hp-block{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;margin-bottom:10px;}
+.hp-readout{font-family:var(--font-display);font-size:1.6rem;color:var(--gold);margin-bottom:5px;}
+.hp-bar{height:8px;background:rgba(var(--shade-rgb),.4);border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.hp-fill{height:100%;transition:width .4s;}
+.hp-inputs{display:flex;gap:5px;}
+.hp-inputs>div{flex:1;text-align:center;}
+.hp-inputs input{width:100%;background:var(--bg-deep);border:1px solid var(--border);border-radius:4px;padding:4px 5px;color:var(--text);font-family:var(--font-display);font-size:.82rem;text-align:center;outline:none;}
+.hp-inputs input:focus{border-color:var(--gold-dark);}
+.hp-inputs label{font-family:var(--font-display);font-size:.52rem;color:var(--text-dim);display:block;margin-top:2px;}
+.mini-stats{display:flex;gap:6px;margin-bottom:10px;}
+.mini-stat{flex:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;padding:6px 4px;text-align:center;}
+.ms-val{font-family:var(--font-display);font-size:1.1rem;color:var(--gold);}
+.ms-label{font-family:var(--font-display);font-size:.52rem;color:var(--text-dim);letter-spacing:.04em;text-transform:uppercase;margin-top:1px;}
+.skill-row{display:flex;align-items:center;gap:7px;padding:3px 5px;border-radius:4px;cursor:pointer;transition:background .1s;font-size:.85rem;}
+.skill-row:hover{background:rgba(var(--hi-rgb),.04);}
+.sk-prof{width:11px;height:11px;border-radius:50%;flex-shrink:0;border:1px solid var(--text-dim);}
+.sk-prof.on{background:var(--gold);border-color:var(--gold);}
+.sk-stat{font-size:.65rem;color:var(--text-dim);}
+.sk-mod{font-family:var(--font-display);font-size:.78rem;color:var(--gold);margin-left:auto;}
+.char-input{width:100%;background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;padding:5px 8px;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;transition:border-color .14s;}
+.char-input:focus{border-color:var(--gold-dark);}
+.char-textarea{width:100%;background:var(--bg-dark);border:1px solid var(--border);border-radius:4px;padding:5px 8px;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;resize:vertical;min-height:55px;}
+.char-textarea:focus{border-color:var(--gold-dark);}
+.char-section{margin-bottom:12px;}
+.char-section-lbl{font-family:var(--font-display);font-size:.58rem;color:var(--gold-dark);letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:3px;margin-bottom:6px;}
+.char-pic-area{width:90px;height:90px;border-radius:50%;border:2px solid var(--border);background:var(--bg-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;transition:border-color .15s;}
+.char-pic-area:hover{border-color:var(--gold-dark);}
+.char-pic-area img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+/* Conditions grid */
+.cond-toggle{padding:3px 9px;border-radius:4px;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;font-size:.78rem;transition:all .14s;}
+.cond-toggle.on{background:rgba(var(--gold-rgb),.14);border-color:var(--gold-dark);color:var(--gold);}
+
+/* ── Attacks ── */
+.attack-card{background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;padding:10px;margin-bottom:7px;}
+.attack-card .atk-name{font-family:var(--font-display);font-size:.88rem;color:var(--gold);margin-bottom:4px;}
+.attack-card .atk-stats{display:flex;gap:10px;font-size:.8rem;color:var(--text-dim);margin-bottom:4px;flex-wrap:wrap;}
+.attack-card .atk-note{font-size:.78rem;color:var(--text-dim);font-style:italic;}
+
+/* ── Handouts ── */
+.handout-card{background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;padding:10px;margin-bottom:7px;cursor:pointer;transition:all .14s;}
+.handout-card:hover{border-color:var(--gold-dark);}
+.handout-card h4{font-family:var(--font-display);font-size:.82rem;color:var(--gold);margin-bottom:3px;}
+.handout-card p{font-size:.82rem;color:var(--text-dim);line-height:1.4;}
+
+/* ── Enemies with folders ── */
+.enemy-folder{margin-bottom:8px;border:1px solid var(--border);border-radius:7px;overflow:hidden;}
+.enemy-folder-header{padding:8px 12px;background:rgba(var(--crimson-rgb),.1);font-family:var(--font-display);font-size:.75rem;color:var(--red-soft);cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none;}
+.enemy-folder-header:hover{background:rgba(var(--crimson-rgb),.2);}
+.enemy-folder-body{display:none;padding:8px;}
+.enemy-folder.open .enemy-folder-body{display:block;}
+.enemy-folder.open .enemy-folder-header span:last-child{transform:rotate(90deg);}
+.enemy-card{background:var(--bg-dark);border:1px solid rgba(var(--crimson-rgb),.3);border-radius:7px;padding:10px;margin-bottom:6px;}
+.ec-name{font-family:var(--font-display);font-size:.88rem;color:var(--red-soft);}
+.ec-stats{font-size:.78rem;color:var(--text-dim);margin-top:2px;}
+
+/* ── Maps panel ── */
+.map-card{background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;padding:10px;margin-bottom:6px;cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:8px;}
+.map-card:hover{border-color:var(--gold-dark);}
+.map-card.active-map{border-color:var(--gold);background:rgba(var(--gold-rgb),.05);}
+
+/* ── Jukebox ── */
+.track-card{display:flex;align-items:center;gap:8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;padding:9px;margin-bottom:5px;cursor:pointer;transition:all .14s;}
+.track-card:hover{border-color:var(--gold-dark);}
+.track-card.playing{border-color:var(--gold);background:rgba(var(--gold-rgb),.05);}
+.track-icon{font-size:1.4rem;}
+.track-name{font-family:var(--font-display);font-size:.8rem;color:var(--gold);}
+.track-desc{font-size:.72rem;color:var(--text-dim);}
+
+/* ── GM toggles ── */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--border);}
+.toggle-label{font-family:var(--font-display);font-size:.72rem;color:var(--text-dim);}
+.toggle-switch{width:38px;height:20px;background:var(--border);border-radius:10px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.toggle-switch.on{background:var(--gold-dark);}
+.toggle-switch::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;}
+.toggle-switch.on::after{left:21px;}
+
+/* ── Context menu ── */
+#ctx-menu{display:none;position:fixed;z-index:400;background:var(--bg-panel2);border:1px solid var(--border);border-radius:8px;padding:4px;min-width:155px;box-shadow:0 8px 24px rgba(var(--shade-rgb),.65);}
+#ctx-menu.open{display:block;}
+.ctx-item{padding:6px 12px;border-radius:5px;cursor:pointer;font-size:.82rem;display:flex;align-items:center;gap:8px;transition:background .1s;}
+.ctx-item:hover{background:rgba(var(--hi-rgb),.06);}
+.ctx-sep{height:1px;background:var(--border);margin:3px 0;}
+
+/* ── Dead overlay ── */
+.token-dead-overlay{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:max(36px,80%);color:#ff3030;font-weight:900;
+  text-shadow:0 0 8px #000,0 0 16px #000;
+  pointer-events:none;z-index:3;
+  animation:dead-pulse 2s ease-in-out infinite;
+}
+@keyframes dead-pulse{
+  0%,100%{opacity:.9}
+  50%{opacity:1;text-shadow:0 0 12px #ff3030,0 0 6px #000}
+}
+.token.dead-token{filter:grayscale(0.6) contrast(0.8);}
+.token.dead-token img{filter:sepia(0.3) hue-rotate(-30deg);}
+
+/* ── LARGER conditions ── */
+.token-conds{
+  position:absolute;
+  top:-10px; right:-8px;
+  display:flex; gap:2px; flex-wrap:wrap;
+  max-width:60px;
+  pointer-events:none;
+  z-index:2;
+}
+.cond-pip{
+  font-size:16px; line-height:1;
+  background:rgba(var(--shade-rgb),0.75);
+  border:1.5px solid var(--gold-dark);
+  border-radius:50%;
+  width:22px; height:22px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 3px rgba(var(--shade-rgb),0.6);
+}
+.cond-pip.cond-dead{border-color:#ff3030;background:rgba(80,0,0,0.8);}
+
+/* ── Init conditions row ── */
+.init-conds-row{
+  display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;
+}
+.init-cond{
+  font-size:14px;line-height:1;
+  background:rgba(var(--shade-rgb),0.5);
+  border:1px solid var(--border);
+  border-radius:50%;
+  width:20px;height:20px;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+
+/* ── Init visibility buttons ── */
+.init-vis-btn{
+  border:1px solid var(--border);
+  background:var(--bg-dark);
+  color:var(--text-dim);
+  border-radius:4px;
+  padding:2px 6px;
+  font-size:10px;
+  cursor:pointer;
+  transition:all .14s;
+}
+.init-vis-btn:hover{border-color:var(--gold-dark);}
+.init-vis-btn.on{
+  background:rgba(var(--gold-rgb),.18);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+/* ── Roster ── */
+.roster-card{
+  background:var(--bg-dark);
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:10px;
+  margin-bottom:6px;
+}
+.status-dot{
+  width:10px;height:10px;border-radius:50%;
+  display:inline-block;flex-shrink:0;
+}
+.status-dot.online{background:var(--green);box-shadow:0 0 6px var(--green);}
+.status-dot.offline{background:#666;}
+
+/* ── Map cursor (cursor set dynamically by JS during pan) ── */
+
+/* ── DM Initiative inline edit ── */
+.init-hp-row{
+  display:flex;align-items:center;gap:4px;margin-top:4px;
+  font-size:.78rem;
+}
+.init-hp-label{color:var(--gold);font-size:.85rem;}
+.init-hp-input{
+  width:42px;padding:3px 5px;
+  background:var(--bg-deep);border:1px solid var(--border);border-radius:4px;
+  color:var(--text);font-family:var(--font-display);font-size:.78rem;text-align:center;outline:none;
+}
+.init-hp-input:focus{border-color:var(--gold-dark);}
+.init-dmg-btn, .init-heal-btn{
+  border:1px solid var(--border);background:var(--bg-dark);
+  color:var(--text-dim);border-radius:4px;padding:2px 7px;
+  font-size:.8rem;cursor:pointer;transition:all .14s;
+}
+.init-dmg-btn:hover{border-color:var(--red);color:var(--red-soft);background:rgba(var(--crimson-rgb),.15);}
+.init-heal-btn:hover{border-color:var(--green);color:var(--green-soft);background:rgba(var(--green-rgb),.15);}
+.init-entry.dead-entry{
+  opacity:0.7;
+  background:rgba(var(--crimson-rgb),0.08);
+  border-color:rgba(var(--red-rgb),0.35);
+}
+.init-entry.dead-entry .init-name{text-decoration:line-through;}
+
+/* ── Pan/Select toolbar buttons ── */
+.tb-btn.mode-btn{
+  border:1px solid transparent;
+}
+.tb-btn.active.mode-btn{
+  background:rgba(var(--gold-rgb),.2);
+  color:var(--gold);
+  border-color:var(--gold-dark);
+}
+
+/* ── Inventory ── */
+.inv-item{
+  display:flex;align-items:flex-start;gap:8px;
+  background:var(--bg-dark);border:1px solid var(--border);
+  border-radius:7px;padding:8px 10px;margin-bottom:5px;
+  transition:border-color .14s;
+}
+.inv-item:hover{border-color:var(--gold-dark);}
+.inv-item.equipped{border-color:var(--gold);background:rgba(var(--gold-rgb),.05);}
+
+/* ── Library picker ── */
+.lib-picker-item{
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:6px;
+  cursor:pointer;
+  transition:all .14s;
+  background:var(--bg-dark);
+}
+.lib-picker-item:hover{
+  border-color:var(--gold);
+  background:rgba(var(--gold-rgb),.06);
+  transform:translateX(3px);
+}
+
+/* ── Map folders ── */
+.map-folder{margin-bottom:8px;border:1px solid var(--border);border-radius:7px;overflow:hidden;}
+.map-folder-header{
+  padding:8px 12px;background:rgba(var(--gold-rgb),.08);
+  font-family:var(--font-display);font-size:.78rem;color:var(--gold);
+  cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none;
+}
+.map-folder-header:hover{background:rgba(var(--gold-rgb),.15);}
+.map-folder-body{display:none;padding:8px;}
+.map-folder.open .map-folder-body{display:block;}
+.map-folder.open .map-folder-header span:last-child{transform:rotate(90deg);}
+
+/* ══════════════════════════════════════════════════════════════════════ */
+/* ══ NEW DETAILED CHARACTER BOG (cb-*)                                  ══ */
+/* ══════════════════════════════════════════════════════════════════════ */
+
+/* Header with portrait */
+.cb-header{
+  display:flex;align-items:center;gap:12px;
+  padding:14px;margin-bottom:12px;
+  background:linear-gradient(135deg,rgba(var(--gold-rgb),.08),rgba(var(--blue-rgb),.05));
+  border:1px solid var(--gold-dark);border-radius:10px;
+}
+.cb-pic{
+  width:70px;height:70px;border-radius:50%;border:2px solid var(--gold);
+  object-fit:cover;flex-shrink:0;
+}
+.cb-pic-ph{
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--bg-panel2),var(--bg-dark));
+  font-size:1.8rem;color:var(--gold);
+}
+.cb-head-info{flex:1;min-width:0;}
+.cb-name{
+  font-family:'Cinzel Decorative',serif;color:var(--gold-light);
+  font-size:1.15rem;letter-spacing:.03em;margin-bottom:2px;
+}
+.cb-subtitle{color:var(--text);font-size:.84rem;}
+.cb-bg{color:var(--text-dim);font-size:.75rem;margin-top:3px;font-style:italic;}
+
+/* HP block */
+.cb-hp-block{
+  text-align:center;padding:16px;margin-bottom:12px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:10px;
+}
+.cb-hp-readout{
+  font-family:var(--font-display);font-size:2rem;font-weight:700;line-height:1;
+}
+.cb-hp-bar{
+  height:9px;background:rgba(var(--shade-rgb),.5);border-radius:5px;
+  margin:8px auto 5px;max-width:92%;overflow:hidden;
+}
+.cb-hp-fill{height:100%;transition:width .35s,background .25s;}
+.cb-hp-label{
+  font-family:var(--font-display);font-size:.58rem;color:var(--text-dim);letter-spacing:.16em;
+}
+
+/* Combat stats row */
+.cb-combat-row{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px;
+}
+.cb-mini{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;
+  padding:7px 3px;text-align:center;
+}
+.cb-mini-icon{font-size:1rem;margin-bottom:2px;}
+.cb-mini-val{
+  font-family:var(--font-display);font-size:1rem;color:var(--gold);line-height:1;
+}
+.cb-mini-lbl{
+  font-family:var(--font-display);font-size:.56rem;color:var(--text-dim);
+  letter-spacing:.06em;margin-top:3px;
+}
+
+/* Section wrapper */
+.cb-section{margin-bottom:14px;}
+.cb-section-title{
+  font-family:var(--font-display);font-size:.7rem;color:var(--gold-dark);
+  letter-spacing:.12em;text-transform:uppercase;
+  padding-bottom:4px;margin-bottom:8px;border-bottom:1px solid var(--border);
+}
+
+/* Stats + Saves grid */
+.cb-stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+}
+.cb-stat-card{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+  padding:9px 5px 7px;text-align:center;
+}
+.cb-stat-lbl{font-family:var(--font-display);font-size:.6rem;color:var(--text-dim);letter-spacing:.1em;}
+.cb-stat-val{
+  font-family:var(--font-display);font-size:1.3rem;color:var(--text);margin:2px 0;
+}
+.cb-stat-mod{
+  font-family:var(--font-display);font-size:.95rem;color:var(--gold);
+  padding:3px 10px;background:var(--bg-deep);border:1px solid var(--gold-dark);
+  border-radius:12px;display:inline-block;cursor:pointer;transition:all .12s;
+}
+.cb-stat-mod:hover{background:var(--gold-dark);color:var(--bg-deep);}
+.cb-save{
+  margin-top:4px;padding:3px 5px;border-radius:4px;
+  font-size:.7rem;color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  transition:all .12s;
+}
+.cb-save:hover{color:var(--gold);background:rgba(var(--gold-rgb),.06);}
+.cb-save-dot{
+  width:7px;height:7px;border-radius:50%;border:1px solid var(--text-dim);
+}
+.cb-save.prof .cb-save-dot{background:var(--gold);border-color:var(--gold);}
+.cb-save.prof{color:var(--gold);}
+
+/* Skills */
+.cb-skills-grid{
+  display:grid;grid-template-columns:1fr;gap:2px;
+}
+.cb-skill-row{
+  display:flex;align-items:center;gap:7px;padding:4px 7px;
+  border-radius:4px;cursor:pointer;font-size:.82rem;transition:background .12s;
+}
+.cb-skill-row:hover{background:rgba(var(--hi-rgb),.04);}
+.cb-skill-dot{
+  width:10px;height:10px;border-radius:50%;border:1.5px solid var(--text-dim);
+  flex-shrink:0;
+}
+.cb-skill-row.prof .cb-skill-dot{background:var(--gold);border-color:var(--gold);}
+.cb-skill-name{flex:1;}
+.cb-skill-stat{
+  font-family:var(--font-display);font-size:.58rem;color:var(--text-dim);
+  letter-spacing:.05em;
+}
+.cb-skill-mod{
+  font-family:var(--font-display);font-size:.82rem;color:var(--gold);
+  min-width:30px;text-align:right;
+}
+
+/* Feature boxes (race, class) */
+.cb-feature-box{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;
+  padding:10px 12px;
+}
+.cb-feat-line{font-size:.82rem;margin-bottom:3px;color:var(--text);}
+.cb-feat-line strong{color:var(--gold-dark);}
+.cb-feat-traits{
+  margin-top:6px;padding-top:6px;border-top:1px solid var(--border);
+  font-size:.82rem;line-height:1.5;color:var(--text);
+}
+
+/* Level features */
+.cb-level-features{
+  max-height:300px;overflow-y:auto;padding:6px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;
+}
+.cb-lvl-card{
+  display:flex;gap:8px;padding:8px;margin-bottom:4px;
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:5px;
+}
+.cb-lvl-badge{
+  flex-shrink:0;width:50px;padding:4px 6px;
+  font-family:var(--font-display);font-size:.72rem;color:var(--gold);
+  background:var(--bg-deep);border:1px solid var(--gold-dark);border-radius:4px;
+  text-align:center;align-self:flex-start;
+}
+.cb-lvl-body{flex:1;font-size:.82rem;line-height:1.45;color:var(--text);}
+
+/* Attacks preview */
+.cb-attacks-list{display:flex;flex-direction:column;gap:4px;}
+.cb-attack-row{
+  display:flex;align-items:center;gap:6px;padding:6px 9px;
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;
+}
+.cb-atk-info{flex:1;min-width:0;}
+.cb-atk-name{font-family:var(--font-display);color:var(--gold);font-size:.84rem;}
+.cb-atk-meta{font-size:.72rem;color:var(--text-dim);}
+
+/* Inventory preview */
+.cb-inv-list{
+  display:flex;flex-direction:column;gap:2px;
+  font-size:.82rem;
+}
+.cb-inv-row{padding:3px 7px;border-radius:3px;}
+.cb-inv-row.equipped{color:var(--gold);font-weight:600;}
+
+/* Coins */
+.cb-coins-row{
+  display:flex;gap:6px;margin:10px 0;
+  justify-content:center;
+}
+.cb-coin{
+  padding:5px 12px;border-radius:15px;font-size:.78rem;
+  background:var(--bg-dark);border:1px solid var(--border);
+  font-family:var(--font-display);
+}
+.cb-coin.gold{border-color:var(--gold-dark);color:var(--gold);}
+.cb-coin.silver{border-color:#aaa;color:#ccc;}
+.cb-coin.copper{border-color:#a67;color:#c98;}
+
+/* Personality */
+.cb-personality-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:5px;
+}
+.cb-pers-card{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;
+  padding:7px 9px;font-size:.78rem;
+}
+.cb-pers-lbl{
+  font-family:var(--font-display);font-size:.6rem;color:var(--gold-dark);
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;
+}
+
+.cb-backstory{
+  background:var(--bg-dark);border:1px solid var(--border);border-radius:7px;
+  padding:10px 12px;font-size:.84rem;line-height:1.55;color:var(--text);
+  font-style:italic;
+}
+
+/* ── Live-Ressourcen-Tracker ──────────────────────────────────────────── */
+.cb-resources{display:flex;flex-direction:column;gap:12px;}
+.cb-res-group{background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:8px;padding:10px 12px;}
+.cb-res-group-title{font-family:var(--font-display);font-size:.72rem;color:var(--gold);letter-spacing:.06em;
+  margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.cb-res-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.cb-res-row:last-child{margin-bottom:0;}
+.cb-res-lbl{font-size:.82rem;color:var(--text);min-width:56px;font-family:var(--font-display);}
+.cb-pips{display:flex;gap:5px;flex-wrap:wrap;flex:1;align-items:center;}
+.cb-pip{width:16px;height:16px;border-radius:50%;cursor:pointer;transition:all .12s;border:2px solid var(--gold-dark);}
+.cb-pip.avail{background:var(--gold);border-color:var(--gold);box-shadow:0 0 5px rgba(var(--gold-rgb),.5);}
+.cb-pip.used{background:transparent;border-color:#555;}
+.cb-pip.avail:hover{transform:scale(1.18);}
+.cb-pip.used:hover{border-color:var(--gold-dark);}
+.cb-pip.success{background:var(--green);border-color:var(--green);box-shadow:0 0 5px rgba(var(--green-rgb),.5);}
+.cb-pip.fail{background:var(--red);border-color:var(--red);box-shadow:0 0 5px rgba(var(--red-rgb),.5);}
+.cb-res-count{font-size:.78rem;color:var(--text-dim);font-family:var(--font-display);min-width:38px;text-align:right;}
+.cb-res-add,.cb-res-del{background:transparent;border:1px solid var(--gold-dark);color:var(--gold);
+  border-radius:4px;cursor:pointer;width:20px;height:20px;line-height:1;padding:0;font-size:.85rem;transition:all .12s;}
+.cb-res-add:hover{background:var(--gold);color:var(--bg-deep);}
+.cb-res-del{color:var(--red-soft);border-color:transparent;}
+.cb-res-del:hover{border-color:var(--red-soft);}
+.cb-res-btn{background:var(--bg-panel);border:1px solid var(--gold-dark);color:var(--gold);
+  border-radius:4px;cursor:pointer;width:22px;height:22px;font-size:1rem;line-height:1;padding:0;}
+.cb-res-btn:hover{background:var(--gold);color:var(--bg-deep);}
+.cb-death{border-color:var(--red);}
+.cb-res-actions{display:flex;gap:8px;}
+.cb-res-actions .btn{flex:1;}
+
+/* ── Journal / Wiki ───────────────────────────────────────────────────── */
+.journal-item{background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:8px;
+  padding:10px 12px;margin:6px 8px;cursor:pointer;transition:all .14s;}
+.journal-item:hover{border-color:var(--gold);transform:translateX(2px);}
+.ji-title{font-family:var(--font-display);color:var(--gold);font-size:.9rem;margin-bottom:3px;}
+.ji-preview{font-size:.76rem;color:var(--text-dim);line-height:1.4;}
+.ji-badges{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
+.ji-badge{font-size:.62rem;padding:2px 7px;border-radius:9px;border:1px solid var(--gold-dark);}
+.ji-badge.vis{background:rgba(var(--green-rgb),.15);border-color:var(--green);color:var(--green-soft);}
+.ji-badge.hidden{background:rgba(120,120,120,.12);color:#bbb;}
+.ji-badge.notes{background:rgba(122,127,165,.15);border-color:#7a7fa5;color:#a8adcf;}
+.journal-content{font-size:.9rem;line-height:1.6;color:var(--text);}
+.journal-link{color:var(--gold);text-decoration:underline;cursor:pointer;font-weight:600;}
+.journal-link:hover{color:var(--gold-light);}
+.journal-link.missing{color:var(--red);text-decoration:underline dotted;}
+.journal-gmnotes{margin-top:16px;padding:12px;background:rgba(122,90,60,.1);
+  border:1px dashed var(--gold-dark);border-radius:8px;font-size:.85rem;line-height:1.5;}
+.jgn-title{font-family:var(--font-display);color:var(--gold-dark);font-size:.72rem;
+  letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+
+/* ── Jukebox: Sektionen + Trigger ─────────────────────────────────────── */
+.jb-section-lbl{font-family:var(--font-display);font-size:.68rem;color:var(--gold-dark);
+  letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;margin-top:4px;}
+.jb-empty{color:var(--text-dim);font-size:.78rem;font-style:italic;text-align:center;padding:12px 8px;line-height:1.5;}
+.jb-trigger{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:5px 10px;font-size:.8rem;color:var(--text);}
+.jb-trigger select{background:var(--bg-dark);border:1px solid var(--gold-dark);color:var(--text);
+  border-radius:5px;padding:3px 6px;font-size:.75rem;max-width:120px;}
+
+/* ── Perception-Sichtregler im Roster ─────────────────────────────────── */
+.rp-vision{background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:6px;
+  padding:6px 8px;margin-bottom:4px;}
+.rp-vision input[type=range]{accent-color:var(--gold);height:4px;}
+
+/* ── Karten-Tab: einklappbare Abschnitte (Accordion) ──────────────────── */
+.map-acc{border-bottom:1px solid var(--border);}
+.map-acc-head{padding:9px 12px;cursor:pointer;font-family:var(--font-display);font-size:.8rem;
+  color:var(--gold);display:flex;align-items:center;justify-content:space-between;
+  user-select:none;transition:background .12s;}
+.map-acc-head:hover{background:var(--bg-dark);}
+.map-acc-arrow{transition:transform .18s;color:var(--text-dim);font-size:.7rem;}
+.map-acc.open .map-acc-arrow{transform:rotate(90deg);}
+.map-acc-body{display:none;padding:4px 12px 12px;}
+.map-acc.open .map-acc-body{display:block;}
+
+/* ── Passive Werte im Charakterbogen ──────────────────────────────────── */
+.cb-passive-row{display:flex;gap:6px;padding:0 10px 10px;}
+.cb-passive{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
+  background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:8px;padding:7px 4px;}
+.cb-passive-icon{font-size:.95rem;}
+.cb-passive-val{font-family:var(--font-display);font-size:1.05rem;color:var(--gold);font-weight:700;}
+.cb-passive-lbl{font-size:.54rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;text-align:center;}
+
+/* ── Spieler-Notizen ──────────────────────────────────────────────────── */
+.notes-folder{margin-bottom:6px;}
+.nf-head{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--bg-panel2);border:1px solid var(--border);border-radius:7px;cursor:pointer;font-family:var(--font-display);font-size:.82rem;color:var(--gold);}
+.nf-head:hover{border-color:var(--arcane-dim);}
+.nf-count{background:var(--bg-dark);color:var(--text-dim);font-size:.7rem;padding:1px 7px;border-radius:10px;}
+.nf-empty{padding:8px 12px;color:var(--text-dim);font-size:.78rem;font-style:italic;}
+.note-card{background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:8px;padding:9px 11px;margin:5px 0 5px 10px;}
+.note-card-head{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:4px;}
+.note-title{font-family:var(--font-display);font-size:.85rem;color:var(--gold);font-weight:600;}
+.note-body{font-size:.82rem;color:var(--text);white-space:pre-wrap;line-height:1.4;}
+.note-meta{font-size:.68rem;color:var(--text-dim);margin-top:5px;font-style:italic;}
+.note-actions{display:flex;gap:2px;flex-shrink:0;}
+.note-actions button{background:transparent;border:none;cursor:pointer;font-size:.82rem;padding:2px 4px;border-radius:4px;opacity:.7;}
+.note-actions button:hover{opacity:1;background:rgba(var(--hi-rgb),.08);}
+.note-shared-tag{font-size:.62rem;color:var(--arcane);background:var(--arcane-deep);padding:1px 6px;border-radius:8px;}
+
+/* ── Ausklappbare Charakter-Bereiche ──────────────────────────────────── */
+.char-details{margin:6px 0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg-panel);}
+.char-details summary{padding:9px 12px;cursor:pointer;font-family:var(--font-display);font-size:.85rem;color:var(--gold);background:var(--bg-panel2);list-style:none;user-select:none;display:flex;align-items:center;gap:6px;}
+.char-details summary::-webkit-details-marker{display:none;}
+.char-details summary::before{content:"▸";color:var(--arcane);transition:transform .15s;}
+.char-details[open] summary::before{transform:rotate(90deg);}
+.char-details summary:hover{background:var(--bg-mid);}
+
+/* ── Angriffe/Zauber-Gruppentitel ─────────────────────────────────────── */
+.atk-group-title{font-family:var(--font-display);font-size:.8rem;color:var(--arcane);font-weight:600;padding:4px 2px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:.03em;}
+
+/* ── Angriffs-Ziel-Auswahl ────────────────────────────────────────────── */
+.att-target-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:8px;cursor:pointer;transition:all .12s;}
+.att-target-btn:hover{border-color:var(--arcane);background:var(--bg-panel2);box-shadow:0 0 10px rgba(var(--arcane-rgb),.15);}
+.sys-msg{background:rgba(var(--arcane-rgb),.06);border-left:3px solid var(--arcane);padding:5px 10px;border-radius:4px;font-size:.85rem;line-height:1.45;}
+.sys-msg b{color:var(--gold);}
+
+/* ── Karten-Kacheln im Karten-Dropdown ───────────────────────────────────── */
+.mapcard{
+  background:var(--bg-panel2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  position:relative;
+  transition:border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+.mapcard:hover{ transform:translateY(-1px); border-color:var(--arcane-dim); }
+.mapcard.is-active { border-color:var(--gold); box-shadow:0 0 0 1px rgba(var(--gold-rgb),.25), var(--glow-gold); }
+.mapcard.is-viewing{ border-color:var(--arcane); box-shadow:0 0 0 1px rgba(var(--arcane-rgb),.22), var(--glow-arcane); }
+
+.mapcard-badge{
+  position:absolute; top:7px; right:7px; z-index:2;
+  font-size:.6rem; font-weight:700; letter-spacing:.04em;
+  padding:3px 8px; border-radius:6px;
+}
+.mapcard-badge.active { background:var(--gold);   color:var(--on-accent); }
+.mapcard-badge.viewing{ background:var(--arcane); color:var(--bg-deep); }
+
+.mapcard-thumb{
+  height:84px;
+  background:var(--bg-deep);
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+/* Sanfter Verlauf, damit der Name über hellen Bildern lesbar bleibt */
+.mapcard-thumb::after{
+  content:""; position:absolute; inset:auto 0 0 0; height:36px;
+  background:linear-gradient(to top, rgba(var(--panel-rgb),.85), transparent);
+}
+.mapcard-body{ padding:9px 10px 10px; }
+.mapcard-name{
+  font-size:.82rem; color:var(--text-bright); font-weight:600;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  margin-bottom:8px;
+}
+
+/* Die drei Aktionen: gleich groß, nur Icons, Bedeutung per Tooltip */
+.mapcard-actions{ display:flex; gap:5px; }
+.mapcard-act{
+  flex:1 1 0;
+  display:flex; align-items:center; justify-content:center;
+  height:30px;
+  border:1px solid var(--border);
+  border-radius:7px;
+  background:var(--bg-deep);
+  color:var(--text-dim);
+  font-size:.86rem;
+  cursor:pointer;
+  transition:all .14s ease;
+}
+.mapcard-act:hover{
+  border-color:var(--arcane-dim);
+  color:var(--text-bright);
+  background:rgba(var(--arcane-rgb),.07);
+}
+/* Der Haupt-Knopf (für alle aktivieren) hebt sich golden ab */
+.mapcard-act.primary{
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  border-color:transparent;
+  color:var(--on-accent);
+}
+.mapcard-act.primary:hover{ filter:brightness(1.1); }
+.mapcard-act:disabled{
+  opacity:.45; cursor:default;
+  background:var(--bg-deep); border-color:var(--border); color:var(--text-dim);
+}
+.mapcard-act:disabled:hover{ transform:none; box-shadow:none; }
+
+/* ── Charakterbogen: Modus-Umschalter (Spielen / Bearbeiten) ─────────────── */
+.cb-modebar{
+  display:flex; align-items:center; gap:8px;
+  padding:8px 2px 10px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:10px;
+}
+.cb-modebar .cb-mode-title{
+  flex:1;
+  font-family:var(--font-display); font-size:.72rem; letter-spacing:.06em;
+  color:var(--gold-dark); text-transform:uppercase;
+}
+.cb-switch{
+  display:flex;
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:2px;
+  gap:2px;
+}
+.cb-switch button{
+  display:flex; align-items:center; gap:5px;
+  padding:5px 11px;
+  border:none; border-radius:6px;
+  background:transparent;
+  color:var(--text-dim);
+  font-family:inherit; font-size:.74rem; font-weight:600;
+  cursor:pointer;
+  transition:all .14s ease;
+  white-space:nowrap;
+}
+.cb-switch button:hover{ color:var(--text-bright); }
+.cb-switch button.on{
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:var(--on-accent);
+}
+/* Umschalten der beiden Ansichten */
+.cb-view{ display:none; }
+.cb-view.on{ display:block; }
+
+/* ── DM-Inspektor: zeigt den Charakterbogen eines Spielers/Gegners ────────
+   Liegt LINKS neben dem normalen Panel, damit der DM beides zugleich sieht. */
+#inspect-panel{
+  width:0; min-width:0;
+  flex-shrink:0;
+  overflow:hidden;
+  background:linear-gradient(180deg,var(--bg-panel) 0%,var(--bg-mid) 100%);
+  border-left:1px solid var(--border);
+  display:flex; flex-direction:column;
+  transition:width .18s cubic-bezier(.2,.8,.3,1);
+}
+#inspect-panel.open{ width:380px; min-width:300px; }
+
+.insp-head{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg-panel2);
+}
+.insp-avatar{
+  width:34px; height:34px; flex:0 0 34px;
+  border-radius:8px; object-fit:cover;
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem;
+}
+.insp-title{ flex:1; min-width:0; }
+.insp-name{
+  font-family:var(--font-display); font-size:.9rem; color:var(--gold);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.insp-sub{ font-size:.68rem; color:var(--text-dim); }
+.insp-close{
+  width:28px; height:28px;
+  border:1px solid var(--border); border-radius:7px;
+  background:var(--bg-deep); color:var(--text-dim);
+  cursor:pointer; font-size:.9rem;
+  transition:all .14s ease;
+}
+.insp-close:hover{ border-color:var(--red); color:var(--red-soft); }
+
+/* Die drei Reiter: Bogen · Angriffe · Inventar */
+.insp-tabs{
+  display:flex; gap:4px;
+  padding:8px 10px;
+  border-bottom:1px solid var(--border);
+}
+.insp-tab{
+  flex:1;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  padding:8px 6px;
+  border:1px solid var(--border); border-radius:8px;
+  background:var(--bg-deep); color:var(--text-dim);
+  font-size:.74rem; font-weight:600;
+  cursor:pointer;
+  transition:all .14s ease;
+}
+.insp-tab:hover{ color:var(--text-bright); border-color:var(--arcane-dim); }
+.insp-tab.on{
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  border-color:transparent; color:var(--on-accent);
+}
+.insp-body{ flex:1; overflow-y:auto; padding:12px; }
+.insp-empty{
+  color:var(--text-dim); font-style:italic; text-align:center;
+  padding:28px 12px; font-size:.85rem; line-height:1.6;
+}
+
+/* ── Inspektor: Inhalte ──────────────────────────────────────────────────── */
+.insp-sec-title{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--gold-dark);
+  margin:16px 0 7px; padding-bottom:4px;
+  border-bottom:1px solid var(--border);
+}
+.insp-sec-title:first-child{ margin-top:0; }
+
+/* Trefferpunkte */
+.insp-hp{
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:10px; padding:12px; text-align:center;
+}
+.insp-hp-readout{ font-family:var(--font-display); font-size:1.5rem; font-weight:700; }
+.insp-hp-bar{
+  height:7px; background:rgba(var(--shade-rgb),.5); border-radius:4px;
+  overflow:hidden; margin:7px 0 5px;
+}
+.insp-hp-fill{ height:100%; border-radius:4px; transition:width .25s ease; }
+.insp-hp-lbl{ font-size:.6rem; letter-spacing:.1em; color:var(--text-dim); }
+
+/* Kampfwerte-Zeile */
+.insp-row3{ display:flex; gap:7px; margin-top:9px; }
+.insp-mini{
+  flex:1; text-align:center;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:9px; padding:9px 4px;
+}
+.insp-mini-ic{ font-size:.9rem; opacity:.75; }
+.insp-mini-v { font-family:var(--font-display); font-size:1.15rem; color:var(--gold); font-weight:700; }
+.insp-mini-l { font-size:.58rem; color:var(--text-dim); letter-spacing:.04em; }
+
+/* Attribute */
+.insp-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+.insp-stat{
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:9px; padding:8px 4px; text-align:center;
+}
+.insp-stat-lbl { font-family:var(--font-display); font-size:.6rem; color:var(--text-dim); letter-spacing:.06em; }
+.insp-stat-val { font-size:1.05rem; color:var(--text-bright); font-weight:600; }
+.insp-stat-mod { font-family:var(--font-display); font-size:.92rem; color:var(--gold); font-weight:700; }
+.insp-stat-save{ font-size:.56rem; color:var(--text-dim); margin-top:2px; }
+
+/* Chips (Fertigkeiten, Geld) */
+.insp-chips{ display:flex; flex-wrap:wrap; gap:5px; }
+.insp-chip{
+  padding:4px 9px; border-radius:6px;
+  background:rgba(var(--arcane-rgb),.07); border:1px solid rgba(var(--arcane-rgb),.18);
+  color:var(--text); font-size:.74rem;
+}
+.insp-muted{ color:var(--text-dim); font-size:.78rem; font-style:italic; }
+.insp-text{
+  color:var(--text); font-size:.82rem; line-height:1.6;
+  white-space:pre-wrap;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:9px; padding:10px;
+}
+
+/* Listen (Angriffe, Inventar) */
+.insp-list{ display:flex; flex-direction:column; gap:7px; }
+.insp-item{
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:9px; padding:9px 11px;
+  transition:border-color .14s ease;
+}
+.insp-item:hover{ border-color:var(--arcane-dim); }
+.insp-item-head{ display:flex; align-items:center; gap:8px; }
+.insp-item-name{ flex:1; color:var(--text-bright); font-size:.85rem; font-weight:600; }
+.insp-badge{
+  padding:2px 7px; border-radius:5px;
+  background:rgba(var(--gold-rgb),.12); border:1px solid rgba(var(--gold-rgb),.3);
+  color:var(--gold); font-size:.68rem; font-weight:700; white-space:nowrap;
+}
+.insp-item-sub { font-size:.74rem; color:var(--text-dim); margin-top:3px; }
+.insp-item-sub b{ color:var(--text); }
+.insp-item-note{ font-size:.72rem; color:var(--text-dim); margin-top:4px; font-style:italic; }
+
+/* Roster-Karte: Kopf ist anklickbar (öffnet den Charakterbogen im Inspektor) */
+.roster-head{
+  display:flex; align-items:center; gap:8px;
+  margin:-2px -4px 5px; padding:4px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:background .14s ease;
+}
+.roster-head:hover{ background:rgba(var(--arcane-rgb),.06); }
+.roster-open{
+  font-size:.8rem; opacity:0;
+  transition:opacity .14s ease;
+}
+.roster-head:hover .roster-open{ opacity:.8; }
+
+/* Schlüssel-Wert-Liste im Inspektor (Sinne, Sprachen, Resistenzen) */
+.insp-kv{
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:9px; padding:4px 10px;
+}
+.insp-kv > div{
+  display:flex; gap:10px; align-items:baseline;
+  padding:6px 0;
+  border-bottom:1px solid rgba(var(--border-rgb),.6);
+}
+.insp-kv > div:last-child{ border-bottom:none; }
+.insp-kv span{ flex:0 0 96px; font-size:.72rem; color:var(--text-dim); }
+.insp-kv b{ flex:1; font-size:.78rem; color:var(--text); font-weight:500; }
+
+/* Gegner-Karte: Kopf ist anklickbar (öffnet den Bogen im Inspektor) */
+.enemy-head{
+  display:flex; align-items:center; gap:8px;
+  margin:-2px -4px 4px; padding:4px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:background .14s ease;
+}
+.enemy-head:hover{ background:rgba(var(--red-rgb),.07); }
+.enemy-head:hover .roster-open{ opacity:.8; }
+
+/* Übungs-Chips (Rettungswürfe/Fertigkeiten im Gegner-Editor) */
+.prof-chip{
+  padding:5px 10px;
+  border:1px solid var(--border); border-radius:6px;
+  background:var(--bg-deep); color:var(--text-dim);
+  font-size:.72rem; font-family:inherit;
+  cursor:pointer;
+  transition:all .13s ease;
+}
+.prof-chip:hover{ border-color:var(--arcane-dim); color:var(--text-bright); }
+.prof-chip.on{
+  background:rgba(var(--gold-rgb),.14);
+  border-color:var(--gold-dark);
+  color:var(--gold);
+  font-weight:600;
+}
+.prof-chip.on::before{ content:"◉ "; }
+
+/* Zeile mit mehreren Eingaben (Fähigkeiten, Beute) */
+.mini-row{ display:flex; gap:5px; align-items:center; }
+.mini-row .form-input{ padding:5px 8px; font-size:.78rem; }
+
+/* ── Würfel-Menü (Knopf in der Werkzeugleiste) ───────────────────────────── */
+.dice-toggle-row{
+  display:flex; align-items:center; gap:12px;
+  padding:11px 13px; margin-bottom:14px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:10px;
+}
+.dice-toggle-row > div:first-child{ flex:1; }
+
+.dice-set-title{
+  font-family:var(--font-display); font-size:.68rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--gold-dark);
+  margin-bottom:8px; padding-bottom:5px;
+  border-bottom:1px solid var(--border);
+}
+.dice-set-list{ display:flex; flex-direction:column; gap:6px; }
+.dice-set-item{
+  display:flex; align-items:center; gap:10px;
+  width:100%; padding:10px 12px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:9px; color:var(--text);
+  font-family:inherit; font-size:.86rem;
+  cursor:pointer; transition:all .14s ease;
+}
+.dice-set-item:hover{ border-color:var(--arcane-dim); background:rgba(var(--arcane-rgb),.06); }
+.dice-set-item.on{
+  border-color:var(--gold-dark);
+  background:rgba(var(--gold-rgb),.10);
+  color:var(--gold);
+  font-weight:600;
+}
+.dice-set-dot{
+  width:16px; height:16px; border-radius:5px; flex:0 0 16px;
+  border:1px solid rgba(var(--hi-rgb),.18);
+}
+
+/* ── Inspektor: Modus-Umschalter ─────────────────────────────────────────── */
+.insp-modebar{
+  display:flex; justify-content:center;
+  padding:8px 10px 0;
+}
+.insp-switch{
+  display:flex; gap:2px; padding:2px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:8px; width:100%;
+}
+.insp-switch button{
+  flex:1;
+  padding:6px 10px; border:none; border-radius:6px;
+  background:transparent; color:var(--text-dim);
+  font-family:inherit; font-size:.75rem; font-weight:600;
+  cursor:pointer; transition:all .14s ease;
+}
+.insp-switch button:hover{ color:var(--text-bright); }
+.insp-switch button.on{
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:var(--on-accent);
+}
+
+/* Schnellaktionen (Schaden/Heilen) */
+.insp-quick{
+  display:flex; gap:6px; margin-top:9px;
+}
+.insp-quick button{
+  flex:1; padding:7px 8px;
+  background:var(--bg-panel2); border:1px solid var(--border);
+  border-radius:7px; color:var(--text);
+  font-family:inherit; font-size:.76rem; cursor:pointer;
+  transition:all .13s ease;
+}
+.insp-quick button:hover{ border-color:var(--arcane-dim); color:var(--text-bright); }
+
+/* Eingabefelder im Bearbeiten-Modus */
+.insp-edit-row, .insp-edit-row3{
+  display:grid; gap:7px;
+}
+.insp-edit-row  { grid-template-columns:repeat(2,1fr); }
+.insp-edit-row3 { grid-template-columns:repeat(3,1fr); }
+.insp-edit-row > div, .insp-edit-row3 > div{ text-align:center; }
+.insp-edit-row label, .insp-edit-row3 label, .insp-edit-col label{
+  display:block; font-size:.62rem; color:var(--text-dim);
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px;
+}
+.insp-edit-row input, .insp-edit-row3 input, .insp-edit-col input{
+  width:100%; padding:7px 8px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:7px; color:var(--text-bright);
+  font-family:inherit; font-size:.88rem; text-align:center;
+  outline:none; transition:border-color .13s ease;
+}
+.insp-edit-row input:focus, .insp-edit-row3 input:focus, .insp-edit-col input:focus{
+  border-color:var(--arcane-dim);
+}
+.insp-edit-col{ display:flex; flex-direction:column; gap:4px; }
+.insp-edit-col input{ text-align:left; }
+
+/* Attribute im Bearbeiten-Modus */
+.insp-stat-inp{
+  width:100%; padding:4px;
+  background:var(--bg-panel2); border:1px solid var(--border);
+  border-radius:5px; color:var(--text-bright);
+  font-size:.95rem; text-align:center; font-family:inherit;
+  outline:none;
+}
+.insp-stat-mod-btn{
+  display:block; width:100%; margin:2px 0;
+  padding:3px; border:none; border-radius:5px;
+  background:transparent; color:var(--gold);
+  font-family:var(--font-display); font-size:.92rem; font-weight:700;
+  cursor:pointer; transition:background .13s ease;
+}
+.insp-stat-mod-btn:hover{ background:rgba(var(--gold-rgb),.12); }
+.insp-save-btn{
+  display:block; width:100%;
+  padding:2px 3px; border:1px solid transparent; border-radius:4px;
+  background:transparent; color:var(--text-dim);
+  font-size:.56rem; cursor:pointer;
+  transition:all .13s ease;
+}
+.insp-save-btn:hover{ border-color:var(--arcane-dim); color:var(--text-bright); }
+.insp-save-btn.on{ color:var(--gold); border-color:rgba(var(--gold-rgb),.3); }
+
+/* Zustände */
+.insp-conds{
+  display:grid; grid-template-columns:repeat(8,1fr); gap:4px;
+}
+.insp-cond{
+  aspect-ratio:1;
+  display:flex; align-items:center; justify-content:center;
+  padding:0; border-radius:7px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  font-size:.95rem; cursor:pointer;
+  opacity:.42;
+  transition:all .13s ease;
+}
+.insp-cond:hover{ opacity:.85; border-color:var(--arcane-dim); }
+.insp-cond.on{
+  opacity:1;
+  background:rgba(var(--gold-rgb),.16);
+  border-color:var(--gold-dark);
+}
+.insp-note{
+  margin-top:6px; font-size:.68rem; color:var(--text-dim);
+  font-style:italic;
+}
+
+/* Fertigkeiten */
+.insp-skills{
+  display:flex; flex-direction:column; gap:1px;
+}
+.insp-skill{
+  display:flex; align-items:center; gap:7px;
+  padding:5px 8px; border-radius:6px;
+  cursor:pointer; transition:background .12s ease;
+  font-size:.78rem;
+}
+.insp-skill:hover{ background:rgba(var(--arcane-rgb),.07); }
+.insp-skill-dot{ color:var(--text-dim); font-size:.7rem; }
+.insp-skill.prof .insp-skill-dot{ color:var(--gold); }
+.insp-skill-name{ flex:1; color:var(--text); }
+.insp-skill.prof .insp-skill-name{ color:var(--text-bright); font-weight:600; }
+.insp-skill-stat{
+  font-size:.58rem; color:var(--text-dim);
+  letter-spacing:.05em;
+}
+.insp-skill-mod{
+  font-family:var(--font-display); font-size:.82rem;
+  color:var(--gold); font-weight:700;
+  min-width:26px; text-align:right;
+}
+
+/* Aktionen an Angriffen */
+.insp-item-actions{
+  display:flex; gap:5px; margin-top:7px;
+}
+.insp-item-actions button{
+  flex:1; padding:5px 7px;
+  background:var(--bg-panel2); border:1px solid var(--border);
+  border-radius:6px; color:var(--text-dim);
+  font-family:inherit; font-size:.7rem; cursor:pointer;
+  transition:all .13s ease;
+}
+.insp-item-actions button:hover{
+  border-color:var(--arcane-dim); color:var(--text-bright);
+  background:rgba(var(--arcane-rgb),.06);
+}
+
+/* ── Inspektor: Bearbeiten von Angriffen und Inventar ─────────────────────── */
+.insp-edit-attack{
+  display:flex; gap:5px; align-items:center;
+}
+.insp-edit-attack input,
+.insp-edit-attack select{
+  padding:6px 8px;
+  background:var(--bg-panel2); border:1px solid var(--border);
+  border-radius:6px; color:var(--text-bright);
+  font-family:inherit; font-size:.78rem;
+  outline:none; min-width:0;
+  transition:border-color .13s ease;
+}
+.insp-edit-attack input:focus,
+.insp-edit-attack select:focus{ border-color:var(--arcane-dim); }
+.insp-del{
+  flex:0 0 26px; height:26px;
+  background:transparent; border:1px solid var(--border);
+  border-radius:6px; color:var(--text-dim);
+  cursor:pointer; font-size:.7rem;
+  transition:all .13s ease;
+}
+.insp-del:hover{ border-color:var(--red); color:var(--red-soft); }
+
+.insp-add{
+  width:100%; margin-top:9px; padding:9px;
+  background:var(--bg-panel2); border:1px dashed var(--gold-dark);
+  border-radius:8px; color:var(--gold-dark);
+  font-family:inherit; font-size:.8rem; cursor:pointer;
+  transition:all .14s ease;
+}
+.insp-add:hover{ border-color:var(--gold); color:var(--gold); }
+
+.insp-money-edit{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:5px;
+}
+.insp-money-edit label{
+  display:block; font-size:.6rem; color:var(--text-dim);
+  text-align:center; margin-bottom:2px;
+}
+.insp-money-edit input{
+  width:100%; padding:5px 3px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:6px; color:var(--text-bright);
+  font-family:inherit; font-size:.8rem; text-align:center;
+  outline:none;
+}
+.insp-money-edit input:focus{ border-color:var(--arcane-dim); }
+
+.insp-textarea{
+  width:100%; padding:8px 10px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  border-radius:8px; color:var(--text);
+  font-family:inherit; font-size:.82rem; line-height:1.5;
+  resize:vertical; outline:none;
+}
+.insp-textarea:focus{ border-color:var(--arcane-dim); }
+
+/* Statuseffekt an einem Angriff (wird bei einem Treffer automatisch gesetzt) */
+.atk-effect{
+  margin-top:6px; padding:5px 9px;
+  background:rgba(var(--violet-rgb),.10);
+  border-left:3px solid var(--violet);
+  border-radius:5px;
+  font-size:.75rem; color:var(--text);
+}
+.atk-effect b{ color:var(--violet); }

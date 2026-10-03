@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D&amp;D</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/design-studio.css">
+<script src="/static/js/theme.js"></script>
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="stylesheet" href="/static/css/dialog.css">
+<style>
+body{overflow-y:auto;min-height:100vh;}
+.container{max-width:1200px;margin:0 auto;padding:30px 20px 80px;position:relative;z-index:2;}
+.user-bar{position:fixed;top:14px;right:14px;z-index:50;display:flex;align-items:center;gap:10px;
+  background:var(--bg-panel);border:1px solid var(--gold-dark);border-radius:24px;padding:6px 14px 6px 6px;}
+.user-avatar-round{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:700;color:#fff;font-size:.95rem;}
+.user-bar .uname{font-family:var(--font-display);font-size:.85rem;color:var(--gold);}
+.user-bar .logout-btn{background:transparent;border:1px solid var(--gold-dark);color:var(--text-dim);
+  padding:4px 10px;border-radius:6px;cursor:pointer;font-size:.75rem;transition:all .12s;}
+.user-bar .logout-btn:hover{border-color:var(--red-soft);color:var(--red-soft);}
+header{text-align:center;margin-bottom:40px;}
+.crest{display:inline-block;font-size:3rem;filter:drop-shadow(0 0 18px rgba(var(--gold-rgb),.4));margin-bottom:10px;}
+h1{font-family:'Cinzel Decorative',serif;font-size:3.4rem;font-weight:900;letter-spacing:.08em;
+  background:linear-gradient(135deg,var(--gold-dark) 0%,var(--gold-light) 40%,var(--gold) 60%,var(--gold-dark) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
+.subtitle{color:var(--text-dim);letter-spacing:.4em;font-family:var(--font-display);font-size:.85rem;text-transform:uppercase;}
+.creator-tiles{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px;}
+@media(max-width:720px){.creator-tiles{grid-template-columns:1fr;}}
+.creator-tile{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--bg-panel2) 0%,var(--bg-panel) 100%);
+  border:2px solid var(--gold-dark);border-radius:16px;padding:34px 26px;cursor:pointer;text-decoration:none;color:inherit;
+  transition:all .25s cubic-bezier(.25,.46,.45,.94);min-height:200px;display:flex;flex-direction:column;}
+.creator-tile:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 10px 36px rgba(var(--shade-rgb),.5);}
+.tile-icon{font-size:3.2rem;margin-bottom:12px;filter:drop-shadow(0 2px 8px rgba(var(--gold-rgb),.3));}
+.tile-title{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold-light);margin-bottom:8px;letter-spacing:.05em;}
+.tile-desc{font-size:.92rem;color:var(--text);line-height:1.5;margin-bottom:14px;flex:1;}
+.tile-cta{align-self:flex-start;padding:8px 18px;background:var(--gold-dark);color:var(--bg-deep);font-family:var(--font-display);font-size:.76rem;letter-spacing:.12em;border-radius:6px;text-transform:uppercase;font-weight:600;}
+.creator-tile:hover .tile-cta{background:var(--gold);}
+.divider{display:flex;align-items:center;gap:20px;margin:26px auto;max-width:500px;color:var(--gold-dark);}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent);}
+.divider span{font-size:1.2rem;}
+.campaign-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+@media(max-width:720px){.campaign-row{grid-template-columns:1fr;}}
+.camp-box{background:linear-gradient(180deg,var(--bg-panel) 0%,var(--bg-panel2) 100%);
+  border:1px solid var(--gold-dark);border-radius:16px;padding:24px;min-height:280px;display:flex;flex-direction:column;}
+.camp-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--gold-dark);}
+.camp-head .h-icon{font-size:1.8rem;}
+.camp-head h2{font-family:'Cinzel Decorative',serif;font-size:1.15rem;color:var(--gold);letter-spacing:.05em;}
+.camp-list{flex:1;min-height:120px;}
+.camp-card{background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:all .14s;}
+.camp-card:hover{border-color:var(--gold);}
+.cc-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;}
+.cc-name{font-family:var(--font-display);color:var(--gold);font-size:.98rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.cc-meta{display:flex;gap:6px;flex-wrap:wrap;font-size:.72rem;color:var(--text-dim);margin-bottom:8px;}
+.cc-badge{padding:2px 8px;border-radius:10px;background:var(--bg-panel);border:1px solid var(--gold-dark);}
+.cc-badge.public{background:rgba(var(--green-rgb),.15);border-color:var(--green);color:var(--green-soft);}
+.cc-badge.private{background:rgba(120,120,120,.15);border-color:#666;color:#bbb;}
+.cc-badge.online{background:rgba(var(--gold-rgb),.15);border-color:var(--gold-dark);color:var(--gold);}
+.cc-badge.offline{background:rgba(var(--red-rgb),.1);border-color:var(--red);color:var(--red-soft);}
+.cc-badge.invited{background:rgba(122,184,212,.15);border-color:var(--blue);color:#a8d5ed;}
+.cc-actions{display:flex;gap:5px;flex-wrap:wrap;}
+.cc-actions .btn{padding:5px 12px;font-size:.76rem;}
+.empty-camp{text-align:center;padding:30px 10px;color:var(--text-dim);font-style:italic;font-size:.86rem;}
+.new-camp-form{display:none;background:var(--bg-dark);border:1px solid var(--gold);border-radius:10px;padding:14px;margin-top:10px;}
+.new-camp-form.open{display:block;}
+.new-camp-form input{width:100%;margin-bottom:6px;padding:8px 10px;background:var(--bg-deep);border:1px solid var(--gold-dark);border-radius:5px;color:var(--text);}
+.ncr-toggle{width:100%;padding:10px;font-family:var(--font-display);font-size:.86rem;}
+.btn{padding:8px 16px;border-radius:8px;border:1px solid var(--gold-dark);cursor:pointer;font-family:var(--font-display);font-size:.85rem;transition:all .15s;background:transparent;color:var(--text);}
+.btn-primary{background:var(--gold-dark);color:var(--bg-deep);font-weight:600;border:none;}
+.btn-primary:hover{background:var(--gold);}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+.btn-danger{border-color:var(--red);color:var(--red-soft);}
+.btn-danger:hover{background:var(--red);color:#fff;}
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(var(--shade-rgb),.82);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--bg-panel2);border:1px solid var(--gold-dark);border-radius:12px;padding:28px;width:460px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;}
+.modal h2{font-family:var(--font-display);color:var(--gold);margin-bottom:10px;}
+.modal-close{position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--text-dim);font-size:1.2rem;cursor:pointer;}
+.form-group label{display:block;font-size:.7rem;color:var(--gold-dark);text-transform:uppercase;margin-bottom:4px;font-family:var(--font-display);}
+.form-group input{width:100%;background:var(--bg-dark);border:1px solid var(--gold-dark);border-radius:6px;padding:9px 12px;color:var(--text);}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg-panel);border:1px solid var(--gold);color:var(--text);padding:12px 20px;border-radius:8px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
+#toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div><div class="stars"></div>
+<div class="user-bar" id="user-bar" style="display:none">
+  <div class="user-account-btn" id="user-account-btn" onclick="toggleAccountMenu()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 10px;border-radius:10px;transition:background .15s">
+    <div class="user-avatar-round" id="user-avatar">?</div>
+    <span class="uname" id="user-name">...</span>
+    <span style="color:var(--text-dim);font-size:.7rem">▼</span>
+  </div>
+  <div id="account-menu" style="display:none;position:absolute;top:100%;right:0;margin-top:6px;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));border-radius:12px;padding:8px;min-width:220px;box-shadow:0 8px 30px rgba(var(--shade-rgb),.5);z-index:100">
+    <div style="padding:10px 12px;border-bottom:1px solid var(--border,var(--border));margin-bottom:6px">
+      <div id="am-name" style="font-weight:600;color:var(--gold,var(--gold))"></div>
+      <div id="am-sub" style="font-size:.78rem;color:var(--text-dim,var(--text-dim))"></div>
+    </div>
+    <button class="am-item" onclick="openAccountEditor()" style="width:100%;text-align:left;background:transparent;border:none;color:var(--text,var(--text));padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.9rem">⚙️ Account bearbeiten</button>
+    <button class="am-item" onclick="doLogout()" style="width:100%;text-align:left;background:transparent;border:none;color:var(--red-soft);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.9rem">🚪 Abmelden</button>
+  </div>
+</div>
+
+<!-- Account-Editor (Overlay) -->
+<div id="account-editor" style="display:none;position:fixed;inset:0;background:rgba(var(--shade-rgb),.6);z-index:200;align-items:center;justify-content:center">
+  <div style="background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));border-radius:16px;padding:26px;width:90%;max-width:420px">
+    <h2 style="color:var(--gold,var(--gold));font-family:Cinzel,serif;margin-bottom:18px">⚙️ Account bearbeiten</h2>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label style="display:block;font-size:.8rem;color:var(--gold,var(--gold));text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Anzeigename</label>
+        <input id="ae-display" type="text" style="width:100%;padding:10px 12px;background:var(--bg-deep,var(--bg-deep));border:1px solid var(--border,var(--border));border-radius:8px;color:var(--text,var(--text))">
+      </div>
+      <div>
+        <label style="display:block;font-size:.8rem;color:var(--gold,var(--gold));text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Spitzname</label>
+        <input id="ae-nick" type="text" style="width:100%;padding:10px 12px;background:var(--bg-deep,var(--bg-deep));border:1px solid var(--border,var(--border));border-radius:8px;color:var(--text,var(--text))">
+      </div>
+      <div>
+        <label style="display:block;font-size:.8rem;color:var(--gold,var(--gold));text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Deine Farbe</label>
+        <input id="ae-color" type="color" style="width:60px;height:40px;background:transparent;border:1px solid var(--border,var(--border));border-radius:8px;cursor:pointer">
+      </div>
+    </div>
+    <div id="ae-error" style="color:var(--red-soft);font-size:.85rem;margin-top:10px;min-height:1em"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+      <button onclick="closeAccountEditor()" style="padding:10px 20px;background:var(--bg-panel2,var(--bg-panel2));border:1px solid var(--border,var(--border));color:var(--text,var(--text));border-radius:8px;cursor:pointer">Abbrechen</button>
+      <button onclick="saveAccount()" style="padding:10px 20px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;color:var(--on-accent);border-radius:8px;cursor:pointer;font-weight:600">Speichern</button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <button onclick="location.href='/menu'" title="Zurück zum Hauptmenü" style="position:fixed;top:14px;left:14px;z-index:50;background:var(--panel,var(--bg-panel2));border:1px solid var(--gold-dark,var(--gold-dark));color:var(--gold,var(--gold));padding:9px 16px;border-radius:10px;cursor:pointer;font-size:.9rem;font-family:Cinzel,serif">← Menü</button>
+  <header>
+    <div class="crest">⚔️</div>
+    <h1>D&amp;D</h1>
+    <p class="subtitle">Virtual Tabletop · 5e</p>
+  </header>
+  <div class="creator-tiles">
+    <a href="/builder" class="creator-tile">
+      <div class="tile-icon">🧙‍♂️</div>
+      <div class="tile-title">Charakter-Builder</div>
+      <div class="tile-desc">Erstelle deine eigenen Helden Schritt für Schritt.</div>
+      <div class="tile-cta">Charakter erstellen →</div>
+    </a>
+    <a href="/library" class="creator-tile">
+      <div class="tile-icon">📚</div>
+      <div class="tile-title">Bibliothek</div>
+      <div class="tile-desc">Homebrew: Rassen, Klassen, Zauber, Talente und mehr.</div>
+      <div class="tile-cta">Bibliothek öffnen →</div>
+    </a>
+    <a href="/dice" class="creator-tile">
+      <div class="tile-icon">🎲</div>
+      <div class="tile-title">Würfel-Werkstatt</div>
+      <div class="tile-desc">Gestalte deine Würfel: Oberfläche, Farben, Muster – mit Live-Vorschau.</div>
+      <div class="tile-cta">Würfel gestalten →</div>
+    </a>
+  </div>
+
+  <script src="/static/js/dialog.js"></script>
+  <div class="divider"><span>✦</span></div>
+  <div class="campaign-row">
+    <div class="camp-box">
+      <div class="camp-head"><span class="h-icon">🏰</span><h2>Meine Kampagnen</h2></div>
+      <p style="color:var(--text-dim);font-size:.82rem;margin-bottom:12px">Kampagnen die du als <strong style="color:var(--gold)">Dungeon Master</strong> leitest.</p>
+      <div class="camp-list" id="my-camps"></div>
+      <button class="btn btn-primary ncr-toggle" onclick="toggleNewCampForm()">+ Neue Kampagne starten</button>
+      <div class="new-camp-form" id="new-camp-form">
+        <input type="text" id="nc-name" placeholder="Kampagnen-Name">
+        <input type="password" id="nc-pw" placeholder="Spieler-Passwort (optional)">
+        <button class="btn btn-primary" style="width:100%" onclick="createCampaign()">🎲 Erstellen</button>
+      </div>
+    </div>
+    <div class="camp-box">
+      <div class="camp-head"><span class="h-icon">🐉</span><h2>Kampagne joinen</h2></div>
+      <p style="color:var(--text-dim);font-size:.82rem;margin-bottom:12px">Kampagnen bei denen du <strong style="color:var(--gold)">eingeladen</strong> bist oder die <strong style="color:var(--gold)">öffentlich</strong> sind.</p>
+      <div class="camp-list" id="join-camps"></div>
+      <button class="btn btn-secondary" style="width:100%;margin-top:6px;font-size:.78rem" onclick="silentRefreshJoinable()">🔄 Aktualisieren</button>
+      <div id="join-updated" style="text-align:center;color:var(--text-dim);font-size:.68rem;margin-top:4px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="pw-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('pw-modal')">✕</button>
+    <h2>🔒 Spieler-Passwort</h2>
+    <p style="color:var(--text-dim);font-size:.9rem;margin-bottom:10px">Diese Kampagne benötigt ein Passwort.</p>
+    <div class="form-group"><label>Passwort</label><input type="password" id="pw-inp" onkeydown="if(event.key==='Enter')doJoinWithPw()"></div>
+    <div id="pw-err" style="color:var(--red-soft);font-size:.8rem;margin-bottom:8px;display:none">Falsches Passwort</div>
+    <button class="btn btn-primary" style="width:100%" onclick="doJoinWithPw()">Beitreten →</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="char-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('char-modal')">✕</button>
+    <h2>🧙 Charakter wählen</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:12px">Mit welchem Charakter möchtest du beitreten?</p>
+    <div id="char-list" style="max-height:200px;overflow-y:auto;margin-bottom:12px"></div>
+    <div id="handover-chars" style="display:none;margin-bottom:12px;max-height:230px;overflow-y:auto"></div>
+    <div style="font-size:.82rem;color:var(--text-dim);text-align:center;margin-bottom:10px">
+      <a href="#" onclick="goCreateCharForJoin();return false;" style="color:var(--gold);text-decoration:underline">→ Charakter erstellen</a></div>
+    <button class="btn btn-primary" id="char-join-btn" style="width:100%" onclick="doFinalJoin()" disabled>Beitreten →</button>
+    <div style="display:flex;align-items:center;gap:10px;margin:14px 0 8px;color:var(--text-dim);font-size:.75rem"><span style="flex:1;height:1px;background:var(--border)"></span>oder<span style="flex:1;height:1px;background:var(--border)"></span></div>
+    <label class="btn btn-secondary" style="width:100%;display:block;text-align:center;cursor:pointer" title="Charakter aus deiner eigenen Installation (.vttchar-Datei)">
+      📥 Charakter-Datei mitbringen<input type="file" accept=".vttchar,.json" style="display:none" onchange="importCharForJoin(this)"></label>
+    <div id="char-missing" style="display:none;margin-top:12px"></div>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+let currentUser=null, pendingJoinSid=null, selectedCharId=null, myCharacters=[];
+function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2200);}
+function closeModal(id){document.getElementById(id).classList.remove("open");}
+async function loadMe(){
+  const res=await fetch("/api/auth/me");const data=await res.json();
+  if(!data.logged_in){window.location.href="/login";return;}
+  currentUser=data.user;
+  document.getElementById("user-bar").style.display="flex";
+  const av=document.getElementById("user-avatar");
+  av.style.background=currentUser.avatar_color||"#c9a96e";
+  av.textContent=(currentUser.display_name||currentUser.username)[0].toUpperCase();
+  document.getElementById("user-name").textContent=currentUser.display_name||currentUser.username;
+  // Account-Dropdown-Kopf befüllen
+  const amName=document.getElementById("am-name");
+  const amSub=document.getElementById("am-sub");
+  if(amName) amName.textContent=currentUser.display_name||currentUser.username;
+  if(amSub) amSub.textContent="@"+currentUser.username;
+  // Gäste können keine eigenen Kampagnen erstellen
+  if(currentUser.is_guest){
+    const box = document.querySelector(".camp-box");
+    if(box){
+      const toggle = box.querySelector(".ncr-toggle");
+      if(toggle) toggle.style.display="none";
+      const list = document.getElementById("my-camps");
+      if(list) list.innerHTML=`<div class="empty-camp">👤 Als Gast kannst du öffentlichen Kampagnen beitreten,<br>aber keine eigenen erstellen.<br><br>Registriere einen Account für alle Funktionen.</div>`;
+    }
+    document.getElementById("user-name").textContent += " (Gast)";
+  }
+}
+async function doLogout(){await fetch("/api/auth/logout",{method:"POST"});window.location.href="/login";}
+
+// ── Account-Menü (Dropdown oben rechts) ──────────────────────────────────
+function toggleAccountMenu(){
+  const m=document.getElementById("account-menu");
+  m.style.display = (m.style.display==="none"||!m.style.display) ? "block" : "none";
+}
+// Klick außerhalb schließt das Menü
+document.addEventListener("click",(e)=>{
+  const bar=document.getElementById("user-bar");
+  const menu=document.getElementById("account-menu");
+  if(bar && menu && !bar.contains(e.target)){ menu.style.display="none"; }
+});
+
+function openAccountEditor(){
+  document.getElementById("account-menu").style.display="none";
+  if(!currentUser) return;
+  document.getElementById("ae-display").value = currentUser.display_name||"";
+  document.getElementById("ae-nick").value = currentUser.nickname||"";
+  document.getElementById("ae-color").value = currentUser.avatar_color||"#c9a96e";
+  document.getElementById("ae-error").textContent="";
+  document.getElementById("account-editor").style.display="flex";
+}
+function closeAccountEditor(){ document.getElementById("account-editor").style.display="none"; }
+
+async function saveAccount(){
+  const body={
+    display_name:document.getElementById("ae-display").value.trim(),
+    nickname:document.getElementById("ae-nick").value.trim(),
+    avatar_color:document.getElementById("ae-color").value,
+  };
+  const err=document.getElementById("ae-error");err.textContent="";
+  if(!body.display_name){err.textContent="Anzeigename darf nicht leer sein.";return;}
+  try{
+    const res=await fetch("/api/auth/update_profile",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(!res.ok||data.error){err.textContent=data.error||"Fehler beim Speichern";return;}
+    currentUser=data.user;
+    // Anzeige oben rechts aktualisieren
+    const av=document.getElementById("user-avatar");
+    av.style.background=currentUser.avatar_color||"#c9a96e";
+    av.textContent=(currentUser.display_name||currentUser.username)[0].toUpperCase();
+    document.getElementById("user-name").textContent=currentUser.display_name||currentUser.username;
+    closeAccountEditor();
+    toast("✅ Profil gespeichert");
+  }catch(e){err.textContent="Netzwerkfehler";}
+}
+async function loadMyCamps(){
+  if(currentUser && currentUser.is_guest) return;
+  const res=await fetch("/api/sessions/my");const list=await res.json();
+  const el=document.getElementById("my-camps");
+  if(!list.length){el.innerHTML=`<div class="empty-camp">Keine Kampagnen.<br>Erstelle unten deine erste!</div>`;return;}
+  el.innerHTML=list.map(s=>{
+    const visClass=s.visibility==="public"?"public":"private";
+    const visText=s.visibility==="public"?"🟢 Öffentlich":"🔒 Privat (nur Eingeladene)";
+    const toggleText=s.visibility==="public"?"🔒 Privat schalten":"🌐 Öffentlich schalten";
+    const nextVis=s.visibility==="public"?"private":"public";
+    return `<div class="camp-card"><div class="cc-top"><div class="cc-name">${esc(s.name)}</div></div>
+      <div class="cc-meta"><span class="cc-badge ${visClass}">${visText}</span><span class="cc-badge">${s.invited_count} Spieler</span></div>
+      <div class="cc-actions">
+        <button class="btn btn-primary" onclick="startAsDM('${s.id}')">▶️ Session starten</button>
+        <button class="btn btn-secondary" onclick="toggleVisibility('${s.id}','${nextVis}')" title="Sichtbarkeit für Spieler umschalten">${toggleText}</button>
+        <button class="btn btn-secondary" onclick="manageCampaign('${s.id}')">⚙️ Verwalten</button>
+        <button class="btn btn-secondary" onclick="cloneCampaign('${s.id}')" title="Kampagne duplizieren">📋</button>
+        <button class="btn btn-danger" onclick="deleteCampaign('${s.id}','${esc(s.name).replace(/'/g,'')}')">🗑</button>
+      </div></div>`;
+  }).join("");
+}
+
+// Schaltet die Sichtbarkeit einer Kampagne zwischen privat und öffentlich um.
+async function toggleVisibility(sid, nextVis){
+  await fetch(`/api/session/${sid}/settings`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({visibility:nextVis})});
+  toast(nextVis==="public"?"🌐 Kampagne ist jetzt öffentlich":"🔒 Kampagne ist jetzt privat");
+  loadMyCamps();
+}
+async function createCampaign(){
+  const name=document.getElementById("nc-name").value.trim()||"Meine Kampagne";
+  const pw=document.getElementById("nc-pw").value;
+  const res=await fetch("/api/sessions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,gm_password:"dm"+Math.random().toString(36).slice(2,8)})});
+  const data=await res.json();
+  if(data.error){toast("❌ "+data.error);return;}
+  if(pw){await fetch(`/api/session/${data.id}/settings`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({player_password:pw})});}
+  toast("🎲 Kampagne erstellt!");
+  document.getElementById("nc-name").value="";document.getElementById("nc-pw").value="";
+  toggleNewCampForm();loadMyCamps();
+}
+function toggleNewCampForm(){document.getElementById("new-camp-form").classList.toggle("open");}
+async function startAsDM(sid){
+  // Die Sitzung wird gestartet, indem der DM die Spieltisch-Seite öffnet.
+  // Dort verbindet er sich als Spielleiter – dadurch erscheint die Sitzung
+  // automatisch als "DM online" in der Beitritts-Liste der anderen.
+  // Die eingestellte Sichtbarkeit (privat/öffentlich) bleibt erhalten:
+  // eine private Kampagne sehen weiterhin nur eingeladene Spieler.
+  window.location.href=`/table/${sid}`;
+}
+async function deleteCampaign(sid,name){
+  if(!await Dialog.confirmDanger(`Die Kampagne „${name}“ wird gelöscht.`,
+      {title:"Kampagne löschen?", icon:"📜",
+       hint:"Karten, Tokens und der Verlauf gehen verloren."})) return;
+  await fetch(`/api/session/${sid}/delete`,{method:"POST"});toast("🗑 Gelöscht");loadMyCamps();
+}
+function manageCampaign(sid){window.location.href=`/table/${sid}`;}
+async function cloneCampaign(sid){
+  const name = await Dialog.prompt("Wie soll die Kopie heißen?", "",
+    {title:"Kampagne duplizieren", icon:"📋", okText:"Duplizieren",
+     placeholder:"Leer lassen für automatischen Namen"});
+  if(name === null) return;   // abgebrochen
+  const res = await fetch(`/api/session/${sid}/clone`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name||undefined})});
+  const data = await res.json();
+  if(data.error){toast("❌ "+data.error);return;}
+  toast("📋 Kampagne dupliziert!");
+  loadMyCamps();
+}
+async function loadJoinable(){
+  const res=await fetch("/api/sessions/joinable");const list=await res.json();
+  const el=document.getElementById("join-camps");
+  if(!list.length){el.innerHTML=`<div class="empty-camp">Keine offenen Kampagnen.<br>Ein DM muss eine Session starten.</div>`;return;}
+  el.innerHTML=list.map(s=>{
+    const badges=[];
+    if(s.invited)badges.push(`<span class="cc-badge invited">📜 Eingeladen</span>`);
+    else if(s.visibility==="public")badges.push(`<span class="cc-badge public">🌐 Öffentlich</span>`);
+    badges.push(s.dm_online?`<span class="cc-badge online">🟢 DM online</span>`:`<span class="cc-badge offline">⚪ DM offline</span>`);
+    const dim=s.joinable?"":"opacity:.55;";
+    return `<div class="camp-card" style="${dim}"><div class="cc-top"><div class="cc-name" style="${s.joinable?"":"color:var(--text-dim)"}">${esc(s.name)}</div></div>
+      <div class="cc-meta"><span class="cc-badge">DM: ${esc(s.owner||"?")}</span>${badges.join("")}</div>
+      <div class="cc-actions">${s.joinable
+        ?`<button class="btn btn-primary" onclick="joinCampaign('${s.id}')">⚔️ Beitreten →</button>`
+        :`<button class="btn btn-secondary" disabled style="cursor:not-allowed" title="Die Sitzung ist offen, sobald der DM sie betritt.">⏳ Warte auf den DM</button>`}</div></div>`;
+  }).join("");
+}
+function goCreateCharForJoin(){
+  // Merkt sich, dass wir aus dem Beitreten-Fluss kommen; Builder kehrt danach zurück
+  if(pendingJoinSid){
+    window.location.href=`/builder?join=${pendingJoinSid}`;
+  }else{
+    window.location.href="/builder";
+  }
+}
+async function joinCampaign(sid){
+  pendingJoinSid=sid;
+  const res=await fetch(`/api/session/${sid}/check_player_pw`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pw:""})});
+  const data=await res.json();
+  if(!data.ok){
+    document.getElementById("pw-err").style.display="none";
+    document.getElementById("pw-inp").value="";
+    document.getElementById("pw-modal").classList.add("open");
+    setTimeout(()=>document.getElementById("pw-inp").focus(),100);
+  }else{openCharPicker();}
+}
+async function doJoinWithPw(){
+  const pw=document.getElementById("pw-inp").value;
+  const res=await fetch(`/api/session/${pendingJoinSid}/check_player_pw`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pw})});
+  const data=await res.json();
+  if(!data.ok){document.getElementById("pw-err").style.display="block";return;}
+  closeModal("pw-modal");openCharPicker();
+}
+async function openCharPicker(){
+  const res=await fetch("/api/characters");myCharacters=await res.json();
+  selectedCharId=null;document.getElementById("char-join-btn").disabled=true;
+  const _cm=document.getElementById("char-missing"); if(_cm){_cm.style.display="none";_cm.innerHTML="";}
+  const list=document.getElementById("char-list");
+  if(!myCharacters.length){
+    list.innerHTML=`<div style="text-align:center;padding:30px;color:var(--text-dim);font-style:italic">Noch keine Charaktere.<br><a href="#" onclick="goCreateCharForJoin();return false;" style="color:var(--gold);text-decoration:underline">→ Jetzt erstellen</a></div>`;
+  }else{
+    list.innerHTML=myCharacters.map(c=>`
+      <div class="char-pick-item" onclick="pickChar('${c.id}', this)" style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--gold-dark);border-radius:8px;margin-bottom:5px;cursor:pointer">
+        ${c.pic_url?`<img src="${esc(c.pic_url)}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">`:`<div style="width:42px;height:42px;border-radius:50%;background:var(--bg-panel2);display:flex;align-items:center;justify-content:center">🧙</div>`}
+        <div style="flex:1;min-width:0"><div style="font-family:var(--font-display);color:var(--gold);font-size:.92rem">${esc(c.name||"Unbenannt")}</div>
+          <div style="font-size:.75rem;color:var(--text-dim)">${esc(c.class||"—")} ${c.level||1} · ${esc(c.race||"—")}</div></div></div>`).join("");
+  }
+  renderHandoverChars();
+  document.getElementById("char-modal").classList.add("open");
+}
+
+// Charaktere, die der Launcher aus der EIGENEN Installation mitgebracht hat
+// (theme.js legt sie in sessionStorage ab). Ein Klick holt sie in die
+// Kampagne – mit derselben Inhalts-Prüfung wie beim Datei-Import.
+function renderHandoverChars(){
+  const box = document.getElementById("handover-chars");
+  let list = [];
+  try { list = JSON.parse(sessionStorage.getItem("vtt_handover_chars") || "[]"); } catch(e){}
+  const have = new Set(myCharacters.map(c => (c.name||"") + "|" + (c.imported_from||"")));
+  list = list.filter(x => x && x.character && !have.has((x.character.name||"") + "|" + (x.character.owner||"")));
+  if (!list.length) { box.style.display = "none"; return; }
+  box.innerHTML = `<div style="font:700 .7rem/1 var(--font-display);letter-spacing:.1em;text-transform:uppercase;color:var(--arcane);margin:4px 0 8px">✦ Aus deiner Installation</div>` +
+    list.map((x,i) => { const c = x.character; return `
+      <div onclick="joinWithHandover(${i})" style="display:flex;align-items:center;gap:10px;padding:10px;border:1px dashed rgba(var(--arcane-rgb),.5);border-radius:8px;margin-bottom:5px;cursor:pointer">
+        ${x.portrait ? `<img src="${esc(x.portrait)}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">` : `<div style="width:42px;height:42px;border-radius:50%;background:var(--bg-panel2);display:flex;align-items:center;justify-content:center">🧙</div>`}
+        <div style="flex:1;min-width:0"><div style="font-family:var(--font-display);color:var(--text-bright);font-size:.92rem">${esc(c.name||"Unbenannt")}</div>
+          <div style="font-size:.75rem;color:var(--text-dim)">${esc(c.class||"—")} ${c.level||1} · ${esc(c.race||"—")} · mitbringen</div></div>
+        <div style="color:var(--arcane)">→</div></div>`; }).join("");
+  box.dataset.list = JSON.stringify(list);
+  box.style.display = "block";
+}
+async function joinWithHandover(i){
+  const list = JSON.parse(document.getElementById("handover-chars").dataset.list || "[]");
+  const x = list[i]; if (!x) return;
+  const file = new File([JSON.stringify(x)], (x.character.name||"charakter") + ".vttchar", {type:"application/json"});
+  const fd = new FormData(); fd.append("file", file);
+  const res = await fetch(`/api/sessions/${pendingJoinSid}/import_character`, {method:"POST", body:fd});
+  const data = await res.json().catch(()=>({}));
+  if (res.status === 409) { showMissing(data); return; }
+  if (!res.ok) { toast("⚠️ " + (data.error||"Fehlgeschlagen")); return; }
+  window.location.href = `/table/${pendingJoinSid}?char_id=${data.char_id}`;
+}
+function pickChar(cid,el){
+  selectedCharId=cid;
+  document.querySelectorAll(".char-pick-item").forEach(e=>{e.style.borderColor="var(--gold-dark)";e.style.background="";});
+  el.style.borderColor="var(--gold)";el.style.background="rgba(201,169,110,0.08)";
+  document.getElementById("char-join-btn").disabled=false;
+}
+// Vor dem Beitreten prüfen, ob die Kampagne alle Inhalte hat, die der
+// Charakter braucht (Rasse, Klasse, Unterklasse, Hintergrund) – packs.py.
+async function doFinalJoin(){
+  if(!selectedCharId){toast("⚠️ Bitte Charakter wählen");return;}
+  const res = await fetch(`/api/sessions/${pendingJoinSid}/check_character`,{method:"POST",
+    headers:{"Content-Type":"application/json"},body:JSON.stringify({char_id:selectedCharId})});
+  if(res.status===409){ showMissing(await res.json()); return; }
+  window.location.href=`/table/${pendingJoinSid}?char_id=${selectedCharId}`;
+}
+
+// Charakter aus der eigenen Installation (.vttchar) in diese Kampagne holen
+async function importCharForJoin(input){
+  const f = input.files[0]; input.value = "";
+  if(!f) return;
+  const fd = new FormData(); fd.append("file", f);
+  const res = await fetch(`/api/sessions/${pendingJoinSid}/import_character`,{method:"POST",body:fd});
+  const data = await res.json().catch(()=>({}));
+  if(res.status===409){ showMissing(data); return; }
+  if(!res.ok){ toast("⚠️ " + (data.error||"Import fehlgeschlagen")); return; }
+  toast(`✅ ${data.name||"Charakter"} ist dabei`);
+  window.location.href=`/table/${pendingJoinSid}?char_id=${data.char_id}`;
+}
+
+// Fehlende Inhalte verständlich anzeigen – nach Paket gruppiert
+function showMissing(data){
+  const box = document.getElementById("char-missing");
+  const groups = {};
+  (data.missing||[]).forEach(m=>{
+    const key = m.reason==="disabled" ? "dm:"+(m.dm_source||m.source) : (m.source || "?");
+    (groups[key] = groups[key] || {m, items:[], reasons:new Set()}).items.push(`${m.label}: ${m.name}`);
+    groups[key].reasons.add(m.reason);
+  });
+  const blocks = Object.values(groups).map(g=>{
+    const disabled = g.m.reason==="disabled";
+    const own = !disabled && g.m.source==="eigene";
+    const name = disabled ? esc(g.m.dm_source_name||g.m.source_name||g.m.source)
+               : own ? "Selbst erstellte Inhalte" : esc(g.m.source_name||g.m.source);
+    const meta = (own||disabled) ? "" : [g.m.source_author?("von "+esc(g.m.source_author)):"", g.m.source_version?("v"+esc(g.m.source_version)):""].filter(Boolean).join(" · ");
+    const hint = g.reasons.has("missing")
+      ? (own ? "Exportiere diese Inhalte in deiner Bibliothek als Paket (📦 Pakete → Paket erstellen) und schicke die Datei dem DM."
+             : "Schicke dem DM dieses Paket. Er muss es installieren und für die Kampagne freigeben.")
+      : "Das Paket ist beim DM vorhanden, aber für diese Kampagne nicht freigegeben. Bitte den DM, es freizuschalten.";
+    return `<div style="border:1px solid rgba(var(--red-rgb),.45);background:rgba(var(--red-rgb),.07);border-radius:8px;padding:10px 12px;margin-bottom:8px">
+      <div style="font-family:var(--font-display);color:var(--text-bright)">📦 ${name} <span style="color:var(--text-dim);font-size:.75rem">${meta}</span></div>
+      <div style="font-size:.85rem;color:var(--text);margin:4px 0">${g.items.map(esc).join("<br>")}</div>
+      <div style="font-size:.8rem;color:var(--text-dim)">${hint}</div></div>`;
+  }).join("");
+  box.innerHTML = `<div style="color:var(--red-soft);font-weight:600;margin-bottom:8px">⚠️ ${esc(data.error||"Es fehlen Inhalte.")}</div>${blocks}`;
+  box.style.display = "block";
+}
+// Besitzer-Prinzip: Kampagnen leitet man in der EIGENEN Installation.
+async function applyOwnerMode(){
+  try{
+    const info = await (await fetch("/api/server/info")).json();
+    if(info.is_owner === false){
+      const t = document.querySelector(".ncr-toggle"); if(t) t.style.display="none";
+      const f = document.getElementById("new-camp-form"); if(f) f.remove();
+      const box = document.getElementById("my-camps");
+      if(box) box.insertAdjacentHTML("afterend", `<p style="color:var(--text-dim);font-size:.82rem;margin-top:10px">Du bist mit dem Server eines anderen Spielers verbunden. Eigene Kampagnen leitest du in deiner eigenen Installation.</p>`);
+    }
+  }catch(e){}
+}
+
+(async function init(){
+  applyOwnerMode();
+  await loadMe();
+  loadMyCamps();
+  loadJoinable();
+
+  // Automatische Aktualisierung der beitretbaren Sitzungen.
+  // So erscheint eine gerade gestartete Sitzung von selbst in der Liste,
+  // ohne dass man neu laden oder manuell aktualisieren muss.
+  const REFRESH_MS = 4000;
+  let _refreshTimer = setInterval(silentRefreshJoinable, REFRESH_MS);
+
+  // Zusätzlich aktualisieren, sobald das Fenster wieder in den Fokus kommt
+  // (z. B. wenn man von der App zurückwechselt) – dann sofort frische Daten.
+  window.addEventListener("focus", silentRefreshJoinable);
+  document.addEventListener("visibilitychange", ()=>{
+    if(document.visibilityState==="visible") silentRefreshJoinable();
+  });
+})();
+
+// Aktualisiert die Liste im Hintergrund und zeigt dezent die Uhrzeit an,
+// ohne die bestehende Ansicht wegzublinken.
+async function silentRefreshJoinable(){
+  try{
+    await loadJoinable();
+    const el=document.getElementById("join-updated");
+    if(el){
+      const t=new Date();
+      const hh=String(t.getHours()).padStart(2,"0");
+      const mm=String(t.getMinutes()).padStart(2,"0");
+      const ss=String(t.getSeconds()).padStart(2,"0");
+      el.textContent=`zuletzt aktualisiert ${hh}:${mm}:${ss}`;
+    }
+  }catch(e){ /* Netzwerkfehler ignorieren, nächster Versuch folgt */ }
+}
+</script>
+<script src="/static/js/dice-presets.js"></script>
+<script src="/static/js/design-studio.js"></script>
+</body>
+</html>

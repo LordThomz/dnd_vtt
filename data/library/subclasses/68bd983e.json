@@ -1,0 +1,42 @@
+{
+  "name": "Pfad des Berserkers",
+  "parent_class_name": "Barbar",
+  "start_level": 3,
+  "description": "Rohe, zerstörerische Raserei.",
+  "level_features": {
+    "3": [
+      {
+        "id": "f3_0",
+        "name": "Frenzy",
+        "description": "Raserei gewährt Bonus-Aktion Angriff, aber danach 1 Erschöpfungs-Stufe.",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Mindless Rage",
+        "description": "Immun gegen Bezaubern & Furcht in Raserei.",
+        "choices": []
+      }
+    ],
+    "10": [
+      {
+        "id": "f10_0",
+        "name": "Intimidating Presence",
+        "description": "Bonus-Aktion: 1 Kreatur WEI-RW oder verängstigt.",
+        "choices": []
+      }
+    ],
+    "14": [
+      {
+        "id": "f14_0",
+        "name": "Retaliation",
+        "description": "Reaktion auf Treffer: Nahkampfangriff als Gegenangriff.",
+        "choices": []
+      }
+    ]
+  },
+  "id": "68bd983e",
+  "source": "basis"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Blind",
+  "description": "Kann nichts sehen. Automatischer Fehlschlag bei Sicht-Proben. Nachteil bei Angriffswürfen; Angriffe gegen ihn haben Vorteil.",
+  "id": "c26dce25",
+  "source": "basis"
+}

@@ -1,0 +1,177 @@
+{
+  "name": "Druide",
+  "hd": "d8",
+  "primary": "wis",
+  "spellcaster": true,
+  "armor": "Leichte & mittlere Rüstung (keine Metall), Schilde (keine Metall)",
+  "weapons": "Keulen, Dolche, Wurfpfeile, Wurfspieße, Keulen, Sichel, Speer, Quarterstaff, Scimitar",
+  "tools": "Kräuterkunde",
+  "saves": "INT, WEI",
+  "skill_count": 2,
+  "skill_options": "Arkana, Tierführung, Einsicht, Heilkunde, Naturkunde, Wahrnehmung, Religion, Überleben",
+  "description": "Hüter der Natur mit wilder Magie und Formwandlung.",
+  "level_features": {
+    "1": [
+      {
+        "id": "f1_0",
+        "name": "Druidic (Sprache). Zauber wirken (WEI).",
+        "description": "Druidic (Sprache). Zauber wirken (WEI).",
+        "choices": []
+      }
+    ],
+    "2": [
+      {
+        "id": "f2_0",
+        "name": "Wildgestalt. Druidenkreis (Unterklasse).",
+        "description": "Wildgestalt. Druidenkreis (Unterklasse).",
+        "choices": []
+      }
+    ],
+    "3": [
+      {
+        "id": "f3_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "4": [
+      {
+        "id": "f4_0",
+        "name": "ASI. Wildgestalt-Verbesserung (Schwimmen",
+        "description": "ASI. Wildgestalt-Verbesserung (Schwimmen).",
+        "choices": []
+      }
+    ],
+    "5": [
+      {
+        "id": "f5_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Kreis-Merkmal",
+        "description": "Kreis-Merkmal",
+        "choices": []
+      }
+    ],
+    "7": [
+      {
+        "id": "f7_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "8": [
+      {
+        "id": "f8_0",
+        "name": "ASI. Wildgestalt (Fliegen).",
+        "description": "ASI. Wildgestalt (Fliegen).",
+        "choices": []
+      }
+    ],
+    "9": [
+      {
+        "id": "f9_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "10": [
+      {
+        "id": "f10_0",
+        "name": "Kreis-Merkmal",
+        "description": "Kreis-Merkmal",
+        "choices": []
+      }
+    ],
+    "11": [
+      {
+        "id": "f11_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "12": [
+      {
+        "id": "f12_0",
+        "name": "ASI",
+        "description": "ASI",
+        "choices": []
+      }
+    ],
+    "13": [
+      {
+        "id": "f13_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "14": [
+      {
+        "id": "f14_0",
+        "name": "Kreis-Merkmal",
+        "description": "Kreis-Merkmal",
+        "choices": []
+      }
+    ],
+    "15": [
+      {
+        "id": "f15_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "16": [
+      {
+        "id": "f16_0",
+        "name": "ASI",
+        "description": "ASI",
+        "choices": []
+      }
+    ],
+    "17": [
+      {
+        "id": "f17_0",
+        "name": "",
+        "description": "",
+        "choices": []
+      }
+    ],
+    "18": [
+      {
+        "id": "f18_0",
+        "name": "Zeitlos. 1000 Formen.",
+        "description": "Zeitlos. 1000 Formen.",
+        "choices": []
+      }
+    ],
+    "19": [
+      {
+        "id": "f19_0",
+        "name": "ASI",
+        "description": "ASI",
+        "choices": []
+      }
+    ],
+    "20": [
+      {
+        "id": "f20_0",
+        "name": "Erzdruide (unbegrenzte Wildgestalt)",
+        "description": "Erzdruide (unbegrenzte Wildgestalt)",
+        "choices": []
+      }
+    ]
+  },
+  "id": "c14b361e",
+  "source": "basis"
+}

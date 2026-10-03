@@ -1,0 +1,80 @@
+# ══════════════════════════════════════════════════════════════════════════
+#  Automatischer Bau + Veröffentlichung (siehe UPDATES.md)
+#
+#  Auslöser: ein Versions-Tag wie v0.2.0 (in GitHub Desktop: „Push" nach
+#  „python tools/release.py 0.2.0" und Anlegen des Tags – Anleitung in UPDATES.md)
+#
+#  Ergebnis: ein GitHub-Release mit Installer (.exe), Signatur und
+#  latest.json. Jeder Launcher findet es beim nächsten Start und
+#  aktualisiert sich automatisch.
+# ══════════════════════════════════════════════════════════════════════════
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Version und Updater prüfen
+        run: python tools/release.py --check "${{ github.ref_name }}"
+
+      - name: Python-Abhängigkeiten
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Server bündeln (PyInstaller)
+        run: pyinstaller --clean --noconfirm vtt-server.spec
+
+      - name: Server in die App legen
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force desktop/src-tauri/binaries | Out-Null
+          Copy-Item dist/vtt-server.exe desktop/src-tauri/binaries/vtt-server-x86_64-pc-windows-msvc.exe
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Rust einrichten
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust-Zwischenspeicher
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "desktop/src-tauri -> target"
+
+      - name: npm install
+        working-directory: desktop
+        run: npm install
+
+      - name: App bauen und veröffentlichen
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: desktop
+          tagName: ${{ github.ref_name }}
+          releaseName: "D&D Virtual Tabletop ${{ github.ref_name }}"
+          releaseBody: "Neuerungen: siehe AENDERUNGEN.txt im Repository."
+          releaseDraft: false
+          prerelease: false
+          includeUpdaterJson: true

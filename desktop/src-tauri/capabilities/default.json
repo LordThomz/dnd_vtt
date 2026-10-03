@@ -1,0 +1,24 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Standard-Berechtigungen der D&D Virtual Tabletop App (inkl. Updater im Launcher)",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "process:default",
+    "updater:default",
+    "shell:allow-open",
+    "fs:allow-write-file",
+    "fs:allow-download-write-recursive",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "$DOWNLOAD/*"
+        }
+      ]
+    }
+  ]
+}

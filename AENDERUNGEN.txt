@@ -1,0 +1,876 @@
+════════════════════════════════════════════════════════════
+  SICHERHEIT: KEIN VORGEGEBENES KONTO MEHR – 1. Oktober
+════════════════════════════════════════════════════════════
+  Jede neue Installation legte automatisch „Thomas" / „thomas" an. Wer
+  sich mit dem Server eines anderen verband, hätte sich damit anmelden
+  können. Neue Installationen starten jetzt ohne Konto; die Anmeldeseite
+  öffnet beim ersten Start direkt die Registrierung (/api/auth/has_users).
+  Bestehende Konten bleiben unverändert.
+
+
+════════════════════════════════════════════════════════════
+  BIBLIOTHEK: NUR SRD 5.1 IM PROGRAMM, REST ALS PRIVATES PAKET – 1. Oktober
+════════════════════════════════════════════════════════════
+
+HINTERGRUND: Updates laufen über öffentliche GitHub-Releases. Der Installer
+enthält die mitgelieferte Bibliothek – sie darf deshalb nur frei
+lizenzierte Inhalte enthalten (SRD 5.1, CC-BY-4.0).
+
+ENTFERNT aus data/library und der Standard-Liste (routes/api.py):
+  • Unterklassen: Bannmagie, Meuchelmörder, Pfad des Totemkriegers
+  • Hintergründe: Adliger, Gelehrter, Soldat, Straßenkind, Unterweltler,
+    Volksheld
+  • Talente: alle 10 (Alert, Athlet, Beobachter, Durchhaltevermögen,
+    Glücklich, Großwaffenmeister, Heiler, Magie-Initiate, Robust,
+    Scharfschütze)
+  • Homebrew-Klasse Nekromant (gehört nicht in die Grundregeln)
+  → stehen unverändert in den PRIVATEN Paketen
+    „Spielerhandbuch (2014) – private Ergänzungen" und „Thomas – Homebrew"
+
+ERGÄNZT (SRD 5.1, eigene Kurzfassungen):
+  • Rasse Tiefling
+  • Unterklassen: Zirkel des Landes, Weg der offenen Hand, Schwur der
+    Hingabe, Jäger, Drakonische Blutlinie, Der Unhold
+    → jede der 12 Klassen hat jetzt ihre SRD-Unterklasse
+  • Talent Ringer
+
+UPDATES BRINGEN NEUE GRUNDREGELN MIT
+  Bisher wurde die mitgelieferte Bibliothek nur beim ersten Start kopiert.
+  Jetzt werden fehlende Grundregel-Einträge beim Start nachgetragen
+  (packs._sync_basis, Abgleich über Name, löscht nie etwas).
+  Bestehende Installationen behalten ihre bisherigen Einträge.
+
+LIZENZ
+  Pflicht-Namensnennung in LIZENZ-SRD.txt, README.md und in der Bibliothek.
+  Quelle „Grundregeln (SRD 5.1)".
+
+GEPRÜFT
+  Frische Installation (50 SRD-Einträge), bestehende Installation nach
+  Update (+8, nichts gelöscht), Import des privaten Pakets (+19),
+  Charakter mit Meuchelmörder: in reiner SRD-Kampagne abgelehnt, mit Paket
+  angenommen. Gesamter Code nach Nicht-SRD-Namen durchsucht: sauber.
+
+
+════════════════════════════════════════════════════════════
+  LAUNCHER + AUTOMATISCHE UPDATES ÜBER GITHUB – 1. Oktober
+════════════════════════════════════════════════════════════
+
+ENTSCHEIDUNG: Updates sind Pflicht. Gibt es eine neue Version, wird sie
+beim Start ohne Nachfrage installiert. So spielen DM und Spieler immer
+mit derselben Version.
+
+LAUNCHER (desktop/src/index.html – erste Seite der App)
+  • Beim Start: Update prüfen → laden (mit Fortschritt) → installieren
+    → Neustart. Vorher wird der eigene Server beendet (stop_server),
+    sonst blockiert Windows die Datei.
+  • Ohne Internet startet die App trotzdem; schlägt die Installation
+    fehl: „Erneut versuchen" oder „Ohne Update starten"
+  • „Eigenes Spiel" mit Server-Status, Schnellzugriff auf Bibliothek,
+    Charaktere, Würfel, Design
+  • „Bei einem DM mitspielen": Adresse (Port 5000 wird ergänzt), zuletzt
+    genutzte Adressen, Versionsvergleich (ungleiche Versionen → klarer
+    Hinweis, wer neu starten muss)
+  • Hauptmenü: „Zum Launcher" statt „Nach Updates suchen"
+
+PERSÖNLICHES REIST MIT
+  • Würfel-Sets, Designs, Würfel-Klang werden auf der eigenen Installation
+    automatisch gespiegelt (/api/profile, theme.js)
+  • Beim Mitspielen gibt der Launcher sie zusammen mit den eigenen
+    Charakteren mit (#vttprofile=…, wird nie an einen Server geschickt)
+  • Beim DM: eigenes Design und eigene Würfel sofort aktiv; Charakter-
+    Auswahl zeigt „Aus deiner Installation" → ein Klick, gleiche
+    Inhalts-Prüfung wie beim Datei-Import
+
+GITHUB-RELEASES
+  • .github/workflows/release.yml: baut bei Tag vX.Y.Z Server + App,
+    signiert und veröffentlicht inkl. latest.json
+  • tools/release.py: Version an allen 4 Stellen setzen/prüfen,
+    Repository für den Updater eintragen
+  • Tauri: tauri-plugin-updater + tauri-plugin-process, Konfiguration im
+    Tauri-2-Format (alte v1-Felder entfernt)
+  • .gitignore: persönliche Daten, Schlüssel und Bau-Ergebnisse werden
+    nie hochgeladen
+  • UPDATES.md: Schritt-für-Schritt-Anleitung (ersetzt
+    UPDATES-HERAUSGEBEN.md); build-windows.bat baut lokal ohne Schlüssel
+
+SICHERHEIT
+  • CORS: Bisher durfte JEDE Webseite mit Anmeldedaten Anfragen an den
+    lokalen Server stellen. Jetzt nur noch die App selbst und dieselbe
+    Adresse (Entwicklung: VTT_DEV_ORIGINS)
+
+GEPRÜFT
+  Launcher im Browser gegen echten eigenen Server + DM-Server über die
+  Netzwerk-Adresse: Server-Erkennung, Rückweg, Profil-Spiegelung,
+  Übergabe von Design/Würfeln/Charakteren, Auswahl beim DM.
+  NICHT prüfbar in dieser Umgebung: Rust-Kompilierung und echter
+  Update-Vorgang – das prüft der erste GitHub-Build.
+
+
+════════════════════════════════════════════════════════════
+  BESITZER-PRINZIP + CHARAKTER MITBRINGEN – 1. Oktober
+════════════════════════════════════════════════════════════
+
+GRUNDSATZ (Thomas' Festlegung): Jede Installation gehört einer Person.
+Nur sie verwaltet Bibliothek, Pakete und Kampagnen. Geteilt wird per Datei.
+
+BESITZER-PRINZIP (config.OWNER_ONLY, routes/api.py _owner_guard)
+  • Verwalten nur bei Zugriff vom eigenen PC (127.0.0.1): Kampagne
+    anlegen/löschen/klonen, Bibliothek ändern, Standards laden, Pakete
+    importieren/abschalten/entfernen, Kampagnen-Pakete festlegen
+  • Über das Netzwerk verbundene Spieler: mitspielen, Bibliothek nur
+    ansehen, Pakete herunterladen. Oberfläche blendet Verwaltung aus
+    (/api/server/info → is_owner)
+  • Für einen zentralen gemieteten Server: VTT_OWNER_ONLY=0
+    (im production-Modus automatisch aus)
+
+CHARAKTER MITBRINGEN
+  • Charaktere merken sich beim Speichern, aus welcher Quelle Rasse,
+    Klasse, Unterklasse und Hintergrund stammen (content_refs)
+  • Builder: „📤 Exportieren" → .vttchar (inkl. Porträt)
+  • Beitreten: „📥 Charakter-Datei mitbringen" bzw. Prüfung vor dem
+    Beitritt mit vorhandenem Charakter
+  • Fehlt etwas: Meldung nach Paket gruppiert, mit Handlungshinweis
+    (Paket schicken / DM soll freigeben / Homebrew als Paket exportieren)
+  • Abgleich über NAMEN innerhalb der freigegebenen Inhalte →
+    Homebrew des Spielers passt auch als importiertes Paket beim DM
+  • Alte Charaktere ohne Quellen-Vermerk werden nicht blockiert
+
+SICHERHEIT
+  • Upload-Dateinamen werden bereinigt (vorher konnte „../" im Namen
+    Dateien außerhalb des Upload-Ordners schreiben)
+  • Importierte Charaktere bekommen eine neue Id, nie die fremde;
+    Porträt nur als echtes Bild (png/jpg/webp/gif) übernommen
+
+GEPRÜFT
+  Zwei getrennte Installationen (Spieler + DM), Spieler über die
+  Netzwerk-Adresse verbunden: 4× Verwaltung abgewiesen, Charakter ohne
+  Paket abgelehnt, Paket installiert aber nicht freigegeben → Hinweis
+  „freigeben", nach Freigabe Beitritt erfolgreich. Oberfläche per
+  Screenshot geprüft.
+
+
+════════════════════════════════════════════════════════════
+  INHALTSPAKETE + QUELLEN IN DER BIBLIOTHEK – 1. Oktober
+════════════════════════════════════════════════════════════
+
+ENTSCHEIDUNG: Kein öffentlicher Katalog. Inhalte werden nur als Datei
+(.vttpack) unter den Spielern weitergegeben.
+
+QUELLEN
+  • Jeder Bibliotheks-Eintrag hat jetzt ein Feld „source":
+      basis   = Grundregeln (mitgeliefert)
+      eigene  = auf diesem Server erstellt (Homebrew)
+      <id>    = importiertes Paket, z. B. thomas.sternenpfad
+  • Bestehende Einträge werden beim ersten Start automatisch zugeordnet
+    (Standard-Namen → basis, Rest → eigene)
+  • Bibliothek: Quellen-Filter über der Liste, Abzeichen an jedem Eintrag,
+    Hinweis im Editor, wenn ein Eintrag aus einem Paket stammt
+
+PAKETE (packs.py, static/js/pack-manager.js, Knopf „📦 Pakete")
+  • Installiert: alle Quellen, an-/abschalten, teilen, entfernen
+  • Importieren: Datei ziehen/auswählen → Vorschau → Installieren.
+    Gleiche Paket-Id = Update (alte Einträge des Pakets werden ersetzt).
+  • Paket erstellen: Name, Version, Beschreibung, beliebige Einträge,
+    Würfel-Sets beilegen → .vttpack-Datei
+  • Desktop-App speichert in den Download-Ordner, Browser lädt herunter
+  • Paket-Ids tragen den Ersteller (thomas.sternenpfad)
+
+KAMPAGNEN
+  • DM-Reiter: „Inhalte dieser Kampagne" – alle aktiven Pakete oder Auswahl
+  • Builder (beim Beitreten), Charakterbogen und Bibliotheks-Auswahl am
+    Tisch zeigen nur erlaubte Inhalte
+  • API: /api/packs, /api/packs/<id>/enabled, /api/packs/export,
+    /api/packs/preview, /api/packs/import, /api/sessions/<id>/packs,
+    /api/library?session=<id> bzw. ?active=1
+
+ROBUSTHEIT
+  • Verweise Unterklasse → Klasse werden beim Import neu aufgelöst
+    (interne IDs sind auf jedem Rechner anders): erst im Paket, dann über
+    den Klassennamen. Getestet mit abweichender ID.
+  • ZIP wird nur im Speicher gelesen (kein Entpacken), nur JSON in bekannten
+    Ordnern, Größen-/Mengengrenzen, bereinigte IDs, Kollisionen → neue ID
+  • „Standards laden" ordnet Einträge jetzt den Grundregeln zu
+
+GEPRÜFT
+  Server-Logik (Export, Vorschau, Import, Update, Abschalten, Filter,
+  Entfernen, manipulierte Dateien) und der ganze Ablauf im Browser.
+
+
+════════════════════════════════════════════════════════════
+  DESIGN-SYSTEM + DESIGN-STUDIO – 1. Oktober
+════════════════════════════════════════════════════════════
+
+NEU: DREI UNABHÄNGIGE DESIGN-BEREICHE (jeder Spieler wählt lokal)
+  • Oberfläche (5): Arkanum (Standard, Fantasy × Modern), Schattenfeste
+    (düster), Pergament (hell/klassisch), Neonsphäre (futuristisch),
+    Mondwald (elfisch)
+  • Spieltisch (5): Arkaner Tisch, Eichentafel, Kerkerstein,
+    Pergamentkarte, Holo-Tisch – steuert Hintergrund, Raster, Nebel, Lineal
+  • Würfel (10 Vorlagen): Messing & Nacht, Obsidian, Blutstein,
+    Elfenbein & Tinte, Neon-Kern, Holo-Chrom, Plasma, Mondglas,
+    Frostzahn, Eichenholz – werden als eigenes Set übernommen
+  • Komplett-Designs stimmen alle drei Bereiche aufeinander ab
+
+DESIGN-STUDIO (static/js/design-studio.js)
+  Erreichbar über 🎨 in der Spieltisch-Leiste, Einstellungen im
+  Hauptmenü und „✦ Aus Vorlage" in der Würfel-Werkstatt.
+  Die Vorschaukarten benutzen das ECHTE CSS des jeweiligen Designs.
+  Wechsel wirkt sofort (sanfter Übergang) und auch in anderen offenen
+  Fenstern.
+
+TECHNIK
+  • Neu: static/css/themes.css (alle Design-Variablen), static/js/theme.js
+    (Verwaltung, lädt im <head> → kein Aufblitzen des falschen Designs)
+  • ~260 fest eingetragene Farben und alle Schriftangaben in CSS und
+    Seiten auf Variablen umgestellt (Skript-gestützt, danach jede Seite
+    in jedem Design per Screenshot geprüft)
+  • Buttons: Schrift auf dem Akzent über --on-accent (vorher dunkle
+    Hintergrundfarbe → im hellen Design unlesbar)
+  • Karte: Rasterfarbe „Tisch-Design" (neuer Standard für neue Karten);
+    Karten mit fester Rasterfarbe behalten diese. Nebel und Lineal folgen
+    dem Tisch-Design.
+  • Würfel: Kanten und Rahmen leuchten bei Glas/Kristall zusätzlich
+    (vorher bei durchsichtigen Würfeln unsichtbar)
+  • Würfel-Popup folgt dem Oberflächen-Design
+  • Vorlagen in eigener Datei dice-presets.js (auch ohne 3D-Engine lesbar)
+  • Programm-Icon (favicon.svg) – beseitigt Fehlermeldungen in der Konsole
+
+KONZEPT
+  KONZEPT-ERWEITERUNGEN.md: Inhaltspakete (.vttpack), Bibliothek mit
+  Quellen, Paket-Katalog auf GitHub, Launcher, signierte Updates über
+  GitHub Releases, Reihenfolge der nächsten Schritte.
+
+
+════════════════════════════════════════════════════════════
+  WÜRFEL-ENGINE V3 „EHRLICH VORBERECHNET" + OFFLINE-FIX – 30. September
+════════════════════════════════════════════════════════════
+
+URSACHEN DER OFFENEN WÜRFELFEHLER (gefunden und behoben)
+
+  W10/W100 landete auf Spitze/Kante
+    dice-geometry.js benutzte als „Flächennormale" die Richtung zum
+    Flächenmittelpunkt. Bei den Drachenflächen des Trapezoeders weicht das
+    um 19,5° von der echten Normale ab. _snapUpright hat den Würfel damit
+    AKTIV schief gedreht. → Echte Normalen (Newell-Verfahren).
+
+  W4: mehrere Zahlen an einer Ecke
+    Textur-v zeigt nach oben, die Leinwand-y-Achse nach unten. Die
+    Eckenzahlen wurden ohne Umrechnung gezeichnet → gespiegelt an der
+    falschen Ecke. → _toCanvas() rechnet sauber um.
+
+  Erster Klick tat nichts
+    Behoben durch den neuen Ablauf (kein Bauplan-Umweg mehr, Materialien
+    und Shader werden beim Seitenstart vorgebaut). Im Browsertest geprüft:
+    ein Klick → Würfel rollen sofort.
+
+  Ergebnis-Popup verdeckte Würfel
+    Popup sucht jetzt freien Platz: über allen Würfeln → darunter → rechts
+    → links (berechnet aus dem Bildschirm-Rechteck ALLER Würfel).
+
+NEUER ABLAUF (ersetzt „Physik entscheidet" / dice_plan / dice_physics)
+
+  1. Server würfelt mit secrets.SystemRandom (nicht vorhersagbar,
+     nicht vom Browser aus manipulierbar).
+  2. Server schickt dice_playback {dice, seed, total, formula} an alle
+     (geheime Würfe nur an den Werfer).
+  3. Jeder Client simuliert den Wurf unsichtbar komplett durch (1–6 ms),
+     zeichnet jede Position auf und verwirft schiefe Landungen.
+  4. Eine Symmetrie-Drehung des Körpers (DiceGeometry.symmetry) dreht die
+     BESCHRIFTUNG so, dass die Serverzahl oben landet. Die Bewegung bleibt
+     exakt die berechnete Physik – kein Einrasten, kein Ruck.
+  Test: 1.475 Würfe über alle Würfeltypen, 0 falsche Ergebnisse,
+  alle flach gelandet.
+
+WEITERE WÜRFEL-VERBESSERUNGEN
+  • Kantenfärbung umgesetzt (Dezent/Kräftig), Panel in der Werkstatt aktiv
+  • Rahmen folgt der echten Flächenform (Dreieck, Fünfeck, Drachen)
+  • Textur deckt die ganze Fläche ab (vorher gestreckte Randpixel an Ecken),
+    doppelte Auflösung (512 px), Farben jetzt farbecht (sRGB)
+  • Gegenseiten ergeben die klassische Summe (W6 7, W20 21, W10 9 …),
+    W10: gerade Zahlen um die eine Spitze, ungerade um die andere
+  • Zahlen zeigen zur Ecke (W8/W12/W20) bzw. Drachenspitze (W10) – wie echt
+  • Prozentwurf (1d100) rollt als Zehner- + Einerwürfel
+  • Aufprallgeräusche an die berechneten Aufschläge gekoppelt
+  • Würfel rollen nur über der Karte (data-dice-area), Wände passen sich
+    an die Fenstergröße an → nie mehr aus dem Bild
+  • Materialien werden zwischengespeichert, Renderschleife stoppt im
+    Ruhezustand (spart Grafikleistung), mehrere Würfe laufen in Warteschlange
+  • Neues Popup-Design mit Würfel-Chips, Kritisch/Patzer-Hervorhebung
+
+WÜRFELFORMELN (dice.py neu)
+  • adv/dis bzw. vorteil/nachteil, 4d6dl1, 1d%, 1w20 (deutsch)
+  • Ungültige Formeln → Hinweis beim Werfer statt stiller Fehler
+  • Schutzgrenzen (max. 100 Würfel je Teil, 1000 Seiten)
+  • Server liefert „kept"-Indizes → Chat streicht bei Nachteil (kl) jetzt
+    die RICHTIGEN Würfel durch (vorher falsch)
+
+OFFLINE-FEHLER BEHOBEN
+  table.html lud den Socket.IO-Client aus dem Internet (cdn.socket.io).
+  Ohne Internet funktionierte der Spieltisch gar nicht. Jetzt lokal:
+  static/lib/socket.io.min.js (v4.7.5).
+
+AUFGERÄUMT
+  Gelöscht: static/dice/, static/dicebox/, dice-engine.js,
+  dice3d.js.old-selfmade/.dicebox-adapter/.dicebox-engine,
+  dice-geometry.js.bak → Projekt 13 MB → 4 MB.
+
+GEPRÜFT
+  Syntax aller JS/PY-Dateien; Browsertest mit echtem Server (Login,
+  Sitzung, Würfeln per Klick, 2d20kh1+5, 1d10+1d100, ungültige Formel);
+  Screenshots aller Würfel in Werkstatt-Vorschau und am Spieltisch
+  selbst angesehen.
+
+
+════════════════════════════════════════════════════════════
+  KOMPLETT EIGENE WÜRFEL-ENGINE (Neuaufbau) – 19. Juli (3)
+════════════════════════════════════════════════════════════
+
+Der dice-box-Weg wurde aufgegeben. Die Würfel werden jetzt
+VOLLSTÄNDIG selbst per Code erzeugt – Form, Zahlen, Materialien,
+alles. So kontrollieren wir jede Eigenschaft selbst.
+
+DREI DATEIEN BILDEN DIE ENGINE:
+
+  static/js/dice-geometry.js
+    Erzeugt die sieben Würfelformen als echte mathematische
+    Körper (Tetraeder, Würfel, Oktaeder, Trapezoeder,
+    Dodekaeder, Ikosaeder). Liefert:
+      • die sichtbare Geometrie (mit UV-Koordinaten je Fläche)
+      • den Physik-Collider (für cannon-es)
+      • Flächendaten (Normale/Mittelpunkt) für die Ergebnis-
+        Erkennung
+    NEU: W100 ergänzt (gleiche Form wie W10). Die Flächen des
+    Physik-Colliders werden jetzt sauber nach außen orientiert –
+    das behebt den alten W4/W10/W100-Bug (cannon-es warnte, die
+    Normalen zeigten nach innen → fehlerhafte Kollision).
+
+  static/js/dice-material.js
+    Zeichnet pro Fläche eine eigene Textur PER CANVAS:
+      • die Zahl in der gewählten Schrift, Farbe, Größe
+      • Muster (Punkte, Linien, Runen … – siehe PATTERNS)
+      • Farbverlauf (Grundfarbe → Zweitfarbe)
+      • Rahmen auf der Fläche (durchgezogen, leuchtend, gestrichelt)
+      • Sonderfälle: eingravierte Zahlen (Metall/Stein), leuchtende
+        Zahlen (Glas/Kristall), W4 mit Zahlen an den Ecken
+    Sieben Oberflächen (SURFACES): Kunststoff, Metall, Glas,
+    Kristall, Stein, Marmor, Holz – jede mit eigener prozeduraler
+    Struktur (gebürstet, Granit, Maserung …).
+    WEIL wir die Zahlen SELBST auf die Fläche zeichnen, sitzen sie
+    exakt richtig – das war mit fremden Texturen das Kernproblem.
+
+  static/js/dice3d.js  (die Engine, die alles zusammenführt)
+    Klar in Abschnitte gegliedert (0–10, siehe die ══-Balken):
+      0  Stellschrauben (Größe, Schwerkraft, Kamera …)
+      1  Sets & Styles (Aussehen speichern, mehrere Sets)
+      2  An/Aus
+      3  Diagnose (roter Fehlerbalken)
+      4  Ein Würfel (Geometrie + Material + Physik + Ergebnis)
+      5  Die Bühne (Szene, Licht, Physik-Welt, Renderloop)
+      6  Wurf-Parameter (pro Würfelform)
+      7  Wurf-Overlay (Vollbild über der Karte)
+      8  Ergebnis-Popup (erscheint am Würfel)
+      9  Öffentliche Funktionen (roll, preview, testRoll)
+      10 Öffentliche Schnittstelle
+    An den mit «STELLSCHRAUBE» markierten Werten kann man gefahrlos
+    drehen (Wurfkraft, Schwerkraft, Kamera, Physik pro Würfel).
+
+WEITERE ZUGEHÖRIGE DATEIEN:
+  static/js/dice-sound.js          – Würfel-Geräusche
+  static/lib/three.min.js          – 3D-Bibliothek
+  static/lib/cannon-es.min.js      – Physik-Bibliothek
+  static/lib/RoomEnvironment.js    – Studio-Spiegelung (Metall/Glas)
+
+WERKSTATT (dice.html):
+  Alle Feineinstellungen sind wieder aktiv – Zweitfarbe/Verlauf,
+  Muster + Muster-Akzent, Schriftart, Zahlengröße, Rahmen. (Die
+  Kanten-Färbung bleibt vorerst aus, weil dafür in dice-material
+  noch keine Umsetzung existiert.) Die Vorschau ist wieder
+  drehbar (Maus/Touch) und zeigt den Würfel groß.
+
+GEPRÜFT (headless):
+  • Alle 7 Formen rendern mit sichtbaren Zahlen.
+  • Physik stabil für alle Würfel (Spitzengeschwindigkeit ~26,
+    keine Explosion), keine cannon-es-Normalen-Warnungen mehr.
+  • Alle Materialien/Muster/Rahmen/Verläufe wirken sichtbar.
+  NOCH offen: die finale VISUELLE Abnahme (Zahlen-Position,
+  Gesamteindruck) auf echter Hardware – bitte testen.
+
+FRÜHERE VERSIONEN LIEGEN ALS SICHERUNG BEREIT:
+  dice3d.js.old-selfmade    – erste Selbstbau-Engine
+  dice3d.js.dicebox-adapter – dice-box-Adapter
+  dice3d.js.dicebox-engine  – dice-box mit eigener Three.js-Engine
+  dice-geometry.js.bak      – Geometrie vor dem W100/Face-Fix
+
+────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════
+  ZAHLEN-DARSTELLUNG überarbeitet – 19. Juli (2)
+════════════════════════════════════════════════════════════
+
+Nach dem Test zeigten die Würfel die Zahlen teils verschoben,
+auf Kanten laufend, mal hell, mal dunkel – je nach Würfel und
+Blickwinkel unterschiedlich (v.a. bei Glas/durchscheinend).
+
+★ URSACHE
+  Die Zahlen lagen bisher auf einem ZWEITEN, transparenten Mesh,
+  das leicht über den Würfel gelegt wurde (Overlay). Dieses
+  Overlay rendert je nach Blickwinkel und Transparenz
+  inkonsistent – daher die verschobenen/verschwindenden Zahlen.
+
+★ FIX
+  Die Zahlen sind jetzt DIREKT ins Würfel-Material eingewoben
+  (im Shader): Die Zahlen-Textur wird beim Einfärben der
+  Oberfläche mitgemischt. So sitzt die Zahl fest auf der Fläche,
+  wird korrekt beleuchtet und funktioniert auch bei Glas/Kristall.
+  Kein separates Overlay-Mesh mehr.
+
+  Technisch geprüft: Shader kompiliert für alle Oberflächen
+  fehlerfrei; Ergebnis-Erkennung und Physik unverändert korrekt.
+  Die VISUELLE Abnahme der Zahlen-Position steht noch aus (muss
+  auf echter Hardware geprüft werden).
+
+★ PHYSIK
+  Läuft nach den Wand-/Collider-Fixes stabil (5 Testwürfe:
+  Spitzengeschwindigkeit 16–27 statt früher ~1400; alle
+  Ergebnisse gültig). Noch nicht „perfekt" im Roll-Gefühl –
+  Feinschliff (Wurfkraft/Drall) ist als Nächstes möglich.
+
+────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════
+  ENGINE-FIXES: Größe, Zentrierung, Physik – 19. Juli
+════════════════════════════════════════════════════════════
+
+Nach dem ersten Test der eigenen Engine gab es drei Probleme,
+die jetzt alle behoben sind.
+
+★ WÜRFEL WAREN ZU KLEIN & NICHT MITTIG (Vorschau)
+  Ursache: Die Rohmodelle sind unterschiedlich groß und manche
+  sitzen nicht im Ursprung (v.a. der W4). Der feste Skalierungs-
+  faktor hat das nicht ausgeglichen.
+  Fix:
+    • Jeder Würfel wird auf denselben Zieldurchmesser normalisiert
+      und exakt zentriert (Render-Mesh UND Physik-Collider gleich).
+    • Die Vorschau hat jetzt eine eigene, nahe, schräg-frontale
+      Kamera – der Würfel füllt das Fenster gut aus (statt als
+      kleiner Fleck weit hinten zu sitzen).
+
+★ ZAHLEN SCHIENEN VERSCHOBEN
+  Stellte sich als Folgefehler heraus: Die UVs und Zahlen sind
+  eigentlich korrekt – bei einer sauber zentrierten, frontal
+  gerenderten Fläche saß die Zahl exakt mittig. Der schiefe
+  Eindruck kam von der außermittigen Geometrie (siehe oben) plus
+  schräger Perspektive. Mit der Zentrierung ist das mitbehoben.
+
+★ PHYSIK „ZAPPELTE"/EXPLODIERTE BEIM ROLLEN
+  Das war der eigentliche Knackpunkt. Mehrere Ursachen, alle
+  gefunden und behoben:
+    1. UNSICHTBARE WÄNDE FALSCH ORIENTIERT (Hauptursache):
+       Eine Physik-Wand blockiert einen ganzen Halbraum. Die
+       Wände waren falsch herum gedreht, sodass der komplette
+       Würfelbereich „innerhalb" der Wände lag. Die Engine
+       drückte den Würfel pausenlos heraus → wilde
+       Geschwindigkeiten (gemessen bis ~1400 statt ~14) und das
+       Zittern/Bugsen. Wände zeigen jetzt korrekt nach innen.
+    2. COLLIDER HATTE DUPLIKATE: Der W20-Kollisionskörper hatte
+       60 statt 12 Ecken (jede 5-fach). Das führt zu falschen
+       Kontaktnormalen. Ecken werden jetzt verschmolzen.
+    3. Broadphase auf die bei Wänden stabilere Variante
+       umgestellt; Schwerkraft, Reibung, Restitution und
+       Sleep-Schwellen sauber auf die Weltgröße abgestimmt;
+       kleinerer Zeitschritt mit mehr Substeps.
+  Ergebnis: Der Würfel fällt jetzt gleichmäßig, rollt sauber aus
+  und bleibt ruhig liegen (nachgemessen – keine Ausreißer mehr).
+
+────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════
+  EIGENE WÜRFEL-ENGINE (Weg A) – 18. Juli
+════════════════════════════════════════════════════════════
+
+★ WAS SICH GRUNDLEGEND GEÄNDERT HAT
+  Wir haben uns von dice-box als aktiver Engine gelöst und eine
+  EIGENE Würfel-Engine gebaut – auf Basis der guten Bausteine, die
+  wir aus dice-box übernommen haben. Damit gehört uns jetzt alles:
+  Aussehen, Materialien, Vorschau, Ergebnis-Anzeige.
+
+  Übernommen aus dice-box (frei/CC0), liegt extrahiert in
+  static/dice/dice-models.json:
+    • die schönen Würfelformen (d4–d100)
+    • die Physik-Collider (vereinfachte Formen)
+    • die colliderFaceMap (welche Fläche trägt welche Zahl)
+  Dazu die Zahlen-Textur (numbers-dark/-light.png) und ein
+  Oberflächenrelief (surface-normal.png).
+
+  Neue Dateien:
+    static/js/dice-engine.js   – die eigene Engine (Three.js + cannon-es)
+    static/dice/…              – Modelle + Texturen
+  dice3d.js ist jetzt ein schlanker Adapter auf diese Engine.
+  Der alte dice-box-Adapter liegt als dice3d.js.dicebox-adapter
+  bereit, dice-box selbst bleibt im Projekt (Fallback).
+
+★ ERGEBNIS: DIE PHYSIK ENTSCHEIDET, EINE ZAHL FÜR ALLES
+  Der Würfel fällt physikalisch echt. Wenn er liegt, liest die
+  Engine über die Flächen-Normalen + faceMap aus, welche Fläche
+  oben liegt. GENAU diese Zahl steht am Würfel, im Popup und im
+  Chat. Damit ist das alte Problem (Würfel zeigt 6, Popup 7,
+  Chat 11) an der Wurzel weg.
+  (Mathematisch geprüft: für alle 7 Würfel, je 2000 Zufallslagen,
+   0 ungültige Flächen, volle Zahlenabdeckung.)
+
+★ MULTIPLAYER: ALLE SEHEN DASSELBE
+  Neuer Fluss (der Werfer würfelt echt, alle sehen dasselbe):
+    1. Client schickt die Formel + want_physics.
+    2. Server schickt dem Werfer nur den Bauplan (dice_plan).
+    3. Der Werfer würfelt physisch, liest die echten Zahlen aus
+       und meldet sie (dice_physics).
+    4. Server prüft sie (Plausibilität), rechnet Summe/Vorteil/
+       Modifikatoren daraus und verteilt Chat + Nachspielung
+       (dice_playback) an alle im Raum.
+    5. Die anderen spielen den Wurf auf denselben Zahlen nach
+       (freier Fall, dann sauberes Einrasten auf die Zielzahl).
+  Fällt 3D aus oder meldet der Client nichts, würfelt der Server
+  wie bisher per Zufall (Fallback) – die App bleibt voll nutzbar.
+
+  dice.py: neue Funktionen plan() und assemble().
+  sockets.py: dice_roll umgebaut, neuer Handler dice_physics.
+
+★ WAHRNEHMUNG/SICHT NUTZT DAS ECHTE ERGEBNIS
+  Der Wahrnehmungswurf hängt jetzt am physisch gefallenen Ergebnis
+  (statt am Server-Zufall).
+
+★ MATERIALIEN – JETZT WIRKLICH ANPASSBAR
+  Weil die Engine uns gehört, sind echte Materialien möglich:
+    • Glas / Kristall / Marmor: echtes, halbtransparentes Material
+      mit Lichtdurchgang und Reflexion (mit dice-box war das
+      technisch unmöglich).
+    • Metall, Stein, Holz, Kunststoff: physikalische Materialien
+      mit passender Rauheit/Glanz.
+    • Farbe frei wählbar, Zahlenfarbe frei wählbar.
+  In der Werkstatt ist die Zahlenfarbe wieder aktiv.
+  Noch nicht dabei: Muster, Ränder, Kanten, Farbverlauf – die
+  Regler bleiben vorerst ausgeblendet (kommen als eigener Schritt).
+
+★ DREHBARE VORSCHAU
+  Die Werkstatt-Vorschau ist ein eigener Betrachter: der Würfel
+  dreht sich sanft und lässt sich mit der Maus frei drehen, um ihn
+  von allen Seiten anzuschauen – wie früher gewünscht.
+
+★ ERGEBNIS-FENSTER AM WÜRFEL
+  Das Ergebnis-Fenster erscheint NACH dem Ausrollen, direkt am
+  Würfel (echte Bildschirmposition), und weicht den Rändern aus
+  (oben kein Platz → darunter; links/rechts → zur anderen Seite).
+  Das Chat-Ergebnis wird erst enthüllt, wenn der Würfel liegt.
+
+★ TESTWURF
+  Der Testwurf in der Werkstatt rollt groß über den Bildschirm
+  (echte Physik, echtes Ergebnis).
+
+────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════
+  D&D Virtual Tabletop – Würfel: Reflexionen, W4, Physik
+════════════════════════════════════════════════════════════
+
+★ REFLEXIONEN AUF EIN MINIMUM
+  Besonders W4, W10 und W100 haben stark geblendet – man konnte
+  die Zahlen nicht mehr lesen.
+
+  Die Spiegelungsstärke ist jetzt drastisch reduziert:
+    Metall    3.0 → 0.40   (plus rauere Oberfläche: 0.52 → 0.62)
+    Kristall  3.2 → 0.35
+    Glas      2.0 → 0.30
+    Marmor    0.9 → 0.15
+    Holz      0.4 → 0.10
+    Kunststoff 0.6 → 0.12
+    Stein     0.12 → 0.05
+
+  Die Materialien unterscheiden sich weiterhin klar, aber nichts
+  blendet mehr. Falls es zu matt wirkt, lässt sich das gezielt
+  wieder anheben.
+
+★ W4: ZAHLEN JETZT KORREKT
+  Recherchiert, wie echte W4 beschriftet sind:
+  "Each face has three numbers, arranged such that the upright
+   number is the same on all three visible faces."
+
+  Die Logik war richtig (jede ECKE trägt eine Zahl), aber die
+  Zahlen standen zu weit in der Mitte – man konnte sie keiner
+  Ecke eindeutig zuordnen. Es sah aus, als stünden zwei Zahlen
+  an derselben Ecke.
+
+  Jetzt sitzen sie dicht an ihrer Ecke (Abstand 0,62 → 0,80) und
+  sind kleiner. Steht eine Ecke oben, zeigen alle drei sichtbaren
+  Flächen dort DIESELBE Zahl – wie beim echten Würfel.
+
+★ W4: ERGEBNIS ÜBER DIE SPITZE
+  Ein Tetraeder liegt auf einer Fläche und zeigt mit einer ECKE
+  nach oben. Die Klarheit wird jetzt daran gemessen, wie deutlich
+  diese Ecke herausragt – nicht mehr an der Fläche.
+
+★ PHYSIK JE WÜRFELFORM
+  Vorher hatten alle dieselben Werte – ein W4 verhielt sich wie
+  ein W20, was unnatürlich aussah.
+
+  Jetzt hat jede Form eigene Werte für Reibung, Sprungkraft,
+  Dämpfung und Wurfkraft:
+    W4  – greift stark, springt kaum, kommt schnell zur Ruhe (1,1 s)
+    W10 – flach, springt wenig, rollt mittellang (2,9 s)
+    W20 – rollt fast wie eine Kugel, am längsten (2,8 s)
+
+★ GEPRÜFT
+  Alle Ergebnisse aller Würfel (W4 bis W100) landen klar:
+    W4: 4/4    W6: 6/6    W8: 8/8    W10: 10/10
+    W12: 12/12 W20: 20/20 W100: 10/10
+  Schlechteste Klarheit: 0,915 (Schwelle 0,90).
+
+════════════════════════════════════════════════════════════════════════════
+ UMSTIEG AUF @3d-dice/dice-box (echte Physik-Würfel-Bibliothek)
+════════════════════════════════════════════════════════════════════════════
+
+WARUM
+  Die selbstgebaute Würfel-Engine (Three.js + cannon-es) hat trotz mehrerer
+  Anläufe optisch und beim Fallverhalten nicht überzeugt. Entscheidung: eine
+  erprobte Bibliothek als Grundlage nehmen statt weiter selbst zu bauen.
+
+GEWÄHLT: @3d-dice/dice-box (v1.1.4)
+  • Echte Physik (BabylonJS + Ammo.js), professionelle 3D-Modelle.
+  • Kann VORBESTIMMTE Ergebnisse: die Würfel fallen physikalisch echt, landen
+    aber garantiert auf einer vorgegebenen Zahl (predetermined rolling).
+  • Aktiv gepflegt (237★), im Gegensatz zu den beiden vom Nutzer gefundenen
+    (react-3d-dice = keine Physik/React; dice-box-threejs = seit 4 J. tot).
+
+EINBINDUNG (kein Bundler nötig)
+  • Fertige dist-Dateien liegen unter static/dicebox/:
+      dice-box.es.min.js, world.onscreen/offscreen/none.min.js,
+      assets/ (Standard-Theme, Texturen, ammo.wasm).
+  • Geladen per dynamischem import() im Adapter – passt zum bestehenden
+    "alles per <script>"-Ansatz. static/ ist bereits in vtt-server.spec →
+    kommt automatisch in den PyInstaller-Build.
+  • app.py: .wasm wird jetzt mit korrektem MIME-Typ (application/wasm)
+    ausgeliefert (sonst verweigert der Browser das Laden).
+  • Modus: onscreen (nicht offscreen) – braucht keine COOP/COEP-Header und
+    kollidiert daher nicht mit Karten-Bildern.
+
+ADAPTER (static/js/dice3d.js – komplett ersetzt)
+  • Stellt DIESELBE öffentliche Schnittstelle bereit wie vorher (Dice3D.roll,
+    preview, testRoll, getSets/… , DEFAULT_DIE_STYLE), damit Chat und
+    Werkstatt unverändert weiterlaufen.
+  • roll([{value,sides},…]) → baut dice-box-Notation mit Vorgabewert, sodass
+    die Physik auf den vom Server bestimmten Zahlen landet.
+  • dice-box wird faul beim ersten Wurf geladen und initialisiert.
+  • Aussehen: nur noch FARBE (themeColor). Material-Felder (Glas/Metall/Muster/
+    Ränder) bleiben im Style-Objekt für UI-Kompatibilität, wirken aber nicht.
+
+MULTIPLAYER (vereinfacht – kein Modell A / keine Frame-Übertragung mehr)
+  • Server würfelt die Zahl (wie ursprünglich, per Zufall) und schickt sie im
+    Chat an alle. Jeder Client zeigt mit dice-box denselben vorbestimmten Wurf.
+    → Alle sehen dasselbe Ergebnis, ohne Bewegungsdaten zu übertragen.
+  • Server (dice.py, sockets.py) UNVERÄNDERT gegenüber dem Upload-Stand.
+
+ENTFERNT AUS DEM SPIEL (table.html)
+  • three.min.js, cannon-es.min.js, RoomEnvironment.js, dice-geometry.js,
+    dice-material.js – werden für die Würfel nicht mehr gebraucht.
+  • Alte Engine als static/js/dice3d.js.old-selfmade gesichert.
+
+WERKSTATT (dice.html)
+  • dice-material.js wird nur noch als DATEN-Lieferant geladen (Farbpaletten,
+    Listen, Schriftarten) – seine 3D-Funktionen werden nicht benutzt.
+  • Farbwahl wirkt (→ themeColor). Oberflächen/Muster/Ränder/Kanten haben mit
+    dice-box vorerst KEINEN Effekt.
+
+OFFEN / AUF DEM ECHTEN GERÄT ZU TESTEN
+  • Erster Live-Lauf auf dem Windows-PC (die Sandbox konnte den GPU-Browser-
+    Test nicht ausführen). Zu prüfen: Laden der WASM/Worker, Optik, Fallen,
+    Mehrfachwürfe, und speziell d100 (Server liefert 1–100; d100-Zerlegung in
+    dice-box am echten Gerät kontrollieren – Nachjustier-Punkt im Adapter
+    markiert).
+  • Werkstatt-UI: wirkungslose Material-Regler später ausblenden/umbauen.
+
+────────────────────────────────────────────────────────────────────────────
+ FEHLERBEHEBUNG: dice-box-Würfel waren unsichtbar / Chat ohne Ergebnis
+────────────────────────────────────────────────────────────────────────────
+Symptome (vom Nutzer gemeldet): keine 3D-Würfel sichtbar (weder Werkstatt-
+Vorschau noch in der Session); Ergebnis erschien nur im kleinen Fenster, teils
+gar nicht im Chat.
+
+Wahrscheinlichste Ursache + behoben:
+  • MIME-TYP für .js: dice-box wird als ES-Modul per import() geladen. Der
+    Browser lädt ein Modul nur bei JavaScript-MIME-Typ. Unter WINDOWS liefert
+    Python die .js-Typen aus der Registry – oft "text/plain" → Import
+    verweigert → Würfel laden NIE. app.py erzwingt jetzt für .js/.mjs den Typ
+    "text/javascript" (und .wasm → application/wasm).
+
+Weitere Absicherungen:
+  • chat.js: der 3D-Würfel-Aufruf steht jetzt in try/catch – ein Würfel-Fehler
+    darf NIE mehr das Anzeigen des Ergebnisses im Chat verhindern.
+  • dice3d.js: sichtbarer Diagnose-Balken + Konsolen-Log, falls dice-box nicht
+    lädt/initialisiert (zeigt die Ursache an, statt still zu scheitern).
+  • dice3d.js: Werkstatt-Vorschau rendert jetzt in einen Container in
+    Canvas-Größe (statt die ganze Bühne zu überdecken).
+
+NOCH zu prüfen auf dem echten PC:
+  • Falls weiterhin keine Würfel: die Konsole (F12) zeigt jetzt die genaue
+    Fehlermeldung – diese bitte weitergeben.
+  • Chat-Ergebnis sollte jetzt immer erscheinen.
+
+────────────────────────────────────────────────────────────────────────────
+ FEHLERBEHEBUNG 2: Würfel luden nicht (404) + veraltete API
+────────────────────────────────────────────────────────────────────────────
+Aus der Browser-Konsole (F12) kamen die entscheidenden Hinweise:
+
+  1) 404 auf "Dice.min.js" und "world.onscreen.min.js"
+     → URSACHE: Beim ersten Einrichten wurde die gemeinsame Bibliotheksdatei
+       Dice.min.js VERGESSEN. Die Worker (world.onscreen/none.min.js)
+       importieren intern "./Dice.min.js" – ohne sie bricht die ganze Kette
+       mit 404 ab und es erscheinen KEINE Würfel.
+     → BEHOBEN: Dice.min.js nach static/dicebox/ ergänzt. Vollständige Kette
+       jetzt: dice-box.es.min.js + Dice.min.js + world.{none,onscreen,
+       offscreen}.min.js (alle im selben Ordner, relative Importe passen).
+
+  2) Warnung "You are using the old API. Dicebox constructor accepts a config
+     object as it's only argument" (dice-box v1.1.x)
+     → URSACHE: Adapter nutzte die alte Signatur new DiceBox("#sel", {cfg}).
+     → BEHOBEN: Auf v1.1.4-API umgestellt – new DiceBox({ container:"#sel",
+       …cfg }). Betrifft Haupt-Würfel UND Werkstatt-Vorschau.
+
+  3) favicon.ico 405 – harmlos, unabhängig von den Würfeln (Browser fragt
+     automatisch, kein Handler vorhanden). Ignorierbar.
+
+Damit sollten die Würfel jetzt laden. Falls nicht, zeigt der eingebaute
+Diagnose-Balken (rot, unten) + die Konsole weiterhin die genaue Ursache.
+
+────────────────────────────────────────────────────────────────────────────
+ FEHLERBEHEBUNG 3: dice-box lädt (Babylon.js läuft), aber Würfel unsichtbar
+────────────────────────────────────────────────────────────────────────────
+Konsole zeigt jetzt "Babylon.js v5.57.1 - WebGL2" und KEINE Fehler mehr –
+d.h. Laden + Init klappen. Trotzdem kein Würfel sichtbar. Ursache liegt dann
+fast immer an der Container-/Canvas-Größe. Eingebaut:
+
+  • CSS-Injektion: erzwingt für das von dice-box erzeugte Canvas
+    width/height:100% – verhindert 0×0-Canvas.
+  • box.resize() direkt nach init() (und vor dem Wurf), damit die aktuelle
+    sichtbare Größe übernommen wird.
+  • Werkstatt-Vorschau: der Container bekommt flex:0 0 auto + min-width/height.
+    Die .stage ist ein zentrierender Flex-Container – ohne das wäre unser
+    Vorschau-Container auf 0 zusammengedrückt worden (→ kein Würfel).
+  • Selbst-Check bei jedem Wurf: schreibt in die Konsole
+    "Host WxH, Canvas vorhanden/​FEHLT" und zeigt einen Hinweis, falls die
+    Größe 0 ist oder kein Canvas erzeugt wurde. → sagt beim nächsten Test
+    genau, ob es ein Größenproblem ist.
+  • API bereits auf v1.1.4 umgestellt (container in Config), Dice.min.js
+    ergänzt (siehe oben) – deshalb lädt es jetzt.
+
+BEIM NÄCHSTEN TEST bitte in der Konsole (F12) nach Zeilen mit "[Dice3D]"
+schauen – die verraten Host-/Canvas-Größe und damit die Ursache, falls immer
+noch nichts zu sehen ist.
+
+────────────────────────────────────────────────────────────────────────────
+ FEHLERBEHEBUNG 4: URSACHE GEFUNDEN – Canvas war 0×0
+────────────────────────────────────────────────────────────────────────────
+Die Diagnose-Zeile aus der Konsole war eindeutig:
+   "[Dice3D] Vorschau: Host 340x340px, Canvas vorhanden 0x0"
+→ Container hatte die richtige Größe, aber das von dice-box erzeugte Canvas
+  blieb 0×0 → deshalb kein Würfel sichtbar, obwohl Babylon lief.
+
+Erkenntnisse aus dem dice-box-Code (v1.1.4):
+  • Es gibt KEINE öffentliche resize()-Methode (mein alter Aufruf lief ins
+    Leere). Intern heißt sie resizeWorld() und liest canvas.clientWidth.
+  • roll() ruft selbst resizeWorld() auf – aber nur nützlich, wenn das Canvas
+    zu dem Zeitpunkt eine echte CSS-Breite hat. Die hatte es nicht.
+  • Das Canvas bekommt die Klasse "dice-box-canvas".
+
+Behoben:
+  • _forceCanvasSize(): gibt dem Canvas VOR dem Wurf eine feste Pixelgröße
+    (aus der Container-Größe) inkl. Puffergröße (devicePixelRatio) und feuert
+    das window-"resize"-Event, auf das dice-box/Babylon lauschen.
+  • Aufruf VOR jedem roll() (Haupt-Würfel + Werkstatt-Vorschau); zusätzlich
+    im nächsten Frame nochmal, und in der Vorschau ein erneuter Wurf, falls
+    das Canvas beim ersten Mal noch 0 war.
+  • ResizeObserver koppelt das Canvas dauerhaft an die Container-Größe –
+    heilt Timing-Probleme und deckt Fenster-/Panel-Größenänderungen ab.
+  • CSS-Regel (width/height:100% !important aufs Canvas) bleibt als zusätzliche
+    Absicherung.
+
+Die Diagnose-Zeile [Dice3D] bleibt drin – beim nächsten Test sollte dort
+"Canvas vorhanden 340x340" (o. ä., nicht 0x0) stehen und ein Würfel sichtbar
+sein.
+
+════════════════════════════════════════════════════════════════════════════
+ KONZEPT AUF dice-box ÜBERTRAGEN: Materialien, Farbe, Ergebnis-Fenster, Testwurf
+════════════════════════════════════════════════════════════════════════════
+
+MATERIALIEN (echte dice-box-Themes, CC0)
+  Fünf offizielle Themes installiert unter static/dicebox/assets/themes/:
+    gemstone, rock, rust, smooth, wooden (+ default war schon da).
+  Zuordnung der Werkstatt-Oberflächen → Theme (im Adapter SURFACE_THEME):
+    Kunststoff→default, Metall→rust, Glas→smooth, Kristall→gemstone,
+    Stein→rock, Marmor→gemstone, Holz→wooden.
+  Farbe (themeColor) wird pro Würfel mitgegeben; bei wooden bestimmt die
+  Textur die Optik (Farbe wirkt dort kaum – bewusst).
+
+ERGEBNIS-FENSTER ÜBER DEM WÜRFEL
+  Erscheint jetzt NACH dem Ausrollen (dice-box onRollComplete), nicht vorher.
+  Zeigt Summe groß, Einzelwürfel klein, Label; W20-Krit/Patzer farbig.
+  Positionierung weicht Rändern aus: oben kein Platz → nach unten; links/
+  rechts → zur anderen Seite; klemmt notfalls an den sichtbaren Rand.
+  (Ankerpunkt = Mitte des Würfelbereichs; feinere Map-Grenzen später möglich.)
+
+TESTWURF (Werkstatt)
+  Wirft jetzt groß über den ganzen Bildschirm (wie im Spiel) inkl. Ergebnis-
+  Fenster – statt nur im kleinen Kasten.
+
+WERKSTATT-VORSCHAU
+  Zeigt das gewählte Material (Theme) + Farbe; aktualisiert sich beim Wechsel
+  (updateConfig + Neuwurf). Freies Drehen-mit-Maus wie früher gibt dice-box
+  nicht her (Physik-Engine, kein Model-Viewer) – der Würfel wird stattdessen
+  geworfen und bleibt liegen.
+
+WERKSTATT-UI AUFGERÄUMT (ehrlich statt wirkungslos)
+  Ausgeblendet (display:none, Elemente bleiben fürs JS im DOM):
+    Muster-Panel, Muster-Akzent, Zweitfarbe/Verlauf, Zahlenfarbe,
+    Zahlen-Panel (Schrift/Größe/Umrandung), Rahmen-Panel, Kanten-Panel.
+  Grund: dice-box nutzt feste Zahlen-Texturen pro Theme und eine einzelne
+  Materialfarbe – diese Feineinstellungen wirken dort nicht.
+  Sichtbar/aktiv bleiben: Material (Oberfläche), Würfelkörper-Farbe, Sets.
+
+SOUND
+  dice-box bringt KEINE eigenen Würfel-Sounds mit (nur Babylons interne
+  Audio-Engine, ohne Geräusch-Dateien). Die vorhandene, synthetische
+  dice-sound.js bleibt vorerst unverändert. Echte Aufnahmen müssten separat
+  beschafft und eingebunden werden.
+
+NOCH ZU TESTEN (auf dem echten PC)
+  • Materialwechsel in der Werkstatt (sieht man die Themes?).
+  • Ergebnis-Fenster über dem Würfel (Position, Ausweichen an den Rändern).
+  • Testwurf rollt groß über den Bildschirm.
+  • Farbe wirkt bei default/smooth/rust/rock/gemstone.
+
+────────────────────────────────────────────────────────────────────────────
+ FIXES nach Nutzer-Feedback (Runde 1)
+────────────────────────────────────────────────────────────────────────────
+Erledigt:
+  • Ergebnis-Fenster: erscheint jetzt NACH dem Ausrollen, ist größer und sitzt
+    über der Landezone (untere Bildschirmhälfte), weicht Rändern aus.
+  • Chat-Ergebnis wird erst enthüllt, wenn der Würfel liegt (Einzelwürfel +
+    Gesamtergebnis waren vorher sofort sichtbar → „Ergebnis vor dem Wurf").
+    Label + Formel bleiben sofort sichtbar, Zahlen erscheinen mit dem Würfel.
+  • Verzögerung beim ersten Wurf: dice-box wird jetzt beim Seitenstart
+    vorgewärmt (Dice3D.preload) statt erst beim ersten Klick zu laden.
+
+Offene Punkte / Richtungsentscheidung getroffen:
+  • Materialien: Weg 1 gewählt – eigene Materialien als dice-box-Themes, damit
+    Vorschau UND Wurf identisch aussehen.
+  • WICHTIGE ERKENNTNIS zu dice-box-Themes: Es gibt nur zwei Material-Typen
+    ("color" und "standard"). Steuerbar sind diffuse-/normal-/specular-Textur
+    plus Level-Werte. KEINE echte Transparenz/Refraktion über die Config →
+    echtes durchsichtiges Glas ist mit dice-box NICHT möglich (nur glasig
+    wirkende Optik auf undurchsichtigem Würfel). Marmor/Kristall als
+    Oberflächen-Optik sind machbar, aber gut aussehende Texturen sind echte
+    Grafik-Arbeit (prozedural wirkt oft technisch).
+  • Drehbare Vorschau: dice-box hat suspendSimulation (Würfel bleibt liegen) –
+    freie Drehung ist umsetzbar, aber noch offen.
+
+NÄCHSTE SCHRITTE (nach Materialentscheidung):
+  • Glas/Kristall/Marmor verbessern (eigene Themes ODER anderes Mapping).
+  • Drehbare Ruhe-Vorschau in der Werkstatt.

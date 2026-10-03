@@ -1,0 +1,42 @@
+{
+  "name": "Hervorrufung",
+  "parent_class_name": "Magier",
+  "start_level": 2,
+  "description": "Meister der zerstörerischen Magie.",
+  "level_features": {
+    "2": [
+      {
+        "id": "f2_0",
+        "name": "Evocation Savant. Sculpt Spells.",
+        "description": "Evocation Savant. Sculpt Spells.",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Potent Cantrip.",
+        "description": "Potent Cantrip.",
+        "choices": []
+      }
+    ],
+    "10": [
+      {
+        "id": "f10_0",
+        "name": "Empowered Evocation.",
+        "description": "Empowered Evocation.",
+        "choices": []
+      }
+    ],
+    "14": [
+      {
+        "id": "f14_0",
+        "name": "Overchannel.",
+        "description": "Overchannel.",
+        "choices": []
+      }
+    ]
+  },
+  "id": "990eced7",
+  "source": "basis"
+}

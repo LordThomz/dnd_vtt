@@ -1,0 +1,11 @@
+{
+  "name": "Akolyth",
+  "skill_profs": "Einsicht, Religion",
+  "languages": "2 beliebige",
+  "tool_profs": "",
+  "equipment": "Heiliges Symbol, Gebetbuch, 5 Räucherstäbchen, Gewand, Alltagskleidung, 15 gp",
+  "feature": "Zuflucht der Gläubigen: Heiler Tempel gewähren dir und deinen Gefährten kostenlose Pflege.",
+  "description": "Du hast dein Leben dem Dienst an einer Gottheit gewidmet.",
+  "id": "62399453",
+  "source": "basis"
+}

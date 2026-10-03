@@ -1,0 +1,48 @@
+{
+  "name": "Der Unhold",
+  "parent_class_name": "Hexer",
+  "start_level": 1,
+  "description": "Ein Pakt mit einem Wesen der unteren Ebenen.",
+  "level_features": {
+    "1": [
+      {
+        "id": "f1_0",
+        "name": "Erweiterte Zauberliste",
+        "description": "Zusätzlich wählbar – Grad 1: Brennende Hände, Befehl; 2: Blindheit/Taubheit, Sengender Strahl; 3: Feuerball, Stinkende Wolke; 4: Feuerschild, Feuerwand; 5: Flammenschlag, Weihen.",
+        "choices": []
+      },
+      {
+        "id": "f1_1",
+        "name": "Segen des Dunklen",
+        "description": "Sinkt ein feindliches Wesen durch dich auf 0 TP: temporäre TP = CHA-Modifikator + Hexerstufe (mindestens 1).",
+        "choices": []
+      }
+    ],
+    "6": [
+      {
+        "id": "f6_0",
+        "name": "Glück des Dunklen",
+        "description": "Einen W10 zu einem Attributs- oder Rettungswurf addieren. Einmal pro kurzer oder langer Rast.",
+        "choices": []
+      }
+    ],
+    "10": [
+      {
+        "id": "f10_0",
+        "name": "Unholdische Widerstandskraft",
+        "description": "Nach jeder Rast eine Schadensart wählen: Resistenz dagegen (nicht gegen magische oder versilberte Waffen).",
+        "choices": []
+      }
+    ],
+    "14": [
+      {
+        "id": "f14_0",
+        "name": "Durch die Hölle schleudern",
+        "description": "Nach einem Treffer: Ziel bis zum Ende deines nächsten Zuges durch die unteren Ebenen geschleudert; Nicht-Unholde erleiden 10W10 psychischen Schaden. Einmal pro langer Rast.",
+        "choices": []
+      }
+    ]
+  },
+  "id": "7fda0a7a",
+  "source": "basis"
+}

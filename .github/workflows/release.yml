@@ -78,3 +78,35 @@ jobs:
           releaseDraft: false
           prerelease: false
           includeUpdaterJson: true
+
+      # ── latest.json selbst erzeugen ──────────────────────────────────────
+      # tauri-action lädt die latest.json (die Datei, die der Updater liest)
+      # nicht zuverlässig hoch – ein bekannter Fehler der Aktion. Deshalb
+      # bauen wir sie hier selbst aus Installer-Name und Signatur.
+      - name: latest.json für den Updater erzeugen
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $repo = "${{ github.repository }}"
+          $version = $tag.TrimStart("v")
+          $sig = Get-ChildItem "desktop/src-tauri/target/release/bundle/nsis/*-setup.exe.sig" | Select-Object -First 1
+          if (-not $sig) { throw "Keine .sig-Datei gefunden - Signatur-Secrets pruefen (UPDATES.md, Schritt 5)" }
+          $release = gh release view $tag --repo $repo --json assets | ConvertFrom-Json
+          $exe = $release.assets | Where-Object { $_.name -like "*_x64-setup.exe" } | Select-Object -First 1
+          if (-not $exe) { throw "Installer nicht im Release gefunden" }
+          $manifest = [ordered]@{
+            version   = $version
+            notes     = "Neuerungen: siehe AENDERUNGEN.txt im Repository."
+            pub_date  = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+            platforms = [ordered]@{
+              "windows-x86_64" = [ordered]@{
+                signature = (Get-Content $sig.FullName -Raw).Trim()
+                url       = "https://github.com/$repo/releases/download/$tag/$($exe.name)"
+              }
+            }
+          }
+          $manifest | ConvertTo-Json -Depth 5 | Set-Content latest.json -Encoding utf8NoBOM
+          Get-Content latest.json
+          gh release upload $tag latest.json --repo $repo --clobber

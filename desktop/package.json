@@ -1,6 +1,6 @@
 {
   "name": "vtt-desktop",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Virtual Tabletop – Desktop-App (Tauri)",
   "scripts": {
     "tauri": "tauri",

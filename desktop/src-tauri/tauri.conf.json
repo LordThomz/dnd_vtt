@@ -56,9 +56,9 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "HIER-DEN-OEFFENTLICHEN-SCHLUESSEL-EINTRAGEN",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZCNUE2NURDMERFNEMyODAKUldTQXd1UU4zR1ZhK3pHNEkzYXZIRWkxTkZUOXUvdDl5WnIrR3VvdXFMaStQMzg5cVZHTk9EeGQK",
       "endpoints": [
-        "https://github.com/GITHUB-NUTZER/dnd-vtt/releases/latest/download/latest.json"
+        "https://github.com/LordThomz/dnd_vtt/releases/latest/download/latest.json"
       ],
       "windows": {
         "installMode": "passive"

@@ -1,0 +1,16 @@
+{
+ "name": "Gepackt",
+ "description": "Geschwindigkeit 0; Nachteil gegen andere als den Greifenden.",
+ "id": "f3647215",
+ "rkey": "srd52.conditions.grappled",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Grappled",
+   "description": "Speed 0; disadvantage against anyone but the grappler."
+  }
+ }
+}

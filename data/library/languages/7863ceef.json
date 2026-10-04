@@ -1,0 +1,22 @@
+{
+ "name": "Urtümlich",
+ "rarity": "Exotisch",
+ "script": "Zwergisch",
+ "speakers": "Elementare",
+ "description": "Exotische Sprache. Schrift: Zwergisch. Typische Sprecher: Elementare.",
+ "id": "7863ceef",
+ "rkey": "srd51.languages.primordial",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Primordial",
+   "rarity": "Exotic",
+   "script": "Dwarvish",
+   "speakers": "Elementals",
+   "description": "Exotic language. Script: Dwarvish. Typical speakers: Elementals."
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Sylvanisch",
+ "rarity": "Selten",
+ "script": "Elfisch",
+ "speakers": "Feenwesen",
+ "description": "Seltene Sprache. Schrift: Elfisch. Typische Sprecher: Feenwesen.",
+ "id": "5c28b17d",
+ "rkey": "srd52.languages.sylvan",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Sylvan",
+   "rarity": "Rare",
+   "script": "Elvish",
+   "speakers": "Fey",
+   "description": "Rare language. Script: Elvish. Typical speakers: Fey."
+  }
+ }
+}

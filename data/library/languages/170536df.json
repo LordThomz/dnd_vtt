@@ -1,0 +1,22 @@
+{
+ "name": "Zwergisch",
+ "rarity": "Standard",
+ "script": "Zwergisch",
+ "speakers": "Zwerge",
+ "description": "Standardsprache. Schrift: Zwergisch. Typische Sprecher: Zwerge.",
+ "id": "170536df",
+ "rkey": "srd52.languages.dwarvish",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Dwarvish",
+   "rarity": "Standard",
+   "script": "Dwarvish",
+   "speakers": "Dwarves",
+   "description": "Standard language. Script: Dwarvish. Typical speakers: Dwarves."
+  }
+ }
+}

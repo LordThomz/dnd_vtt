@@ -1,0 +1,240 @@
+{
+ "name": "Kleriker",
+ "hd": "d8",
+ "primary": "wis",
+ "spellcaster": true,
+ "armor": "Leichte & mittlere Rüstung, Schilde",
+ "weapons": "Einfache Waffen",
+ "tools": "",
+ "saves": "WEI, CHA",
+ "skill_count": 2,
+ "skill_options": "Geschichte, Einsicht, Heilkunde, Überzeugen, Religion",
+ "description": "Diener einer Gottheit mit göttlicher Magie.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste wirken. Attribut: WEI.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Göttliche Domäne",
+    "description": "Wähle deine Domäne (Unterklasse).",
+    "choices": [
+     {
+      "id": "f1_1c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Göttliche Macht",
+    "description": "Einmal pro Rast (Stufe 6: zweimal, Stufe 18: dreimal), u. a. Untote vertreiben.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Domäne.",
+    "choices": []
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Untote zerstören",
+    "description": "Vertriebene schwache Untote werden zerstört (Grenze steigt mit der Stufe).",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Domäne.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Domäne.",
+    "choices": []
+   },
+   {
+    "id": "f8_1",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Göttliches Eingreifen",
+    "description": "Deine Gottheit um Hilfe bitten (Erfolg bei W100 ≤ Stufe; ab Stufe 20 automatisch).",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Domäne.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "8cd785ab",
+ "rkey": "srd51.classes.cleric",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Cleric",
+   "armor": "Light & medium armour, shields",
+   "weapons": "Simple weapons",
+   "tools": "",
+   "saves": "WIS, CHA",
+   "skill_options": "History, Insight, Medicine, Persuasion, Religion",
+   "description": "A servant of a deity wielding divine magic.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Cast spells from your class list. Ability: WIS."
+     },
+     {
+      "id": "f1_1",
+      "name": "Divine Domain",
+      "description": "Choose your domain (subclass)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Channel Divinity",
+      "description": "Once per rest (twice at 6, three times at 18), e.g. Turn Undead."
+     },
+     {
+      "id": "f2_1",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen domain."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Destroy Undead",
+      "description": "Weak undead that are turned are destroyed (threshold rises with level)."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen domain."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen domain."
+     },
+     {
+      "id": "f8_1",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Divine Intervention",
+      "description": "Call on your deity for aid (succeeds on d100 ≤ level; automatic at level 20)."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen domain."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ]
+   }
+  }
+ }
+}

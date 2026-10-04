@@ -1,0 +1,22 @@
+{
+ "name": "Diebessprache",
+ "rarity": "Selten",
+ "script": "—",
+ "speakers": "Schurken",
+ "description": "Seltene Sprache. Schrift: —. Typische Sprecher: Schurken.",
+ "id": "215cddde",
+ "rkey": "srd52.languages.thieves_cant",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Thieves' Cant",
+   "rarity": "Rare",
+   "script": "—",
+   "speakers": "Rogues",
+   "description": "Rare language. Script: —. Typical speakers: Rogues."
+  }
+ }
+}

@@ -1,0 +1,77 @@
+{
+ "name": "Mensch",
+ "size": "Mittel oder klein",
+ "speed": 30,
+ "darkvision": 0,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Anpassungsfähig, ehrgeizig und einfallsreich.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Einfallsreich",
+   "description": "Nach jeder langen Rast Heldenhafte Inspiration.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Geschickt",
+   "description": "Geübt in einer Fertigkeit deiner Wahl.",
+   "choices": [
+    {
+     "id": "t1c0",
+     "type": "skill",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  },
+  {
+   "id": "t2",
+   "name": "Vielseitig",
+   "description": "Ein Herkunftstalent deiner Wahl.",
+   "choices": [
+    {
+     "id": "t2c0",
+     "type": "feat",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  }
+ ],
+ "id": "fc48e562",
+ "rkey": "srd52.races.human",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Human",
+   "size": "Medium or small",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Adaptable, ambitious and resourceful.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Resourceful",
+     "description": "Gain Heroic Inspiration after each long rest."
+    },
+    {
+     "id": "t1",
+     "name": "Skillful",
+     "description": "Proficient in one skill of your choice."
+    },
+    {
+     "id": "t2",
+     "name": "Versatile",
+     "description": "One origin feat of your choice."
+    }
+   ]
+  }
+ }
+}

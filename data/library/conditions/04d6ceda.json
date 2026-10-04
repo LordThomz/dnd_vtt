@@ -1,0 +1,16 @@
+{
+ "name": "Unsichtbar",
+ "description": "Überraschung bei Initiative; eigene Angriffe mit Vorteil, gegen dich mit Nachteil.",
+ "id": "04d6ceda",
+ "rkey": "srd52.conditions.invisible",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Invisible",
+   "description": "Surprise on initiative; your attacks have advantage, attacks against you disadvantage."
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Tiefensprache",
+ "rarity": "Exotisch",
+ "script": "—",
+ "speakers": "Wesen der Tiefe",
+ "description": "Exotische Sprache. Schrift: —. Typische Sprecher: Wesen der Tiefe.",
+ "id": "7bbd86ab",
+ "rkey": "srd51.languages.deep_speech",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Deep Speech",
+   "rarity": "Exotic",
+   "script": "—",
+   "speakers": "Aberrations",
+   "description": "Exotic language. Script: —. Typical speakers: Aberrations."
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Gemeinsprache",
+ "rarity": "Standard",
+ "script": "Gemeinsprache",
+ "speakers": "Die meisten Völker",
+ "description": "Standardsprache. Schrift: Gemeinsprache. Typische Sprecher: Die meisten Völker.",
+ "id": "dc59043b",
+ "rkey": "srd52.languages.common",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Common",
+   "rarity": "Standard",
+   "script": "Common",
+   "speakers": "Most peoples",
+   "description": "Standard language. Script: Common. Typical speakers: Most peoples."
+  }
+ }
+}

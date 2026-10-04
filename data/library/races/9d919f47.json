@@ -1,0 +1,61 @@
+{
+ "name": "Tiefling",
+ "size": "Mittel oder klein",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Mit dem Erbe der unteren Ebenen – abyssisch, chthonisch oder infernalisch.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Dunkelsicht 60 ft.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Unholdisches Erbe",
+   "description": "Abyssisch, chthonisch oder infernalisch: Resistenz, Zaubertrick und Zauber auf Stufe 3 und 5.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Andersweltliche Präsenz",
+   "description": "Zaubertrick Thaumaturgie.",
+   "choices": []
+  }
+ ],
+ "id": "9d919f47",
+ "rkey": "srd52.races.tiefling",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Tiefling",
+   "size": "Medium or small",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Heirs of the lower planes – abyssal, chthonic or infernal.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Darkvision 60 ft."
+    },
+    {
+     "id": "t1",
+     "name": "Fiendish Legacy",
+     "description": "Abyssal, chthonic or infernal: a resistance, a cantrip and spells at levels 3 and 5."
+    },
+    {
+     "id": "t2",
+     "name": "Otherworldly Presence",
+     "description": "Thaumaturgy cantrip."
+    }
+   ]
+  }
+ }
+}

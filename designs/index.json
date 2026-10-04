@@ -8,7 +8,14 @@
       "version": "1.0.0",
       "tag": "Düster",
       "description": "Verrußtes Eisen, Blutrot, knochenfarbene Schrift. Für Grimdark-Runden.",
-      "file": "schattenfeste.vttdesign"
+      "file": "schattenfeste.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Shadowkeep",
+          "tag": "Dark",
+          "description": "Soot-black iron, blood red and bone-coloured script. For grimdark games."
+        }
+      }
     },
     {
       "id": "pergament",
@@ -17,7 +24,14 @@
       "version": "1.0.0",
       "tag": "Klassisch · Hell",
       "description": "Wie ein aufgeschlagenes Abenteuerbuch: Pergament, Tinte, Siegelrot.",
-      "file": "pergament.vttdesign"
+      "file": "pergament.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Parchment",
+          "tag": "Classic · Light",
+          "description": "Like an open adventure book: parchment, ink and seal red."
+        }
+      }
     },
     {
       "id": "neonsphaere",
@@ -26,7 +40,14 @@
       "version": "1.0.0",
       "tag": "Futuristisch",
       "description": "Tiefschwarz mit Cyan und Magenta, kantig und leuchtend.",
-      "file": "neonsphaere.vttdesign"
+      "file": "neonsphaere.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Neon Sphere",
+          "tag": "Futuristic",
+          "description": "Deep black with cyan and magenta, angular and glowing."
+        }
+      }
     },
     {
       "id": "mondwald",
@@ -35,7 +56,14 @@
       "version": "1.0.0",
       "tag": "Elfisch",
       "description": "Nachtgrün, Mondsilber und sanftes Violett – ruhig und naturverbunden.",
-      "file": "mondwald.vttdesign"
+      "file": "mondwald.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Moonwood",
+          "tag": "Elven",
+          "description": "Night green, moon silver and soft violet – calm and close to nature."
+        }
+      }
     },
     {
       "id": "eiche",
@@ -44,7 +72,14 @@
       "version": "1.0.0",
       "tag": "Holz",
       "description": "Warmes, gemasertes Holz – wie am echten Spieltisch.",
-      "file": "eiche.vttdesign"
+      "file": "eiche.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Oak Board",
+          "tag": "Wood",
+          "description": "Warm, grained wood – like a real gaming table."
+        }
+      }
     },
     {
       "id": "kerker",
@@ -53,7 +88,14 @@
       "version": "1.0.0",
       "tag": "Stein",
       "description": "Kalte Steinplatten, helles Raster.",
-      "file": "kerker.vttdesign"
+      "file": "kerker.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Dungeon Stone",
+          "tag": "Stone",
+          "description": "Cold flagstones with a bright grid."
+        }
+      }
     },
     {
       "id": "karte",
@@ -62,7 +104,14 @@
       "version": "1.0.0",
       "tag": "Papier",
       "description": "Gealtertes Papier mit Sepia-Raster.",
-      "file": "karte.vttdesign"
+      "file": "karte.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Parchment Map",
+          "tag": "Paper",
+          "description": "Aged paper with a sepia grid."
+        }
+      }
     },
     {
       "id": "holo",
@@ -71,7 +120,14 @@
       "version": "1.0.0",
       "tag": "Futuristisch",
       "description": "Leuchtendes Cyan-Raster auf tiefem Blau.",
-      "file": "holo.vttdesign"
+      "file": "holo.vttdesign",
+      "i18n": {
+        "en": {
+          "name": "Holo Table",
+          "tag": "Futuristic",
+          "description": "Glowing cyan grid on deep blue."
+        }
+      }
     }
   ]
 }

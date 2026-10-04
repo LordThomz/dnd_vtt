@@ -1,0 +1,16 @@
+{
+ "name": "Gelähmt",
+ "description": "Kampfunfähig, keine Bewegung; Nahkampftreffer sind kritisch.",
+ "id": "4885d2fa",
+ "rkey": "srd52.conditions.paralyzed",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Paralyzed",
+   "description": "Incapacitated and can't move; melee hits are critical."
+  }
+ }
+}

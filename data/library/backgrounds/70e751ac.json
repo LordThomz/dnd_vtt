@@ -1,0 +1,28 @@
+{
+ "name": "Krimineller",
+ "skill_profs": "Fingerfertigkeit, Heimlichkeit",
+ "languages": "—",
+ "tool_profs": "Diebeswerkzeug",
+ "equipment": "2 Dolche, Diebeswerkzeug, Brecheisen, 2 Beutel, Reisekleidung, 16 GM – oder 50 GM",
+ "feature": "Herkunftstalent: Wachsam.",
+ "description": "Du hast dich in dunklen Gassen durchgeschlagen.",
+ "ability_scores": "GES, KON, INT",
+ "id": "70e751ac",
+ "rkey": "srd52.backgrounds.criminal",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Criminal",
+   "skill_profs": "Sleight of Hand, Stealth",
+   "languages": "—",
+   "tool_profs": "Thieves' tools",
+   "equipment": "2 daggers, thieves' tools, crowbar, 2 pouches, traveler's clothes, 16 gp – or 50 gp",
+   "feature": "Origin feat: Alert.",
+   "description": "You made your way in dark alleys.",
+   "ability_scores": "DEX, CON, INT"
+  }
+ }
+}

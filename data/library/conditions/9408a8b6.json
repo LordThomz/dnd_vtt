@@ -1,0 +1,16 @@
+{
+ "name": "Vergiftet",
+ "description": "Nachteil auf Angriffe und Attributsproben.",
+ "id": "9408a8b6",
+ "rkey": "srd52.conditions.poisoned",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Poisoned",
+   "description": "Disadvantage on attacks and ability checks."
+  }
+ }
+}

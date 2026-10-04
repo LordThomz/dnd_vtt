@@ -1,0 +1,22 @@
+{
+ "name": "Abyssisch",
+ "rarity": "Selten",
+ "script": "Infernalisch",
+ "speakers": "Dämonen",
+ "description": "Seltene Sprache. Schrift: Infernalisch. Typische Sprecher: Dämonen.",
+ "id": "dc21ef3e",
+ "rkey": "srd52.languages.abyssal",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Abyssal",
+   "rarity": "Rare",
+   "script": "Infernal",
+   "speakers": "Demons",
+   "description": "Rare language. Script: Infernal. Typical speakers: Demons."
+  }
+ }
+}

@@ -1,0 +1,305 @@
+{
+ "name": "Barde",
+ "hd": "d8",
+ "primary": "cha",
+ "spellcaster": true,
+ "armor": "Leichte Rüstung",
+ "weapons": "Einfache Waffen",
+ "tools": "Drei Musikinstrumente",
+ "saves": "GES, CHA",
+ "skill_count": 3,
+ "skill_options": "Akrobatik, Tierführung, Arkana, Athletik, Täuschung, Geschichte, Einsicht, Einschüchtern, Nachforschungen, Heilkunde, Naturkunde, Wahrnehmung, Auftreten, Überzeugen, Religion, Fingerfertigkeit, Heimlichkeit, Überleben",
+ "description": "Ein Magier der Musik und Worte.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Bardische Inspiration",
+    "description": "Bonusaktion: Verbündeter erhält W6 für einen W20-Wurf (steigt bis W12). CHA-mal pro langer Rast.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste vorbereiten und wirken. Attribut: CHA.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Expertise",
+    "description": "Doppelter Übungsbonus in zwei Fertigkeiten (Stufe 9: zwei weitere).",
+    "choices": [
+     {
+      "id": "f2_0c0",
+      "type": "skill",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f2_1",
+    "name": "Alleskönner",
+    "description": "Halber Übungsbonus auf ungeübte Proben.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Barden-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Quell der Inspiration",
+    "description": "Inspiration auch nach kurzer Rast; Zauberplatz gegen Inspiration tauschen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Gegenzauber-Lied",
+    "description": "Reaktion: misslungenen Rettungswurf gegen Bezauberung/Verängstigung wiederholen lassen.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Magische Geheimnisse",
+    "description": "Zauber aus Barden-, Kleriker-, Druiden- und Magierliste vorbereiten.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Überlegene Inspiration",
+    "description": "Bei Initiative Inspiration bis auf 2 auffüllen.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Worte der Schöpfung",
+    "description": "Machtwort heilen und Machtwort töten immer vorbereitet; mit zwei Zielen wirkbar.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "b719cdd4",
+ "rkey": "srd52.classes.bard",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Bard",
+   "armor": "Light armour",
+   "weapons": "Simple weapons",
+   "tools": "Three musical instruments",
+   "saves": "DEX, CHA",
+   "skill_options": "Acrobatics, Animal Handling, Arcana, Athletics, Deception, History, Insight, Intimidation, Investigation, Medicine, Nature, Perception, Performance, Persuasion, Religion, Sleight of Hand, Stealth, Survival",
+   "description": "A mage of music and words.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Bardic Inspiration",
+      "description": "Bonus action: an ally gains a d6 for a d20 test (up to d12). CHA times per long rest."
+     },
+     {
+      "id": "f1_1",
+      "name": "Spellcasting",
+      "description": "Prepare and cast spells from your class list. Ability: CHA."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Expertise",
+      "description": "Double proficiency in two skills (two more at level 9)."
+     },
+     {
+      "id": "f2_1",
+      "name": "Jack of All Trades",
+      "description": "Half proficiency on unproficient checks."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Bard Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Font of Inspiration",
+      "description": "Inspiration returns on a short rest; trade a spell slot for a use."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Countercharm",
+      "description": "Reaction: let a creature reroll a failed save against charm or fear."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Magical Secrets",
+      "description": "Prepare spells from the bard, cleric, druid and wizard lists."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Superior Inspiration",
+      "description": "Regain inspiration up to 2 when rolling initiative."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Words of Creation",
+      "description": "Power word heal and power word kill always prepared; can target two creatures."
+     }
+    ]
+   }
+  }
+ }
+}

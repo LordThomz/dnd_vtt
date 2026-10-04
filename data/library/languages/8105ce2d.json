@@ -1,0 +1,22 @@
+{
+ "name": "Celestisch",
+ "rarity": "Exotisch",
+ "script": "Celestisch",
+ "speakers": "Celestische Wesen",
+ "description": "Exotische Sprache. Schrift: Celestisch. Typische Sprecher: Celestische Wesen.",
+ "id": "8105ce2d",
+ "rkey": "srd51.languages.celestial",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Celestial",
+   "rarity": "Exotic",
+   "script": "Celestial",
+   "speakers": "Celestials",
+   "description": "Exotic language. Script: Celestial. Typical speakers: Celestials."
+  }
+ }
+}

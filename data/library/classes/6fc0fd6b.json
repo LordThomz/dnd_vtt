@@ -1,0 +1,282 @@
+{
+ "name": "Hexenmeister",
+ "hd": "d6",
+ "primary": "cha",
+ "spellcaster": true,
+ "armor": "Keine",
+ "weapons": "Einfache Waffen",
+ "tools": "",
+ "saves": "KON, CHA",
+ "skill_count": 2,
+ "skill_options": "Arkana, Täuschung, Einsicht, Einschüchtern, Überzeugen, Religion",
+ "description": "Ein Magier mit angeborener, roher Magie.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste vorbereiten und wirken. Attribut: CHA.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Angeborene Zauberei",
+    "description": "Bonusaktion: 1 Minute höherer Zauber-SG und Vorteil auf Zauberangriffe (zweimal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Quelle der Magie",
+    "description": "Zauberpunkte = Stufe; mit Zauberplätzen tauschen.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Metamagie",
+    "description": "Zwei Metamagie-Optionen (weitere auf Stufe 10 und 17).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Hexenmeister-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zauberische Erholung",
+    "description": "Nach kurzer Rast Zauberpunkte bis zur halben Stufe zurück.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Verkörperte Zauberei",
+    "description": "Angeborene Zauberei für Zauberpunkte; zwei Metamagien pro Zauber.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Arkane Apotheose",
+    "description": "Während angeborener Zauberei einmal pro Zug Metamagie kostenlos.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "6fc0fd6b",
+ "rkey": "srd52.classes.sorcerer",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Sorcerer",
+   "armor": "None",
+   "weapons": "Simple weapons",
+   "tools": "",
+   "saves": "CON, CHA",
+   "skill_options": "Arcana, Deception, Insight, Intimidation, Persuasion, Religion",
+   "description": "A caster of innate, raw magic.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Prepare and cast spells from your class list. Ability: CHA."
+     },
+     {
+      "id": "f1_1",
+      "name": "Innate Sorcery",
+      "description": "Bonus action: 1 minute of higher spell DC and advantage on spell attacks (twice per long rest)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Font of Magic",
+      "description": "Sorcery points equal to level; trade with spell slots."
+     },
+     {
+      "id": "f2_1",
+      "name": "Metamagic",
+      "description": "Two metamagic options (more at levels 10 and 17)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Sorcerer Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Sorcerous Restoration",
+      "description": "Regain sorcery points up to half your level on a short rest."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Sorcery Incarnate",
+      "description": "Innate Sorcery for sorcery points; two metamagics per spell."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Arcane Apotheosis",
+      "description": "During Innate Sorcery, one free metamagic per turn."
+     }
+    ]
+   }
+  }
+ }
+}

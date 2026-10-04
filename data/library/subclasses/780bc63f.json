@@ -1,0 +1,95 @@
+{
+ "name": "Schwur der Hingabe",
+ "parent_class_name": "Paladin",
+ "parent_class": "b431d326",
+ "start_level": 3,
+ "description": "Ideale des edlen Ritters.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Schwurzauber",
+    "description": "Immer vorbereitet: u. a. Schutz vor Gut und Böse, Heiligtum.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Geheiligte Waffe",
+    "description": "Göttliche Macht: +CHA auf Angriffe, Waffe leuchtet.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Aura der Hingabe",
+    "description": "Immun gegen Bezauberung in deiner Aura.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Schützendes Niederstrecken",
+    "description": "Nach Niederstrecken: halbe Deckung für Verbündete in der Aura.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Heiliger Nimbus",
+    "description": "10 Minuten: Licht, Schaden an Feinden, Vorteil gegen Unholde und Untote.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "780bc63f",
+ "rkey": "srd52.subclasses.devotion",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Oath of Devotion",
+   "parent_class_name": "Paladin",
+   "description": "Ideals of the noble knight.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Oath of Devotion Spells",
+      "description": "Always prepared: e.g. protection from evil and good, sanctuary."
+     },
+     {
+      "id": "f3_1",
+      "name": "Sacred Weapon",
+      "description": "Channel Divinity: +CHA to attacks, weapon glows."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Aura of Devotion",
+      "description": "Immune to charm within your aura."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Smite of Protection",
+      "description": "After a smite: half cover for allies in your aura."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Holy Nimbus",
+      "description": "10 minutes: light, damage to foes, advantage against fiends and undead."
+     }
+    ]
+   }
+  }
+ }
+}

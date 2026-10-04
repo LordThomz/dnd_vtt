@@ -1,0 +1,22 @@
+{
+ "name": "Infernalisch",
+ "rarity": "Selten",
+ "script": "Infernalisch",
+ "speakers": "Teufel",
+ "description": "Seltene Sprache. Schrift: Infernalisch. Typische Sprecher: Teufel.",
+ "id": "1d72ca77",
+ "rkey": "srd52.languages.infernal",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Infernal",
+   "rarity": "Rare",
+   "script": "Infernal",
+   "speakers": "Devils",
+   "description": "Rare language. Script: Infernal. Typical speakers: Devils."
+  }
+ }
+}

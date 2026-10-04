@@ -1,0 +1,349 @@
+{
+ "name": "Paladin",
+ "hd": "d10",
+ "primary": "str",
+ "spellcaster": true,
+ "armor": "Alle Rüstungen, Schilde",
+ "weapons": "Einfache & Kriegswaffen",
+ "tools": "",
+ "saves": "WEI, CHA",
+ "skill_count": 2,
+ "skill_options": "Athletik, Einsicht, Einschüchtern, Heilkunde, Überzeugen, Religion",
+ "description": "Heiliger Krieger, gebunden an einen Eid.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Göttlicher Sinn",
+    "description": "Celestische, Unholde und Untote in 60 ft spüren.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Handauflegen",
+    "description": "Heilungspool von 5 × Stufe Trefferpunkten pro langer Rast.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Kampfstil",
+    "description": "Einen Kampfstil wählen (z. B. Bogenschießen, Verteidigung, Duellieren).",
+    "choices": [
+     {
+      "id": "f2_0c0",
+      "type": "fighting_style",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f2_1",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste wirken. Attribut: CHA.",
+    "choices": []
+   },
+   {
+    "id": "f2_2",
+    "name": "Göttliches Niederstrecken",
+    "description": "Zauberplatz verbrauchen: +2W8 gleißender Schaden bei einem Nahkampftreffer.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Göttliche Gesundheit",
+    "description": "Immun gegen Krankheiten.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Heiliger Eid",
+    "description": "Wähle deinen Eid (Unterklasse).",
+    "choices": [
+     {
+      "id": "f3_1c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Aura des Schutzes",
+    "description": "Du und Verbündete in 10 ft addieren deinen CHA auf Rettungswürfe.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Eid.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Aura des Mutes",
+    "description": "Du und Verbündete in 10 ft können nicht verängstigt werden.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Verbessertes Niederstrecken",
+    "description": "Alle Nahkampftreffer verursachen +1W8 gleißenden Schaden.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Reinigende Berührung",
+    "description": "Aktion: einen Zauber an dir oder einem Verbündeten beenden (CHA-mal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Eid.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Auren-Verbesserung",
+    "description": "Deine Auren reichen 30 ft.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Eid.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "25c5c436",
+ "rkey": "srd51.classes.paladin",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Paladin",
+   "armor": "All armour, shields",
+   "weapons": "Simple & martial weapons",
+   "tools": "",
+   "saves": "WIS, CHA",
+   "skill_options": "Athletics, Insight, Intimidation, Medicine, Persuasion, Religion",
+   "description": "A holy warrior bound by an oath.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Divine Sense",
+      "description": "Sense celestials, fiends and undead within 60 ft."
+     },
+     {
+      "id": "f1_1",
+      "name": "Lay on Hands",
+      "description": "A pool of 5 × level hit points of healing per long rest."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Fighting Style",
+      "description": "Choose a fighting style (e.g. Archery, Defense, Dueling)."
+     },
+     {
+      "id": "f2_1",
+      "name": "Spellcasting",
+      "description": "Cast spells from your class list. Ability: CHA."
+     },
+     {
+      "id": "f2_2",
+      "name": "Divine Smite",
+      "description": "Spend a spell slot: +2d8 radiant damage on a melee hit."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Divine Health",
+      "description": "Immune to disease."
+     },
+     {
+      "id": "f3_1",
+      "name": "Sacred Oath",
+      "description": "Choose your oath (subclass)."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Aura of Protection",
+      "description": "You and allies within 10 ft add your CHA to saving throws."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen oath."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Aura of Courage",
+      "description": "You and allies within 10 ft can't be frightened."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Improved Divine Smite",
+      "description": "All melee hits deal +1d8 radiant damage."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Cleansing Touch",
+      "description": "Action: end a spell on yourself or an ally (CHA times per long rest)."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen oath."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Aura Improvements",
+      "description": "Your auras extend to 30 ft."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen oath."
+     }
+    ]
+   }
+  }
+ }
+}

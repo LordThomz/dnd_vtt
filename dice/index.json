@@ -1,0 +1,439 @@
+{
+ "format": 1,
+ "sets": [
+  {
+   "id": "messing",
+   "name": "Messing & Nacht",
+   "tag": "Fantasy × Modern",
+   "version": "1.0.0",
+   "file": "messing.vttdice",
+   "style": {
+    "surface": "metal",
+    "color": "#c8a24a",
+    "color2": null,
+    "numberColor": "#1b1407",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#f0d79c",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Brass & Night",
+     "tag": "Classic"
+    }
+   }
+  },
+  {
+   "id": "obsidian",
+   "name": "Obsidian",
+   "tag": "Edel",
+   "version": "1.0.0",
+   "file": "obsidian.vttdice",
+   "style": {
+    "surface": "plastic",
+    "color": "#141319",
+    "color2": "#2a2140",
+    "numberColor": "#e8c46a",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": "#000000",
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#b8944a",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Obsidian",
+     "tag": "Dark"
+    }
+   }
+  },
+  {
+   "id": "blutstein",
+   "name": "Blutstein",
+   "tag": "Düster",
+   "version": "1.0.0",
+   "file": "blutstein.vttdice",
+   "style": {
+    "surface": "stone",
+    "color": "#4a0f0c",
+    "color2": "#1a0504",
+    "numberColor": "#e6d8bc",
+    "accentColor": "#0a0202",
+    "pattern": "cracks",
+    "font": "'Uncial Antiqua', serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "none",
+    "edgeColor": "#f0d79c",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Bloodstone",
+     "tag": "Dark"
+    }
+   }
+  },
+  {
+   "id": "tinte",
+   "name": "Elfenbein & Tinte",
+   "tag": "Klassisch",
+   "version": "1.0.0",
+   "file": "tinte.vttdice",
+   "style": {
+    "surface": "plastic",
+    "color": "#efe4c8",
+    "color2": null,
+    "numberColor": "#2a1a0a",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": "#efe4c8",
+    "border": "solid",
+    "borderColor": "#8a5a1c",
+    "borderWidth": 5,
+    "edges": "none",
+    "edgeColor": "#f0d79c",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Ivory & Ink",
+     "tag": "Classic"
+    }
+   }
+  },
+  {
+   "id": "neonkern",
+   "name": "Neon-Kern",
+   "tag": "Futuristisch",
+   "version": "1.0.0",
+   "file": "neonkern.vttdice",
+   "style": {
+    "surface": "glass",
+    "color": "#0b1a26",
+    "color2": null,
+    "numberColor": "#2fe3ff",
+    "accentColor": "#ff3ea5",
+    "pattern": "circuit",
+    "font": "'Orbitron', 'Segoe UI', sans-serif",
+    "numberScale": 1,
+    "numberOutline": 0,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#2fe3ff",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Neon Core",
+     "tag": "Futuristic"
+    }
+   }
+  },
+  {
+   "id": "holochrom",
+   "name": "Holo-Chrom",
+   "tag": "Futuristisch",
+   "version": "1.0.0",
+   "file": "holochrom.vttdice",
+   "style": {
+    "surface": "metal",
+    "color": "#c9d3e0",
+    "color2": "#ff3ea5",
+    "numberColor": "#0a0f1c",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Orbitron', 'Segoe UI', sans-serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#2fe3ff",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Holo Chrome",
+     "tag": "Futuristic"
+    }
+   }
+  },
+  {
+   "id": "plasma",
+   "name": "Plasma",
+   "tag": "Futuristisch",
+   "version": "1.0.0",
+   "file": "plasma.vttdice",
+   "style": {
+    "surface": "crystal",
+    "color": "#5b1a8a",
+    "color2": "#ff3ea5",
+    "numberColor": "#ffffff",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Orbitron', 'Segoe UI', sans-serif",
+    "numberScale": 1,
+    "numberOutline": 0,
+    "outlineColor": null,
+    "border": "glow",
+    "borderColor": "#ff6ad0",
+    "borderWidth": 6,
+    "edges": "none",
+    "edgeColor": "#f0d79c",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Plasma",
+     "tag": "Futuristic"
+    }
+   }
+  },
+  {
+   "id": "mondglas",
+   "name": "Mondglas",
+   "tag": "Elfisch",
+   "version": "1.0.0",
+   "file": "mondglas.vttdice",
+   "style": {
+    "surface": "crystal",
+    "color": "#a9d8a2",
+    "color2": null,
+    "numberColor": "#ffffff",
+    "accentColor": "#e8fff0",
+    "pattern": "leaves",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "none",
+    "edgeColor": "#f0d79c",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Moon Glass",
+     "tag": "Elven"
+    }
+   }
+  },
+  {
+   "id": "frostzahn",
+   "name": "Frostzahn",
+   "tag": "Eis",
+   "version": "1.0.0",
+   "file": "frostzahn.vttdice",
+   "style": {
+    "surface": "glass",
+    "color": "#9fd4ff",
+    "color2": null,
+    "numberColor": "#0b2440",
+    "accentColor": "#ffffff",
+    "pattern": "frost",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#e8f6ff",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Frostfang",
+     "tag": "Elemental"
+    }
+   }
+  },
+  {
+   "id": "eichenholz",
+   "name": "Eichenholz",
+   "tag": "Natur",
+   "version": "1.0.0",
+   "file": "eichenholz.vttdice",
+   "style": {
+    "surface": "wood",
+    "color": "#8a5a2c",
+    "color2": null,
+    "numberColor": "#f3e2c0",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "none",
+    "edgeColor": "#f0d79c",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Oakwood",
+     "tag": "Natural"
+    }
+   }
+  },
+  {
+   "id": "perlmond",
+   "name": "Perlmond",
+   "tag": "Edel",
+   "version": "1.0.0",
+   "file": "perlmond.vttdice",
+   "style": {
+    "surface": "pearl",
+    "color": "#f2ece4",
+    "color2": "#d9d0ea",
+    "numberColor": "#4a3a66",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": "#ffffff",
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#e6dcf5",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Pearl Moon",
+     "tag": "Noble"
+    }
+   }
+  },
+  {
+   "id": "prisma",
+   "name": "Prisma",
+   "tag": "Futuristisch",
+   "version": "1.0.0",
+   "file": "prisma.vttdice",
+   "style": {
+    "surface": "holo",
+    "color": "#c8ccd8",
+    "color2": null,
+    "numberColor": "#101322",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Orbitron', 'Segoe UI', sans-serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "bold",
+    "edgeColor": "#e8ecff",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Prism",
+     "tag": "Futuristic"
+    }
+   }
+  },
+  {
+   "id": "vulkanglas",
+   "name": "Vulkanglas",
+   "tag": "Düster",
+   "version": "1.0.0",
+   "file": "vulkanglas.vttdice",
+   "style": {
+    "surface": "obsidian",
+    "color": "#0d0b10",
+    "color2": null,
+    "numberColor": "#ff9a3c",
+    "accentColor": "#ff6a1a",
+    "pattern": "cracks",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": "#2a0a00",
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#3a1a10",
+    "numberGlow": 0.8
+   },
+   "i18n": {
+    "en": {
+     "name": "Volcanic Glass",
+     "tag": "Dark"
+    }
+   }
+  },
+  {
+   "id": "smaragd",
+   "name": "Smaragd",
+   "tag": "Edelstein",
+   "version": "1.0.0",
+   "file": "smaragd.vttdice",
+   "style": {
+    "surface": "crystal",
+    "color": "#14a06a",
+    "color2": "#0a4a32",
+    "numberColor": "#f4fff0",
+    "accentColor": "#ffffff",
+    "pattern": "none",
+    "font": "'Cinzel', Georgia, serif",
+    "numberScale": 1,
+    "numberOutline": 0.08,
+    "outlineColor": null,
+    "border": "none",
+    "borderColor": "#f0d79c",
+    "borderWidth": 8,
+    "edges": "subtle",
+    "edgeColor": "#d8ffe8",
+    "numberGlow": 0
+   },
+   "i18n": {
+    "en": {
+     "name": "Emerald",
+     "tag": "Gemstone"
+    }
+   }
+  }
+ ]
+}

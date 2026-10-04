@@ -1,0 +1,22 @@
+{
+ "name": "Magie-Eingeweihter",
+ "prereq": "—",
+ "description": "Ein Hauch von Magie.",
+ "benefits": "Zwei Zaubertricks und ein Zauber 1. Grades aus der Kleriker-, Druiden- oder Magierliste.",
+ "category": "Herkunft",
+ "id": "fc74963b",
+ "rkey": "srd52.feats.magic_initiate",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Magic Initiate",
+   "prereq": "—",
+   "description": "A touch of magic.",
+   "benefits": "Two cantrips and one 1st-level spell from the cleric, druid or wizard list.",
+   "category": "Origin"
+  }
+ }
+}

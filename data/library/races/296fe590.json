@@ -1,0 +1,91 @@
+{
+ "name": "Drachenblütiger",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Nachfahren von Drachen mit Odem und – später – Flügeln.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Drachenahnen",
+   "description": "Drachenart wählen – bestimmt die Schadensart.",
+   "choices": [
+    {
+     "id": "t0c0",
+     "type": "damage_type",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  },
+  {
+   "id": "t1",
+   "name": "Odemwaffe",
+   "description": "Ersetzt einen Angriff: 15-ft-Kegel oder 30-ft-Linie, 1W10 (steigt bis 4W10), GES-Rettungswurf. Übungsbonus-mal pro langer Rast.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Schadensresistenz",
+   "description": "Resistenz gegen die Schadensart deiner Ahnen.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Dunkelsicht",
+   "description": "Dunkelsicht 60 ft.",
+   "choices": []
+  },
+  {
+   "id": "t4",
+   "name": "Drakonischer Flug",
+   "description": "Ab Stufe 5: Bonusaktion, 10 Minuten Flügel mit Fluggeschwindigkeit. Einmal pro langer Rast.",
+   "choices": []
+  }
+ ],
+ "id": "296fe590",
+ "rkey": "srd52.races.dragonborn",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Dragonborn",
+   "size": "Medium",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Descendants of dragons with breath and, later, wings.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Draconic Ancestry",
+     "description": "Choose a dragon type – it sets your damage type."
+    },
+    {
+     "id": "t1",
+     "name": "Breath Weapon",
+     "description": "Replaces an attack: 15 ft cone or 30 ft line, 1d10 (up to 4d10), DEX save. Proficiency bonus times per long rest."
+    },
+    {
+     "id": "t2",
+     "name": "Damage Resistance",
+     "description": "Resistance to your ancestry's damage type."
+    },
+    {
+     "id": "t3",
+     "name": "Darkvision",
+     "description": "Darkvision 60 ft."
+    },
+    {
+     "id": "t4",
+     "name": "Draconic Flight",
+     "description": "From level 5: bonus action, spectral wings with a flying speed for 10 minutes. Once per long rest."
+    }
+   ]
+  }
+ }
+}

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>D&amp;D Virtual Tabletop – Launcher</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="i18n.js"></script>
 <script src="config.js"></script>
 <script src="sfx.js"></script>
 <script src="icons.js"></script>
@@ -201,7 +202,22 @@
     box-shadow: 0 0 12px #e8a33d; animation: fill 2.2s cubic-bezier(.4,0,.2,1) .3s forwards; }
   @keyframes fill { to { width: 100%; } }
   .intro .skip { position: absolute; bottom: 26px; font: 500 .72rem/1 var(--ui); letter-spacing: .1em; color: rgba(255,255,255,.3); }
-  .intro.out { animation: iout .5s ease forwards; } @keyframes iout { to { filter: brightness(2.2) blur(6px); opacity: 0; } }
+  /* Übergang in den Ladebildschirm des Spiels (gleiches Bild wie theme.js) */
+  .intro .halo, .intro .ring, .intro .ititle, .intro .ibar, .intro .skip { transition: opacity .45s ease; }
+  .intro .crest { transition: transform .5s cubic-bezier(.4,0,.2,1); }
+  .intro.morph .halo, .intro.morph .ring, .intro.morph .ititle, .intro.morph .ibar, .intro.morph .skip { opacity: 0 !important; animation-play-state: paused; }
+  .intro.morph .crest { transform: translateY(-25px) scale(.541); }   /* = Position im Ladebildschirm */
+  .intro .ld { position: absolute; top: calc(50% + 39px); display: flex; flex-direction: column; align-items: center; gap: 18px; opacity: 0; transition: opacity .4s ease .15s; }
+  .intro.morph .ld { opacity: 1; }
+  .intro .ld span { font: 600 .74rem/1 var(--display); letter-spacing: .32em; text-transform: uppercase; color: var(--text-dim); }
+  /* gleicher Fortschrittsbalken wie der Ladebildschirm des Spiels (theme.js) */
+  .intro .ld b { position: relative; width: 240px; height: 4px; border-radius: 4px; overflow: hidden; display: block;
+    background: rgba(255,255,255,.07); box-shadow: inset 0 0 0 1px rgba(212,181,120,.12); }
+  .intro .ld b i { position: absolute; inset: 0; transform-origin: left; transform: scaleX(.12);
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--arcane)); box-shadow: 0 0 10px rgba(212,181,120,.6); }
+  .intro .ld b em { position: absolute; top: 0; bottom: 0; width: 30%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+    animation: sweep 1.6s ease-in-out infinite; }
+  @keyframes sweep { from { transform: translateX(-120%); } to { transform: translateX(380%); } }
   /* ── Musikknopf ── */
   .music { position: fixed; top: 16px; right: 18px; z-index: 40; display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 22px;
     background: rgba(12,14,23,.7); border: 1px solid var(--border); backdrop-filter: blur(6px); }
@@ -281,6 +297,7 @@
   <div class="ititle">D&amp;D VIRTUAL TABLETOP</div>
   <div class="ibar"><i></i></div>
   <div class="skip">Klicken zum Überspringen</div>
+  <div class="ld"><span>Lädt</span><b><i></i><em></em></b></div>
 </div>
 <input type="file" id="file-in" accept=".vttpack,.vttdice,.zip,.json" hidden>
 
@@ -368,7 +385,7 @@ function closeModal() { $("modal").classList.remove("open"); }
 function openModal(title, sub, body) { $("m-title").textContent = title; $("m-sub").textContent = sub || ""; $("m-body").innerHTML = body; $("modal").classList.add("open"); }
 
 const CAT = { races: "Rassen", classes: "Klassen", subclasses: "Unterklassen", backgrounds: "Hintergründe", feats: "Talente",
-  spells: "Zauber", items: "Gegenstände", magic_items: "Magische Gegenstände", attacks: "Angriffe", conditions: "Zustände", monsters: "Monster" };
+  spells: "Zauber", items: "Gegenstände", magic_items: "Magische Gegenstände", attacks: "Angriffs-Vorlagen", conditions: "Zustände", monsters: "Monster", languages: "Sprachen" };
 const countsText = c => Object.entries(c || {}).filter(([, n]) => n).map(([k, n]) => `${n} ${CAT[k] || k}`).join(" · ") || "leer";
 
 let tab = "packs", packs = [], profile = { keys: {} };
@@ -399,6 +416,9 @@ async function waitForOwnServer(attempt) {
     await new Promise(res => { const sc = document.createElement("script"); sc.src = LOCAL + "/static/js/design-runtime.js";
       sc.onload = res; sc.onerror = res; document.head.appendChild(sc); });
     await reload();
+    // Sprache aus dem Profil (im Spiel eingestellt) – bei Abweichung neu laden
+    try { const st = JSON.parse((profile.keys || {}).vtt_settings || "{}") || {};
+          if (st.lang && st.lang !== I18n.lang) { I18n.set(st.lang); location.reload(); return; } } catch (e) {}
     // Klang-Einstellungen aus dem Profil übernehmen (gleich wie im Spiel)
     try { const fx = JSON.parse((profile.keys || {}).vtt_fx || "null"); if (fx) { Sfx.configure(fx); renderMusicBtn(); if (fx.music) Sfx.music.start(); } } catch (e) {}
     const fxs = document.createElement("script"); fxs.src = LOCAL + "/static/js/fx.js"; document.head.appendChild(fxs);
@@ -424,17 +444,24 @@ function render() { $("panel").innerHTML = { packs: renderPacks, dice: renderDic
 // ── Intro: Vorfreude statt hartem Umschalten ───────────────────────────────
 let introDone = false, introTimer = 0;
 function startGame() {
-  const target = LOCAL + "/menu#vttprofile=" + packHandover({ launcher: launcherUrl(), intro: 1 });
+  // /app = fester Rahmen: darin läuft die Musik bei Seitenwechseln weiter
+  const target = LOCAL + "/app?start=/menu#vttprofile=" + packHandover({ launcher: launcherUrl(), intro: 1 });
   const ov = $("intro"); ov.style.display = "grid"; requestAnimationFrame(() => ov.classList.add("on"));
+  // Einstellungen → Allgemein → „Intro beim Start": aus → direkt zum Ladebildschirm
+  let st = {}; try { st = JSON.parse((profile.keys || {}).vtt_settings || "{}") || {}; } catch (e) {}
+  if (st.intro === false) { window._introTarget = target; introDone = false; return finishIntro(); }
   window._introTarget = target;
   try { Sfx.music.stop(1.5); Sfx.play("intro"); } catch (e) {}
   fetch(LOCAL + "/menu", { cache: "force-cache" }).catch(() => {});        // vorladen
   introTimer = setTimeout(finishIntro, 2700);
 }
 function finishIntro() {
+  // Nicht ausblenden (sonst wäre kurz wieder der Launcher zu sehen), sondern
+  // in den Ladebildschirm des Spiels übergehen: gleiches Wappen, gleiche
+  // Größe, „Lädt" + Lichtleiste. Die Spielseite startet mit genau diesem Bild.
   if (introDone) return; introDone = true; clearTimeout(introTimer);
-  $("intro").classList.add("out");
-  setTimeout(() => { location.href = window._introTarget; }, 420);
+  $("intro").classList.add("morph");
+  setTimeout(() => { location.href = window._introTarget; }, 520);
 }
 
 // ── Musik (generativ, sfx.js) ──────────────────────────────────────────────
@@ -493,7 +520,7 @@ function pickFile(accept) {
 function renderPacks() {
   const rows = packs.filter(p => p.total || !p.builtin).map(p => `
     <div class="row${p.enabled ? "" : " off"}">
-      <div class="ico">${p.id === "basis" ? "📘" : p.id === "eigene" ? "✍️" : "📦"}</div>
+      <div class="ico">${(p.id === "basis" || p.id === "basis2024") ? "📘" : p.id === "eigene" ? "✍️" : "📦"}</div>
       <div class="info"><div class="name">${esc(p.name)}${p.version ? `<small>v${esc(p.version)}</small>` : ""}${p.builtin ? `<span class="tag">Eingebaut</span>` : ""}</div>
         <div class="meta">${p.author ? "von " + esc(p.author) + " · " : ""}${esc(countsText(p.counts))}</div></div>
       <div class="acts">
@@ -572,7 +599,11 @@ async function saveDice(store) { await saveProfileKeys({ vtt_dice_sets: JSON.str
 async function addDiceSets(list) {
   const st = diceStore(); let n = 0;
   (list || []).forEach(s => { if (!s || typeof s.dice !== "object") return;
-    const c = JSON.parse(JSON.stringify(s)); c.id = "set_" + Math.random().toString(36).slice(2, 10); delete c.presetId; delete c.hidden;
+    const c = JSON.parse(JSON.stringify(s)); delete c.presetId; delete c.hidden;
+    // Aus dem Katalog: vorhandene Version ersetzen (gleiche Kennung), sonst neu anlegen
+    const old = c.catalogId ? st.sets.find(x => x.catalogId === c.catalogId) : null;
+    if (old) { c.id = old.id; if (old.hidden) c.hidden = true; st.sets[st.sets.indexOf(old)] = c; n++; return; }
+    c.id = "set_" + Math.random().toString(36).slice(2, 10);
     c.name = String(c.name || "Importiertes Set").slice(0, 60); st.sets.push(c); n++; });
   if (!st.activeId && st.sets.length) st.activeId = st.sets[0].id;
   await saveDice(st); return n;
@@ -597,9 +628,38 @@ function renderDice() {
       <div class="acts2"><button class="b" onclick="diceExport('${esc(s.id)}')">Exportieren</button>
         <button class="b danger" onclick="diceDelete('${esc(s.id)}')" ${active || st.sets.length < 2 ? "disabled" : ""}>Löschen</button></div>
     </div>`; }).join("");
+  if (diceCatalog === null) loadDiceCatalog().then(() => tab === "dice" && render());
+  const have = new Map(st.sets.filter(x => x.catalogId).map(x => [x.catalogId, x]));
+  const catCards = (diceCatalog || []).map(c => {
+    const own = have.get(c.id), upd = own && own.version && c.version !== own.version;
+    if (own && !upd) return "";
+    return `<div class="card">${dieMini(c.style)}
+      <div class="foot"><b>${esc(loc(c, "name"))}</b>${c.tag ? `<span class="tag">${esc(loc(c, "tag"))}</span>` : ""}</div>
+      <div class="acts2"><button class="b gold" onclick="diceCatalogInstall('${esc(c.id)}')">${upd ? "Update " + esc(c.version) : "Herunterladen"}</button></div></div>`;
+  }).join("");
   return `<div class="bar2"><p>Deine Würfel-Sets. Ausgeblendete stehen im Spiel nicht zur Auswahl. Gestaltet und ausgewählt wird im Spiel.</p>
     <button class="b gold" onclick="diceImport()">Importieren</button></div>
-    ${st.sets.length ? `<div class="grid">${cards}</div>` : `<p class="msg">Noch keine eigenen Sets – sie entstehen in der Würfel-Werkstatt im Spiel.</p>`}`;
+    ${st.sets.length ? `<div class="grid">${cards}</div>` : `<p class="msg">Noch keine eigenen Sets – sie entstehen in der Würfel-Werkstatt im Spiel.</p>`}
+    <div class="h3">Katalog · fertige Würfel-Sets</div>
+    ${diceCatalog === null ? `<p class="msg">Katalog wird geladen …</p>` : diceCatalogErr ? `<div class="hint">${esc(diceCatalogErr)}</div>`
+      : catCards.trim() ? `<div class="grid">${catCards}</div>` : `<p class="msg">Du hast bereits alle Würfel-Sets aus dem Katalog.</p>`}`;
+}
+let diceCatalog = null, diceCatalogErr = "";
+async function loadDiceCatalog() {
+  const r = catalogRoot();
+  if (!r) { diceCatalog = []; diceCatalogErr = "Der Würfel-Katalog ist noch nicht eingerichtet."; return; }
+  try { const d = await getJSON(r + "dice/index.json", 8000); diceCatalog = (d && d.sets) || []; diceCatalogErr = ""; }
+  catch (e) { diceCatalog = []; diceCatalogErr = "Katalog nicht erreichbar – keine Internetverbindung?"; }
+}
+async function diceCatalogInstall(id) {
+  const c = (diceCatalog || []).find(x => x.id === id); if (!c) return;
+  try {
+    const d = await getJSON(catalogRoot() + "dice/" + c.file, 10000);
+    if (!d || !d.vttdice || !d.set || typeof d.set.dice !== "object") throw new Error("Ungültige Katalog-Datei");
+    d.set.catalogId = c.id; d.set.version = c.version;
+    d.set.name = loc(d.set, "name") || d.set.name;          // Name in der eingestellten Sprache
+    await addDiceSets([d.set]); toast(`„${c.name}" installiert`);
+  } catch (e) { toast("⚠️ " + (e.message || "Download fehlgeschlagen")); }
 }
 async function diceToggle(id, on) { const st = diceStore(); const s = st.sets.find(x => x.id === id); if (s) { if (on) delete s.hidden; else s.hidden = true; } await saveDice(st); }
 async function diceDelete(id) {
@@ -631,11 +691,13 @@ async function packImportFile(f) { const orig = pickFile; pickFile = async () =>
 //  Import (.vttdesign). Alle liegen im Profil (vtt_designs).
 const BUILTIN = { ui: [{ id: "arkanum", name: "Arkanum", tag: "Standard" }], table: [{ id: "arkan", name: "Arkaner Tisch", tag: "Standard" }] };
 let catalog = null, catalogErr = "";
-function catalogBase() {
+// Basis der Kataloge im Repository (darunter designs/ und dice/)
+function catalogRoot() {
   if (window.VTT_CATALOG_URL) return window.VTT_CATALOG_URL.replace(/\/?$/, "/");
   if (!window.VTT_REPO || /GITHUB-NUTZER/.test(window.VTT_REPO)) return "";
-  return `https://raw.githubusercontent.com/${window.VTT_REPO}/main/designs/`;
+  return `https://raw.githubusercontent.com/${window.VTT_REPO}/main/`;
 }
+function catalogBase() { const r = catalogRoot(); return r ? r + "designs/" : ""; }
 async function loadCatalog() {
   const base = catalogBase();
   if (!base) { catalogErr = "Der Design-Katalog ist noch nicht eingerichtet."; catalog = []; return; }
@@ -656,6 +718,8 @@ function uiMini(id) { return `<div class="ds-ui" data-ui-theme="${esc(id)}"><div
   <div class="ds-ui-side"><div class="ds-ui-btn">Würfeln</div><div class="ds-ui-chip">W20 · 17</div></div></div></div>`; }
 function tableMini(id) { return `<div class="ds-table" data-table-theme="${esc(id)}"><div class="ds-table-grid"></div><div class="ds-token" style="left:30%;top:38%"></div><div class="ds-token b" style="left:62%;top:58%"></div></div>`; }
 const miniFor = (scope, id) => scope === "ui" ? uiMini(id) : tableMini(id);
+// Katalog-Texte in der eingestellten Sprache (i18n.<lang> im Katalog)
+const loc = (o, k) => ((o && o.i18n && o.i18n[I18n.lang]) || {})[k] || (o || {})[k] || "";
 
 function renderDesigns() {
   if (catalog === null) { loadCatalog().then(() => tab === "designs" && render()); }
@@ -667,7 +731,7 @@ function renderDesigns() {
     const key = scope + ":" + d.id, active = cur[scope] === d.id, off = h.has(key) && !active;
     const cat = catById[key], upd = cat && d.version && cat.version !== d.version && !d.builtin;
     return `<div class="card${off ? " off" : ""}">${miniFor(scope, d.id)}
-      <div class="foot"><b>${esc(d.name)}</b>${active ? `<span class="tag">Aktiv</span>` : d.builtin ? `<span class="tag">Standard</span>` : ""}
+      <div class="foot"><b>${esc(loc(d, "name"))}</b>${active ? `<span class="tag">Aktiv</span>` : d.builtin ? `<span class="tag">Standard</span>` : ""}
         <label class="sw" title="${active ? "Das aktive Design ist immer sichtbar" : off ? "Ausgeblendet" : "Im Spiel zur Auswahl"}"><input type="checkbox" ${!off ? "checked" : ""} ${active ? "disabled" : ""} onchange="designToggle('${scope}','${esc(d.id)}',this.checked)"><span></span></label></div>
       ${d.builtin ? "" : `<div class="acts2">${upd ? `<button class="b gold" onclick="catalogInstall('${scope}','${esc(d.id)}')">Update ${esc(cat.version)}</button>` : ""}
         <button class="b" onclick="designExport('${scope}','${esc(d.id)}')">Exportieren</button>
@@ -675,8 +739,8 @@ function renderDesigns() {
     </div>`; }).join("");
   const missing = (catalog || []).filter(c => !inst.some(d => d.scope === c.scope && d.id === c.id));
   const catCards = missing.map(c => `<div class="card">
-      <div class="cat-prev"><div class="cat-badge">${c.scope === "ui" ? "Oberfläche" : "Spieltisch"}</div><b>${esc(c.name)}</b><span>${esc(c.description || "")}</span></div>
-      <div class="foot"><b>${esc(c.name)}</b>${c.tag ? `<span class="tag">${esc(c.tag)}</span>` : ""}</div>
+      <div class="cat-prev"><div class="cat-badge">${c.scope === "ui" ? "Oberfläche" : "Spieltisch"}</div><b>${esc(loc(c, "name"))}</b><span>${esc(loc(c, "description"))}</span></div>
+      <div class="foot"><b>${esc(loc(c, "name"))}</b>${c.tag ? `<span class="tag">${esc(loc(c, "tag"))}</span>` : ""}</div>
       <div class="acts2"><button class="b gold" onclick="catalogInstall('${c.scope}','${esc(c.id)}')">Herunterladen</button></div></div>`).join("");
   return `<div class="bar2"><p>Welche Designs du hast und welche im Spiel zur Auswahl stehen. Gewählt, kombiniert und selbst gebaut wird im Spiel im Design-Studio.</p>
       <button class="b gold" onclick="designImport()">Importieren</button></div>

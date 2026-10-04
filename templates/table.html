@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="color-scheme" content="dark light">
+<style>html{background:var(--bg-deep,#06070d)}</style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>D&amp;D</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <link rel="preload" href="/static/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,6 +14,7 @@
 <link rel="stylesheet" href="/static/css/design-studio.css">
 <link rel="stylesheet" href="/static/css/fx.css">
 <script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/i18n.js"></script>
 <script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
@@ -869,7 +872,6 @@
 <script src="/static/js/dice-sound.js"></script>
 <script src="/static/js/dice-geometry.js"></script>
 <script src="/static/js/dice-material.js"></script>
-<script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/dice3d.js"></script>
 
 <script>
@@ -881,7 +883,7 @@ async function leaveToMenu(){
     ? "Sitzung verlassen? Die Sitzung bleibt bestehen, ist für Spieler aber nicht erreichbar, solange du weg bist."
     : "Sitzung verlassen? Du verlässt die laufende Sitzung.";
   if(!await Dialog.confirm(msg, {title:"Sitzung verlassen", icon:"🚪", okText:"Verlassen"})) return;
-  window.location.href = "/play";
+  (typeof Theme!=="undefined"?Theme.go("/play"):location.assign("/play"));
 }
 
 (async function boot(){
@@ -1662,7 +1664,7 @@ function _closeDiceMenu(){
 // kommen. Der Zurück-Knopf dort führt dann wieder hierher – man verlässt
 // die Sitzung also nicht.
 function openDiceWorkshop(){
-  window.location.href = "/dice?from=" + encodeURIComponent(State.session_id);
+  (typeof Theme!=="undefined"?Theme.go("/dice?from=" + encodeURIComponent(State.session_id)):location.assign("/dice?from=" + encodeURIComponent(State.session_id)));
 }
 function _diceToggleFromMenu(el){
   const on = !Dice3D.isEnabled();
@@ -2212,7 +2214,12 @@ const CampaignPacks = (() => {
     };
     document.getElementById("panel-toggle-btn").textContent = "›";
     document.getElementById("panel-toggle-btn").title = "Seitenleiste ein-/ausklappen";
-    try { if (localStorage.getItem("vtt_panel_collapsed") === "1") window.togglePanel(); } catch (e) {}
+    try {
+      // Einstellungen → Spieltisch → „Seitenleiste beim Start": zuletzt / offen / eingeklappt
+      const start = Theme.setting("panelStart", "last");
+      const collapse = start === "collapsed" || (start === "last" && localStorage.getItem("vtt_panel_collapsed") === "1");
+      if (collapse) window.togglePanel();
+    } catch (e) {}
     // 5) Neue Chat-Nachricht, während der Chat nicht sichtbar ist → Punkt am Symbol
     const chat = document.getElementById("chat-messages"), chatTab = tabs.querySelector('[data-tab="chat"]');
     if (chat && chatTab) new MutationObserver(() => {
@@ -2229,7 +2236,11 @@ const CampaignPacks = (() => {
     const hide = () => { hud.classList.add("hud-hidden"); btn.classList.add("show"); };
     const show = () => { hud.classList.remove("hud-hidden"); btn.classList.remove("show"); clearTimeout(t); t = setTimeout(hide, 8000); };
     btn.onclick = show;
-    t = setTimeout(hide, 12000);
+    // Einstellungen → Spieltisch → „Steuerungshilfe": automatisch / immer / nie
+    const mode = Theme.setting("hudMode", "auto");
+    if (mode === "never") hide();
+    else if (mode === "auto") t = setTimeout(hide, 12000);
+    if (mode === "always") btn.onclick = () => {};
   })();
   // ── Hinweis für den DM, solange die aktive Karte kein Bild hat ──────────
   (function(){

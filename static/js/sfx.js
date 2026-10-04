@@ -17,7 +17,7 @@
    ══════════════════════════════════════════════════════════════════════════ */
 const Sfx = (() => {
   "use strict";
-  const DEFAULTS = { sound: true, music: true, uiVol: 0.55, musicVol: 0.35, reduceMotion: false };
+  const DEFAULTS = { sound: true, music: true, uiVol: 0.55, musicVol: 0.35, masterVol: 0.9, reduceMotion: false };
   let ctx = null, master, uiBus, musicBus, verb, verbSend;
 
   function settings() {
@@ -62,6 +62,7 @@ const Sfx = (() => {
   function _applyVolumes() {
     if (!ctx) return;
     const s = settings();
+    master.gain.setTargetAtTime(Math.max(0, Math.min(1, s.masterVol)), ctx.currentTime, .05);
     uiBus.gain.setTargetAtTime(s.sound ? s.uiVol : 0, ctx.currentTime, .05);
     musicBus.gain.setTargetAtTime(s.music ? s.musicVol : 0, ctx.currentTime, .3);
   }

@@ -1,0 +1,16 @@
+{
+ "name": "Erschöpft",
+ "description": "Je Stufe −2 auf W20-Würfe und −5 ft Geschwindigkeit; Stufe 6 bedeutet den Tod.",
+ "id": "db3645a0",
+ "rkey": "srd52.conditions.exhaustion",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Exhaustion",
+   "description": "Each level: −2 to d20 tests and −5 ft speed; level 6 means death."
+  }
+ }
+}

@@ -1,0 +1,236 @@
+{
+ "name": "Hexenmeister",
+ "hd": "d6",
+ "primary": "cha",
+ "spellcaster": true,
+ "armor": "Keine",
+ "weapons": "Dolch, Wurfpfeil, Schleuder, Kampfstab, leichte Armbrust",
+ "tools": "",
+ "saves": "KON, CHA",
+ "skill_count": 2,
+ "skill_options": "Arkana, Täuschung, Einsicht, Einschüchtern, Überzeugen, Religion",
+ "description": "Angeborene Magie aus dem Blut, spontan und kraftvoll.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste wirken. Attribut: CHA.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Zauberische Herkunft",
+    "description": "Wähle deine Herkunft (Unterklasse).",
+    "choices": [
+     {
+      "id": "f1_1c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Quelle der Magie",
+    "description": "Zauberpunkte = Stufe; in Zauberplätze umwandeln und umgekehrt.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Metamagie",
+    "description": "Zwei Metamagie-Optionen, um Zauber zu verändern (weitere auf Stufe 10 und 17).",
+    "choices": []
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Herkunft.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Herkunft.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Herkunft.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Zauberische Erholung",
+    "description": "Nach kurzer Rast 4 Zauberpunkte zurück.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "40117707",
+ "rkey": "srd51.classes.sorcerer",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Sorcerer",
+   "armor": "None",
+   "weapons": "Dagger, dart, sling, quarterstaff, light crossbow",
+   "tools": "",
+   "saves": "CON, CHA",
+   "skill_options": "Arcana, Deception, Insight, Intimidation, Persuasion, Religion",
+   "description": "Innate magic from the blood, spontaneous and powerful.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Cast spells from your class list. Ability: CHA."
+     },
+     {
+      "id": "f1_1",
+      "name": "Sorcerous Origin",
+      "description": "Choose your origin (subclass)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Font of Magic",
+      "description": "Sorcery points equal to level; convert to and from spell slots."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Metamagic",
+      "description": "Two metamagic options to alter spells (more at levels 10 and 17)."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen origin."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen origin."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen origin."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Sorcerous Restoration",
+      "description": "Regain 4 sorcery points on a short rest."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "Zauberer"
+ ]
+}

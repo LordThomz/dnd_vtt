@@ -49,9 +49,12 @@ MAX_ENTRIES      = 5000
 MAX_DICE_SETS    = 50
 
 BUILTIN = {
-    "basis":  {"id": "basis",  "name": "Grundregeln (SRD 5.1)", "builtin": True,
-               "description": "Mitgelieferte Inhalte aus dem System Reference Document 5.1 von "
-                              "Wizards of the Coast LLC, lizenziert unter CC-BY-4.0."},
+    "basis":  {"id": "basis",  "name": "Grundregeln 2014 (SRD 5.1)", "builtin": True, "rules": "2014",
+               "description": "Regeln 2014: System Reference Document 5.1 von Wizards of the Coast LLC, "
+                              "lizenziert unter CC-BY-4.0. Deutsch und Englisch."},
+    "basis2024": {"id": "basis2024", "name": "Grundregeln 2024 (SRD 5.2)", "builtin": True, "rules": "2024",
+               "description": "Regeln 2024: System Reference Document 5.2 von Wizards of the Coast LLC, "
+                              "lizenziert unter CC-BY-4.0. Deutsch und Englisch."},
     "eigene": {"id": "eigene", "name": "Eigene Inhalte", "builtin": True,
                "description": "Alles, was auf diesem Server selbst erstellt wurde (Homebrew)."},
 }
@@ -97,33 +100,68 @@ def load():
     _save()
 
 
+BASIS_SOURCES = ("basis", "basis2024")
+
 def _sync_basis():
-    """Neue Grundregel-Einträge aus einem Update nachtragen.
-    Der mitgelieferte Bibliotheks-Ordner wird nur beim ersten Start kopiert.
-    Kommen mit einem Update neue SRD-Inhalte dazu, fehlen sie sonst in
-    bestehenden Installationen. Abgleich über Kategorie + Name; es wird nie
-    etwas gelöscht oder überschrieben."""
+    """Mitgelieferte Grundregeln (2014 + 2024) mit einem Update abgleichen.
+    • Neue Einträge werden ergänzt.
+    • Ältere Fassungen (gleiche Kennung rkey mit kleinerer Revision, oder
+      frühere Einträge ohne rkey mit gleichem Namen/Alias) werden ERSETZT –
+      die Kennung (id) bleibt, damit Charaktere und Verweise weiter passen.
+    • Es wird nie etwas gelöscht; eigene Einträge bleiben unberührt."""
     try:
+        import i18n_content
         bundle = gs._BUNDLE_DIR / "data" / "library"
         if str(gs._DATA_DIR) == str(gs._BUNDLE_DIR) or not bundle.is_dir():
             return
         lib = gs.get_library()
-        added = 0
+        added = updated = 0
         for cat in gs.LIBRARY_CATEGORIES:
-            have = {str(e.get("name", "")).strip().lower() for e in lib.get(cat, {}).values()}
             for f in sorted((bundle / cat).glob("*.json")) if (bundle / cat).is_dir() else []:
                 try:
                     e = json.loads(f.read_text(encoding="utf-8"))
                 except Exception:
                     continue
-                if e.get("source") != "basis" or str(e.get("name", "")).strip().lower() in have:
+                src = e.get("source")
+                if src not in BASIS_SOURCES:
                     continue
-                if e.get("id") in lib.get(cat, {}):
-                    e["id"] = gs.new_id()
-                gs.save_library_entry(cat, e)
-                added += 1
-        if added:
-            print(f"[packs] {added} neue Grundregel-Einträge aus dem Update übernommen")
+                cur = lib.get(cat, {})
+                old = next((x for x in cur.values() if e.get("rkey") and x.get("rkey") == e.get("rkey")), None)
+                if old is None and src == "basis":
+                    names = i18n_content.names_of(e)
+                    old = next((x for x in cur.values() if x.get("source") == "basis" and not x.get("rkey")
+                                and str(x.get("name", "")).strip().lower() in names), None)
+                if old is not None:
+                    if old.get("rkey") and int(old.get("rev") or 0) >= int(e.get("rev") or 0):
+                        continue
+                    e["id"] = old["id"]
+                    gs.save_library_entry(cat, e); updated += 1
+                else:
+                    if e.get("id") in cur:
+                        e["id"] = gs.new_id()
+                    gs.save_library_entry(cat, e); added += 1
+        # Altlasten: frühere „Grundregel"-Einträge ohne Gegenstück in den
+        # heutigen Grundregeln (z. B. Spielerhandbuch-Inhalte aus Version 0.1)
+        # werden zu eigenen Inhalten. Ein importiertes Paket mit denselben
+        # Kennungen ersetzt sie später sauber.
+        lib = gs.get_library(); moved = 0
+        for cat, entries in lib.items():
+            for x in list(entries.values()):
+                if x.get("source") == "basis" and not x.get("rkey"):
+                    x["source"] = "eigene"; gs.save_library_entry(cat, x); moved += 1
+        if moved:
+            print(f"[packs] {moved} frühere Grundregel-Einträge zu „Eigene Inhalte“ verschoben")
+        # Unterklassen der Grundregeln mit der Klasse DESSELBEN Regelwerks verknüpfen
+        lib = gs.get_library()
+        for sc in list(lib.get("subclasses", {}).values()):
+            if sc.get("source") not in BASIS_SOURCES:
+                continue
+            cls = next((c for c in lib.get("classes", {}).values() if c.get("source") == sc.get("source")
+                        and str(c.get("name", "")).strip().lower() == str(sc.get("parent_class_name", "")).strip().lower()), None)
+            if cls and sc.get("parent_class") != cls["id"]:
+                sc["parent_class"] = cls["id"]; gs.save_library_entry("subclasses", sc)
+        if added or updated:
+            print(f"[packs] Grundregeln abgeglichen: {added} neu, {updated} aktualisiert")
     except Exception as ex:
         print(f"[packs] Abgleich der Grundregeln übersprungen: {ex}")
 
@@ -195,6 +233,38 @@ def list_packs():
 def get(pid):
     _ensure()
     return _packs.get(pid)
+
+
+def create(name, description="", author=""):
+    """Neue, leere eigene Bibliothek anlegen (in der Bibliothek im Spiel).
+    Sie ist ein ganz normales Paket: im Launcher an-/ausschaltbar,
+    exportierbar und teilbar."""
+    _ensure()
+    name = str(name or "").strip()[:60]
+    if not name:
+        raise PackError("Bitte einen Namen angeben")
+    base = "bib." + _clean_id(name, "bibliothek")
+    pid, i = base, 2
+    while pid in _packs or pid in BUILTIN:
+        pid = f"{base}-{i}"; i += 1
+    _packs[pid] = {"id": pid, "name": name, "version": "1.0.0", "author": str(author or "")[:60],
+                   "description": str(description or "")[:400], "enabled": True, "own": True,
+                   "installed": time.strftime("%Y-%m-%d")}
+    _save()
+    return _packs[pid]
+
+
+def rename(pid, name=None, description=None):
+    """Eigene Bibliothek umbenennen / beschreiben."""
+    _ensure()
+    if pid not in _packs or pid in BUILTIN:
+        raise PackError("Diese Bibliothek kann nicht umbenannt werden")
+    if name is not None and str(name).strip():
+        _packs[pid]["name"] = str(name).strip()[:60]
+    if description is not None:
+        _packs[pid]["description"] = str(description)[:400]
+    _save()
+    return _packs[pid]
 
 
 def set_enabled(pid, enabled: bool):
@@ -366,6 +436,8 @@ def _read_pack(data: bytes):
         "name": str(manifest.get("name") or pid)[:80],
         "version": str(manifest.get("version") or "1.0.0")[:20],
         "author": str(manifest.get("author") or "")[:60],
+        # Regelwerk des Pakets ("2014"/"2024", leer = beide) – für die Kampagnen-Wahl
+        "rules": str(manifest.get("rules") or "")[:8] if str(manifest.get("rules") or "") in ("2014", "2024") else "",
         "description": str(manifest.get("description") or "")[:500],
     }
     return meta, entries, dice
@@ -386,8 +458,9 @@ def _relink(cat, e, idmap):
     if not name:
         return
     matches = [c for c in gs.get_library().get("classes", {}).values()
-               if str(c.get("name", "")).strip().lower() == name]
-    matches.sort(key=lambda c: 0 if c.get("source") == "basis" else 1)
+               if name in __import__("i18n_content").names_of(c)]
+    # gleiches Regelwerk/Paket zuerst, dann Grundregeln
+    matches.sort(key=lambda c: 0 if c.get("source") == e.get("source") else 1 if c.get("source") in ("basis", "basis2024") else 2)
     e["parent_class"] = matches[0]["id"] if matches else ""
 
 
@@ -461,8 +534,10 @@ REF_FIELDS = (("races", "race", "Rasse"), ("classes", "class", "Klasse"),
 
 
 def _find_by_name(lib, cat, name, prefer=None):
+    # Abgleich in beiden Sprachen (Hauptname + Übersetzungen, i18n_content)
+    import i18n_content
     name = str(name or "").strip().lower()
-    hits = [e for e in (lib.get(cat) or {}).values() if str(e.get("name", "")).strip().lower() == name]
+    hits = [e for e in (lib.get(cat) or {}).values() if name in i18n_content.names_of(e)]
     if not hits:
         return None
     if prefer:

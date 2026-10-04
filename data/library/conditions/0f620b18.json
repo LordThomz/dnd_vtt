@@ -1,0 +1,19 @@
+{
+ "name": "Kampfunfähig",
+ "description": "Keine Aktionen und Reaktionen.",
+ "id": "0f620b18",
+ "rkey": "srd51.conditions.incapacitated",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Incapacitated",
+   "description": "Can't take actions or reactions."
+  }
+ },
+ "aliases": [
+  "Handlungsunfähig"
+ ]
+}

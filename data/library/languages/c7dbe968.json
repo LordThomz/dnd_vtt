@@ -1,0 +1,22 @@
+{
+ "name": "Gnomisch",
+ "rarity": "Standard",
+ "script": "Zwergisch",
+ "speakers": "Gnome",
+ "description": "Standardsprache. Schrift: Zwergisch. Typische Sprecher: Gnome.",
+ "id": "c7dbe968",
+ "rkey": "srd52.languages.gnomish",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Gnomish",
+   "rarity": "Standard",
+   "script": "Dwarvish",
+   "speakers": "Gnomes",
+   "description": "Standard language. Script: Dwarvish. Typical speakers: Gnomes."
+  }
+ }
+}

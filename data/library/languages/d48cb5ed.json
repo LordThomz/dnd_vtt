@@ -1,0 +1,22 @@
+{
+ "name": "Gemeinsprache der Unterreiche",
+ "rarity": "Selten",
+ "script": "Elfisch",
+ "speakers": "Bewohner des Unterreichs",
+ "description": "Seltene Sprache. Schrift: Elfisch. Typische Sprecher: Bewohner des Unterreichs.",
+ "id": "d48cb5ed",
+ "rkey": "srd52.languages.undercommon",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Undercommon",
+   "rarity": "Rare",
+   "script": "Elvish",
+   "speakers": "Underdark dwellers",
+   "description": "Rare language. Script: Elvish. Typical speakers: Underdark dwellers."
+  }
+ }
+}

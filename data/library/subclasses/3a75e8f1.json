@@ -1,0 +1,84 @@
+{
+ "name": "Pfad des Berserkers",
+ "parent_class_name": "Barbar",
+ "parent_class": "66064874",
+ "start_level": 3,
+ "description": "Wut als reine, rohe Kraft.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Raserei",
+    "description": "Im Kampfrausch je Zug ein Nahkampfangriff als Bonusaktion; danach eine Stufe Erschöpfung.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Gedankenloser Kampfrausch",
+    "description": "Im Kampfrausch immun gegen Bezauberung und Verängstigung.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Einschüchternde Präsenz",
+    "description": "Aktion: eine Kreatur verängstigen (WEI-Rettungswurf).",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Vergeltung",
+    "description": "Reaktion: Nahkampfangriff gegen einen Angreifer, der dir in 5 ft Schaden zufügt.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "3a75e8f1",
+ "rkey": "srd51.subclasses.berserker",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Path of the Berserker",
+   "parent_class_name": "Barbarian",
+   "description": "Rage as pure, raw force.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Frenzy",
+      "description": "While raging, one melee attack as a bonus action each turn; gain exhaustion afterwards."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Mindless Rage",
+      "description": "Can't be charmed or frightened while raging."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Intimidating Presence",
+      "description": "Action: frighten a creature (WIS save)."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Retaliation",
+      "description": "Reaction: melee attack a creature within 5 ft that damages you."
+     }
+    ]
+   }
+  }
+ }
+}

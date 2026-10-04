@@ -1,0 +1,16 @@
+{
+ "name": "Verängstigt",
+ "description": "Nachteil, solange die Quelle sichtbar ist; kann sich ihr nicht nähern.",
+ "id": "fb371b2b",
+ "rkey": "srd51.conditions.frightened",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Frightened",
+   "description": "Disadvantage while the source is visible; can't move closer to it."
+  }
+ }
+}

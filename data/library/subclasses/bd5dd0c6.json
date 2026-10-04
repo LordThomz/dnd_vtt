@@ -1,0 +1,95 @@
+{
+ "name": "Dieb",
+ "parent_class_name": "Schurke",
+ "parent_class": "29fbf6cf",
+ "start_level": 3,
+ "description": "Einbrecher, Kletterer und Meister der Finger.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Flinke Hände",
+    "description": "Fingerfertigkeit, Diebeswerkzeug oder Gegenstand benutzen als Bonusaktion.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Fassadenkletterer",
+    "description": "Klettern ohne Zusatzkosten, weitere Sprünge.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Überragende Heimlichkeit",
+    "description": "Vorteil auf Heimlichkeit bei halber Geschwindigkeit.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Magische Gegenstände nutzen",
+    "description": "Klassen-, Volks- und Stufenvoraussetzungen magischer Gegenstände ignorieren.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Diebesreflexe",
+    "description": "In der ersten Runde zwei Züge.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "bd5dd0c6",
+ "rkey": "srd51.subclasses.thief",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Thief",
+   "parent_class_name": "Rogue",
+   "description": "Burglars, climbers and masters of the hand.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Fast Hands",
+      "description": "Sleight of Hand, thieves' tools or Use an Object as a bonus action."
+     },
+     {
+      "id": "f3_1",
+      "name": "Second-Story Work",
+      "description": "Climb at full speed and jump farther."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Supreme Sneak",
+      "description": "Advantage on Stealth when moving at half speed."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Use Magic Device",
+      "description": "Ignore class, race and level requirements of magic items."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Thief's Reflexes",
+      "description": "Take two turns in the first round of combat."
+     }
+    ]
+   }
+  }
+ }
+}

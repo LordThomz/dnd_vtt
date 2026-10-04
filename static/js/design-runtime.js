@@ -77,6 +77,9 @@ const DesignRuntime = (() => {
       description: String(d.description || "").slice(0, 200),
       scheme: d.scheme === "light" ? "light" : "dark",
       params: (d.params && typeof d.params === "object") ? JSON.parse(JSON.stringify(d.params)) : null,
+      // Übersetzungen von Name/Tag/Beschreibung (nur Texte)
+      i18n: (d.i18n && typeof d.i18n === "object") ? Object.fromEntries(Object.entries(d.i18n).filter(([l]) => /^[a-z]{2}$/.test(l)).map(([l, v]) =>
+              [l, { name: String((v || {}).name || "").slice(0, 50), tag: String((v || {}).tag || "").slice(0, 30), description: String((v || {}).description || "").slice(0, 200) }])) : undefined,
       vars,
     };
   }

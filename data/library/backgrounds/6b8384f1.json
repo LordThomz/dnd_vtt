@@ -1,0 +1,26 @@
+{
+ "name": "Akolyth",
+ "skill_profs": "Einsicht, Religion",
+ "languages": "Zwei Sprachen deiner Wahl",
+ "tool_profs": "",
+ "equipment": "Heiliges Symbol, Gebetbuch, 5 Räucherstäbchen, Gewänder, Alltagskleidung, 15 GM",
+ "feature": "Zuflucht der Gläubigen: Tempel deines Glaubens gewähren dir und deinen Gefährten Hilfe.",
+ "description": "Du hast dein Leben dem Dienst in einem Tempel gewidmet.",
+ "id": "6b8384f1",
+ "rkey": "srd51.backgrounds.acolyte",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Acolyte",
+   "skill_profs": "Insight, Religion",
+   "languages": "Two languages of your choice",
+   "tool_profs": "",
+   "equipment": "Holy symbol, prayer book, 5 sticks of incense, vestments, common clothes, 15 gp",
+   "feature": "Shelter of the Faithful: temples of your faith offer you and your companions aid.",
+   "description": "You have spent your life in service to a temple."
+  }
+ }
+}

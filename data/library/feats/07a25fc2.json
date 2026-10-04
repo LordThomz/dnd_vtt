@@ -1,0 +1,22 @@
+{
+ "name": "Bogenschießen",
+ "prereq": "Kampfstil-Merkmal",
+ "description": "Präzise auf Distanz.",
+ "benefits": "+2 auf Angriffe mit Fernkampfwaffen.",
+ "category": "Kampfstil",
+ "id": "07a25fc2",
+ "rkey": "srd52.feats.archery",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Archery",
+   "prereq": "Fighting Style feature",
+   "description": "Precise at range.",
+   "benefits": "+2 to attack rolls with ranged weapons.",
+   "category": "Fighting Style"
+  }
+ }
+}

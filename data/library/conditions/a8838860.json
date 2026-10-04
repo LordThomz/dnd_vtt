@@ -1,0 +1,16 @@
+{
+ "name": "Kampfunfähig",
+ "description": "Keine Aktionen, Bonusaktionen, Reaktionen; Konzentration endet.",
+ "id": "a8838860",
+ "rkey": "srd52.conditions.incapacitated",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Incapacitated",
+   "description": "No actions, bonus actions or reactions; concentration ends."
+  }
+ }
+}

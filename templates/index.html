@@ -1,7 +1,39 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="color-scheme" content="dark light">
+<style>html{background:var(--bg-deep,#06070d)}
+/* ── Einstellungsmenü ── */
+.st-wrap{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:start;}
+.st-nav{display:flex;flex-direction:column;gap:3px;position:sticky;top:0;}
+.st-nav button{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);border:1px solid transparent;background:transparent;
+  color:var(--text);font:600 .84rem/1.2 var(--font-display);letter-spacing:.03em;text-align:left;cursor:pointer;}
+.st-nav button svg{width:17px;height:17px;color:var(--gold);}
+.st-nav button:hover{background:rgba(var(--hi-rgb),.05);}
+.st-nav button.on{background:rgba(var(--gold-rgb),.12);border-color:rgba(var(--gold-rgb),.35);color:var(--gold-light);}
+.st-body{animation:fx-fade-up .3s ease both;}
+.st-group{padding:6px 20px;border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,var(--bg-panel),var(--bg-dark));margin-bottom:16px;}
+.st-group h3{font:700 .72rem/1 var(--font-display);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:14px 0 4px;}
+.st-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 0;border-top:1px solid rgba(var(--hi-rgb),.06);}
+.st-group h3+.st-row{border-top:none;}
+.st-row .st-l{flex:1;min-width:0;} .st-row .st-l b{display:block;font-size:.95rem;font-weight:600;color:var(--text-bright);}
+.st-row .st-l i{display:block;font-style:normal;font-size:.8rem;color:var(--text-dim);margin-top:2px;line-height:1.4;}
+.st-row .st-c{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
+.st-row input[type=range]{width:180px;} .st-row .st-v{font:500 .78rem/1 var(--font-mono);color:var(--text-dim);width:38px;text-align:right;}
+.st-row select{padding:8px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-dark);color:var(--text-bright);font:500 .88rem/1.2 var(--font-ui);}
+.sw{position:relative;width:44px;height:24px;cursor:pointer;flex:0 0 auto;display:inline-block;}
+.sw input{opacity:0;width:0;height:0;position:absolute;}
+.sw span{position:absolute;inset:0;border-radius:24px;background:var(--border);transition:background .2s;}
+.sw span::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--text-dim);transition:transform .2s,background .2s;}
+.sw input:checked+span{background:rgba(var(--gold-rgb),.5);} .sw input:checked+span::after{transform:translateX(20px);background:var(--gold-light);}
+.st-seg{display:inline-flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.st-seg button{padding:8px 13px;border:none;background:transparent;color:var(--text-dim);font:600 .78rem/1 var(--font-ui);cursor:pointer;}
+.st-seg button+button{border-left:1px solid var(--border);} .st-seg button.on{background:rgba(var(--gold-rgb),.18);color:var(--gold-light);}
+.st-note{font-size:.78rem;color:var(--arcane);margin-top:2px;}
+.st-about p{font-size:.88rem;color:var(--text-dim);line-height:1.55;margin:8px 0;} .st-about b{color:var(--text-bright);}
+@media(max-width:900px){.st-wrap{grid-template-columns:1fr;}.st-nav{flex-direction:row;flex-wrap:wrap;position:static;}}
+</style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>D&amp;D</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <link rel="preload" href="/static/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,6 +44,7 @@
 <link rel="stylesheet" href="/static/css/design-studio.css">
 <link rel="stylesheet" href="/static/css/fx.css">
 <script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/i18n.js"></script>
 <script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
@@ -79,6 +112,7 @@ h1{font-family:'Cinzel Decorative',serif;font-size:3.4rem;font-weight:900;letter
 .cc-actions{display:flex;gap:5px;flex-wrap:wrap;}
 .cc-actions .btn{padding:5px 12px;font-size:.76rem;}
 .empty-camp{text-align:center;padding:30px 10px;color:var(--text-dim);font-style:italic;font-size:.86rem;}
+.new-camp-form select{width:100%;margin-bottom:8px;padding:10px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-dark);color:var(--text-bright);font:500 .9rem/1.2 var(--font-ui);}
 .new-camp-form{display:none;background:var(--bg-dark);border:1px solid var(--gold);border-radius:10px;padding:14px;margin-top:10px;}
 .new-camp-form.open{display:block;}
 .new-camp-form input{width:100%;margin-bottom:6px;padding:8px 10px;background:var(--bg-deep);border:1px solid var(--gold-dark);border-radius:5px;color:var(--text);}
@@ -208,7 +242,7 @@ body{overflow:hidden;}
     <button class="hub-link" onclick="DesignStudio.open()"><span class="hl-ic">🎨</span>Design</button>
     <div class="hub-sep"></div>
     <button class="hub-link" data-view="settings" onclick="showView('settings')"><span class="hl-ic">⚙</span>Einstellungen</button>
-    <button class="hub-link hidden" id="btn-launcher" onclick="location.href=Theme.launcherUrl()"><span class="hl-ic">⬅</span>Zum Launcher</button>
+    <button class="hub-link hidden" id="btn-launcher" onclick="Theme.go(Theme.launcherUrl())"><span class="hl-ic">⬅</span>Zum Launcher</button>
   </nav>
   <div class="hub-foot" id="hub-version"></div>
 </aside>
@@ -228,6 +262,11 @@ body{overflow:hidden;}
       <div class="new-camp-form" id="new-camp-form">
         <input type="text" id="nc-name" placeholder="Kampagnen-Name">
         <input type="password" id="nc-pw" placeholder="Spieler-Passwort (optional)">
+        <select id="nc-rules" title="Welche Grundregeln in dieser Kampagne gelten">
+          <option value="2024">Regeln 2024 (SRD 5.2)</option>
+          <option value="2014">Regeln 2014 (SRD 5.1)</option>
+          <option value="both">Beide Regelwerke</option>
+        </select>
         <button class="btn btn-primary" style="width:100%" onclick="createCampaign()">🎲 Erstellen</button>
       </div>
     </div>
@@ -241,31 +280,12 @@ body{overflow:hidden;}
   </div>
 </div>
 
-<!-- Einstellungen (ehemals im Hauptmenü) -->
+<!-- Einstellungen (Logik: renderSettings unten) -->
 <div class="container hidden" id="view-settings">
-  <header class="hub-head"><h1>Einstellungen</h1><p class="subtitle">Gilt nur für dich auf diesem Gerät.</p></header>
-  <div class="set-grid">
-    <div class="set-card">
-      <h3>Konto</h3>
-      <p>Anzeigename, Spitzname und deine Farbe am Spieltisch.</p>
-      <button class="btn btn-secondary" style="width:auto" onclick="openAccountEditor()">Konto bearbeiten</button>
-    </div>
-    <div class="set-card">
-      <h3>Klang &amp; Bewegung</h3>
-      <label class="fx-opt"><span>Bedien-Klänge</span><input type="checkbox" id="fx-sound" onchange="fxSet()"></label>
-      <label class="fx-opt"><span>Lautstärke</span><input type="range" id="fx-vol" min="0" max="100" oninput="fxSet()"></label>
-      <label class="fx-opt"><span>Musik im Launcher</span><input type="checkbox" id="fx-music" onchange="fxSet()"></label>
-      <label class="fx-opt"><span>Animationen reduzieren<i>weniger Bewegung, z. B. bei Unwohlsein</i></span><input type="checkbox" id="fx-reduce" onchange="fxSet()"></label>
-    </div>
-    <div class="set-card">
-      <h3>Updates</h3>
-      <p>Neue Versionen installiert der Launcher beim Start automatisch. Inhalte, Würfel-Sets und Designs verwaltest du im Launcher.</p>
-    </div>
-    <div class="set-card danger">
-      <h3>Programm deinstallieren</h3>
-      <p>Entfernt D&amp;D Virtual Tabletop von diesem PC (über die Windows-Einstellungen).</p>
-      <button class="btn btn-secondary" style="width:auto;border-color:var(--red);color:var(--red-soft)" onclick="uninstallApp()">Deinstallieren</button>
-    </div>
+  <header class="hub-head"><h1>Einstellungen</h1><p class="subtitle">Gilt für dich auf diesem Gerät. Änderungen wirken sofort.</p></header>
+  <div class="st-wrap">
+    <nav class="st-nav" id="st-nav"></nav>
+    <section class="st-body" id="st-body"></section>
   </div>
 </div>
 </main>
@@ -306,7 +326,7 @@ function toast(msg){const el=document.getElementById("toast");el.textContent=msg
 function closeModal(id){document.getElementById(id).classList.remove("open");}
 async function loadMe(){
   const res=await fetch("/api/auth/me");const data=await res.json();
-  if(!data.logged_in){window.location.href="/login";return;}
+  if(!data.logged_in){(typeof Theme!=="undefined"?Theme.go("/login"):location.assign("/login"));return;}
   currentUser=data.user;
   const av=document.getElementById("user-avatar");
   av.style.background=currentUser.avatar_color||"#c9a96e";
@@ -327,7 +347,7 @@ async function loadMe(){
     const jb=document.getElementById("btn-join"); if(jb) jb.classList.add("hidden");
   }
 }
-async function doLogout(){await fetch("/api/auth/logout",{method:"POST"});window.location.href="/login";}
+async function doLogout(){await fetch("/api/auth/logout",{method:"POST"});(typeof Theme!=="undefined"?Theme.go("/login"):location.assign("/login"));}
 
 // ── Account-Menü (Dropdown oben rechts) ──────────────────────────────────
 function toggleAccountMenu(){
@@ -418,6 +438,16 @@ async function createCampaign(){
   const data=await res.json();
   if(data.error){toast("❌ "+data.error);return;}
   if(pw){await fetch(`/api/session/${data.id}/settings`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({player_password:pw})});}
+  // Regelwerk: erlaubte Erweiterungen festlegen (änderbar im DM-Bereich der Kampagne)
+  const rules=document.getElementById("nc-rules").value;
+  if(rules!=="both"){
+    try{
+      const all=await (await fetch("/api/packs")).json();
+      const other=rules==="2024"?"2014":"2024";
+      const allowed=all.filter(p=>p.enabled && (p.rules||"")!==other).map(p=>p.id);
+      await fetch(`/api/sessions/${data.id}/packs`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({packs:allowed})});
+    }catch(e){}
+  }
   toast("🎲 Kampagne erstellt!");
   document.getElementById("nc-name").value="";document.getElementById("nc-pw").value="";
   toggleNewCampForm();loadMyCamps();
@@ -429,7 +459,7 @@ async function startAsDM(sid){
   // automatisch als "DM online" in der Beitritts-Liste der anderen.
   // Die eingestellte Sichtbarkeit (privat/öffentlich) bleibt erhalten:
   // eine private Kampagne sehen weiterhin nur eingeladene Spieler.
-  window.location.href=`/table/${sid}`;
+  (typeof Theme!=="undefined"?Theme.go(`/table/${sid}`):location.assign(`/table/${sid}`));
 }
 async function deleteCampaign(sid,name){
   if(!await Dialog.confirmDanger(`Die Kampagne „${name}“ wird gelöscht.`,
@@ -437,7 +467,7 @@ async function deleteCampaign(sid,name){
        hint:"Karten, Tokens und der Verlauf gehen verloren."})) return;
   await fetch(`/api/session/${sid}/delete`,{method:"POST"});toast("🗑 Gelöscht");loadMyCamps();
 }
-function manageCampaign(sid){window.location.href=`/table/${sid}`;}
+function manageCampaign(sid){(typeof Theme!=="undefined"?Theme.go(`/table/${sid}`):location.assign(`/table/${sid}`));}
 async function cloneCampaign(sid){
   const name = await Dialog.prompt("Wie soll die Kopie heißen?", "",
     {title:"Kampagne duplizieren", icon:"📋", okText:"Duplizieren",
@@ -470,9 +500,9 @@ async function loadJoinable(){
 function goCreateCharForJoin(){
   // Merkt sich, dass wir aus dem Beitreten-Fluss kommen; Builder kehrt danach zurück
   if(pendingJoinSid){
-    window.location.href=`/builder?join=${pendingJoinSid}`;
+    (typeof Theme!=="undefined"?Theme.go(`/builder?join=${pendingJoinSid}`):location.assign(`/builder?join=${pendingJoinSid}`));
   }else{
-    window.location.href="/builder";
+    (typeof Theme!=="undefined"?Theme.go("/builder"):location.assign("/builder"));
   }
 }
 async function joinCampaign(sid){
@@ -540,7 +570,7 @@ async function joinWithHandover(i){
   const data = await res.json().catch(()=>({}));
   if (res.status === 409) { showMissing(data); return; }
   if (!res.ok) { toast("⚠️ " + (data.error||"Fehlgeschlagen")); return; }
-  window.location.href = `/table/${pendingJoinSid}?char_id=${data.char_id}`;
+  (typeof Theme!=="undefined"?Theme.go(`/table/${pendingJoinSid}?char_id=${data.char_id}`):location.assign(`/table/${pendingJoinSid}?char_id=${data.char_id}`));
 }
 function pickChar(cid,el){
   selectedCharId=cid;
@@ -555,7 +585,7 @@ async function doFinalJoin(){
   const res = await fetch(`/api/sessions/${pendingJoinSid}/check_character`,{method:"POST",
     headers:{"Content-Type":"application/json"},body:JSON.stringify({char_id:selectedCharId})});
   if(res.status===409){ showMissing(await res.json()); return; }
-  window.location.href=`/table/${pendingJoinSid}?char_id=${selectedCharId}`;
+  (typeof Theme!=="undefined"?Theme.go(`/table/${pendingJoinSid}?char_id=${selectedCharId}`):location.assign(`/table/${pendingJoinSid}?char_id=${selectedCharId}`));
 }
 
 // Charakter aus der eigenen Installation (.vttchar) in diese Kampagne holen
@@ -568,7 +598,7 @@ async function importCharForJoin(input){
   if(res.status===409){ showMissing(data); return; }
   if(!res.ok){ toast("⚠️ " + (data.error||"Import fehlgeschlagen")); return; }
   toast(`✅ ${data.name||"Charakter"} ist dabei`);
-  window.location.href=`/table/${pendingJoinSid}?char_id=${data.char_id}`;
+  (typeof Theme!=="undefined"?Theme.go(`/table/${pendingJoinSid}?char_id=${data.char_id}`):location.assign(`/table/${pendingJoinSid}?char_id=${data.char_id}`));
 }
 
 // Fehlende Inhalte verständlich anzeigen – nach Paket gruppiert
@@ -613,9 +643,10 @@ async function applyOwnerMode(){
 
 (async function init(){
   applyOwnerMode();
-  await loadMe();
-  loadMyCamps();
-  loadJoinable();
+  // Ladebildschirm wartet, bis Konto und beide Kampagnenlisten da sind
+  const ready = (async () => { await loadMe(); await Promise.all([loadMyCamps(), loadJoinable()]); })();
+  (typeof Theme!=="undefined"&&Theme.hold?Theme.hold:(p=>p))(ready);
+  await ready;
 
   // Automatische Aktualisierung der beitretbaren Sitzungen.
   // So erscheint eine gerade gestartete Sitzung von selbst in der Liste,
@@ -647,7 +678,6 @@ async function silentRefreshJoinable(){
   }catch(e){ /* Netzwerkfehler ignorieren, nächster Versuch folgt */ }
 }
 </script>
-<script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/design-studio.js"></script>
 <script src="/static/js/sfx.js"></script>
 <script src="/static/js/icons.js"></script>
@@ -664,9 +694,10 @@ function showView(v){
   document.querySelector(".hub-main").scrollTop = 0;
 }
 function continueLast(){
-  try { const l = JSON.parse(localStorage.getItem("vtt_last_session")||"null"); if (l && l.id) location.href = "/table/" + l.id; } catch(e) {}
+  try { const l = JSON.parse(localStorage.getItem("vtt_last_session")||"null"); if (l && l.id) (typeof Theme!=="undefined"?Theme.go("/table/" + l.id):location.assign("/table/" + l.id)); } catch(e) {}
 }
 (async function(){
+  if (Theme.setting("showContinue", true) === false) return;    // Einstellungen → Allgemein
   let last = null; try { last = JSON.parse(localStorage.getItem("vtt_last_session")||"null"); } catch(e) {}
   if (!last || !last.id) return;
   try {
@@ -678,17 +709,99 @@ function continueLast(){
     document.getElementById("continue").classList.remove("hidden");
   } catch(e) {}
 })();
-function fxLoad(){
-  const s = Sfx.settings();
-  document.getElementById("fx-sound").checked = s.sound;
-  document.getElementById("fx-vol").value = Math.round(s.uiVol * 100);
-  document.getElementById("fx-music").checked = s.music;
-  document.getElementById("fx-reduce").checked = s.reduceMotion;
+// ══ EINSTELLUNGSMENÜ ═════════════════════════════════════════════════════
+//  Speicherorte: "fx" = Klang/Bewegung (sfx.js), "set" = Theme.setting,
+//  "ls" = eigener Schlüssel ("1"/"0" bzw. Zahl, z.B. Würfel-Geräusche).
+const ST_TABS = [
+  ["general","settings","Allgemein"], ["audio","volume-2","Audio"], ["graphics","palette","Grafik & Bewegung"],
+  ["table","map","Spieltisch"], ["dice","dices","Würfel"], ["account","user","Konto & Daten"], ["about","book-open","Über"],
+];
+let stTab = "general";
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } };
+function stGet(store, key, d) {
+  if (store === "fx") { const v = Sfx.settings()[key]; return v === undefined ? d : v; }
+  if (store === "set") return Theme.setting(key, d);
+  if (store === "ls") return lsGet(key, d);
 }
-function fxSet(){
-  Sfx.configure({ sound: document.getElementById("fx-sound").checked, uiVol: (+document.getElementById("fx-vol").value) / 100,
-                  music: document.getElementById("fx-music").checked, reduceMotion: document.getElementById("fx-reduce").checked });
+function stSet(store, key, v) {
+  if (store === "fx") Sfx.configure({ [key]: v });
+  else if (store === "set") Theme.setSetting(key, v);
+  else if (store === "ls") { try { localStorage.setItem(key, String(v)); } catch (e) {} }
 }
+const stRow = (label, hint, control) => `<div class="st-row"><div class="st-l"><b>${label}</b>${hint ? `<i>${hint}</i>` : ""}</div><div class="st-c">${control}</div></div>`;
+function stToggle(store, key, d, label, hint, onVal = true, offVal = false) {
+  const on = String(stGet(store, key, d)) === String(onVal);
+  return stRow(label, hint, `<label class="sw"><input type="checkbox" ${on ? "checked" : ""} onchange='stSet("${store}","${key}", this.checked ? ${JSON.stringify(onVal)} : ${JSON.stringify(offVal)})'><span></span></label>`);
+}
+function stSlider(store, key, d, label, hint) {
+  const v = Math.round(parseFloat(stGet(store, key, d)) * 100);
+  return stRow(label, hint, `<input type="range" min="0" max="100" value="${v}" oninput='this.nextElementSibling.textContent=this.value+"%"; stSet("${store}","${key}", this.value/100)'><span class="st-v">${v}%</span>`);
+}
+function stSeg(store, key, d, label, hint, opts) {
+  const cur = stGet(store, key, d);
+  return stRow(label, hint, `<div class="st-seg">${opts.map(([v, l]) => `<button class="${String(cur) === String(v) ? "on" : ""}" onclick='stSet("${store}","${key}",${JSON.stringify(v)}); renderSettings()'>${l}</button>`).join("")}</div>`);
+}
+const group = (title, rows) => `<div class="st-group"><h3>${title}</h3>${rows}</div>`;
+const reloadNote = `<div class="st-note">Wirkt ab der nächsten geöffneten Seite.</div>`;
+function renderSettings() {
+  document.getElementById("st-nav").innerHTML = ST_TABS.map(([id, ic, l]) =>
+    `<button class="${id === stTab ? "on" : ""}" onclick="stTab='${id}';renderSettings()">${typeof Icons !== "undefined" ? Icons.svg(ic) : ""}${l}</button>`).join("");
+  const T = {
+    general: () =>
+      group("Sprache", stRow("Sprache der Oberfläche", "Gilt für die ganze App und die mitgelieferten Inhalte.",
+        `<select class="notranslate" onchange="stLang(this.value)">${Object.entries(I18n.LANGS).map(([k, v]) => `<option value="${k}" ${k === I18n.lang ? "selected" : ""}>${v}</option>`).join("")}</select>`)) +
+      group("Start", stToggle("set", "intro", true, "Intro beim Start", "Animation nach „Spiel starten“ im Launcher.") +
+        stToggle("set", "showContinue", true, "„Weiterspielen“ anzeigen", "Schnellstart der zuletzt gespielten Kampagne auf dem Startbildschirm.")),
+    audio: () =>
+      group("Lautstärke", stSlider("fx", "masterVol", .9, "Gesamtlautstärke", "Regelt Musik und Bedien-Klänge gemeinsam.")) +
+      group("Musik", stToggle("fx", "music", true, "Hintergrundmusik", "Im Launcher und in den Menüs – am Spieltisch spielt die Musik des DM.") +
+        stSlider("fx", "musicVol", .35, "Musiklautstärke")) +
+      group("Klänge", stToggle("fx", "sound", true, "Bedien-Klänge", "Klicks, Fenster, Meldungen, kritische Treffer.") +
+        stSlider("fx", "uiVol", .55, "Lautstärke der Bedien-Klänge") +
+        stToggle("ls", "vtt_dice_sound", "1", "Würfel-Geräusche", "Aufschläge der 3D-Würfel – klingen je nach Material.", "1", "0") +
+        stSlider("ls", "vtt_dice_volume", .7, "Lautstärke der Würfel") +
+        stRow("Klang testen", "", `<button class="btn btn-secondary" style="width:auto" onclick="Sfx.play('success')">Abspielen</button>`)),
+    graphics: () =>
+      group("Bewegung", stToggle("fx", "reduceMotion", false, "Animationen reduzieren", "Weniger Bewegung, z. B. bei Unwohlsein. Die Windows-Einstellung wird ebenfalls beachtet.") +
+        stToggle("set", "particles", true, "Lichtpartikel im Hintergrund", "Schwebende Lichter auf Startbildschirm und Anmeldung.")) +
+      group("3D-Würfel", stToggle("ls", "vtt_dice3d", "1", "3D-Würfel", "Aus: Ergebnisse erscheinen ohne Würfel-Animation.", "1", "0") +
+        stSeg("set", "diceQuality", "high", "Würfel-Texturen", "Standard ist schneller auf schwächeren PCs." + reloadNote, [["high", "Hoch"], ["standard", "Standard"]]) +
+        stToggle("set", "diceBevel", true, "Abgerundete Kanten", "Aus: klassische scharfe Kanten." + reloadNote)) +
+      group("Design", stRow("Oberfläche, Spieltisch & Würfel", "Designs wählen und eigene erstellen.", `<button class="btn btn-secondary" style="width:auto" onclick="DesignStudio.open()">Design öffnen</button>`)),
+    table: () =>
+      group("Ansicht", stSeg("set", "panelStart", "last", "Seitenleiste beim Start", "", [["last", "Wie zuletzt"], ["open", "Offen"], ["collapsed", "Eingeklappt"]]) +
+        stSeg("set", "hudMode", "auto", "Steuerungshilfe", "Hinweise zu Maus und Tastatur unten rechts.", [["auto", "Automatisch"], ["always", "Immer"], ["never", "Nie"]])) +
+      group("Benachrichtigungen", stToggle("set", "chatSound", true, "Ton bei neuer Chat-Nachricht", "")),
+    dice: () =>
+      group("Würfeln", stSeg("set", "diceHold", "normal", "Ergebnis anzeigen", "Wie lange Würfel und Ergebnis nach dem Wurf sichtbar bleiben.", [["short", "Kurz"], ["normal", "Normal"], ["long", "Lang"]])) +
+      group("Gestaltung", stRow("Würfel-Werkstatt", "Eigene Würfel-Sets gestalten.", `<a class="btn btn-secondary" style="width:auto" href="/dice">Öffnen</a>`)),
+    account: () =>
+      group("Konto", stRow("Konto bearbeiten", "Anzeigename, Spitzname und Farbe am Spieltisch.", `<button class="btn btn-secondary" style="width:auto" onclick="openAccountEditor()">Bearbeiten</button>`) +
+        stRow("Abmelden", "", `<button class="btn btn-secondary" style="width:auto" onclick="doLogout()">Abmelden</button>`)) +
+      group("Daten", stRow("Würfel-Vorschaubilder neu erzeugen", "Falls Vorschauen veraltet aussehen.", `<button class="btn btn-secondary" style="width:auto" onclick="localStorage.removeItem('vtt_style_thumbs_v1');UI&&UI.toast?UI.toast('Vorschaubilder werden neu erzeugt'):0">Neu erzeugen</button>`) +
+        stRow("Einstellungen zurücksetzen", "Alle Einstellungen auf Standard. Designs, Würfel und Inhalte bleiben.", `<button class="btn btn-secondary" style="width:auto" onclick="stReset()">Zurücksetzen</button>`)) +
+      group("Programm", stRow("Deinstallieren", "Entfernt D&D Virtual Tabletop von diesem PC (über Windows).", `<button class="btn btn-secondary" style="width:auto;border-color:var(--red);color:var(--red-soft)" onclick="uninstallApp()">Deinstallieren</button>`)),
+    about: () => `<div class="st-group st-about"><h3>D&amp;D Virtual Tabletop</h3>
+        <p><b id="st-ver">Version …</b> · Updates installiert der Launcher beim Start automatisch.</p>
+        <p>Erweiterungen, Würfel-Sets und Designs verwaltest du im Launcher.</p>
+        <h3>Lizenzen</h3>
+        <p>Die „Grundregeln (SRD 5.1)" enthalten Material aus dem System Reference Document 5.1 von Wizards of the Coast LLC, lizenziert unter CC-BY-4.0. Kompatibel mit der 5. Edition, keine Verbindung zu Wizards of the Coast.</p>
+        <p>Symbole: Lucide (ISC-Lizenz). 3D: three.js (MIT), Physik: cannon-es (MIT). Musik und Klänge werden live erzeugt.</p></div>`,
+  };
+  const body = document.getElementById("st-body");
+  body.innerHTML = T[stTab](); body.style.animation = "none"; void body.offsetWidth; body.style.animation = "";
+  if (stTab === "about") fetch("/api/server/info").then(r => r.json()).then(i => { const e = document.getElementById("st-ver"); if (e) e.textContent = "Version " + i.version; }).catch(() => {});
+}
+// Sprache wechseln: speichern und die ganze App neu laden (auch den Rahmen)
+function stLang(l) {
+  I18n.set(l); Theme.setSetting("lang", l);
+  setTimeout(() => { try { (window.top || window).location.reload(); } catch (e) { location.reload(); } }, 150);
+}
+async function stReset() {
+  if (!await Dialog.confirmDanger("Alle Einstellungen werden auf Standard zurückgesetzt.", { title: "Einstellungen zurücksetzen?", okText: "Zurücksetzen" })) return;
+  Theme.resetSettings(); renderSettings();
+}
+function fxLoad(){ renderSettings(); }
 async function quitApp(){
   try { const T = window.__TAURI__;
     if (T && T.process && T.process.exit) { await T.process.exit(0); return; }

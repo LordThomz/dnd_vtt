@@ -1,0 +1,121 @@
+{
+ "name": "Elf",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "+2 GES, +1 INT",
+ "languages": "Gemeinsprache, Elfisch, +1 Sprache",
+ "description": "Anmutige, langlebige Wesen mit starker Verbindung zur Magie (Hochelf).",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Im Dämmerlicht auf 60 ft wie bei hellem Licht, im Dunkeln wie im Dämmerlicht (nur Graustufen).",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Scharfe Sinne",
+   "description": "Geübt in Wahrnehmung.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Feenblut",
+   "description": "Vorteil gegen Bezauberung; Magie kann dich nicht einschläfern.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Trance",
+   "description": "4 Stunden Meditation ersetzen 8 Stunden Schlaf.",
+   "choices": []
+  },
+  {
+   "id": "t4",
+   "name": "Elfische Waffenausbildung",
+   "description": "Geübt mit Langschwert, Kurzschwert, Kurz- und Langbogen.",
+   "choices": []
+  },
+  {
+   "id": "t5",
+   "name": "Zaubertrick",
+   "description": "Ein Zaubertrick der Magier-Liste; Attribut: INT.",
+   "choices": [
+    {
+     "id": "t5c0",
+     "type": "cantrip",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  },
+  {
+   "id": "t6",
+   "name": "Zusätzliche Sprache",
+   "description": "Eine weitere Sprache deiner Wahl.",
+   "choices": [
+    {
+     "id": "t6c0",
+     "type": "language",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  }
+ ],
+ "id": "3eda1272",
+ "rkey": "srd51.races.elf",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Elf",
+   "size": "Medium",
+   "asi": "+2 DEX, +1 INT",
+   "languages": "Common, Elvish, +1 language",
+   "description": "Graceful, long-lived beings with a strong bond to magic (high elf).",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Within 60 ft you see in dim light as if bright and in darkness as if dim (shades of grey only)."
+    },
+    {
+     "id": "t1",
+     "name": "Keen Senses",
+     "description": "Proficient in Perception."
+    },
+    {
+     "id": "t2",
+     "name": "Fey Ancestry",
+     "description": "Advantage against being charmed; magic can't put you to sleep."
+    },
+    {
+     "id": "t3",
+     "name": "Trance",
+     "description": "4 hours of meditation replace 8 hours of sleep."
+    },
+    {
+     "id": "t4",
+     "name": "Elf Weapon Training",
+     "description": "Proficient with longsword, shortsword, shortbow and longbow."
+    },
+    {
+     "id": "t5",
+     "name": "Cantrip",
+     "description": "One wizard cantrip; spellcasting ability: INT."
+    },
+    {
+     "id": "t6",
+     "name": "Extra Language",
+     "description": "One additional language of your choice."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,72 @@
+{
+ "name": "Zwerg",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 120,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Zäh, ausdauernd und mit dem Stein verbunden.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Dunkelsicht 120 ft.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Zwergische Widerstandskraft",
+   "description": "Resistenz gegen Gift; Vorteil gegen Vergiftung.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Zwergische Zähigkeit",
+   "description": "+1 Trefferpunkt-Maximum pro Stufe.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Steingespür",
+   "description": "Bonusaktion: 10 Minuten Erschütterungssinn 60 ft auf Stein. Übungsbonus-mal pro langer Rast.",
+   "choices": []
+  }
+ ],
+ "id": "e3d7efd1",
+ "rkey": "srd52.races.dwarf",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Dwarf",
+   "size": "Medium",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Tough, enduring and bound to stone.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Darkvision 120 ft."
+    },
+    {
+     "id": "t1",
+     "name": "Dwarven Resilience",
+     "description": "Resistance to poison; advantage against being poisoned."
+    },
+    {
+     "id": "t2",
+     "name": "Dwarven Toughness",
+     "description": "+1 hit point maximum per level."
+    },
+    {
+     "id": "t3",
+     "name": "Stonecunning",
+     "description": "Bonus action: tremorsense 60 ft on stone for 10 minutes. Proficiency bonus times per long rest."
+    }
+   ]
+  }
+ }
+}

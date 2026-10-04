@@ -51,5 +51,12 @@
     "--backdrop": "radial-gradient(ellipse at 50% 40%, rgba(255,250,235,.7) 0%, transparent 65%), radial-gradient(ellipse at 50% 100%, rgba(120,80,30,.18) 0%, transparent 70%)",
     "--stars-opacity": "0"
   },
-  "scheme": "light"
+  "scheme": "light",
+  "i18n": {
+    "en": {
+      "name": "Parchment",
+      "tag": "Classic · Light",
+      "description": "Like an open adventure book: parchment, ink and seal red."
+    }
+  }
 }

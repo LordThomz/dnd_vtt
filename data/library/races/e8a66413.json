@@ -1,0 +1,61 @@
+{
+ "name": "Gnom",
+ "size": "Klein",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Klug und erfinderisch – Wald- oder Felsengnome.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Dunkelsicht 60 ft.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Gnomische Gerissenheit",
+   "description": "Vorteil bei INT-, WEI- und CHA-Rettungswürfen.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Gnomische Abstammung",
+   "description": "Waldgnom (Kleine Illusion, mit Tieren sprechen) oder Felsengnom (Ausbessern, Taschenspielerei, Uhrwerkspielzeug).",
+   "choices": []
+  }
+ ],
+ "id": "e8a66413",
+ "rkey": "srd52.races.gnome",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Gnome",
+   "size": "Small",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Clever and inventive – forest or rock gnomes.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Darkvision 60 ft."
+    },
+    {
+     "id": "t1",
+     "name": "Gnomish Cunning",
+     "description": "Advantage on INT, WIS and CHA saving throws."
+    },
+    {
+     "id": "t2",
+     "name": "Gnomish Lineage",
+     "description": "Forest gnome (minor illusion, speak with animals) or rock gnome (mending, prestidigitation, clockwork toys)."
+    }
+   ]
+  }
+ }
+}

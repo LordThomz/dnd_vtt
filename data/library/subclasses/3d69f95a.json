@@ -1,0 +1,95 @@
+{
+ "name": "Jäger",
+ "parent_class_name": "Waldläufer",
+ "parent_class": "e3ab0fc6",
+ "start_level": 3,
+ "description": "Schutz vor den Gefahren der Wildnis.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Wissen des Jägers",
+    "description": "Mal des Jägers enthüllt Resistenzen und Immunitäten.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Beute des Jägers",
+    "description": "Kolossbezwinger oder Hordenbrecher.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Verteidigungstaktik",
+    "description": "Der Horde entkommen oder Verteidigung gegen Mehrfachangriffe.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Überlegene Beute",
+    "description": "Mal-Schaden trifft ein zweites nahes Ziel.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Überlegene Jägerverteidigung",
+    "description": "Reaktion: Resistenz gegen den auslösenden Schaden.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "3d69f95a",
+ "rkey": "srd52.subclasses.hunter",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Hunter",
+   "parent_class_name": "Ranger",
+   "description": "Protection from the wild's dangers.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Hunter's Lore",
+      "description": "Hunter's mark reveals resistances and immunities."
+     },
+     {
+      "id": "f3_1",
+      "name": "Hunter's Prey",
+      "description": "Colossus Slayer or Horde Breaker."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Defensive Tactics",
+      "description": "Escape the Horde or Multiattack Defense."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Superior Hunter's Prey",
+      "description": "Mark damage also hits a second nearby target."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Superior Hunter's Defense",
+      "description": "Reaction: resistance to the triggering damage."
+     }
+    ]
+   }
+  }
+ }
+}

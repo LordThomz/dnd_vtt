@@ -1,0 +1,96 @@
+{
+ "name": "Schule des Wissens",
+ "parent_class_name": "Barde",
+ "parent_class": "b719cdd4",
+ "start_level": 3,
+ "description": "Sammler von Wissen und Geheimnissen.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Zusätzliche Übung",
+    "description": "Drei Fertigkeiten deiner Wahl.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "skill",
+      "count": 3,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f3_1",
+    "name": "Schneidende Worte",
+    "description": "Reaktion: Inspirationswürfel von einem gegnerischen Wurf abziehen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Magische Entdeckungen",
+    "description": "Zwei Zauber aus Kleriker-, Druiden- oder Magierliste.",
+    "choices": [
+     {
+      "id": "f6_0c0",
+      "type": "spell",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Unvergleichliches Können",
+    "description": "Inspiration auf eigene misslungene Proben.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "5ae51615",
+ "rkey": "srd52.subclasses.lore",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "College of Lore",
+   "parent_class_name": "Bard",
+   "description": "Collectors of knowledge and secrets.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Bonus Proficiencies",
+      "description": "Three skills of your choice."
+     },
+     {
+      "id": "f3_1",
+      "name": "Cutting Words",
+      "description": "Reaction: subtract an inspiration die from an enemy roll."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Magical Discoveries",
+      "description": "Two spells from the cleric, druid or wizard list."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Peerless Skill",
+      "description": "Use inspiration on your own failed checks."
+     }
+    ]
+   }
+  }
+ }
+}

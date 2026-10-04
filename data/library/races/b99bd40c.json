@@ -1,0 +1,58 @@
+{
+ "name": "Mensch",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 0,
+ "asi": "+1 auf alle Attribute",
+ "languages": "Gemeinsprache, +1 Sprache",
+ "description": "Ehrgeizig und vielseitig – das verbreitetste Volk.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Vielseitig",
+   "description": "+1 auf jedes Attribut.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Zusätzliche Sprache",
+   "description": "Eine weitere Sprache deiner Wahl.",
+   "choices": [
+    {
+     "id": "t1c0",
+     "type": "language",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  }
+ ],
+ "id": "b99bd40c",
+ "rkey": "srd51.races.human",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Human",
+   "size": "Medium",
+   "asi": "+1 to all ability scores",
+   "languages": "Common, +1 language",
+   "description": "Ambitious and versatile – the most widespread people.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Versatile",
+     "description": "+1 to every ability score."
+    },
+    {
+     "id": "t1",
+     "name": "Extra Language",
+     "description": "One additional language of your choice."
+    }
+   ]
+  }
+ }
+}

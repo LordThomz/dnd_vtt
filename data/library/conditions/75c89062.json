@@ -1,0 +1,16 @@
+{
+ "name": "Versteinert",
+ "description": "In Stein verwandelt; Resistenz gegen allen Schaden.",
+ "id": "75c89062",
+ "rkey": "srd51.conditions.petrified",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Petrified",
+   "description": "Turned to stone; resistance to all damage."
+  }
+ }
+}

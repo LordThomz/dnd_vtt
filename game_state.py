@@ -43,7 +43,7 @@ _ensure_initial_data()
 LIBRARY_CATEGORIES = [
     "races", "classes", "subclasses",
     "items", "magic_items", "spells", "attacks",
-    "feats", "backgrounds", "conditions", "monsters",
+    "feats", "backgrounds", "conditions", "monsters", "languages",
 ]
 
 _sessions:   dict = {}

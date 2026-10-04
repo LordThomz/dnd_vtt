@@ -1,0 +1,28 @@
+{
+ "name": "Soldat",
+ "skill_profs": "Athletik, Einschüchtern",
+ "languages": "—",
+ "tool_profs": "Ein Spielset",
+ "equipment": "Speer, Kurzbogen, 20 Pfeile, Spielset, Heilerausrüstung, Köcher, Reisekleidung, 14 GM – oder 50 GM",
+ "feature": "Herkunftstalent: Wilder Angreifer.",
+ "description": "Du hast für eine Armee oder Miliz gekämpft.",
+ "ability_scores": "STR, GES, KON",
+ "id": "c91ea3ab",
+ "rkey": "srd52.backgrounds.soldier",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Soldier",
+   "skill_profs": "Athletics, Intimidation",
+   "languages": "—",
+   "tool_profs": "One gaming set",
+   "equipment": "Spear, shortbow, 20 arrows, gaming set, healer's kit, quiver, traveler's clothes, 14 gp – or 50 gp",
+   "feature": "Origin feat: Savage Attacker.",
+   "description": "You fought for an army or militia.",
+   "ability_scores": "STR, DEX, CON"
+  }
+ }
+}

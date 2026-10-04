@@ -1,0 +1,22 @@
+{
+ "name": "Verteidigung",
+ "prereq": "Kampfstil-Merkmal",
+ "description": "Schwer zu treffen.",
+ "benefits": "+1 RK in leichter, mittlerer oder schwerer Rüstung.",
+ "category": "Kampfstil",
+ "id": "70a55775",
+ "rkey": "srd52.feats.defense",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Defense",
+   "prereq": "Fighting Style feature",
+   "description": "Hard to hit.",
+   "benefits": "+1 AC while wearing light, medium or heavy armour.",
+   "category": "Fighting Style"
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Gabe der Zaubererinnerung",
+ "prereq": "Stufe 19+",
+ "description": "Magie ohne Ende.",
+ "benefits": "+1 INT, WEI oder CHA; einen Zauber 1.–4. Grades ohne Zauberplatz wirken (einmal pro langer Rast).",
+ "category": "Epische Gabe",
+ "id": "9c18db19",
+ "rkey": "srd52.feats.boon_recall",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Boon of Spell Recall",
+   "prereq": "Level 19+",
+   "description": "Endless magic.",
+   "benefits": "+1 INT, WIS or CHA; cast a 1st–4th level spell without a slot (once per long rest).",
+   "category": "Epic Boon"
+  }
+ }
+}

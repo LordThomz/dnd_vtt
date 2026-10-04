@@ -1,0 +1,98 @@
+{
+ "name": "Hervorrufer",
+ "parent_class_name": "Magier",
+ "parent_class": "b720d905",
+ "start_level": 3,
+ "description": "Meister zerstörerischer Energie.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Hervorrufungs-Gelehrter",
+    "description": "Zwei Hervorrufungszauber kostenlos; neue günstiger.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Wirksamer Zaubertrick",
+    "description": "Bestandene Rettungswürfe gegen Zaubertricks: halber Schaden.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Zauber formen",
+    "description": "Verbündete aus Hervorrufungszaubern aussparen.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Verstärkte Hervorrufung",
+    "description": "+INT auf einen Schadenswurf.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Überladen",
+    "description": "Zauber bis 5. Grad mit Höchstschaden; danach nekrotischer Rückschlag.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "a462509d",
+ "rkey": "srd52.subclasses.evoker",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Evoker",
+   "parent_class_name": "Wizard",
+   "description": "Masters of destructive energy.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Evocation Savant",
+      "description": "Two evocation spells free; new ones cheaper."
+     },
+     {
+      "id": "f3_1",
+      "name": "Potent Cantrip",
+      "description": "Successful saves against cantrips: half damage."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Sculpt Spells",
+      "description": "Exclude allies from evocation spells."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Empowered Evocation",
+      "description": "+INT to one damage roll."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Overchannel",
+      "description": "Spells up to 5th level deal maximum damage, with necrotic backlash."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "Hervorrufung"
+ ]
+}

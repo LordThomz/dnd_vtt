@@ -1,0 +1,271 @@
+{
+ "name": "Hexer",
+ "hd": "d8",
+ "primary": "cha",
+ "spellcaster": true,
+ "armor": "Leichte Rüstung",
+ "weapons": "Einfache Waffen",
+ "tools": "",
+ "saves": "WEI, CHA",
+ "skill_count": 2,
+ "skill_options": "Arkana, Täuschung, Geschichte, Einschüchtern, Nachforschungen, Naturkunde, Religion",
+ "description": "Ein Suchender verbotenen Wissens im Pakt mit einer Macht.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Schauerliche Anrufungen",
+    "description": "Anrufungen mit besonderen Fähigkeiten (mehr mit der Stufe).",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Paktmagie",
+    "description": "Wenige Zauberplätze höchsten Grades, zurück nach kurzer Rast. Attribut: CHA.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Magische Gerissenheit",
+    "description": "1 Minute: halbe Paktzauberplätze zurück (einmal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Hexer-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Schutzherrn kontaktieren",
+    "description": "Kontakt zu einer anderen Ebene wirken, ohne Platz.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Mystisches Arkanum",
+    "description": "Ein Zauber 6. Grades einmal pro langer Rast (7.–9. Grad auf 13/15/17).",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Schauerlicher Meister",
+    "description": "Magische Gerissenheit stellt alle Paktplätze wieder her.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "bf1d1f3d",
+ "rkey": "srd52.classes.warlock",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Warlock",
+   "armor": "Light armour",
+   "weapons": "Simple weapons",
+   "tools": "",
+   "saves": "WIS, CHA",
+   "skill_options": "Arcana, Deception, History, Intimidation, Investigation, Nature, Religion",
+   "description": "A seeker of forbidden lore bound to a patron.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Eldritch Invocations",
+      "description": "Invocations granting special abilities (more as you level)."
+     },
+     {
+      "id": "f1_1",
+      "name": "Pact Magic",
+      "description": "A few top-level slots that return on a short rest. Ability: CHA."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Magical Cunning",
+      "description": "1 minute: regain half your pact slots (once per long rest)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Warlock Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Contact Patron",
+      "description": "Cast contact other plane without a slot."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Mystic Arcanum",
+      "description": "One 6th-level spell once per long rest (7th–9th at 13/15/17)."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Eldritch Master",
+      "description": "Magical Cunning restores all pact slots."
+     }
+    ]
+   }
+  }
+ }
+}

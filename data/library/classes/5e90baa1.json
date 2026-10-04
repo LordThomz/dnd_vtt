@@ -1,0 +1,297 @@
+{
+ "name": "Barde",
+ "hd": "d8",
+ "primary": "cha",
+ "spellcaster": true,
+ "armor": "Leichte Rüstung",
+ "weapons": "Einfache Waffen, Handarmbrust, Langschwert, Rapier, Kurzschwert",
+ "tools": "Drei Musikinstrumente",
+ "saves": "GES, CHA",
+ "skill_count": 3,
+ "skill_options": "Akrobatik, Tierführung, Arkana, Athletik, Täuschung, Geschichte, Einsicht, Einschüchtern, Nachforschungen, Heilkunde, Naturkunde, Wahrnehmung, Auftreten, Überzeugen, Religion, Fingerfertigkeit, Heimlichkeit, Überleben",
+ "description": "Magischer Geschichtenerzähler, der Verbündete inspiriert.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste wirken. Attribut: CHA.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Bardische Inspiration",
+    "description": "Bonusaktion: Ein Verbündeter erhält einen W6 für einen Wurf (W8/W10/W12 ab Stufe 5/10/15). CHA-mal pro langer Rast.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Alleskönner",
+    "description": "Halber Übungsbonus auf ungeübte Attributsproben.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Lied der Erholung",
+    "description": "Bei kurzer Rast +1W6 Heilung für Verbündete (steigt mit der Stufe).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Bardenschule",
+    "description": "Wähle deine Schule (Unterklasse).",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f3_1",
+    "name": "Expertise",
+    "description": "Doppelter Übungsbonus in zwei Fertigkeiten (Stufe 10: zwei weitere).",
+    "choices": [
+     {
+      "id": "f3_1c0",
+      "type": "skill",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Quell der Inspiration",
+    "description": "Bardische Inspiration erneuert sich auch nach kurzer Rast.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Gegenzauber-Lied",
+    "description": "Aktion: Verbündete in 30 ft erhalten Vorteil gegen Verängstigung und Bezauberung.",
+    "choices": []
+   },
+   {
+    "id": "f6_1",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Schule.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Magische Geheimnisse",
+    "description": "Zwei Zauber aus beliebigen Klassenlisten lernen (auch Stufe 14 und 18).",
+    "choices": [
+     {
+      "id": "f10_0c0",
+      "type": "spell",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Schule.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Überlegene Inspiration",
+    "description": "Ohne Inspiration bei Initiative erhältst du eine zurück.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "5e90baa1",
+ "rkey": "srd51.classes.bard",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Bard",
+   "armor": "Light armour",
+   "weapons": "Simple weapons, hand crossbow, longsword, rapier, shortsword",
+   "tools": "Three musical instruments",
+   "saves": "DEX, CHA",
+   "skill_options": "Acrobatics, Animal Handling, Arcana, Athletics, Deception, History, Insight, Intimidation, Investigation, Medicine, Nature, Perception, Performance, Persuasion, Religion, Sleight of Hand, Stealth, Survival",
+   "description": "A magical storyteller who inspires allies.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Cast spells from your class list. Ability: CHA."
+     },
+     {
+      "id": "f1_1",
+      "name": "Bardic Inspiration",
+      "description": "Bonus action: an ally gains a d6 for a roll (d8/d10/d12 at levels 5/10/15). CHA times per long rest."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Jack of All Trades",
+      "description": "Half proficiency bonus on unproficient ability checks."
+     },
+     {
+      "id": "f2_1",
+      "name": "Song of Rest",
+      "description": "During a short rest allies heal an extra 1d6 (increases with level)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Bard College",
+      "description": "Choose your college (subclass)."
+     },
+     {
+      "id": "f3_1",
+      "name": "Expertise",
+      "description": "Double proficiency in two skills (two more at level 10)."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Font of Inspiration",
+      "description": "Bardic Inspiration also recovers on a short rest."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Countercharm",
+      "description": "Action: allies within 30 ft gain advantage against being frightened or charmed."
+     },
+     {
+      "id": "f6_1",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen college."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Magical Secrets",
+      "description": "Learn two spells from any class list (again at levels 14 and 18)."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen college."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Superior Inspiration",
+      "description": "If you have no inspiration left when rolling initiative, you regain one."
+     }
+    ]
+   }
+  }
+ }
+}

@@ -131,6 +131,8 @@ const FX = (() => {
     new MutationObserver(list => list.forEach(m => {
       m.addedNodes.forEach(n => {
         if (n.nodeType !== 1) return;
+        // Einstellungen → Spieltisch → „Ton bei neuer Chat-Nachricht"
+        if (n.parentElement === box && setting("chatSound", true) !== false && !n.querySelector(".roll-total")) snd("notify");
         (n.matches(".roll-total") ? [n] : [...n.querySelectorAll(".roll-total")]).forEach(el => setTimeout(() => _countUp(el), 30));
       });
     })).observe(box, { childList: true, subtree: true });
@@ -150,9 +152,15 @@ const FX = (() => {
   }
 
   // ── Bewegter Hintergrund: schwebende Lichtpartikel ──────────────────────
+  const setting = (k, d) => (typeof Theme !== "undefined" && Theme.setting) ? Theme.setting(k, d) : d;
   function ambient() {
     if (document.getElementById("fx-ambient")) return;
+    // Einstellungen → Grafik → „Lichtpartikel im Hintergrund"
+    window.addEventListener("vtt:settings", e => {
+      if (e.detail && e.detail.key === "particles") { const c = document.getElementById("fx-ambient"); if (c) c.style.display = e.detail.value === false ? "none" : ""; }
+    });
     const cv = document.createElement("canvas"); cv.id = "fx-ambient";
+    if (setting("particles", true) === false) cv.style.display = "none";
     document.body.prepend(cv);
     const ctx = cv.getContext("2d");
     const cs = getComputedStyle(document.documentElement);
@@ -178,10 +186,12 @@ const FX = (() => {
         a: .15 + Math.random() * .5, ph: Math.random() * 6.28 }));
     }
     resize(); addEventListener("resize", resize);
-    let last = performance.now();
+    let last = performance.now(), stopped = false;
+    window.addEventListener("vtt:leaving", () => { stopped = true; });
     function frame(now) {
+      if (stopped) return;
       const dt = Math.min(50, now - last) / 16.7; last = now;
-      if (!document.hidden && !reduced()) {
+      if (!document.hidden && !reduced() && cv.style.display !== "none") {
         ctx.globalAlpha = 1; ctx.clearRect(0, 0, W, H);
         for (const p of parts) {
           p.x += p.vx * dt; p.y += p.vy * dt; p.ph += .02 * dt;
@@ -214,7 +224,23 @@ const FX = (() => {
     return true;
   }
 
+  // ── Hintergrundmusik in den Menüs (nicht am Spieltisch – dort läuft die
+  //    Musik des DM über die Jukebox) ─────────────────────────────────────
+  function _music() {
+    if (typeof Sfx === "undefined" || document.getElementById("map-area")) return;
+    // Im festen Rahmen (/app) spielt der Rahmen die Musik durchgehend
+    try { if (window.top !== window && window.top.VTT_SHELL) return; } catch (e) {}
+    const start = () => { try { if (Sfx.settings().music) Sfx.music.start(); } catch (e) {} };
+    window.addEventListener("vtt:ready", start, { once: true });
+    if (!document.documentElement.classList.contains("vtt-loading")) start();
+    // Browser erlauben Ton oft erst nach einem Klick → dann nachholen
+    window.addEventListener("pointerdown", () => setTimeout(start, 30), { once: true });
+    window.addEventListener("vtt:leaving", () => { try { Sfx.music.stop(.25); } catch (e) {} });
+    window.addEventListener("vtt:fx", e => { try { if (e.detail && e.detail.music) start(); } catch (x) {} });
+  }
+
   function _boot() {
+    _music();
     _watchStagger(); _watchChat(); _hookToast();
     // höchstens einmal pro Bild prüfen (der Spieltisch ändert sich sehr oft)
     let pend = false;

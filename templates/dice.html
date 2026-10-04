@@ -2,6 +2,8 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="dark light">
+<style>html{background:var(--bg-deep,#06070d)}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Würfel-Werkstatt · D&amp;D Virtual Tabletop</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
@@ -13,6 +15,7 @@
 <link rel="stylesheet" href="/static/css/design-studio.css">
 <link rel="stylesheet" href="/static/css/fx.css">
 <script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/i18n.js"></script>
 <script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
@@ -212,7 +215,6 @@ input[type=range] { accent-color: var(--gold); width: 150px; }
 <script src="/static/js/dice-geometry.js"></script>
 <script src="/static/js/dice-material.js"></script>
 <script src="/static/js/dice-sound.js"></script>
-<script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/dice3d.js"></script>
 <script src="/static/js/icons.js"></script>
 <script>
@@ -222,7 +224,7 @@ input[type=range] { accent-color: var(--gold); width: 150px; }
    • Ein Set = 7 Würfel (W4 … W100), jeder mit eigenem Aussehen.
    • „Alle Würfel": Änderungen gelten für das ganze Set, „Nur dieser": nur
      für den gewählten Würfel.
-   • Stil = Startpunkt (Vorlagen aus dice-presets.js), alles darunter
+   • Vorlagen = deine anderen Sets (fertige Sets gibt es im Launcher-Katalog),
      verfeinert ihn – es gibt keine zweite Stelle für Würfel-Looks.
    • Rückgängig/Wiederholen, Vorschaubild je Set (Dice3D.snapshot).
    • Löschen und Teilen von Sets: im Launcher (eine Stelle).
@@ -256,8 +258,13 @@ const DIE_SVG = {
   100: '<polygon points="12,2 21,10 12,22 3,10" /><text x="12" y="15" text-anchor="middle" font-size="6" stroke="none" fill="currentColor">%</text>',
 };
 const dieSvg = s => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">${DIE_SVG[s]}</svg>`;
-// DicePresets ist eine globale const (kein window-Eintrag) → so abfragen
-const presetList = () => (typeof DicePresets !== "undefined" ? DicePresets : []);
+// Vorlagen = deine ANDEREN Würfel-Sets. Fertige System-Sets lädst du im
+// Launcher aus dem Katalog herunter – danach erscheinen sie hier.
+const presetList = () => Dice3D.getVisibleSets().filter(x => !set || x.id !== set.id).map(x => ({
+  id: x.id, name: x.name || "Set", tag: "", thumb: x.thumb || null, dice: x.dice || {},
+  style: Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, (x.dice || {})[20] || (x.dice || {})["20"] || {}),
+}));
+let _stylesDirty = true;     // Vorlagen-Galerie neu aufbauen (Set gewechselt/neu)
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const ic = n => (typeof Icons !== "undefined" ? Icons.svg(n) : "");
 
@@ -272,6 +279,7 @@ function loadSet(id) {
   set = JSON.parse(JSON.stringify(s));
   SIDES.forEach(sd => { set.dice[sd] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, set.dice[sd] || set.dice[20] || {}); });
   Dice3D.setActiveSet(set.id);           // die Werkstatt zeigt immer das Set, mit dem gewürfelt wird
+  _stylesDirty = true;
   history = []; future = [];
   renderAll();
 }
@@ -281,7 +289,7 @@ function persist() {
   clearTimeout(thumbT); thumbT = setTimeout(makeThumb, 1400);
 }
 async function makeThumb() {
-  if (document.documentElement.classList.contains("vtt-veil")) return void Theme.whenReady(makeThumb);
+  if (document.documentElement.classList.contains("vtt-loading")) return void Theme.whenReady(makeThumb);
   try { const url = await Dice3D.snapshot(20, set.dice[20], 140); if (url) { set.thumb = url; Dice3D.saveSet(set); renderSetSelect(); } } catch (e) {}
 }
 function snapshot() { return JSON.stringify(set.dice); }
@@ -312,23 +320,25 @@ function duplicateSet() {
   if (typeof UI !== "undefined") UI.toast("Set dupliziert");
 }
 function openNewSet() {
-  const list = presetList();
+  // Leer starten oder eines deiner Sets (auch das aktuelle) als Grundlage kopieren
+  const list = Dice3D.getVisibleSets().map(x => ({ id: x.id, name: x.name || "Set", thumb: x.thumb || null, dice: x.dice || {},
+    style: Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, (x.dice || {})[20] || {}) }));
   const el = document.getElementById("ns") || Object.assign(document.createElement("div"), { id: "ns", className: "ds-backdrop" });
   el.innerHTML = `<div class="ds-win" style="width:min(860px,94vw)"><header class="ds-head"><div><h2>Neues Würfel-Set</h2>
-    <span>Wähle einen Stil als Startpunkt – danach passt du alles frei an.</span></div><button class="ds-x">✕</button></header>
+    <span>Leer starten oder eines deiner Sets als Grundlage kopieren. Fertige Sets gibt es im Launcher-Katalog.</span></div><button class="ds-x">✕</button></header>
     <div class="ds-body"><div class="ns-grid">
       <button class="style-card" data-new=""><div class="ph" style="display:grid;place-items:center;font-size:2rem;color:var(--gold)">＋</div><b>Leer</b><small>Standard</small></button>
-      ${list.map(p => `<button class="style-card" data-new="${p.id}"><img data-thumb="${p.id}" alt=""><b>${esc(p.name)}</b><small>${esc(p.tag || "")}</small></button>`).join("")}
+      ${list.map(p => `<button class="style-card" data-new="${p.id}"><img ${p.thumb ? `src="${p.thumb}"` : ""} alt=""><b>${esc(p.name)}</b><small>als Grundlage</small></button>`).join("")}
     </div></div></div>`;
   document.body.appendChild(el);
-  fillPresetThumbs(el);
   el.onclick = e => {
     if (e.target === el || e.target.closest(".ds-x")) return el.classList.remove("open");
     const b = e.target.closest("[data-new]"); if (!b) return;
     let s;
     if (b.dataset.new) {
       const p = list.find(x => x.id === b.dataset.new);
-      s = Dice3D.newSet(p.name); SIDES.forEach(sd => { s.dice[sd] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, p.style); });
+      s = Dice3D.newSet(p.name + " (Variante)");
+      SIDES.forEach(sd => { s.dice[sd] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, p.dice[sd] || p.dice[String(sd)] || p.style); });
     } else s = Dice3D.newSet("Neues Set");
     Dice3D.saveSet(s); el.classList.remove("open"); loadSet(s.id);
   };
@@ -341,11 +351,15 @@ function testSound() {
 
 // ── Überrasch mich: Stil + Palette + Muster stimmig kombinieren ─────────────
 function surprise() {
-  const P = presetList(), pick = a => a[Math.floor(Math.random() * a.length)];
-  const base = Object.assign({}, pick(P).style);
-  if (Math.random() < .55) { const pal = pick(PALETTES).c; base.color = pal[0]; base.color2 = pal[1]; base.numberColor = pal[2]; }
-  if (Math.random() < .4) base.pattern = pick(Object.keys(DiceMaterial.PATTERNS));
-  if (Math.random() < .35) base.edges = pick(["subtle", "bold"]);
+  // Unabhängig von Vorlagen: Material + abgestimmte Palette + Muster/Kanten/Schrift
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const surfaces = Object.keys(DiceMaterial.SURFACES);
+  const pal = pick(PALETTES).c;
+  const base = { surface: pick(surfaces), color: pal[0], color2: pal[1], numberColor: pal[2],
+                 pattern: Math.random() < .4 ? pick(Object.keys(DiceMaterial.PATTERNS)) : "none",
+                 edges: Math.random() < .45 ? pick(["subtle", "bold"]) : "none", edgeColor: pick(["#f0d79c", "#e8eef4", pal[2], "#2fe3ff"]),
+                 font: Math.random() < .5 ? pick(FONTS).id : Dice3D.DEFAULT_DIE_STYLE.font,
+                 numberGlow: Math.random() < .2 ? .7 : 0 };
   apply(Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, base), { all: true });
 }
 
@@ -361,22 +375,30 @@ function fillPresetThumbs(root) {
   // Vorhandene sofort einsetzen …
   root.querySelectorAll("img[data-thumb]").forEach(img => {
     const p = presetList().find(x => x.id === img.dataset.thumb);
-    if (p && _thumbCache[_thumbId(p)]) img.src = _thumbCache[_thumbId(p)];
+    if (p && p.thumb) img.src = p.thumb;
+    else if (p && _thumbCache[_thumbId(p)]) img.src = _thumbCache[_thumbId(p)];
   });
   // … fehlende nach dem Laden nacheinander erzeugen
   if (_thumbRun) return;
-  _thumbRun = new Promise(done => Theme.whenReady(async () => {
-    for (const p of presetList()) {
+  // Fehlende Vorschauen hinter dem Ladebildschirm erzeugen (mit Fortschritt) –
+  // so ist nach dem Einblenden alles fertig und nichts ruckelt nach.
+  const missing = presetList().filter(p => !p.thumb && !_thumbCache[_thumbId(p)]);
+  if (!missing.length) return;
+  const loading = document.documentElement.classList.contains("vtt-loading");
+  _thumbRun = (async () => {
+    let i = 0;
+    for (const p of missing) {
+      i++; if (loading) Theme.loaderText(`Bereite Würfel-Stile vor · ${i}/${missing.length}`);
       const id = _thumbId(p);
-      if (!_thumbCache[id]) {
-        _thumbCache[id] = await Dice3D.snapshot(20, p.style, 120);
-        try { localStorage.setItem(THUMB_KEY, JSON.stringify(_thumbCache)); } catch (e) {}
-        document.querySelectorAll(`img[data-thumb="${p.id}"]`).forEach(img => { img.src = _thumbCache[id] || ""; });
-        await new Promise(r => setTimeout(r, 140));          // Luft für die Animation
-      }
+      _thumbCache[id] = await Dice3D.snapshot(20, p.style, 120);
+      document.querySelectorAll(`img[data-thumb="${p.id}"]`).forEach(img => { img.src = _thumbCache[id] || ""; });
+      if (!loading) await new Promise(r => setTimeout(r, 140));
     }
-    _thumbRun = null; done();
-  }));
+    try { localStorage.setItem(THUMB_KEY, JSON.stringify(_thumbCache)); } catch (e) {}
+    if (loading) Theme.loaderText("Lädt");
+    _thumbRun = null;
+  })();
+  if (loading) Theme.hold(_thumbRun);
 }
 // ── Darstellung ─────────────────────────────────────────────────────────────
 function renderRail() {
@@ -433,9 +455,10 @@ function renderInspector() {
   const st = styleOf(current), S = DiceMaterial.SURFACES, PT = DiceMaterial.PATTERNS;
   const presets = presetList();
   const html =
-    sec("style", "sparkles", "Stil",
-      `<div class="styles">${presets.map(p => `<button class="style-card" title="${esc(p.tag || "")}" onclick="applyPreset('${p.id}')"><img data-thumb="${p.id}" alt=""><b>${esc(p.name)}</b></button>`).join("")}</div>
-       <div class="lbl" style="margin-top:10px">Ein Stil ist der Startpunkt – darunter verfeinerst du ihn.</div>`) +
+    sec("style", "sparkles", "Vorlagen",
+      (presets.length ? `<div class="styles">${presets.map(p => `<button class="style-card" title="Aussehen von „${esc(p.name)}“ übernehmen" onclick="applyPreset('${p.id}')"><img data-thumb="${p.id}" alt=""><b>${esc(p.name)}</b></button>`).join("")}</div>`
+        : `<div class="fx-empty"><div class="fx-empty-ic">${ic("dices")}</div><b>Noch keine weiteren Sets</b>Fertige Würfel-Sets findest du im Launcher unter „Würfel-Sets → Katalog".</div>`) + `
+       <div class="lbl" style="margin-top:10px">Übernimmt das Aussehen eines deiner Sets – darunter verfeinerst du es.</div>`) +
     sec("material", "gem", "Material",
       `<div class="mats">${Object.entries(S).map(([id, m]) => `<button class="mat${st.surface === id ? " on" : ""}" onclick="pickSurface('${id}')"><span class="orb ${id}"></span>${esc(m.label)}</button>`).join("")}</div>`) +
     sec("colors", "palette", "Farben",
@@ -462,7 +485,8 @@ function renderInspector() {
   const insp = document.getElementById("insp"), y = insp.scrollTop;
   // Die Stil-Galerie ändert sich nie – sie bleibt stehen, statt bei jeder
   // Änderung 14 Vorschaubilder neu einzusetzen (das ruckelte).
-  const keepStyles = insp.querySelector('details[data-sec="style"]');
+  const keepStyles = _stylesDirty ? null : insp.querySelector('details[data-sec="style"]');
+  _stylesDirty = false;
   insp.innerHTML = html;
   const fresh = insp.querySelector('details[data-sec="style"]');
   if (keepStyles && fresh) fresh.replaceWith(keepStyles);
@@ -487,6 +511,11 @@ function fillPatternThumbs(root) {
 }
 function applyPreset(id) {
   const p = presetList().find(x => x.id === id); if (!p) return;
+  if (scope === "all" && p.dice) {
+    history.push(snapshot()); if (history.length > 60) history.shift(); future = [];
+    SIDES.forEach(sd => { set.dice[sd] = Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, p.dice[sd] || p.dice[String(sd)] || p.style); });
+    persist(); refresh(); return;
+  }
   apply(Object.assign({}, Dice3D.DEFAULT_DIE_STYLE, p.style));
 }
 function pickSurface(id) {

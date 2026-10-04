@@ -1,0 +1,16 @@
+{
+ "name": "Taub",
+ "description": "Hört nichts; Proben, die Hören erfordern, scheitern.",
+ "id": "73cedc21",
+ "rkey": "srd52.conditions.deafened",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Deafened",
+   "description": "Can't hear; checks relying on hearing fail."
+  }
+ }
+}

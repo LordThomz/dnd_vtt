@@ -164,7 +164,7 @@ const Socket = (() => {
       await Dialog.alert("Du wurdest vom DM aus der Sitzung entfernt."
                          + (d.reason ? "\n\nGrund: " + d.reason : ""),
                          {title:"Aus der Sitzung entfernt", icon:"🚪", okText:"Verstanden"});
-      window.location.href="/play";
+      (typeof Theme!=="undefined"?Theme.go("/play"):location.assign("/play"));
     });
     // ── Char-change approval ──
     _io.on("char_change_request", d=>{ if(State.isGM) dispatch("char_change_request", d); });

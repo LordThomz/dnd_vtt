@@ -1,0 +1,22 @@
+{
+ "name": "Urtümlich",
+ "rarity": "Selten",
+ "script": "Zwergisch",
+ "speakers": "Elementare",
+ "description": "Seltene Sprache. Schrift: Zwergisch. Typische Sprecher: Elementare.",
+ "id": "0b5d49de",
+ "rkey": "srd52.languages.primordial",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Primordial",
+   "rarity": "Rare",
+   "script": "Dwarvish",
+   "speakers": "Elementals",
+   "description": "Rare language. Script: Dwarvish. Typical speakers: Elementals."
+  }
+ }
+}

@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="color-scheme" content="dark light">
+<style>html{background:var(--bg-deep,#06070d)}
+.rules-seg{display:inline-flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:2px;}
+.rules-seg button{padding:8px 13px;border:none;background:transparent;color:var(--text-dim);font:600 .8rem/1 var(--font-ui);cursor:pointer;}
+.rules-seg button+button{border-left:1px solid var(--border);} .rules-seg button.on{background:rgba(var(--gold-rgb),.18);color:var(--gold-light);}
+</style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Charakter-Builder · D&amp;D</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <link rel="preload" href="/static/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,6 +18,7 @@
 <link rel="stylesheet" href="/static/css/design-studio.css">
 <link rel="stylesheet" href="/static/css/fx.css">
 <script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/i18n.js"></script>
 <script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
@@ -303,7 +310,7 @@ textarea{resize:vertical;min-height:70px;}
       list = list.filter(p => p.enabled && p.total);
       if (sid) { const c = await (await fetch(`/api/sessions/${sid}/packs`)).json(); if (Array.isArray(c.packs)) list = list.filter(p => c.packs.includes(p.id)); }
       const box = document.getElementById("avail-packs");
-      if (box) box.innerHTML = list.map(p => `<span class="src-badge ${p.id==="basis"?"basis":p.id==="eigene"?"eigene":""}" style="font-size:.78rem;padding:4px 10px">${(p.name||p.id).replace(/[<>&]/g,"")}</span>`).join("") || '<span style="color:var(--text-dim)">Keine – bitte im Launcher eine Erweiterung aktivieren.</span>';
+      if (box) box.innerHTML = list.map(p => `<span class="src-badge ${(p.id==="basis"||p.id==="basis2024")?"basis":p.id==="eigene"?"eigene":""}" style="font-size:.78rem;padding:4px 10px">${(p.name||p.id).replace(/[<>&]/g,"")}</span>`).join("") || '<span style="color:var(--text-dim)">Keine – bitte im Launcher eine Erweiterung aktivieren.</span>';
     } catch(e) {}
   })();
 
@@ -311,7 +318,7 @@ textarea{resize:vertical;min-height:70px;}
     // Falls ungespeicherte Eingaben: kurz nachfragen.
     if(await Dialog.confirm("Nicht gespeicherte Änderungen gehen verloren.",
         {title:"Charakter-Builder verlassen?", icon:"🚪", okText:"Verlassen"})){
-      window.location.href = "/play";
+      (typeof Theme!=="undefined"?Theme.go("/play"):location.assign("/play"));
     }
   }
   </script>
@@ -355,6 +362,13 @@ textarea{resize:vertical;min-height:70px;}
         </div>
 
         <div class="row">
+          <div>
+            <label class="field-label">Regelwerk</label>
+            <div class="st-seg rules-seg" id="rules-seg">
+              <button type="button" data-rules="2024" onclick="setRules('2024')">Regeln 2024</button>
+              <button type="button" data-rules="2014" onclick="setRules('2014')">Regeln 2014</button>
+            </div>
+          </div>
           <div>
             <label class="field-label">Fortschrittstyp</label>
             <select id="f-progression">
@@ -643,7 +657,7 @@ let library = {items:{},spells:{},attacks:{}};
 function defaultSheet(){
   return {
     id:null, pic_url:"",
-    name:"", progression:"milestone", dice_rolling:true, optional_features:true,
+    name:"", progression:"milestone", dice_rolling:true, optional_features:true, rules:"2024",
     sources:["phb"],
     race:null, race_asi_2:"str", race_asi_1:"dex",
     class:null, subclass:"", level:1, hit_dice:"",
@@ -674,6 +688,25 @@ async function init(){
   renderRaces(); renderClasses(); renderStats(); updateMethodInfo();
 }
 
+// ── Regelwerk 2014 / 2024 ──────────────────────────────────────────────────
+// Grundregel-Einträge tragen „rules"; eigene Inhalte ohne Angabe passen zu
+// beiden. So stehen nie zwei „Elf"-Einträge (2014 und 2024) nebeneinander.
+let libraryAll = null;
+function filterRules(){
+  if (!libraryAll) return;
+  const r = sheet.rules || "2024";
+  library = {};
+  for (const cat in libraryAll) {
+    library[cat] = {};
+    for (const id in libraryAll[cat]) { const e = libraryAll[cat][id]; if (!e.rules || e.rules === r) library[cat][id] = e; }
+  }
+  document.querySelectorAll("#rules-seg button").forEach(b => b.classList.toggle("on", b.dataset.rules === r));
+}
+function setRules(r){
+  sheet.rules = r; filterRules();
+  try { renderRaces(); renderClasses(); if (typeof populateBackgrounds === "function") populateBackgrounds(); } catch(e){}
+}
+
 async function loadLibrary(){
   try {
     // Kommt man über „Kampagne beitreten", gelten deren Paket-Regeln,
@@ -687,6 +720,7 @@ async function loadLibrary(){
       await fetch("/api/library/seed_defaults",{method:"POST"});
       library = await (await fetch(_libUrl)).json();
     }
+    libraryAll = library; filterRules();
   } catch(e){}
 }
 
@@ -704,7 +738,7 @@ async function loadSavedChars(){
 }
 
 function newCharacter(){
-  sheet = defaultSheet();
+  sheet = defaultSheet(); filterRules();
   document.getElementById("f-name").value = "";
   document.getElementById("portrait-img").style.display="none";
   document.getElementById("portrait-placeholder").style.display="";
@@ -721,6 +755,8 @@ async function loadCharacter(cid){
     if (!res.ok) return;
     const data = await res.json();
     sheet = Object.assign(defaultSheet(), data);
+    if (!data.rules) sheet.rules = "2014";      // vor 0.2.0 erstellt → Regeln 2014
+    filterRules();
     populateForm();
     renderRaces(); renderClasses(); renderStats();
     document.getElementById("del-btn").style.display = "inline-flex";
@@ -843,7 +879,7 @@ async function uploadPortrait(input){
 // ── Race ──
 function renderRaces(){
   const grid = document.getElementById("race-grid");
-  const libRaces = Object.values(library.races || {});
+  const libRaces = Object.values(library.races || {}).sort((a,b)=>(a.name||"").localeCompare(b.name||""));   // alphabetisch
   // Library takes precedence; only show hardcoded if library is empty
   let combined;
   if (libRaces.length) {
@@ -940,7 +976,9 @@ function renderChoicesUI(trait, sourceKey){
     const currentVal = sheet.trait_choices[sourceKey][trait.id][c.id] || [];
     let options = [];
     switch(c.type){
-      case "language":         options = LANGUAGES; break;
+      // Sprachen aus der Bibliothek (Grundregeln + eigene) – sonst feste Liste
+      case "language":         { const libL = Object.values(library.languages||{}).map(l=>l.name).filter(Boolean).sort((a,b)=>a.localeCompare(b));
+                                 options = libL.length ? libL : LANGUAGES; } break;
       case "skill":            options = SKILLS; break;
       case "ability":          options = ABILITIES; break;
       case "damage_type":
@@ -1039,7 +1077,7 @@ function saveTraitChoiceMulti(checkbox, choiceKey, option, limit){
 // ── Class ──
 function renderClasses(){
   const grid = document.getElementById("class-grid");
-  const libClasses = Object.values(library.classes || {});
+  const libClasses = Object.values(library.classes || {}).sort((a,b)=>(a.name||"").localeCompare(b.name||""));   // alphabetisch
   let combined;
   if (libClasses.length) {
     combined = libClasses.map(c=>({
@@ -1701,7 +1739,7 @@ async function saveCharacter(){
   // Kam der Nutzer aus dem Beitreten-Fluss? Dann zurück zur Kampagne mit diesem Charakter.
   const joinSid = new URLSearchParams(location.search).get("join");
   if (joinSid) {
-    setTimeout(()=>{ window.location.href = `/table/${joinSid}?char_id=${saved.id}`; }, 700);
+    setTimeout(()=>{ (typeof Theme!=="undefined"?Theme.go(`/table/${joinSid}?char_id=${saved.id}`):location.assign(`/table/${joinSid}?char_id=${saved.id}`)); }, 700);
   }
 }
 
@@ -1737,9 +1775,8 @@ async function deleteCharacter(){
   toast("🗑 Gelöscht");
 }
 
-init();
+(typeof Theme!=="undefined"&&Theme.hold?Theme.hold:(p=>p))(init());
 </script>
-<script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/design-studio.js"></script>
 <script src="/static/js/sfx.js"></script>
 <script src="/static/js/icons.js"></script>

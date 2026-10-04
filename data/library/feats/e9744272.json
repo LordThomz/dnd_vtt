@@ -1,0 +1,22 @@
+{
+ "name": "Gabe der Dimensionsreise",
+ "prereq": "Stufe 19+",
+ "description": "Zwischen den Orten.",
+ "benefits": "+1 Attribut; nach Angriff oder Zauber 30 ft teleportieren.",
+ "category": "Epische Gabe",
+ "id": "e9744272",
+ "rkey": "srd52.feats.boon_travel",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Boon of Dimensional Travel",
+   "prereq": "Level 19+",
+   "description": "Between places.",
+   "benefits": "+1 ability; teleport 30 ft after an attack or spell.",
+   "category": "Epic Boon"
+  }
+ }
+}

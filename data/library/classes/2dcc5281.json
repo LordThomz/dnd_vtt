@@ -1,0 +1,398 @@
+{
+ "name": "Kämpfer",
+ "hd": "d10",
+ "primary": "str",
+ "spellcaster": false,
+ "armor": "Alle Rüstungen, Schilde",
+ "weapons": "Einfache & Kriegswaffen",
+ "tools": "",
+ "saves": "STR, KON",
+ "skill_count": 2,
+ "skill_options": "Akrobatik, Tierführung, Athletik, Geschichte, Einsicht, Einschüchtern, Überzeugen, Wahrnehmung, Überleben",
+ "description": "Meister aller Waffen und Rüstungen.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Kampfstil",
+    "description": "Ein Talent der Kategorie Kampfstil.",
+    "choices": [
+     {
+      "id": "f1_0c0",
+      "type": "fighting_style",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f1_1",
+    "name": "Durchatmen",
+    "description": "Bonusaktion: 1W10 + Stufe TP heilen; mehrere Nutzungen pro Rast.",
+    "choices": []
+   },
+   {
+    "id": "f1_2",
+    "name": "Waffenmeisterschaft",
+    "description": "Meisterschafts-Eigenschaften von 3 Waffenarten nutzen (wechselbar nach langer Rast).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Tatendrang",
+    "description": "Eine zusätzliche Aktion (ab Stufe 17 zweimal pro Rast).",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Taktischer Verstand",
+    "description": "Durchatmen nutzen, um eine misslungene Probe um 1W10 zu verbessern.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Kämpfer-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   },
+   {
+    "id": "f5_1",
+    "name": "Taktischer Wechsel",
+    "description": "Beim Durchatmen halbe Bewegung ohne Gelegenheitsangriffe.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Unbeugsam",
+    "description": "Rettungswurf wiederholen, + Stufe (Stufe 13/17: weitere Nutzungen).",
+    "choices": []
+   },
+   {
+    "id": "f9_1",
+    "name": "Taktischer Meister",
+    "description": "Meisterschaft bei Angriffen durch Stoßen, Verlangsamen oder Schwächen ersetzen.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Zwei zusätzliche Angriffe",
+    "description": "Dreimal angreifen.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Gezielte Angriffe",
+    "description": "Nach einem Fehlschlag Vorteil gegen dasselbe Ziel.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Drei zusätzliche Angriffe",
+    "description": "Viermal angreifen.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "2dcc5281",
+ "rkey": "srd52.classes.fighter",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Fighter",
+   "armor": "All armour, shields",
+   "weapons": "Simple & martial weapons",
+   "tools": "",
+   "saves": "STR, CON",
+   "skill_options": "Acrobatics, Animal Handling, Athletics, History, Insight, Intimidation, Persuasion, Perception, Survival",
+   "description": "A master of all weapons and armour.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Fighting Style",
+      "description": "A Fighting Style feat."
+     },
+     {
+      "id": "f1_1",
+      "name": "Second Wind",
+      "description": "Bonus action: heal 1d10 + level HP; several uses per rest."
+     },
+     {
+      "id": "f1_2",
+      "name": "Weapon Mastery",
+      "description": "Use the mastery properties of 3 kinds of weapons (swap after a long rest)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Action Surge",
+      "description": "One extra action (twice per rest from level 17)."
+     },
+     {
+      "id": "f2_1",
+      "name": "Tactical Mind",
+      "description": "Spend Second Wind to add 1d10 to a failed ability check."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Fighter Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     },
+     {
+      "id": "f5_1",
+      "name": "Tactical Shift",
+      "description": "When you use Second Wind, move half speed without provoking."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Indomitable",
+      "description": "Reroll a save adding your level (more uses at 13/17)."
+     },
+     {
+      "id": "f9_1",
+      "name": "Tactical Master",
+      "description": "Replace a weapon's mastery with Push, Sap or Slow."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Two Extra Attacks",
+      "description": "Attack three times."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Studied Attacks",
+      "description": "After a miss, advantage on your next attack against that target."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Three Extra Attacks",
+      "description": "Attack four times."
+     }
+    ]
+   }
+  }
+ }
+}

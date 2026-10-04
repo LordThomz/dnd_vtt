@@ -331,7 +331,8 @@ const DiceGeometry = (() => {
 
   // «STELLSCHRAUBE» Breite der abgerundeten Kanten (Anteil am Radius).
   // 0 = scharfe Kanten wie früher. Nur Darstellung – die Physik bleibt exakt.
-  const BEVEL_FRAC = 0.045;
+  // Einstellungen → Grafik → „Abgerundete Kanten" (aus = scharfe Kanten)
+  const BEVEL_FRAC = (() => { try { return JSON.parse(localStorage.getItem("vtt_settings") || "{}") || {}; } catch (e) { return {}; } })().diceBevel === false ? 0 : 0.045;
 
   // Zwischenspeicher: Geometrie wird pro Würfelform nur einmal gerechnet.
   const _cache = new Map();

@@ -13,5 +13,12 @@
     "--table-grid-rgb": "30,18,8",
     "--table-fog-rgb": "18,11,6",
     "--table-measure": "#ffcf6a"
+  },
+  "i18n": {
+    "en": {
+      "name": "Oak Board",
+      "tag": "Wood",
+      "description": "Warm, grained wood – like a real gaming table."
+    }
   }
 }

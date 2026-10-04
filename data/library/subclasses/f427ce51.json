@@ -1,0 +1,84 @@
+{
+ "name": "Jäger",
+ "parent_class_name": "Waldläufer",
+ "parent_class": "91cb3b33",
+ "start_level": 3,
+ "description": "Bollwerk gegen die Schrecken der Wildnis.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Beute des Jägers",
+    "description": "Kolossbezwinger, Riesentöter oder Hordenbrecher.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Verteidigungstaktik",
+    "description": "Der Horde entkommen, Mehrfachangriffs-Verteidigung oder Stählerner Wille.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Mehrfachangriff",
+    "description": "Salve oder Wirbelangriff.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Überlegene Jägerverteidigung",
+    "description": "Entrinnen, Gegen den Strom oder Unheimliches Ausweichen.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "f427ce51",
+ "rkey": "srd51.subclasses.hunter",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Hunter",
+   "parent_class_name": "Ranger",
+   "description": "A bulwark against the horrors of the wild.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Hunter's Prey",
+      "description": "Colossus Slayer, Giant Killer or Horde Breaker."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Defensive Tactics",
+      "description": "Escape the Horde, Multiattack Defense or Steel Will."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Multiattack",
+      "description": "Volley or Whirlwind Attack."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Superior Hunter's Defense",
+      "description": "Evasion, Stand Against the Tide or Uncanny Dodge."
+     }
+    ]
+   }
+  }
+ }
+}

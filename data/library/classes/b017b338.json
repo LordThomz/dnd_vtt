@@ -1,0 +1,286 @@
+{
+ "name": "Kleriker",
+ "hd": "d8",
+ "primary": "wis",
+ "spellcaster": true,
+ "armor": "Leichte & mittlere Rüstung, Schilde",
+ "weapons": "Einfache Waffen",
+ "tools": "",
+ "saves": "WEI, CHA",
+ "skill_count": 2,
+ "skill_options": "Geschichte, Einsicht, Heilkunde, Überzeugen, Religion",
+ "description": "Ein Werkzeug göttlicher Macht.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste vorbereiten und wirken. Attribut: WEI.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Göttliche Ordnung",
+    "description": "Beschützer (schwere Rüstung, Kriegswaffen) oder Thaumaturg (Zaubertrick, Arkana/Religion).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Göttliche Macht",
+    "description": "Göttlicher Funke (heilen oder Schaden) oder Untote vertreiben; Nutzungen pro Rast.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Kleriker-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Untote versengen",
+    "description": "Vertriebene Untote erleiden gleißenden Schaden.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Gesegnete Schläge",
+    "description": "Göttlicher Schlag (+1W8) oder wirksames Zauberwirken (+WEI auf Zaubertricks).",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Göttliches Eingreifen",
+    "description": "Einen Zauber bis 5. Grad ohne Platz wirken (einmal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Verbesserte gesegnete Schläge",
+    "description": "Stärkere Wirkung der gesegneten Schläge.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Größeres göttliches Eingreifen",
+    "description": "Göttliches Eingreifen kann Wunsch wirken.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "b017b338",
+ "rkey": "srd52.classes.cleric",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Cleric",
+   "armor": "Light & medium armour, shields",
+   "weapons": "Simple weapons",
+   "tools": "",
+   "saves": "WIS, CHA",
+   "skill_options": "History, Insight, Medicine, Persuasion, Religion",
+   "description": "An instrument of divine power.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Prepare and cast spells from your class list. Ability: WIS."
+     },
+     {
+      "id": "f1_1",
+      "name": "Divine Order",
+      "description": "Protector (heavy armour, martial weapons) or Thaumaturge (cantrip, Arcana/Religion)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Channel Divinity",
+      "description": "Divine Spark (heal or harm) or Turn Undead; uses per rest."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Cleric Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Sear Undead",
+      "description": "Turned undead take radiant damage."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Blessed Strikes",
+      "description": "Divine Strike (+1d8) or Potent Spellcasting (+WIS to cantrips)."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Divine Intervention",
+      "description": "Cast a spell up to 5th level without a slot (once per long rest)."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Improved Blessed Strikes",
+      "description": "Stronger Blessed Strikes."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Greater Divine Intervention",
+      "description": "Divine Intervention can cast wish."
+     }
+    ]
+   }
+  }
+ }
+}

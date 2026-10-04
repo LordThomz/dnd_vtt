@@ -1,0 +1,16 @@
+{
+ "name": "Taub",
+ "description": "Hört nichts.",
+ "id": "1b68b508",
+ "rkey": "srd51.conditions.deafened",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Deafened",
+   "description": "Can't hear."
+  }
+ }
+}

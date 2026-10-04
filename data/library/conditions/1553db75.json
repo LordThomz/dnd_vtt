@@ -1,0 +1,16 @@
+{
+ "name": "Unsichtbar",
+ "description": "Nicht ohne Hilfe zu sehen; eigene Angriffe mit Vorteil, gegen dich mit Nachteil.",
+ "id": "1553db75",
+ "rkey": "srd51.conditions.invisible",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Invisible",
+   "description": "Can't be seen without help; your attacks have advantage, attacks against you disadvantage."
+  }
+ }
+}

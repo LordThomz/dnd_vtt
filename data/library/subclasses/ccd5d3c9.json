@@ -1,0 +1,87 @@
+{
+ "name": "Krieger der offenen Hand",
+ "parent_class_name": "Mönch",
+ "parent_class": "18540b50",
+ "start_level": 3,
+ "description": "Meister des waffenlosen Kampfes.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Technik der offenen Hand",
+    "description": "Schlaghagel: Ziel umwerfen, wegstoßen oder Reaktionen verwehren.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Ganzheit des Körpers",
+    "description": "Bonusaktion: Kampfkunstwürfel + WEI heilen (WEI-mal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Flinker Schritt",
+    "description": "Schritt des Windes nach jeder anderen Bonusaktion.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Bebende Handfläche",
+    "description": "4 Fokus: tödliche Schwingungen, später 10W12 Energieschaden.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "ccd5d3c9",
+ "rkey": "srd52.subclasses.openhand",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Warrior of the Open Hand",
+   "parent_class_name": "Monk",
+   "description": "Masters of unarmed combat.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Open Hand Technique",
+      "description": "Flurry of Blows: topple, push or deny reactions."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Wholeness of Body",
+      "description": "Bonus action: heal a martial arts die + WIS (WIS times per long rest)."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Fleet Step",
+      "description": "Step of the Wind after any other bonus action."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Quivering Palm",
+      "description": "4 focus: lethal vibrations, later 10d12 force damage."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "Weg der offenen Hand"
+ ]
+}

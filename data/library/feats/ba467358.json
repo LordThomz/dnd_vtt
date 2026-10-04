@@ -1,0 +1,22 @@
+{
+ "name": "Gabe des Nachtgeistes",
+ "prereq": "Stufe 19+",
+ "description": "Eins mit den Schatten.",
+ "benefits": "+1 Attribut; im Dämmerlicht unsichtbar werden; Resistenz in Schatten.",
+ "category": "Epische Gabe",
+ "id": "ba467358",
+ "rkey": "srd52.feats.boon_night",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Boon of the Night Spirit",
+   "prereq": "Level 19+",
+   "description": "One with shadows.",
+   "benefits": "+1 ability; become invisible in dim light; resistance while in shadows.",
+   "category": "Epic Boon"
+  }
+ }
+}

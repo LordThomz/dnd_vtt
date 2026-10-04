@@ -1,0 +1,404 @@
+{
+ "name": "Mönch",
+ "hd": "d8",
+ "primary": "dex",
+ "spellcaster": false,
+ "armor": "Keine",
+ "weapons": "Einfache Waffen, Kurzschwert",
+ "tools": "Ein Handwerkszeug oder Instrument",
+ "saves": "STR, GES",
+ "skill_count": 2,
+ "skill_options": "Akrobatik, Athletik, Geschichte, Einsicht, Religion, Heimlichkeit",
+ "description": "Disziplinierter Kämpfer mit übernatürlicher Körperbeherrschung.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Ungerüstete Verteidigung",
+    "description": "Ohne Rüstung und Schild: RK 10 + GES + WEI.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Kampfkunst",
+    "description": "Waffenlose und Mönchswaffen-Angriffe mit GES; Kampfkunstwürfel W4 (steigt); Bonusangriff waffenlos.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Ki",
+    "description": "Ki-Punkte = Stufe: Schlaghagel, Geduldige Verteidigung, Schritt des Windes.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Ungerüstete Bewegung",
+    "description": "+10 ft Geschwindigkeit (steigt; ab Stufe 9 über Wände und Wasser).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Klostertradition",
+    "description": "Wähle deine Tradition (Unterklasse).",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f3_1",
+    "name": "Geschosse abwehren",
+    "description": "Reaktion: Fernkampfschaden verringern, evtl. zurückwerfen.",
+    "choices": []
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Langsamer Fall",
+    "description": "Reaktion: Fallschaden um das Fünffache der Stufe verringern.",
+    "choices": []
+   },
+   {
+    "id": "f4_1",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   },
+   {
+    "id": "f5_1",
+    "name": "Betäubender Schlag",
+    "description": "1 Ki nach einem Treffer: KON-Rettungswurf oder betäubt.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Ki-verstärkte Schläge",
+    "description": "Waffenlose Angriffe gelten als magisch.",
+    "choices": []
+   },
+   {
+    "id": "f6_1",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Tradition.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Entrinnen",
+    "description": "Bei GES-Rettungswürfen für halben Schaden: Erfolg = kein Schaden, Misserfolg = halber.",
+    "choices": []
+   },
+   {
+    "id": "f7_1",
+    "name": "Geistesruhe",
+    "description": "Aktion: Bezauberung oder Verängstigung an dir beenden.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Reinheit des Körpers",
+    "description": "Immun gegen Krankheiten und Gift.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Tradition.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Zunge von Sonne und Mond",
+    "description": "Du verstehst alle gesprochenen Sprachen.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Diamantene Seele",
+    "description": "Geübt in allen Rettungswürfen; 1 Ki für einen neuen Versuch.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Zeitloser Körper",
+    "description": "Kein Altern mehr durch Magie; kein Essen und Trinken nötig.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Tradition.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Leerer Körper",
+    "description": "4 Ki: 1 Minute unsichtbar mit Resistenz gegen fast alles.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Vollkommenes Selbst",
+    "description": "Mit 0 Ki bei Initiative erhältst du 4 Ki.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "24ba8176",
+ "rkey": "srd51.classes.monk",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Monk",
+   "armor": "None",
+   "weapons": "Simple weapons, shortsword",
+   "tools": "One artisan's tool or instrument",
+   "saves": "STR, DEX",
+   "skill_options": "Acrobatics, Athletics, History, Insight, Religion, Stealth",
+   "description": "A disciplined fighter with supernatural body control.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Unarmored Defense",
+      "description": "Without armour or shield: AC 10 + DEX + WIS."
+     },
+     {
+      "id": "f1_1",
+      "name": "Martial Arts",
+      "description": "Unarmed and monk weapon attacks use DEX; martial arts die d4 (scales); bonus unarmed strike."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Ki",
+      "description": "Ki points equal to level: Flurry of Blows, Patient Defense, Step of the Wind."
+     },
+     {
+      "id": "f2_1",
+      "name": "Unarmored Movement",
+      "description": "+10 ft speed (increases; walls and water from level 9)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Monastic Tradition",
+      "description": "Choose your tradition (subclass)."
+     },
+     {
+      "id": "f3_1",
+      "name": "Deflect Missiles",
+      "description": "Reaction: reduce ranged weapon damage and possibly throw it back."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Slow Fall",
+      "description": "Reaction: reduce falling damage by five times your level."
+     },
+     {
+      "id": "f4_1",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     },
+     {
+      "id": "f5_1",
+      "name": "Stunning Strike",
+      "description": "1 ki after a hit: CON save or stunned."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Ki-Empowered Strikes",
+      "description": "Unarmed strikes count as magical."
+     },
+     {
+      "id": "f6_1",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen tradition."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Evasion",
+      "description": "On DEX saves for half damage: success = none, failure = half."
+     },
+     {
+      "id": "f7_1",
+      "name": "Stillness of Mind",
+      "description": "Action: end a charm or fear effect on yourself."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Purity of Body",
+      "description": "Immune to disease and poison."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen tradition."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Tongue of the Sun and Moon",
+      "description": "You understand all spoken languages."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Diamond Soul",
+      "description": "Proficient in all saves; spend 1 ki to reroll one."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Timeless Body",
+      "description": "No magical ageing; no need for food or water."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen tradition."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Empty Body",
+      "description": "4 ki: invisible for 1 minute with resistance to almost everything."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Perfect Self",
+      "description": "With no ki left when rolling initiative, you regain 4."
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Sylvanisch",
+ "rarity": "Exotisch",
+ "script": "Elfisch",
+ "speakers": "Feenwesen",
+ "description": "Exotische Sprache. Schrift: Elfisch. Typische Sprecher: Feenwesen.",
+ "id": "bf224251",
+ "rkey": "srd51.languages.sylvan",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Sylvan",
+   "rarity": "Exotic",
+   "script": "Elvish",
+   "speakers": "Fey creatures",
+   "description": "Exotic language. Script: Elvish. Typical speakers: Fey creatures."
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Begabt",
+ "prereq": "—",
+ "description": "Vielseitig ausgebildet.",
+ "benefits": "Geübt in drei Fertigkeiten oder Werkzeugen.",
+ "category": "Herkunft",
+ "id": "bbcdbbed",
+ "rkey": "srd52.feats.skilled",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Skilled",
+   "prereq": "—",
+   "description": "Broadly trained.",
+   "benefits": "Proficiency in three skills or tools.",
+   "category": "Origin"
+  }
+ }
+}

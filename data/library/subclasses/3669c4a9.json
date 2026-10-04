@@ -1,0 +1,95 @@
+{
+ "name": "Schwur der Hingabe",
+ "parent_class_name": "Paladin",
+ "parent_class": "25c5c436",
+ "start_level": 3,
+ "description": "Das Ideal des edlen Ritters.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Schwurzauber",
+    "description": "Immer vorbereitet: u. a. Schutz vor Gut und Böse, Magie bannen.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Göttliche Macht",
+    "description": "Geheiligte Waffe (+CHA auf Angriffe) oder Unheiliges vertreiben.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Aura der Hingabe",
+    "description": "Du und Verbündete in 10 ft können nicht bezaubert werden.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Reinheit des Geistes",
+    "description": "Dauerhaft geschützt wie durch Schutz vor Gut und Böse.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Heiliger Nimbus",
+    "description": "1 Minute helles Licht, Schaden an Feinden, Schutz vor Unholden und Untoten.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "3669c4a9",
+ "rkey": "srd51.subclasses.devotion",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Oath of Devotion",
+   "parent_class_name": "Paladin",
+   "description": "The ideal of the noble knight.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Oath Spells",
+      "description": "Always prepared: e.g. protection from evil and good, dispel magic."
+     },
+     {
+      "id": "f3_1",
+      "name": "Channel Divinity",
+      "description": "Sacred Weapon (+CHA to attacks) or Turn the Unholy."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Aura of Devotion",
+      "description": "You and allies within 10 ft can't be charmed."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Purity of Spirit",
+      "description": "Permanently protected as by protection from evil and good."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Holy Nimbus",
+      "description": "1 minute of bright light that damages foes and wards against fiends and undead."
+     }
+    ]
+   }
+  }
+ }
+}

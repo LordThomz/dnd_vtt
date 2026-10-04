@@ -1,0 +1,103 @@
+{
+ "name": "Drakonische Blutlinie",
+ "parent_class_name": "Hexenmeister",
+ "parent_class": "40117707",
+ "start_level": 1,
+ "description": "Die Magie stammt von einem Drachen unter deinen Vorfahren.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Drachenahn",
+    "description": "Drachenart wählen; Drakonisch sprechen.",
+    "choices": [
+     {
+      "id": "f1_0c0",
+      "type": "damage_type",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f1_1",
+    "name": "Drakonische Widerstandskraft",
+    "description": "+1 TP pro Stufe; ohne Rüstung RK 13 + GES.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Elementare Affinität",
+    "description": "+CHA auf Schaden deiner Drachen-Schadensart; Resistenz für 1 Zauberpunkt.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Drachenschwingen",
+    "description": "Bonusaktion: Flügel mit Fluggeschwindigkeit.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Drakonische Präsenz",
+    "description": "5 Zauberpunkte: Aura der Ehrfurcht oder Furcht.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "8aa9a2e9",
+ "rkey": "srd51.subclasses.draconic",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Draconic Bloodline",
+   "parent_class_name": "Sorcerer",
+   "description": "Your magic comes from a dragon ancestor.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Dragon Ancestor",
+      "description": "Choose a dragon type; speak Draconic."
+     },
+     {
+      "id": "f1_1",
+      "name": "Draconic Resilience",
+      "description": "+1 HP per level; AC 13 + DEX without armour."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Elemental Affinity",
+      "description": "+CHA to damage of your dragon type; resistance for 1 sorcery point."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Dragon Wings",
+      "description": "Bonus action: sprout wings with a flying speed."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Draconic Presence",
+      "description": "5 sorcery points: an aura of awe or fear."
+     }
+    ]
+   }
+  }
+ }
+}

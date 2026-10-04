@@ -1,0 +1,22 @@
+{
+ "name": "Ringer",
+ "prereq": "Stufe 4+, STR oder GES 13",
+ "description": "Meister des Haltegriffs.",
+ "benefits": "+1 STR oder GES; Schlag und Packen in einem; Vorteil gegen Gepackte; Gepackte ohne Verlangsamung bewegen.",
+ "category": "Allgemein",
+ "id": "123a91d2",
+ "rkey": "srd52.feats.grappler",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Grappler",
+   "prereq": "Level 4+, STR or DEX 13",
+   "description": "Master of holds.",
+   "benefits": "+1 STR or DEX; punch and grab together; advantage against grappled targets; move them without slowing.",
+   "category": "General"
+  }
+ }
+}

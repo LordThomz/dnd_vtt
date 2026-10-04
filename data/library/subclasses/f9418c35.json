@@ -1,0 +1,98 @@
+{
+ "name": "Hervorrufung",
+ "parent_class_name": "Magier",
+ "parent_class": "c81322e3",
+ "start_level": 2,
+ "description": "Magier, die Elementargewalten entfesseln.",
+ "level_features": {
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Hervorrufungs-Gelehrter",
+    "description": "Hervorrufungszauber halb so teuer abzuschreiben.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Zauber formen",
+    "description": "Verbündete aus Flächenzaubern aussparen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Wirksamer Zaubertrick",
+    "description": "Bestandene Rettungswürfe gegen deine Zaubertricks: halber Schaden.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Verstärkte Hervorrufung",
+    "description": "+INT auf den Schaden von Hervorrufungszaubern.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Überladen",
+    "description": "Zauber bis 5. Grad mit maximalem Schaden (danach nekrotischer Schaden an dir).",
+    "choices": []
+   }
+  ]
+ },
+ "id": "f9418c35",
+ "rkey": "srd51.subclasses.evocation",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "School of Evocation",
+   "parent_class_name": "Wizard",
+   "description": "Wizards who unleash elemental power.",
+   "level_features": {
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Evocation Savant",
+      "description": "Copy evocation spells at half cost."
+     },
+     {
+      "id": "f2_1",
+      "name": "Sculpt Spells",
+      "description": "Exclude allies from your area spells."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Potent Cantrip",
+      "description": "Successful saves against your cantrips still take half damage."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Empowered Evocation",
+      "description": "+INT to the damage of evocation spells."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Overchannel",
+      "description": "Spells up to 5th level deal maximum damage (with necrotic backlash)."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "Schule der Hervorrufung"
+ ]
+}

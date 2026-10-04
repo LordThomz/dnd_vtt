@@ -1,0 +1,331 @@
+{
+ "name": "Kämpfer",
+ "hd": "d10",
+ "primary": "str",
+ "spellcaster": false,
+ "armor": "Alle Rüstungen, Schilde",
+ "weapons": "Einfache & Kriegswaffen",
+ "tools": "",
+ "saves": "STR, KON",
+ "skill_count": 2,
+ "skill_options": "Akrobatik, Tierführung, Athletik, Geschichte, Einsicht, Einschüchtern, Wahrnehmung, Überleben",
+ "description": "Meisterlicher Krieger mit vielseitigen Kampftechniken.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Kampfstil",
+    "description": "Einen Kampfstil wählen (z. B. Bogenschießen, Verteidigung, Duellieren).",
+    "choices": [
+     {
+      "id": "f1_0c0",
+      "type": "fighting_style",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f1_1",
+    "name": "Durchatmen",
+    "description": "Bonusaktion: 1W10 + Stufe Trefferpunkte heilen. Einmal pro Rast.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Tatendrang",
+    "description": "Eine zusätzliche Aktion in deinem Zug. Einmal pro Rast (ab Stufe 17 zweimal).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Kampfarchetyp",
+    "description": "Wähle deinen Archetyp (Unterklasse).",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Unbeugsam",
+    "description": "Einen misslungenen Rettungswurf wiederholen. Einmal pro langer Rast (Stufe 13: zweimal, 17: dreimal).",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Zusätzlicher Angriff (2)",
+    "description": "Dreimal angreifen.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Zusätzlicher Angriff (3)",
+    "description": "Viermal angreifen.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "cf8fb909",
+ "rkey": "srd51.classes.fighter",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Fighter",
+   "armor": "All armour, shields",
+   "weapons": "Simple & martial weapons",
+   "tools": "",
+   "saves": "STR, CON",
+   "skill_options": "Acrobatics, Animal Handling, Athletics, History, Insight, Intimidation, Perception, Survival",
+   "description": "A master of martial combat with versatile techniques.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Fighting Style",
+      "description": "Choose a fighting style (e.g. Archery, Defense, Dueling)."
+     },
+     {
+      "id": "f1_1",
+      "name": "Second Wind",
+      "description": "Bonus action: regain 1d10 + level hit points. Once per rest."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Action Surge",
+      "description": "Take one extra action on your turn. Once per rest (twice from level 17)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Martial Archetype",
+      "description": "Choose your archetype (subclass)."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Indomitable",
+      "description": "Reroll a failed saving throw. Once per long rest (twice at 13, three times at 17)."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Extra Attack (2)",
+      "description": "Attack three times."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Extra Attack (3)",
+      "description": "Attack four times."
+     }
+    ]
+   }
+  }
+ }
+}

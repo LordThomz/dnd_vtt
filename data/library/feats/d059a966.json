@@ -1,0 +1,22 @@
+{
+ "name": "Attributswerterhöhung",
+ "prereq": "Stufe 4+",
+ "description": "Stärker, klüger, schneller.",
+ "benefits": "Ein Attribut +2 oder zwei Attribute +1 (höchstens 20).",
+ "category": "Allgemein",
+ "id": "d059a966",
+ "rkey": "srd52.feats.asi",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Ability Score Improvement",
+   "prereq": "Level 4+",
+   "description": "Stronger, smarter, faster.",
+   "benefits": "One ability +2 or two abilities +1 (max 20).",
+   "category": "General"
+  }
+ }
+}

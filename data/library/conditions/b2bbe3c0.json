@@ -1,0 +1,16 @@
+{
+ "name": "Liegend",
+ "description": "Kriechen; Nahkampf gegen dich mit Vorteil, Fernkampf mit Nachteil.",
+ "id": "b2bbe3c0",
+ "rkey": "srd52.conditions.prone",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Prone",
+   "description": "Crawl only; melee against you has advantage, ranged disadvantage."
+  }
+ }
+}

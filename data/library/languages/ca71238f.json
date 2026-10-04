@@ -1,0 +1,22 @@
+{
+ "name": "Gemeinsprache der Unterreiche",
+ "rarity": "Exotisch",
+ "script": "Elfisch",
+ "speakers": "Händler der Unterreiche",
+ "description": "Exotische Sprache. Schrift: Elfisch. Typische Sprecher: Händler der Unterreiche.",
+ "id": "ca71238f",
+ "rkey": "srd51.languages.undercommon",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Undercommon",
+   "rarity": "Exotic",
+   "script": "Elvish",
+   "speakers": "Underworld traders",
+   "description": "Exotic language. Script: Elvish. Typical speakers: Underworld traders."
+  }
+ }
+}

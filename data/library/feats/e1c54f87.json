@@ -1,0 +1,22 @@
+{
+ "name": "Kampf mit zwei Waffen",
+ "prereq": "Kampfstil-Merkmal",
+ "description": "Zwei Klingen, ein Rhythmus.",
+ "benefits": "Attributsmodifikator auch auf den Schaden des Zusatzangriffs.",
+ "category": "Kampfstil",
+ "id": "e1c54f87",
+ "rkey": "srd52.feats.two_weapon",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Two-Weapon Fighting",
+   "prereq": "Fighting Style feature",
+   "description": "Two blades, one rhythm.",
+   "benefits": "Add your ability modifier to the extra attack's damage.",
+   "category": "Fighting Style"
+  }
+ }
+}

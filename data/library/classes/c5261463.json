@@ -1,0 +1,255 @@
+{
+ "name": "Druide",
+ "hd": "d8",
+ "primary": "wis",
+ "spellcaster": true,
+ "armor": "Leichte & mittlere Rüstung, Schilde (kein Metall)",
+ "weapons": "Keule, Dolch, Wurfpfeil, Speer, Kampfstab, Sichel, Schleuder u. a.",
+ "tools": "Kräuterkunde-Ausrüstung",
+ "saves": "INT, WEI",
+ "skill_count": 2,
+ "skill_options": "Arkana, Tierführung, Einsicht, Heilkunde, Naturkunde, Wahrnehmung, Religion, Überleben",
+ "description": "Hüter der Natur mit wilder Magie und Gestaltwandel.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Druidisch",
+    "description": "Die Geheimsprache der Druiden.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste wirken. Attribut: WEI.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Tiergestalt",
+    "description": "Zweimal pro kurzer Rast in ein bekanntes Tier verwandeln (Grenzen steigen mit der Stufe).",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Druidenzirkel",
+    "description": "Wähle deinen Zirkel (Unterklasse).",
+    "choices": [
+     {
+      "id": "f2_1c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Zirkel.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Zirkel.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Zirkel.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Zeitloser Körper",
+    "description": "Du alterst nur noch sehr langsam.",
+    "choices": []
+   },
+   {
+    "id": "f18_1",
+    "name": "Tierzauber",
+    "description": "Zauber auch in Tiergestalt wirken.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Erzdruide",
+    "description": "Unbegrenzte Tiergestalt; Zauberkomponenten entfallen.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "c5261463",
+ "rkey": "srd51.classes.druid",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Druid",
+   "armor": "Light & medium armour, shields (no metal)",
+   "weapons": "Club, dagger, dart, spear, quarterstaff, sickle, sling and more",
+   "tools": "Herbalism kit",
+   "saves": "INT, WIS",
+   "skill_options": "Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, Survival",
+   "description": "A guardian of nature with primal magic and shapechanging.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Druidic",
+      "description": "The secret language of druids."
+     },
+     {
+      "id": "f1_1",
+      "name": "Spellcasting",
+      "description": "Cast spells from your class list. Ability: WIS."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Wild Shape",
+      "description": "Turn into a beast you have seen, twice per short rest (limits rise with level)."
+     },
+     {
+      "id": "f2_1",
+      "name": "Druid Circle",
+      "description": "Choose your circle (subclass)."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen circle."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen circle."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen circle."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Timeless Body",
+      "description": "You age very slowly."
+     },
+     {
+      "id": "f18_1",
+      "name": "Beast Spells",
+      "description": "Cast spells while in wild shape."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Archdruid",
+      "description": "Unlimited wild shape; ignore many spell components."
+     }
+    ]
+   }
+  }
+ }
+}

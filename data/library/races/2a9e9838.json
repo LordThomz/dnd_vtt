@@ -1,0 +1,91 @@
+{
+ "name": "Elf",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Magische, langlebige Wesen mit Abstammung aus Drow, Hochelfen oder Waldelfen.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Dunkelsicht 60 ft.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Elfische Abstammung",
+   "description": "Drow, Hochelf oder Waldelf: Zaubertrick und weitere Zauber auf Stufe 3 und 5.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Feenblut",
+   "description": "Vorteil gegen Bezauberung.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Scharfe Sinne",
+   "description": "Geübt in Einsicht, Wahrnehmung oder Überleben.",
+   "choices": [
+    {
+     "id": "t3c0",
+     "type": "skill",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  },
+  {
+   "id": "t4",
+   "name": "Trance",
+   "description": "4 Stunden Trance ersetzen eine lange Rast an Schlaf.",
+   "choices": []
+  }
+ ],
+ "id": "2a9e9838",
+ "rkey": "srd52.races.elf",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Elf",
+   "size": "Medium",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Magical, long-lived people of drow, high elf or wood elf lineage.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Darkvision 60 ft."
+    },
+    {
+     "id": "t1",
+     "name": "Elven Lineage",
+     "description": "Drow, high elf or wood elf: a cantrip and more spells at levels 3 and 5."
+    },
+    {
+     "id": "t2",
+     "name": "Fey Ancestry",
+     "description": "Advantage against being charmed."
+    },
+    {
+     "id": "t3",
+     "name": "Keen Senses",
+     "description": "Proficient in Insight, Perception or Survival."
+    },
+    {
+     "id": "t4",
+     "name": "Trance",
+     "description": "4 hours of trance replace sleep for a long rest."
+    }
+   ]
+  }
+ }
+}

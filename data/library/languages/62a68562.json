@@ -1,0 +1,22 @@
+{
+ "name": "Gebärdensprache",
+ "rarity": "Standard",
+ "script": "—",
+ "speakers": "Überall verbreitet",
+ "description": "Standardsprache. Schrift: —. Typische Sprecher: Überall verbreitet.",
+ "id": "62a68562",
+ "rkey": "srd52.languages.common_sign_language",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Common Sign Language",
+   "rarity": "Standard",
+   "script": "—",
+   "speakers": "Widespread",
+   "description": "Standard language. Script: —. Typical speakers: Widespread."
+  }
+ }
+}

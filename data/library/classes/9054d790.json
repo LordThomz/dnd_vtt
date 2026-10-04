@@ -1,0 +1,409 @@
+{
+ "name": "Schurke",
+ "hd": "d8",
+ "primary": "dex",
+ "spellcaster": false,
+ "armor": "Leichte Rüstung",
+ "weapons": "Einfache Waffen, Kriegswaffen mit Finesse oder leicht",
+ "tools": "Diebeswerkzeug",
+ "saves": "GES, INT",
+ "skill_count": 4,
+ "skill_options": "Akrobatik, Athletik, Täuschung, Einsicht, Einschüchtern, Nachforschungen, Wahrnehmung, Auftreten, Überzeugen, Fingerfertigkeit, Heimlichkeit",
+ "description": "Ein geschickter Experte für Heimlichkeit und Präzision.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Expertise",
+    "description": "Doppelter Übungsbonus in zwei Fertigkeiten (Stufe 6: zwei weitere).",
+    "choices": [
+     {
+      "id": "f1_0c0",
+      "type": "skill",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f1_1",
+    "name": "Hinterhältiger Angriff",
+    "description": "Einmal pro Zug +1W6 (steigt) bei Vorteil oder Verbündetem am Ziel.",
+    "choices": []
+   },
+   {
+    "id": "f1_2",
+    "name": "Diebessprache",
+    "description": "Geheimsprache der Unterwelt und eine weitere Sprache.",
+    "choices": []
+   },
+   {
+    "id": "f1_3",
+    "name": "Waffenmeisterschaft",
+    "description": "Meisterschafts-Eigenschaften von 2 Waffenarten nutzen (wechselbar nach langer Rast).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Raffinierte Aktion",
+    "description": "Spurt, Rückzug oder Verstecken als Bonusaktion.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Schurken-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f3_1",
+    "name": "Ruhiges Zielen",
+    "description": "Bonusaktion: Vorteil auf den nächsten Angriff, wenn du dich nicht bewegst.",
+    "choices": []
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Raffinierter Schlag",
+    "description": "Würfel des Hinterhalts für Gift, Umstoßen oder Rückzug eintauschen.",
+    "choices": []
+   },
+   {
+    "id": "f5_1",
+    "name": "Unheimliches Ausweichen",
+    "description": "Reaktion: Schaden eines Angriffs halbieren.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Entrinnen",
+    "description": "GES-Rettungswürfe für halben Schaden: Erfolg = kein Schaden.",
+    "choices": []
+   },
+   {
+    "id": "f7_1",
+    "name": "Verlässliches Talent",
+    "description": "Geübte Proben: 9 oder weniger zählt als 10.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Verbesserter raffinierter Schlag",
+    "description": "Zwei Effekte gleichzeitig.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Hinterlistige Schläge",
+    "description": "Neue Effekte: Benommen, Bewusstlos, Verschleiert.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Schlüpfriger Geist",
+    "description": "Geübt in WEI- und CHA-Rettungswürfen.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Schwer zu fassen",
+    "description": "Angriffe gegen dich haben nie Vorteil.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Glückstreffer",
+    "description": "Fehlgeschlagenen W20-Wurf in eine 20 verwandeln (einmal pro Rast).",
+    "choices": []
+   }
+  ]
+ },
+ "id": "9054d790",
+ "rkey": "srd52.classes.rogue",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Rogue",
+   "armor": "Light armour",
+   "weapons": "Simple weapons, martial weapons with finesse or light",
+   "tools": "Thieves' tools",
+   "saves": "DEX, INT",
+   "skill_options": "Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, Stealth",
+   "description": "A dexterous expert in stealth and precision.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Expertise",
+      "description": "Double proficiency in two skills (two more at level 6)."
+     },
+     {
+      "id": "f1_1",
+      "name": "Sneak Attack",
+      "description": "Once per turn +1d6 (scales) with advantage or an ally next to the target."
+     },
+     {
+      "id": "f1_2",
+      "name": "Thieves' Cant",
+      "description": "Secret underworld language and one more language."
+     },
+     {
+      "id": "f1_3",
+      "name": "Weapon Mastery",
+      "description": "Use the mastery properties of 2 kinds of weapons (swap after a long rest)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Cunning Action",
+      "description": "Dash, Disengage or Hide as a bonus action."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Rogue Subclass",
+      "description": "Choose your subclass."
+     },
+     {
+      "id": "f3_1",
+      "name": "Steady Aim",
+      "description": "Bonus action: advantage on your next attack if you don't move."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Cunning Strike",
+      "description": "Trade Sneak Attack dice for poison, trip or withdraw."
+     },
+     {
+      "id": "f5_1",
+      "name": "Uncanny Dodge",
+      "description": "Reaction: halve an attack's damage."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Evasion",
+      "description": "DEX saves for half damage: success = no damage."
+     },
+     {
+      "id": "f7_1",
+      "name": "Reliable Talent",
+      "description": "Proficient checks: treat 9 or lower as 10."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Improved Cunning Strike",
+      "description": "Two effects at once."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Devious Strikes",
+      "description": "New effects: Daze, Knock Out, Obscure."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Slippery Mind",
+      "description": "Proficient in WIS and CHA saves."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Elusive",
+      "description": "Attacks against you never have advantage."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Stroke of Luck",
+      "description": "Turn a failed d20 test into a 20 (once per rest)."
+     }
+    ]
+   }
+  }
+ }
+}

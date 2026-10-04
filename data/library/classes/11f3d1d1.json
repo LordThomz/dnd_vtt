@@ -1,0 +1,248 @@
+{
+ "name": "Hexer",
+ "hd": "d8",
+ "primary": "cha",
+ "spellcaster": true,
+ "armor": "Leichte Rüstung",
+ "weapons": "Einfache Waffen",
+ "tools": "",
+ "saves": "WEI, CHA",
+ "skill_count": 2,
+ "skill_options": "Arkana, Täuschung, Geschichte, Einschüchtern, Nachforschungen, Naturkunde, Religion",
+ "description": "Paktgebundener Magier im Dienst eines mächtigen Wesens.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Andersweltlicher Schutzherr",
+    "description": "Wähle deinen Schutzherrn (Unterklasse).",
+    "choices": [
+     {
+      "id": "f1_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f1_1",
+    "name": "Paktmagie",
+    "description": "Wenige Zauberplätze höchsten Grades, die nach kurzer Rast zurückkehren. Attribut: CHA.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Schauerliche Anrufungen",
+    "description": "Zwei Anrufungen mit besonderen Fähigkeiten (weitere mit der Stufe).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Paktgabe",
+    "description": "Pakt der Kette, der Klinge oder des Folianten.",
+    "choices": []
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Schutzherr.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Schutzherr.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Mystisches Arkanum",
+    "description": "Ein Zauber 6. Grades einmal pro langer Rast (7./8./9. Grad auf Stufe 13/15/17).",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Schutzherr.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Schauerlicher Meister",
+    "description": "Eine Minute bitten: alle Paktzauberplätze zurück. Einmal pro langer Rast.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "11f3d1d1",
+ "rkey": "srd51.classes.warlock",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Warlock",
+   "armor": "Light armour",
+   "weapons": "Simple weapons",
+   "tools": "",
+   "saves": "WIS, CHA",
+   "skill_options": "Arcana, Deception, History, Intimidation, Investigation, Nature, Religion",
+   "description": "A pact-bound caster serving a powerful patron.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Otherworldly Patron",
+      "description": "Choose your patron (subclass)."
+     },
+     {
+      "id": "f1_1",
+      "name": "Pact Magic",
+      "description": "A few top-level spell slots that return on a short rest. Ability: CHA."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Eldritch Invocations",
+      "description": "Two invocations granting special abilities (more as you level)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Pact Boon",
+      "description": "Pact of the Chain, Blade or Tome."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen patron."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen patron."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Mystic Arcanum",
+      "description": "One 6th-level spell once per long rest (7th/8th/9th at levels 13/15/17)."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen patron."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Eldritch Master",
+      "description": "Spend a minute to regain all pact spell slots. Once per long rest."
+     }
+    ]
+   }
+  }
+ }
+}

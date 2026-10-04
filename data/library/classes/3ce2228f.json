@@ -1,0 +1,323 @@
+{
+ "name": "Druide",
+ "hd": "d8",
+ "primary": "wis",
+ "spellcaster": true,
+ "armor": "Leichte Rüstung, Schilde",
+ "weapons": "Einfache Waffen",
+ "tools": "Kräuterkunde-Ausrüstung",
+ "saves": "INT, WEI",
+ "skill_count": 2,
+ "skill_options": "Arkana, Tierführung, Einsicht, Heilkunde, Naturkunde, Wahrnehmung, Religion, Überleben",
+ "description": "Ein Priester der alten Mächte der Natur.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste vorbereiten und wirken. Attribut: WEI.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Druidisch",
+    "description": "Geheimsprache; Mit Tieren sprechen immer vorbereitet.",
+    "choices": []
+   },
+   {
+    "id": "f1_2",
+    "name": "Urtümliche Ordnung",
+    "description": "Magier (Zaubertrick, Naturkunde) oder Hüter (mittlere Rüstung, Kriegswaffen).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Tiergestalt",
+    "description": "Bonusaktion: in ein bekanntes Tier verwandeln; Nutzungen pro Rast.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Wilder Gefährte",
+    "description": "Tiergestalt nutzen, um Vertrauten finden zu wirken.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Druiden-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Wildes Wiederaufleben",
+    "description": "Zauberplatz und Tiergestalt gegeneinander tauschen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Elementarer Zorn",
+    "description": "Wirksames Zauberwirken oder Urtümlicher Schlag (+1W8 Elementarschaden).",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Verbesserter elementarer Zorn",
+    "description": "Stärkere Wirkung des elementaren Zorns.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Tierzauber",
+    "description": "Zauber auch in Tiergestalt.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Erzdruide",
+    "description": "Tiergestalt bei Initiative zurück; Tiergestalt in Zauberplätze umwandeln; langsames Altern.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "3ce2228f",
+ "rkey": "srd52.classes.druid",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Druid",
+   "armor": "Light armour, shields",
+   "weapons": "Simple weapons",
+   "tools": "Herbalism kit",
+   "saves": "INT, WIS",
+   "skill_options": "Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, Survival",
+   "description": "A priest of the old powers of nature.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Prepare and cast spells from your class list. Ability: WIS."
+     },
+     {
+      "id": "f1_1",
+      "name": "Druidic",
+      "description": "Secret language; speak with animals always prepared."
+     },
+     {
+      "id": "f1_2",
+      "name": "Primal Order",
+      "description": "Magician (cantrip, Nature) or Warden (medium armour, martial weapons)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Wild Shape",
+      "description": "Bonus action: turn into a known beast; uses per rest."
+     },
+     {
+      "id": "f2_1",
+      "name": "Wild Companion",
+      "description": "Use Wild Shape to cast find familiar."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Druid Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Wild Resurgence",
+      "description": "Trade spell slots and Wild Shape uses."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Elemental Fury",
+      "description": "Potent Spellcasting or Primal Strike (+1d8 elemental damage)."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Improved Elemental Fury",
+      "description": "Stronger Elemental Fury."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Beast Spells",
+      "description": "Cast spells in Wild Shape."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Archdruid",
+      "description": "Regain Wild Shape on initiative; convert it into spell slots; slow ageing."
+     }
+    ]
+   }
+  }
+ }
+}

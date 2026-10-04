@@ -13,5 +13,12 @@
     "--table-grid-rgb": "200,200,205",
     "--table-fog-rgb": "8,8,10",
     "--table-measure": "#ff8a3a"
+  },
+  "i18n": {
+    "en": {
+      "name": "Dungeon Stone",
+      "tag": "Stone",
+      "description": "Cold flagstones with a bright grid."
+    }
   }
 }

@@ -1,0 +1,16 @@
+{
+ "name": "Gepackt",
+ "description": "Geschwindigkeit 0.",
+ "id": "0e2ad2ad",
+ "rkey": "srd51.conditions.grappled",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Grappled",
+   "description": "Speed becomes 0."
+  }
+ }
+}

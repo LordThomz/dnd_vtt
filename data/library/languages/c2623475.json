@@ -1,0 +1,22 @@
+{
+ "name": "Elfisch",
+ "rarity": "Standard",
+ "script": "Elfisch",
+ "speakers": "Elfen",
+ "description": "Standardsprache. Schrift: Elfisch. Typische Sprecher: Elfen.",
+ "id": "c2623475",
+ "rkey": "srd51.languages.elvish",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Elvish",
+   "rarity": "Standard",
+   "script": "Elvish",
+   "speakers": "Elves",
+   "description": "Standard language. Script: Elvish. Typical speakers: Elves."
+  }
+ }
+}

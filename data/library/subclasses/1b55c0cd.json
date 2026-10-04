@@ -1,0 +1,124 @@
+{
+ "name": "Domäne des Lebens",
+ "parent_class_name": "Kleriker",
+ "parent_class": "8cd785ab",
+ "start_level": 1,
+ "description": "Positive Energie, die heilt und erhält.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zusätzliche Übung",
+    "description": "Geübt mit schwerer Rüstung.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Jünger des Lebens",
+    "description": "Heilzauber heilen zusätzlich 2 + Zaubergrad.",
+    "choices": []
+   },
+   {
+    "id": "f1_2",
+    "name": "Domänenzauber",
+    "description": "Immer vorbereitet: u. a. Segnen, Wunden heilen, Wiederbeleben.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Göttliche Macht: Leben bewahren",
+    "description": "Heilung von 5 × Stufe auf Kreaturen in 30 ft verteilen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Gesegneter Heiler",
+    "description": "Heilst du andere, heilst du dich um 2 + Zaubergrad.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Göttlicher Schlag",
+    "description": "Einmal pro Zug +1W8 gleißender Schaden mit Waffen (Stufe 14: 2W8).",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Höchste Heilung",
+    "description": "Heilwürfel zählen immer den Höchstwert.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "1b55c0cd",
+ "rkey": "srd51.subclasses.life",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Life Domain",
+   "parent_class_name": "Cleric",
+   "description": "Positive energy that heals and sustains.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Bonus Proficiency",
+      "description": "Proficient with heavy armour."
+     },
+     {
+      "id": "f1_1",
+      "name": "Disciple of Life",
+      "description": "Healing spells restore an extra 2 + spell level."
+     },
+     {
+      "id": "f1_2",
+      "name": "Domain Spells",
+      "description": "Always prepared: e.g. bless, cure wounds, revivify."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Channel Divinity: Preserve Life",
+      "description": "Distribute 5 × level healing among creatures within 30 ft."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Blessed Healer",
+      "description": "Healing others also heals you for 2 + spell level."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Divine Strike",
+      "description": "Once per turn +1d8 radiant weapon damage (2d8 at level 14)."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Supreme Healing",
+      "description": "Healing dice always count as their maximum."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "Leben-Domäne"
+ ]
+}

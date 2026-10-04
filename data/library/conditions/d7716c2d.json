@@ -1,0 +1,16 @@
+{
+ "name": "Versteinert",
+ "description": "Zu Stein; Resistenz gegen allen Schaden, immun gegen Gift.",
+ "id": "d7716c2d",
+ "rkey": "srd52.conditions.petrified",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Petrified",
+   "description": "Turned to stone; resistance to all damage, immune to poison."
+  }
+ }
+}

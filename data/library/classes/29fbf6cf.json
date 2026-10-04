@@ -1,0 +1,357 @@
+{
+ "name": "Schurke",
+ "hd": "d8",
+ "primary": "dex",
+ "spellcaster": false,
+ "armor": "Leichte Rüstung",
+ "weapons": "Einfache Waffen, Handarmbrust, Langschwert, Rapier, Kurzschwert",
+ "tools": "Diebeswerkzeug",
+ "saves": "GES, INT",
+ "skill_count": 4,
+ "skill_options": "Akrobatik, Athletik, Täuschung, Einsicht, Einschüchtern, Nachforschungen, Wahrnehmung, Auftreten, Überzeugen, Fingerfertigkeit, Heimlichkeit",
+ "description": "Geschickter Spezialist für Heimlichkeit und Hinterhalte.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Expertise",
+    "description": "Doppelter Übungsbonus in zwei Fertigkeiten oder Diebeswerkzeug (Stufe 6: zwei weitere).",
+    "choices": [
+     {
+      "id": "f1_0c0",
+      "type": "skill",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f1_1",
+    "name": "Hinterhältiger Angriff",
+    "description": "Einmal pro Zug +1W6 Schaden bei Vorteil oder Verbündetem neben dem Ziel (steigt alle 2 Stufen).",
+    "choices": []
+   },
+   {
+    "id": "f1_2",
+    "name": "Diebessprache",
+    "description": "Geheimsprache und Zeichen der Unterwelt.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Raffinierte Aktion",
+    "description": "Spurt, Rückzug oder Verstecken als Bonusaktion.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Schurken-Archetyp",
+    "description": "Wähle deinen Archetyp (Unterklasse).",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Unheimliches Ausweichen",
+    "description": "Reaktion: Schaden eines sichtbaren Angriffs halbieren.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Entrinnen",
+    "description": "Bei GES-Rettungswürfen für halben Schaden: Erfolg = kein Schaden, Misserfolg = halber.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Verlässliches Talent",
+    "description": "Bei geübten Proben zählt eine 9 oder weniger als 10.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Blindgespür",
+    "description": "Versteckte und unsichtbare Kreaturen in 10 ft wahrnehmen.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Schlüpfriger Geist",
+    "description": "Geübt in WEI-Rettungswürfen.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Schwer zu fassen",
+    "description": "Angriffe gegen dich haben nie Vorteil.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Glückstreffer",
+    "description": "Einen Fehlschlag in einen Treffer oder eine 20 verwandeln. Einmal pro Rast.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "29fbf6cf",
+ "rkey": "srd51.classes.rogue",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Rogue",
+   "armor": "Light armour",
+   "weapons": "Simple weapons, hand crossbow, longsword, rapier, shortsword",
+   "tools": "Thieves' tools",
+   "saves": "DEX, INT",
+   "skill_options": "Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, Stealth",
+   "description": "A skilled specialist in stealth and ambushes.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Expertise",
+      "description": "Double proficiency in two skills or thieves' tools (two more at level 6)."
+     },
+     {
+      "id": "f1_1",
+      "name": "Sneak Attack",
+      "description": "Once per turn +1d6 damage with advantage or an ally next to the target (increases every 2 levels)."
+     },
+     {
+      "id": "f1_2",
+      "name": "Thieves' Cant",
+      "description": "Secret language and signs of the underworld."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Cunning Action",
+      "description": "Dash, Disengage or Hide as a bonus action."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Roguish Archetype",
+      "description": "Choose your archetype (subclass)."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Uncanny Dodge",
+      "description": "Reaction: halve the damage of an attack you can see."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Evasion",
+      "description": "On DEX saves for half damage: success = none, failure = half."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Reliable Talent",
+      "description": "On proficient checks, treat a roll of 9 or lower as 10."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Blindsense",
+      "description": "Sense hidden and invisible creatures within 10 ft."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Slippery Mind",
+      "description": "Proficient in WIS saving throws."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Elusive",
+      "description": "Attacks against you never have advantage."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Stroke of Luck",
+      "description": "Turn a miss into a hit or a check into a 20. Once per rest."
+     }
+    ]
+   }
+  }
+ }
+}

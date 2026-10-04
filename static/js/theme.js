@@ -44,8 +44,9 @@ const Theme = (() => {
   }
   function _list(scope) {
     const base = scope === "ui" ? BUILTIN_UI : BUILTIN_TABLE;
+    const L = (typeof I18n !== "undefined" ? I18n.lang : "de"), tr = d => (d.i18n && d.i18n[L]) || {};
     return base.concat(installed().filter(d => d.scope === scope).map(d => ({
-      id: d.id, name: d.name, tag: d.tag || (d.author ? "von " + d.author : "Eigenes"), desc: d.description || "",
+      id: d.id, name: tr(d).name || d.name, tag: tr(d).tag || d.tag || (d.author ? "von " + d.author : "Eigenes"), desc: tr(d).description || d.description || "",
       custom: true, design: d })));
   }
   /** CSS aller installierten Designs in die Seite legen. */
@@ -130,7 +131,7 @@ const Theme = (() => {
   //      einen Server geschickt).
   //   3. Hier wird diese Übergabe beim DM ausgepackt und gespeichert.
   const PROFILE_KEYS = ["vtt_theme_ui", "vtt_theme_table", "vtt_dice_sets", "vtt_dice3d",
-                        "vtt_dice_sound", "vtt_dice_volume", "vtt_hidden_designs", "vtt_designs", "vtt_fx"];
+                        "vtt_dice_sound", "vtt_dice_volume", "vtt_hidden_designs", "vtt_designs", "vtt_fx", "vtt_settings"];
   const isOwnInstall = ["localhost", "127.0.0.1", "::1", "[::1]"].includes(location.hostname);
   const _origSet = Storage.prototype.setItem;
   const _setQuiet = (k, v) => { try { _origSet.call(localStorage, k, v); } catch (e) {} };
@@ -251,66 +252,164 @@ const Theme = (() => {
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  //  LADESCHLEIER – Seiten erscheinen erst, wenn sie wirklich fertig sind
+  //  EINSTELLUNGEN (Einstellungsmenü im Startbildschirm)
   // ══════════════════════════════════════════════════════════════════════
-  //  Ein Schleier im Design der App liegt ab dem ersten Bild über der Seite
-  //  (html::before / ::after – braucht kein HTML und ist sofort da). Er
-  //  verschwindet weich, wenn: Seite geladen + Schriften fertig + alle
-  //  angemeldeten Wartepunkte erledigt (Theme.hold(promise)). Höchstens 6 s.
-  //  Beim Verlassen blendet er wieder ein → ruhige Übergänge.
+  //  Theme.setting(name, standard)   lesen
+  //  Theme.setSetting(name, wert)    schreiben (+ Ereignis „vtt:settings")
+  //  Klang-Einstellungen liegen in sfx.js (vtt_fx), alles andere hier.
+  const SETTINGS_KEY = "vtt_settings";
+  function _settings() { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  function setting(k, d) { const s = _settings(); return (k in s) ? s[k] : d; }
+  function setSetting(k, v) {
+    const s = _settings(); s[k] = v;
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch (e) {}
+    try { window.dispatchEvent(new CustomEvent("vtt:settings", { detail: { key: k, value: v } })); } catch (e) {}
+  }
+  function resetSettings() { try { localStorage.removeItem(SETTINGS_KEY); localStorage.removeItem("vtt_fx"); } catch (e) {} _pushProfile(true); }
+
+  // ══════════════════════════════════════════════════════════════════════
+  //  LADEBILDSCHIRM – kein Zwischenzustand ist je zu sehen
+  // ══════════════════════════════════════════════════════════════════════
+  //  • Liegt ab dem allerersten Bild über jeder Seite (wird schon im <head>
+  //    eingefügt) und verschwindet erst, wenn die Seite WIRKLICH fertig ist:
+  //    geladen + Schriften + alle Wartepunkte (Theme.hold) – höchstens 15 s.
+  //  • Erscheint beim Verlassen SOFORT beim Klick (Theme.go / Links). Die alte
+  //    Seite stellt dabei aufwendige Animationen ein (Ereignis „vtt:leaving").
+  //  • Gleiches Bild auf beiden Seiten → nahtloser Übergang.
+  //  • Animiert nur transform/opacity → läuft auf der Grafikkarte und bleibt
+  //    flüssig, auch wenn im Hintergrund gerechnet wird.
+  const _tr = s => (typeof I18n !== "undefined" ? I18n.t(s) : s);   // Übersetzung (i18n.js)
   const _holds = [];
   function hold(p) { if (p && p.then) _holds.push(p.catch(() => {})); }
-  /** Läuft, sobald die Seite sichtbar ist (für Arbeit, die warten kann). */
   function whenReady(fn) {
-    if (!document.documentElement.classList.contains("vtt-veil")) return void setTimeout(fn, 0);
+    if (!document.documentElement.classList.contains("vtt-loading")) return void setTimeout(fn, 0);
     window.addEventListener("vtt:ready", () => setTimeout(fn, 200), { once: true });
   }
-  (function veil() {
+  const CREST = '<svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="ldg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold-light)"/><stop offset=".55" stop-color="var(--gold)"/><stop offset="1" stop-color="var(--arcane)"/></linearGradient></defs>' +
+    '<polygon points="50,4 91,27 91,73 50,96 9,73 9,27" fill="none" stroke="url(#ldg)" stroke-width="2.4" stroke-linejoin="round"/>' +
+    '<polygon points="50,22 76,66 24,66" fill="none" stroke="url(#ldg)" stroke-width="1.8" stroke-linejoin="round"/>' +
+    '<path d="M50 4 50 22 M91 27 76 66 M9 27 24 66 M91 73 76 66 M9 73 24 66 M50 96 50 66 M50 22 9 27 M50 22 91 27" stroke="url(#ldg)" stroke-opacity=".55" stroke-width="1.2" fill="none"/></svg>';
+  let _loader = null;
+  function _ensureLoader() {
+    if (_loader) return _loader;
     const css = document.createElement("style");
     css.textContent = `
-      html.vtt-veil::before { content: ""; position: fixed; inset: 0; z-index: 2147483000; pointer-events: none;
-        background: var(--bg-deep); background-image: var(--backdrop); opacity: 1; transition: opacity .38s ease; }
-      html.vtt-veil::after { content: ""; position: fixed; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px;
-        z-index: 2147483001; pointer-events: none; border-radius: 50%; border: 2px solid rgba(var(--gold-rgb), .15);
-        border-top-color: var(--gold); border-right-color: var(--arcane); opacity: 0;
-        animation: vtt-spin .9s linear infinite, vtt-spin-in .3s ease .45s forwards; transition: opacity .25s ease; }
-      html.vtt-veil.vtt-ready::before, html.vtt-veil.vtt-ready::after { opacity: 0 !important; }
-      html.vtt-leaving::before { content: ""; position: fixed; inset: 0; z-index: 2147483000; pointer-events: none;
-        background: var(--bg-deep); background-image: var(--backdrop); animation: vtt-leave .2s ease forwards; }
-      @keyframes vtt-spin { to { transform: rotate(360deg); } }
-      @keyframes vtt-spin-in { to { opacity: 1; } }
-      @keyframes vtt-leave { from { opacity: 0; } to { opacity: 1; } }`;
+      #vtt-loader { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; pointer-events: none;
+        background: var(--bg-deep, #06070d); background-image: var(--backdrop); opacity: 1; transition: opacity .42s ease; }
+      #vtt-loader.gone { opacity: 0; }
+      #vtt-loader.leave { opacity: 0; transition: opacity .16s ease; pointer-events: all; }
+      #vtt-loader.leave.on { opacity: 1; }
+      #vtt-loader .ld-in { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+      #vtt-loader .ld-crest { position: relative; width: 92px; height: 92px; }
+      #vtt-loader .ld-crest svg { width: 100%; height: 100%; will-change: transform, opacity;
+        animation: ld-float 2.6s ease-in-out infinite; filter: drop-shadow(0 0 16px rgba(var(--gold-rgb, 212,181,120), .55)); }
+      #vtt-loader .ld-glow { position: absolute; inset: -40px; border-radius: 50%; will-change: transform, opacity;
+        background: radial-gradient(circle, rgba(var(--gold-rgb, 212,181,120), .28), rgba(var(--arcane-rgb, 77,224,212), .08) 45%, transparent 70%);
+        animation: ld-breathe 2.6s ease-in-out infinite; }
+      #vtt-loader .ld-crest svg { position: relative; }
+      #vtt-loader .ld-text { font: 600 .74rem/1 var(--font-display, Georgia, serif); letter-spacing: .32em; text-transform: uppercase;
+        color: var(--text-dim, #7a7488); min-height: 1em; }
+      #vtt-loader .ld-bar { position: relative; width: 240px; height: 4px; border-radius: 4px; overflow: hidden;
+        background: rgba(var(--hi-rgb, 255,255,255), .07); box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb, 212,181,120), .12); }
+      #vtt-loader .ld-fill { position: absolute; inset: 0; transform-origin: left; transform: scaleX(.04); will-change: transform;
+        background: linear-gradient(90deg, var(--gold-dark, #8a6d35), var(--gold, #d4b578), var(--arcane, #4de0d4));
+        box-shadow: 0 0 10px rgba(var(--gold-rgb, 212,181,120), .6); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+      #vtt-loader .ld-shine { position: absolute; top: 0; bottom: 0; width: 30%; will-change: transform;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); animation: ld-sweep 1.6s ease-in-out infinite; }
+      @keyframes ld-float { 50% { transform: translateY(-5px) scale(1.03); } }
+      @keyframes ld-breathe { 0%, 100% { transform: scale(.85); opacity: .55; } 50% { transform: scale(1.1); opacity: 1; } }
+      @keyframes ld-sweep { from { transform: translateX(-120%); } to { transform: translateX(380%); } }`;
     (document.head || document.documentElement).appendChild(css);
+    const el = document.createElement("div");
+    el.id = "vtt-loader"; el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite");
+    el.innerHTML = `<div class="ld-in"><div class="ld-crest"><div class="ld-glow"></div>${CREST}</div><div class="ld-text">${_tr("Lädt")}</div><div class="ld-bar"><div class="ld-fill"></div><div class="ld-shine"></div></div></div>`;
+    document.documentElement.appendChild(el);    // geht schon, bevor <body> existiert
+    _loader = el;
+    return el;
+  }
+  /** Fortschritt des Balkens (0 … 1) – geht nur vorwärts. */
+  let _prog = 0;
+  function progress(v) {
+    _prog = Math.max(_prog, Math.min(1, v));
+    const f = _ensureLoader().querySelector(".ld-fill"); if (f) f.style.transform = `scaleX(${Math.max(.04, _prog)})`;
+  }
+  /** Ladetext ändern (z.B. „Bereite Würfel vor · 3/14"). */
+  function loaderText(t) { const el = _ensureLoader(); el.querySelector(".ld-text").textContent = _tr(t || "Lädt"); }
+  // Läuft die Seite im festen Rahmen (/app, für durchgehende Musik)?
+  const inShell = (() => { try { return window.top !== window && !!window.top.VTT_SHELL; } catch (e) { return false; } })();
+  // Desktop-Funktionen (Dateien speichern …) aus dem Rahmen durchreichen
+  if (inShell && !window.__TAURI__) { try { if (window.top.__TAURI__) window.__TAURI__ = window.top.__TAURI__; } catch (e) {} }
+
+  /** Zu einer anderen Seite wechseln – Ladebildschirm erscheint sofort. */
+  function go(url) {
+    let target; try { target = new URL(url, location.href); } catch (e) { target = null; }
+    // Andere Adresse (Launcher, Server eines DM): die GANZE Seite wechselt
+    if (inShell && target && target.origin !== location.origin) {
+      try { window.top.location.href = target.href; return; } catch (e) {}
+    }
+    if (inShell) { try { window.parent.postMessage({ type: "vtt-nav", url: target ? target.href : url }, location.origin); } catch (e) {} }
+    const el = _ensureLoader();
+    loaderText("Lädt");
+    el.classList.remove("gone"); el.classList.add("leave");
+    el.style.display = ""; _prog = 0; progress(.12);
+    try { window.dispatchEvent(new CustomEvent("vtt:leaving")); } catch (e) {}
+    requestAnimationFrame(() => {
+      el.classList.add("on");
+      setTimeout(() => { location.href = url; }, 170);     // erst wenn der Ladebildschirm steht
+    });
+  }
+  (function boot() {
     const html = document.documentElement;
-    html.classList.add("vtt-veil");
+    html.classList.add("vtt-loading");
+    _ensureLoader();
     const loaded = new Promise(r => { if (document.readyState === "complete") r(); else window.addEventListener("load", r, { once: true }); });
     const fonts = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    // Echter Fortschritt: Struktur → geladen → Schriften → Wartepunkte
+    progress(.15);
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => progress(.3), { once: true }); else progress(.3);
+    loaded.then(() => progress(.6)); fonts.then(() => progress(Math.max(_prog, .45)));
     const all = async () => {
       await Promise.all([loaded, fonts]);
-      let n = -1; while (n !== _holds.length) { n = _holds.length; await Promise.all(_holds.slice()); }   // auch spät angemeldete
+      progress(.7);
+      let n = -1, done = 0;
+      while (n !== _holds.length) {
+        n = _holds.length;
+        await Promise.all(_holds.slice().map(h => h.then(() => { done++; progress(.7 + .28 * done / Math.max(1, _holds.length)); })));
+      }
+      progress(1);
+      // zwei ruhige Bilder abwarten: erst dann ist die Seite wirklich gezeichnet
+      await new Promise(r => setTimeout(r, 240));   // vollen Balken kurz zeigen
     };
     const reveal = () => {
-      if (html.classList.contains("vtt-ready")) return;
-      // setTimeout statt requestAnimationFrame: bei hoher Last bleiben Bilder
-      // aus – der Schleier soll trotzdem zuverlässig verschwinden.
-      setTimeout(() => {
-        html.classList.add("vtt-ready");
-        setTimeout(() => html.classList.remove("vtt-veil", "vtt-ready"), 450);
-        try { window.dispatchEvent(new CustomEvent("vtt:ready")); } catch (e) {}
-      }, 30);
+      if (!html.classList.contains("vtt-loading")) return;
+      html.classList.remove("vtt-loading");
+      const el = _ensureLoader(); el.classList.add("gone");
+      setTimeout(() => { if (el.classList.contains("gone")) el.style.display = "none"; }, 480);
+      try { window.dispatchEvent(new CustomEvent("vtt:ready")); } catch (e) {}
     };
-    Promise.race([all(), new Promise(r => setTimeout(r, 6000))]).then(reveal);
-    // Beim Verlassen weich abblenden (bei Datei-Downloads bleibt die Seite – dann wieder weg)
-    window.addEventListener("beforeunload", () => {
-      html.classList.add("vtt-leaving");
-      setTimeout(() => html.classList.remove("vtt-leaving"), 2500);
+    Promise.race([all(), new Promise(r => setTimeout(r, 15000))]).then(reveal);
+    // Links innerhalb der App: Ladebildschirm sofort beim Klick
+    document.addEventListener("click", e => {
+      if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const a = e.target.closest && e.target.closest("a[href]");
+      if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+      const href = a.getAttribute("href");
+      if (!href || href.startsWith("#") || href.startsWith("javascript:")) return;
+      let u; try { u = new URL(href, location.href); } catch (x) { return; }
+      if (u.origin !== location.origin) return;
+      e.preventDefault(); go(u.href);
     });
-    // Zurück-Navigation aus dem Browser-Cache: Schleier nicht hängen lassen
-    window.addEventListener("pageshow", e => { if (e.persisted) { html.classList.remove("vtt-leaving"); reveal(); } });
+    // Andere Seitenwechsel (z.B. location.href im Code): so früh wie möglich
+    window.addEventListener("beforeunload", () => {
+      const el = _ensureLoader(); el.style.display = ""; el.classList.remove("gone"); el.classList.add("leave", "on");
+      try { window.dispatchEvent(new CustomEvent("vtt:leaving")); } catch (e) {}
+      setTimeout(() => { el.classList.remove("leave", "on"); el.classList.add("gone"); }, 3000);   // Download-Fall
+    });
+    window.addEventListener("pageshow", e => { if (e.persisted) { const el = _ensureLoader(); el.classList.remove("leave", "on"); reveal(); } });
   })();
 
   _injectDesigns();
   apply();
-  return { hold, whenReady, get, set, apply, tableVars, launcherUrl, visible, isHidden, installed, preview, endPreview, saveDesign,
+  return { hold, whenReady, go, loaderText, progress, inShell, setting, setSetting, resetSettings, get, set, apply, tableVars, launcherUrl, visible, isHidden, installed, preview, endPreview, saveDesign,
            get UI() { return _list("ui"); }, get TABLE() { return _list("table"); } };
 })();

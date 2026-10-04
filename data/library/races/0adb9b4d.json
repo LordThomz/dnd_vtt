@@ -1,0 +1,75 @@
+{
+ "name": "Halb-Ork",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "+2 STR, +1 KON",
+ "languages": "Gemeinsprache, Orkisch",
+ "description": "Kraftvoll und unbeugsam.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Im Dämmerlicht auf 60 ft wie bei hellem Licht, im Dunkeln wie im Dämmerlicht (nur Graustufen).",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Bedrohlich",
+   "description": "Geübt in Einschüchtern.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Unermüdliche Ausdauer",
+   "description": "Fällst du auf 0 TP, bleibst du stattdessen bei 1 TP. Einmal pro langer Rast.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Wilde Angriffe",
+   "description": "Bei einem kritischen Nahkampftreffer einen zusätzlichen Waffenwürfel.",
+   "choices": []
+  }
+ ],
+ "id": "0adb9b4d",
+ "rkey": "srd51.races.halforc",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Half-Orc",
+   "size": "Medium",
+   "asi": "+2 STR, +1 CON",
+   "languages": "Common, Orc",
+   "description": "Powerful and unyielding.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Within 60 ft you see in dim light as if bright and in darkness as if dim (shades of grey only)."
+    },
+    {
+     "id": "t1",
+     "name": "Menacing",
+     "description": "Proficient in Intimidation."
+    },
+    {
+     "id": "t2",
+     "name": "Relentless Endurance",
+     "description": "When reduced to 0 HP you drop to 1 instead. Once per long rest."
+    },
+    {
+     "id": "t3",
+     "name": "Savage Attacks",
+     "description": "Roll one extra weapon die on a melee critical hit."
+    }
+   ]
+  }
+ },
+ "aliases": [
+  "Halbork"
+ ]
+}

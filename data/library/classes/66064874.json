@@ -1,0 +1,345 @@
+{
+ "name": "Barbar",
+ "hd": "d12",
+ "primary": "str",
+ "spellcaster": false,
+ "armor": "Leichte & mittlere Rüstung, Schilde",
+ "weapons": "Einfache & Kriegswaffen",
+ "tools": "",
+ "saves": "STR, KON",
+ "skill_count": 2,
+ "skill_options": "Tierführung, Athletik, Einschüchtern, Naturkunde, Wahrnehmung, Überleben",
+ "description": "Ein wilder Krieger, angetrieben von urtümlicher Wut.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Kampfrausch",
+    "description": "Bonusaktion: Vorteil auf STR-Proben und -Rettungswürfe, Bonusschaden, Resistenz gegen Hieb-, Stich- und Wuchtschaden.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Ungerüstete Verteidigung",
+    "description": "Ohne Rüstung: RK 10 + GES + KON.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Rücksichtsloser Angriff",
+    "description": "Vorteil auf STR-Nahkampfangriffe – Angriffe gegen dich haben ebenfalls Vorteil.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Gefahrensinn",
+    "description": "Vorteil bei GES-Rettungswürfen gegen sichtbare Effekte.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Pfad des Urinstinkts",
+    "description": "Wähle deinen Pfad (Unterklasse).",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   },
+   {
+    "id": "f5_1",
+    "name": "Schnelle Bewegung",
+    "description": "+10 ft Geschwindigkeit ohne schwere Rüstung.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Pfad.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Wilder Instinkt",
+    "description": "Vorteil auf Initiative; im Kampfrausch nicht überraschbar.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Brutaler kritischer Treffer",
+    "description": "+1 Waffenwürfel bei kritischen Nahkampftreffern (Stufe 13: +2, Stufe 17: +3).",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Pfad.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Unerbittlicher Kampfrausch",
+    "description": "Fällst du im Kampfrausch auf 0 TP: KON-Rettungswurf SG 10, bei Erfolg 1 TP (SG steigt je Einsatz um 5).",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Pfad.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Anhaltender Kampfrausch",
+    "description": "Der Kampfrausch endet nur, wenn du bewusstlos wirst oder ihn beendest.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Unbezwingbare Kraft",
+    "description": "STR-Proben mindestens in Höhe deines STR-Werts.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Urgewaltiger Champion",
+    "description": "+4 STR und +4 KON, Höchstwert 24.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "66064874",
+ "rkey": "srd51.classes.barbarian",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Barbarian",
+   "armor": "Light & medium armour, shields",
+   "weapons": "Simple & martial weapons",
+   "tools": "",
+   "saves": "STR, CON",
+   "skill_options": "Animal Handling, Athletics, Intimidation, Nature, Perception, Survival",
+   "description": "A fierce warrior driven by primal rage.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Rage",
+      "description": "Bonus action: advantage on STR checks and saves, bonus damage, resistance to slashing, piercing and bludgeoning."
+     },
+     {
+      "id": "f1_1",
+      "name": "Unarmored Defense",
+      "description": "Without armour: AC 10 + DEX + CON."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Reckless Attack",
+      "description": "Advantage on STR melee attacks – attacks against you also have advantage."
+     },
+     {
+      "id": "f2_1",
+      "name": "Danger Sense",
+      "description": "Advantage on DEX saves against effects you can see."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Primal Path",
+      "description": "Choose your path (subclass)."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     },
+     {
+      "id": "f5_1",
+      "name": "Fast Movement",
+      "description": "+10 ft speed without heavy armour."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen path."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Feral Instinct",
+      "description": "Advantage on initiative; can't be surprised while raging."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Brutal Critical",
+      "description": "+1 weapon die on melee critical hits (+2 at level 13, +3 at level 17)."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen path."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Relentless Rage",
+      "description": "If you drop to 0 HP while raging: CON save DC 10 to stay at 1 HP (DC +5 per use)."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen path."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Persistent Rage",
+      "description": "Your rage only ends if you fall unconscious or choose to end it."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Indomitable Might",
+      "description": "STR checks are at least equal to your STR score."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Primal Champion",
+      "description": "+4 STR and +4 CON, maximum 24."
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Drakonisch",
+ "rarity": "Standard",
+ "script": "Drakonisch",
+ "speakers": "Drachen, Drachenblütige",
+ "description": "Standardsprache. Schrift: Drakonisch. Typische Sprecher: Drachen, Drachenblütige.",
+ "id": "b37969c4",
+ "rkey": "srd52.languages.draconic",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Draconic",
+   "rarity": "Standard",
+   "script": "Draconic",
+   "speakers": "Dragons, dragonborn",
+   "description": "Standard language. Script: Draconic. Typical speakers: Dragons, dragonborn."
+  }
+ }
+}

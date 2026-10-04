@@ -1,0 +1,95 @@
+{
+ "name": "Dieb",
+ "parent_class_name": "Schurke",
+ "parent_class": "9054d790",
+ "start_level": 3,
+ "description": "Einbrecher und Fassadenkletterer.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Flinke Hände",
+    "description": "Fingerfertigkeit oder Gegenstand benutzen als Bonusaktion.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Fassadenkletterer",
+    "description": "Klettergeschwindigkeit; Sprünge mit GES.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Überragende Heimlichkeit",
+    "description": "Raffinierter Schlag: Heimlicher Angriff ohne Versteck zu verlieren.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Magische Gegenstände nutzen",
+    "description": "Mehr Einstimmungen; Schriftrollen benutzen.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Diebesreflexe",
+    "description": "Zwei Züge in der ersten Runde.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "254d7a86",
+ "rkey": "srd52.subclasses.thief",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Thief",
+   "parent_class_name": "Rogue",
+   "description": "Burglars and second-story artists.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Fast Hands",
+      "description": "Sleight of Hand or Use an Object as a bonus action."
+     },
+     {
+      "id": "f3_1",
+      "name": "Second-Story Work",
+      "description": "Climb speed; jump using DEX."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Supreme Sneak",
+      "description": "Cunning Strike option: Stealth Attack."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Use Magic Device",
+      "description": "More attunement; use spell scrolls."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Thief's Reflexes",
+      "description": "Two turns in the first round."
+     }
+    ]
+   }
+  }
+ }
+}

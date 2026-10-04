@@ -1,0 +1,61 @@
+{
+ "name": "Tiefling",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "+2 CHA, +1 INT",
+ "languages": "Gemeinsprache, Infernalisch",
+ "description": "Nachfahren eines höllischen Erbes mit angeborener Magie.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Im Dämmerlicht auf 60 ft wie bei hellem Licht, im Dunkeln wie im Dämmerlicht (nur Graustufen).",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Höllische Resistenz",
+   "description": "Resistenz gegen Feuerschaden.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Infernalisches Erbe",
+   "description": "Zaubertrick Thaumaturgie; ab Stufe 3 Höllischer Tadel, ab Stufe 5 Dunkelheit (je 1× pro langer Rast). Attribut: CHA.",
+   "choices": []
+  }
+ ],
+ "id": "7ac957cc",
+ "rkey": "srd51.races.tiefling",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Tiefling",
+   "size": "Medium",
+   "asi": "+2 CHA, +1 INT",
+   "languages": "Common, Infernal",
+   "description": "Heirs of an infernal legacy with innate magic.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Within 60 ft you see in dim light as if bright and in darkness as if dim (shades of grey only)."
+    },
+    {
+     "id": "t1",
+     "name": "Hellish Resistance",
+     "description": "Resistance to fire damage."
+    },
+    {
+     "id": "t2",
+     "name": "Infernal Legacy",
+     "description": "Thaumaturgy cantrip; hellish rebuke at level 3 and darkness at level 5 (each once per long rest). Ability: CHA."
+    }
+   ]
+  }
+ }
+}

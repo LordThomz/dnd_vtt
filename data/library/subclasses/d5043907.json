@@ -1,0 +1,106 @@
+{
+ "name": "Drakonische Zauberei",
+ "parent_class_name": "Hexenmeister",
+ "parent_class": "6fc0fd6b",
+ "start_level": 3,
+ "description": "Drachenmagie im Blut.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Drakonische Widerstandskraft",
+    "description": "+1 TP pro Stufe; RK 10 + GES + CHA ohne Rüstung.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Drakonische Zauber",
+    "description": "Immer vorbereitet: u. a. Furcht, Fliegen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Elementare Affinität",
+    "description": "Resistenz und +CHA Schaden einer Drachen-Schadensart.",
+    "choices": [
+     {
+      "id": "f6_0c0",
+      "type": "damage_type",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Drachenschwingen",
+    "description": "Bonusaktion: Flügel, 1 Stunde Fluggeschwindigkeit.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Drachengefährte",
+    "description": "Drachen beschwören ohne Materialkomponente.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "d5043907",
+ "rkey": "srd52.subclasses.draconic",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Draconic Sorcery",
+   "parent_class_name": "Sorcerer",
+   "description": "Dragon magic in the blood.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Draconic Resilience",
+      "description": "+1 HP per level; AC 10 + DEX + CHA without armour."
+     },
+     {
+      "id": "f3_1",
+      "name": "Draconic Spells",
+      "description": "Always prepared: e.g. fear, fly."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Elemental Affinity",
+      "description": "Resistance and +CHA damage of a dragon type."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Dragon Wings",
+      "description": "Bonus action: wings with a flying speed for 1 hour."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Dragon Companion",
+      "description": "Summon dragon without a material component."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "Drakonische Blutlinie"
+ ]
+}

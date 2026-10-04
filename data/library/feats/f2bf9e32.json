@@ -1,0 +1,22 @@
+{
+ "name": "Wilder Angreifer",
+ "prereq": "—",
+ "description": "Wuchtige Treffer.",
+ "benefits": "Einmal pro Zug Waffenschaden zweimal würfeln, den besseren nehmen.",
+ "category": "Herkunft",
+ "id": "f2bf9e32",
+ "rkey": "srd52.feats.savage_attacker",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Savage Attacker",
+   "prereq": "—",
+   "description": "Brutal hits.",
+   "benefits": "Once per turn roll weapon damage twice and use either.",
+   "category": "Origin"
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Gabe des unwiderstehlichen Angriffs",
+ "prereq": "Stufe 19+",
+ "description": "Nichts hält stand.",
+ "benefits": "+1 STR oder GES; Hieb-, Stich- und Wuchtschaden ignoriert Resistenz; Extraschaden bei einer 20.",
+ "category": "Epische Gabe",
+ "id": "6294d35d",
+ "rkey": "srd52.feats.boon_offense",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Boon of Irresistible Offense",
+   "prereq": "Level 19+",
+   "description": "Nothing withstands.",
+   "benefits": "+1 STR or DEX; your weapon damage ignores resistance; extra damage on a 20.",
+   "category": "Epic Boon"
+  }
+ }
+}

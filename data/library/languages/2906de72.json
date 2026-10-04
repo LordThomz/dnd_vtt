@@ -1,0 +1,22 @@
+{
+ "name": "Riesisch",
+ "rarity": "Standard",
+ "script": "Zwergisch",
+ "speakers": "Riesen",
+ "description": "Standardsprache. Schrift: Zwergisch. Typische Sprecher: Riesen.",
+ "id": "2906de72",
+ "rkey": "srd52.languages.giant",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Giant",
+   "rarity": "Standard",
+   "script": "Dwarvish",
+   "speakers": "Giants",
+   "description": "Standard language. Script: Dwarvish. Typical speakers: Giants."
+  }
+ }
+}

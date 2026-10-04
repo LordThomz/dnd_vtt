@@ -1,0 +1,22 @@
+{
+ "name": "Gemeinsprache",
+ "rarity": "Standard",
+ "script": "Gemeinsprache",
+ "speakers": "Menschen",
+ "description": "Standardsprache. Schrift: Gemeinsprache. Typische Sprecher: Menschen.",
+ "id": "260cb3a4",
+ "rkey": "srd51.languages.common",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Common",
+   "rarity": "Standard",
+   "script": "Common",
+   "speakers": "Humans",
+   "description": "Standard language. Script: Common. Typical speakers: Humans."
+  }
+ }
+}

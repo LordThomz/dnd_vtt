@@ -1,0 +1,72 @@
+{
+ "name": "Gnom",
+ "size": "Klein",
+ "speed": 25,
+ "darkvision": 60,
+ "asi": "+2 INT, +1 KON",
+ "languages": "Gemeinsprache, Gnomisch",
+ "description": "Neugierige Tüftler und Erfinder (Felsengnom).",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Im Dämmerlicht auf 60 ft wie bei hellem Licht, im Dunkeln wie im Dämmerlicht (nur Graustufen).",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Gnomische Gerissenheit",
+   "description": "Vorteil bei INT-, WEI- und CHA-Rettungswürfen gegen Magie.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Kunde der Handwerker",
+   "description": "Doppelter Übungsbonus auf Geschichte-Proben zu magischen und technischen Gegenständen.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Bastler",
+   "description": "Mit Bastlerwerkzeug kleine mechanische Spielereien bauen.",
+   "choices": []
+  }
+ ],
+ "id": "91704522",
+ "rkey": "srd51.races.gnome",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Gnome",
+   "size": "Small",
+   "asi": "+2 INT, +1 CON",
+   "languages": "Common, Gnomish",
+   "description": "Curious tinkerers and inventors (rock gnome).",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Within 60 ft you see in dim light as if bright and in darkness as if dim (shades of grey only)."
+    },
+    {
+     "id": "t1",
+     "name": "Gnome Cunning",
+     "description": "Advantage on INT, WIS and CHA saves against magic."
+    },
+    {
+     "id": "t2",
+     "name": "Artificer's Lore",
+     "description": "Double proficiency bonus on History checks about magic items and devices."
+    },
+    {
+     "id": "t3",
+     "name": "Tinker",
+     "description": "Build small clockwork devices with tinker's tools."
+    }
+   ]
+  }
+ }
+}

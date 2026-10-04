@@ -1,0 +1,16 @@
+{
+ "name": "Bewusstlos",
+ "description": "Kampfunfähig und liegend; Nahkampftreffer sind kritisch.",
+ "id": "cda6250f",
+ "rkey": "srd52.conditions.unconscious",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Unconscious",
+   "description": "Incapacitated and prone; melee hits are critical."
+  }
+ }
+}

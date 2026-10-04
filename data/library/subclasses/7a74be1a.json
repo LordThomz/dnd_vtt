@@ -1,0 +1,118 @@
+{
+ "name": "Champion",
+ "parent_class_name": "Kämpfer",
+ "parent_class": "2dcc5281",
+ "start_level": 3,
+ "description": "Körperliche Perfektion.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Verbesserter kritischer Treffer",
+    "description": "Kritisch bei 19–20.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Bemerkenswerter Athlet",
+    "description": "Vorteil auf Initiative und Athletik; Bewegung nach kritischem Treffer.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Zusätzlicher Kampfstil",
+    "description": "Ein weiteres Kampfstil-Talent.",
+    "choices": [
+     {
+      "id": "f7_0c0",
+      "type": "fighting_style",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Heldenhafter Krieger",
+    "description": "Ohne Inspiration zu Beginn des Zuges Heldenhafte Inspiration.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Überlegener kritischer Treffer",
+    "description": "Kritisch bei 18–20.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Überlebender",
+    "description": "Vorteil bei Todesrettungswürfen; Regeneration bei wenig TP.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "7a74be1a",
+ "rkey": "srd52.subclasses.champion",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Champion",
+   "parent_class_name": "Fighter",
+   "description": "Physical perfection.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Improved Critical",
+      "description": "Critical on 19–20."
+     },
+     {
+      "id": "f3_1",
+      "name": "Remarkable Athlete",
+      "description": "Advantage on initiative and Athletics; move after a critical hit."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Additional Fighting Style",
+      "description": "Another Fighting Style feat."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Heroic Warrior",
+      "description": "Gain Heroic Inspiration at the start of your turn if you have none."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Superior Critical",
+      "description": "Critical on 18–20."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Survivor",
+      "description": "Advantage on death saves; regenerate when low on HP."
+     }
+    ]
+   }
+  }
+ }
+}

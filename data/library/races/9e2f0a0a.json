@@ -1,0 +1,72 @@
+{
+ "name": "Halbling",
+ "size": "Klein",
+ "speed": 25,
+ "darkvision": 0,
+ "asi": "+2 GES, +1 CHA",
+ "languages": "Gemeinsprache, Halblingisch",
+ "description": "Kleine, gesellige Leute mit erstaunlichem Glück (Leichtfuß).",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Glückspilz",
+   "description": "Eine gewürfelte 1 bei Angriff, Probe oder Rettungswurf darfst du neu würfeln.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Tapfer",
+   "description": "Vorteil bei Rettungswürfen gegen Verängstigung.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Halblings-Gewandtheit",
+   "description": "Du kannst dich durch den Raum größerer Kreaturen bewegen.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Natürlich verstohlen",
+   "description": "Verstecken ist möglich, wenn dich nur eine größere Kreatur verdeckt.",
+   "choices": []
+  }
+ ],
+ "id": "9e2f0a0a",
+ "rkey": "srd51.races.halfling",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Halfling",
+   "size": "Small",
+   "asi": "+2 DEX, +1 CHA",
+   "languages": "Common, Halfling",
+   "description": "Small, sociable folk with remarkable luck (lightfoot).",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Lucky",
+     "description": "Reroll a natural 1 on an attack, check or save."
+    },
+    {
+     "id": "t1",
+     "name": "Brave",
+     "description": "Advantage on saves against being frightened."
+    },
+    {
+     "id": "t2",
+     "name": "Halfling Nimbleness",
+     "description": "You can move through the space of any larger creature."
+    },
+    {
+     "id": "t3",
+     "name": "Naturally Stealthy",
+     "description": "You can hide when obscured only by a larger creature."
+    }
+   ]
+  }
+ }
+}

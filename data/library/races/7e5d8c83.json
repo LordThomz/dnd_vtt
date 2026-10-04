@@ -1,0 +1,61 @@
+{
+ "name": "Goliath",
+ "size": "Mittel",
+ "speed": 35,
+ "darkvision": 0,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Riesenblut in den Adern – groß, stark und unerschrocken.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Riesenahnen",
+   "description": "Eine Gabe wählen: Wolkensprung, Feuerbrand, Frostkälte, Hügelsturz, Steinausdauer oder Sturmdonner. Übungsbonus-mal pro langer Rast.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Große Gestalt",
+   "description": "Ab Stufe 5: Bonusaktion, 10 Minuten groß – Vorteil auf STR-Proben, +10 ft. Einmal pro langer Rast.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Kräftiger Körperbau",
+   "description": "Vorteil gegen Ende des Gepacktseins; trägt wie eine Größenkategorie größer.",
+   "choices": []
+  }
+ ],
+ "id": "7e5d8c83",
+ "rkey": "srd52.races.goliath",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Goliath",
+   "size": "Medium",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Giant blood in their veins – tall, strong and fearless.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Giant Ancestry",
+     "description": "Choose a boon: Cloud's Jaunt, Fire's Burn, Frost's Chill, Hill's Tumble, Stone's Endurance or Storm's Thunder. Proficiency bonus times per long rest."
+    },
+    {
+     "id": "t1",
+     "name": "Large Form",
+     "description": "From level 5: bonus action, Large for 10 minutes – advantage on STR checks, +10 ft. Once per long rest."
+    },
+    {
+     "id": "t2",
+     "name": "Powerful Build",
+     "description": "Advantage to end being grappled; carry as one size larger."
+    }
+   ]
+  }
+ }
+}

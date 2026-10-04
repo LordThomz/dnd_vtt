@@ -245,6 +245,26 @@ Designs sind Dateien (`.vttdesign`, Logik in `static/js/design-runtime.js`). Ein
 
 Hauptmenü und Spielen-Seite sind ein Startbildschirm (`templates/index.html`, Routen `/`, `/menu`, `/play`). `menu.html` gibt es nicht mehr. Am Spieltisch verschiebt ein Skript in `table.html` die Werkzeuggruppen aus der Kopfzeile in `#tool-dock`; das Aussehen steht in `static/css/table-layout.css`. **Neue Werkzeuge** einfach wie bisher als `.tb-btn` in eine `.tb-group` der Kopfzeile schreiben – sie landen automatisch im Dock. **Neue Reiter** als `.p-tab` mit `.t-icon` und Beschriftung anlegen – die Beschriftung wird zum Tooltip der Schiene.
 
+## Ladebildschirm & Kataloge (seit 04.10.2026)
+
+**Seitenwechsel immer über `Theme.go(url)`** (oder normale Links) – dann erscheint der Ladebildschirm sofort. Was eine Seite vor dem Einblenden fertig haben muss, meldet sie mit `Theme.hold(promise)` an; Arbeit, die warten kann, mit `Theme.whenReady(fn)`. Aufwendige Darstellungen hören auf das Ereignis `vtt:leaving` und halten an.
+
+Würfel-Sets und Designs aus dem System kommen aus den Katalogen `dice/` und `designs/` im Repository (je mit `index.json`). Neues Katalog-Set: `.vttdice`-Datei + Eintrag in `dice/index.json`, pushen – ohne App-Update.
+
+## Rahmen, Einstellungen, Bibliotheken (seit 04.10.2026)
+
+Das Spiel läuft im Rahmen `/app` (`templates/shell.html`) – Seitenwechsel passieren im iframe, die Musik im Rahmen läuft weiter. Seiten erkennen den Rahmen an `Theme.inShell`. Einstellungen: `Theme.setting(name, standard)` / `Theme.setSetting()`; das Menü steht in `index.html` (`renderSettings`). Eigene Bibliotheken sind Pakete (`packs.create`), Einträge gehören über `source` zu genau einer Bibliothek. **Neue Bibliotheks-Kategorie:** in `game_state.LIBRARY_CATEGORIES`, in `library.html` (`CATEGORIES`, `AREAS`, `CAT_ICON`, `makeDefault`, Formular) und im Launcher (`CAT`) eintragen.
+
+## Sprachen (seit 04.10.2026)
+
+**Oberfläche:** Texte einfach deutsch schreiben. Danach `python tools/i18n.py --missing`, die gemeldeten Texte in `static/i18n/en.json` übersetzen und `python tools/i18n.py --sync` (kopiert in den Launcher). Kein Oberflächentext (Code, Namen) → `tools/i18n_ignorieren.json`. Nutzerinhalte mit `class="notranslate"` oder `translate="no"` schützen.
+
+**Inhalte:** Bibliotheks-Einträge haben `lang` (Hauptsprache) und `i18n.<andere>` (nur Texte). Logik in `i18n_content.py`, gleiche Logik im Bibliotheks-Editor (`trMerge`/`trDiff`). `/api/library?raw=1` liefert unverändert (Editor), sonst in der Sprache des Spielers.
+
+## Grundregeln 2014 + 2024 (seit 04.10.2026)
+
+Die mitgelieferten Regeln entstehen aus `tools/content/srd51.py` (2014, Paket `basis`) und `srd52.py` (2024, Paket `basis2024`) mit `python tools/content/build_rules.py` – **nie** direkt in `data/library` bearbeiten. Nach inhaltlichen Änderungen `REV` in `build_rules.py` erhöhen, dann übernehmen bestehende Installationen die neue Fassung automatisch. Nur SRD-Inhalte (CC-BY-4.0) gehören hierher.
+
 ## 6. Was als Nächstes zu tun ist
 
 ### Priorität 1 – Würfel: erledigt am 30.09. (siehe AENDERUNGEN.txt)

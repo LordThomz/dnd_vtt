@@ -1,0 +1,22 @@
+{
+ "name": "Riesisch",
+ "rarity": "Standard",
+ "script": "Zwergisch",
+ "speakers": "Oger, Riesen",
+ "description": "Standardsprache. Schrift: Zwergisch. Typische Sprecher: Oger, Riesen.",
+ "id": "9ffcb683",
+ "rkey": "srd51.languages.giant",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Giant",
+   "rarity": "Standard",
+   "script": "Dwarvish",
+   "speakers": "Ogres, giants",
+   "description": "Standard language. Script: Dwarvish. Typical speakers: Ogres, giants."
+  }
+ }
+}

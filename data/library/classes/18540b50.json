@@ -1,0 +1,438 @@
+{
+ "name": "Mönch",
+ "hd": "d8",
+ "primary": "dex",
+ "spellcaster": false,
+ "armor": "Keine",
+ "weapons": "Einfache Waffen, leichte Kriegswaffen",
+ "tools": "Ein Handwerkszeug oder Instrument",
+ "saves": "STR, GES",
+ "skill_count": 2,
+ "skill_options": "Akrobatik, Athletik, Geschichte, Einsicht, Religion, Heimlichkeit",
+ "description": "Kampfkünstler, der seine innere Kraft bündelt.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Kampfkunst",
+    "description": "Kampfkunstwürfel (W6, steigt); waffenloser Bonusangriff; GES für Mönchswaffen.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Ungerüstete Verteidigung",
+    "description": "RK 10 + GES + WEI ohne Rüstung und Schild.",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Mönchsfokus",
+    "description": "Fokuspunkte = Stufe: Schlaghagel, Geduldige Verteidigung, Schritt des Windes.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Ungerüstete Bewegung",
+    "description": "+10 ft Geschwindigkeit (steigt).",
+    "choices": []
+   },
+   {
+    "id": "f2_2",
+    "name": "Unheimlicher Stoffwechsel",
+    "description": "Bei Initiative Fokus auffüllen und heilen (einmal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Angriffe ablenken",
+    "description": "Reaktion: Schaden verringern, evtl. zurückschleudern.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Mönchs-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_1c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Langsamer Fall",
+    "description": "Reaktion: Fallschaden um 5 × Stufe verringern.",
+    "choices": []
+   },
+   {
+    "id": "f4_1",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   },
+   {
+    "id": "f5_1",
+    "name": "Betäubender Schlag",
+    "description": "1 Fokus: KON-Rettungswurf oder betäubt.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Verstärkte Schläge",
+    "description": "Waffenloser Schaden als Energieschaden.",
+    "choices": []
+   },
+   {
+    "id": "f6_1",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Entrinnen",
+    "description": "GES-Rettungswürfe für halben Schaden: Erfolg = kein Schaden.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Akrobatische Bewegung",
+    "description": "Über Wände und Flüssigkeiten laufen.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Gesteigerter Fokus",
+    "description": "Stärkere Fokus-Fähigkeiten.",
+    "choices": []
+   },
+   {
+    "id": "f10_1",
+    "name": "Selbstheilung",
+    "description": "Bezaubert, verängstigt oder vergiftet am Zugende beenden.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Energie ablenken",
+    "description": "Angriffe ablenken gegen jede Schadensart.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Disziplinierter Überlebender",
+    "description": "Geübt in allen Rettungswürfen; 1 Fokus für Wiederholung.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Perfekter Fokus",
+    "description": "Bei Initiative mit wenig Fokus auf 4 auffüllen.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Überlegene Verteidigung",
+    "description": "3 Fokus: 1 Minute Resistenz gegen fast allen Schaden.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Körper und Geist",
+    "description": "+4 GES und +4 WEI, Höchstwert 25.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "18540b50",
+ "rkey": "srd52.classes.monk",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Monk",
+   "armor": "None",
+   "weapons": "Simple weapons, light martial weapons",
+   "tools": "One artisan's tool or instrument",
+   "saves": "STR, DEX",
+   "skill_options": "Acrobatics, Athletics, History, Insight, Religion, Stealth",
+   "description": "A martial artist channelling inner power.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Martial Arts",
+      "description": "Martial arts die (d6, scales); bonus unarmed strike; DEX for monk weapons."
+     },
+     {
+      "id": "f1_1",
+      "name": "Unarmored Defense",
+      "description": "AC 10 + DEX + WIS without armour or shield."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Monk's Focus",
+      "description": "Focus points equal to level: Flurry of Blows, Patient Defense, Step of the Wind."
+     },
+     {
+      "id": "f2_1",
+      "name": "Unarmored Movement",
+      "description": "+10 ft speed (increases)."
+     },
+     {
+      "id": "f2_2",
+      "name": "Uncanny Metabolism",
+      "description": "On initiative regain focus and heal (once per long rest)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Deflect Attacks",
+      "description": "Reaction: reduce damage and possibly redirect it."
+     },
+     {
+      "id": "f3_1",
+      "name": "Monk Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Slow Fall",
+      "description": "Reaction: reduce falling damage by 5 × level."
+     },
+     {
+      "id": "f4_1",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     },
+     {
+      "id": "f5_1",
+      "name": "Stunning Strike",
+      "description": "1 focus: CON save or stunned."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Empowered Strikes",
+      "description": "Unarmed damage can be force damage."
+     },
+     {
+      "id": "f6_1",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Evasion",
+      "description": "DEX saves for half damage: success = no damage."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Acrobatic Movement",
+      "description": "Run on walls and liquids."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Heightened Focus",
+      "description": "Stronger focus options."
+     },
+     {
+      "id": "f10_1",
+      "name": "Self-Restoration",
+      "description": "End charmed, frightened or poisoned at the end of your turn."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Deflect Energy",
+      "description": "Deflect Attacks works against any damage type."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Disciplined Survivor",
+      "description": "Proficient in all saves; 1 focus to reroll."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Perfect Focus",
+      "description": "With little focus left, regain up to 4 on initiative."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Superior Defense",
+      "description": "3 focus: 1 minute of resistance to almost all damage."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Body and Mind",
+      "description": "+4 DEX and +4 WIS, maximum 25."
+     }
+    ]
+   }
+  }
+ }
+}

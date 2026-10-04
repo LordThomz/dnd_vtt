@@ -16,8 +16,9 @@ def index():
     u = flask_session.get("username")
     if not u or not get_user(u):
         return render_template("login.html")
-    # Eingeloggt → Startbildschirm (Hauptmenü und Spielen sind zusammengelegt)
-    return render_template("index.html", current_user=get_user(u))
+    # Eingeloggt → fester Rahmen der App (Musik läuft bei Seitenwechseln weiter);
+    # darin der Startbildschirm (Hauptmenü und Spielen sind zusammengelegt)
+    return redirect("/app")
 
 @pages_bp.route("/menu")
 def menu():
@@ -26,6 +27,14 @@ def menu():
         return redirect("/login")
     # Das frühere Hauptmenü ist im Startbildschirm aufgegangen
     return render_template("index.html", current_user=get_user(u))
+
+@pages_bp.route("/app")
+def app_shell():
+    """Fester Rahmen der App – darin wechseln die Seiten, die Musik läuft weiter."""
+    u = flask_session.get("username")
+    if not u or not get_user(u):
+        return redirect("/login")
+    return render_template("shell.html")
 
 @pages_bp.route("/play")
 def play():

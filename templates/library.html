@@ -1,7 +1,62 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="color-scheme" content="dark light">
+<style>html{background:var(--bg-deep,#06070d)}
+/* ══ Neue Bibliothek: Navigation · Liste · Editor ══════════════════════ */
+.container{max-width:1500px !important;}
+.lib-app{display:grid;grid-template-columns:250px 320px minmax(0,1fr);gap:16px;align-items:start;}
+.lib-nav,.lib-mid{position:sticky;top:14px;max-height:calc(100vh - 160px);overflow-y:auto;
+  background:linear-gradient(180deg,var(--bg-panel),var(--bg-dark));border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;}
+.ln-h{font:700 .66rem/1 var(--font-display);letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin:2px 4px 8px;}
+.lib-pick{display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;border-radius:var(--radius);border:1px solid transparent;background:transparent;
+  color:var(--text);cursor:pointer;text-align:left;font:600 .84rem/1.2 var(--font-ui);}
+.lib-pick:hover{background:rgba(var(--hi-rgb),.05);}
+.lib-pick.on{background:rgba(var(--gold-rgb),.13);border-color:rgba(var(--gold-rgb),.4);color:var(--gold-light);}
+.lib-pick .lp-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;background:rgba(var(--hi-rgb),.05);color:var(--gold);}
+.lib-pick .lp-ic svg{width:15px;height:15px;}
+.lib-pick .lp-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lib-pick .lp-c{font:500 .7rem/1 var(--font-mono);color:var(--text-dim);}
+.lib-pick.off .lp-n{opacity:.55;} .lib-pick.off .lp-n::after{content:" · aus";font-size:.7rem;}
+.ln-add{width:100%;margin:6px 0 14px;padding:8px;border-radius:var(--radius);border:1px dashed rgba(var(--gold-rgb),.4);background:transparent;
+  color:var(--gold);font:600 .78rem/1 var(--font-display);letter-spacing:.04em;cursor:pointer;}
+.ln-add:hover{background:rgba(var(--gold-rgb),.07);}
+.area{margin-top:12px;} .area-h{display:flex;align-items:baseline;gap:6px;font:700 .66rem/1 var(--font-display);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:0 4px 5px;}
+.area-h i{font:400 .7rem/1.3 var(--font-body);font-style:italic;letter-spacing:0;text-transform:none;color:var(--text-dim);}
+.cat-pick{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;border-radius:var(--radius);border:none;background:transparent;color:var(--text);
+  cursor:pointer;text-align:left;font:500 .86rem/1.2 var(--font-ui);}
+.cat-pick svg{width:16px;height:16px;color:var(--text-dim);}
+.cat-pick:hover{background:rgba(var(--hi-rgb),.05);}
+.cat-pick.on{background:rgba(var(--arcane-rgb),.12);color:var(--arcane);} .cat-pick.on svg{color:var(--arcane);}
+.cat-pick b{flex:1;font-weight:500;} .cat-pick span{font:500 .7rem/1 var(--font-mono);color:var(--text-dim);}
+.lm-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px;}
+.lm-head h3{font:700 1rem/1.2 var(--font-display);color:var(--gold-light);margin:0;}
+.lm-head span{font-size:.75rem;color:var(--text-dim);}
+.lm-tools{display:flex;gap:8px;margin-bottom:10px;} .lm-tools .search-box{flex:1;margin:0;}
+#editor-container{min-width:0;}
+#ed-lib{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-4px 0 14px;padding:10px 12px;border-radius:var(--radius);
+  background:rgba(var(--hi-rgb),.03);border:1px solid var(--border);font-size:.84rem;}
+#ed-lib select{padding:6px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-dark);color:var(--text-bright);font:500 .84rem/1.2 var(--font-ui);}
+#ed-lib .hint{color:var(--text-dim);font-size:.78rem;flex-basis:100%;}
+@media(max-width:1200px){.lib-app{grid-template-columns:220px 1fr;} #editor-container{grid-column:1/-1;}}
+@media(max-width:760px){.lib-app{grid-template-columns:1fr;} .lib-nav,.lib-mid{position:static;max-height:none;}}
+
+/* Sprachen im Editor */
+.ed-langs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-basis:100%;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid rgba(var(--hi-rgb),.06);}
+.ed-langs > span{color:var(--text-dim);font-size:.8rem;margin-right:2px;}
+.ed-langs button{padding:6px 11px;border-radius:var(--radius);border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font:600 .8rem/1 var(--font-ui);}
+.ed-langs button small{font-weight:500;color:var(--text-dim);margin-left:4px;}
+.ed-langs button.on{background:rgba(var(--gold-rgb),.16);border-color:rgba(var(--gold-rgb),.5);color:var(--gold-light);}
+.ed-langs button.todo small{color:var(--red-soft);}
+.ed-langs .hint{flex-basis:100%;font-size:.78rem;color:var(--text-dim);} .ed-langs .hint.warn{color:var(--gold);}
+.tr-miss{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:8px;font:600 .62rem/1.4 var(--font-ui);color:var(--red-soft);border:1px solid rgba(var(--red-rgb),.4);background:rgba(var(--red-rgb),.08);vertical-align:middle;}
+/* In der Übersetzung: Struktur nicht ändern (nur Texte) */
+.editor.ov-mode [onclick^="addTrait"], .editor.ov-mode [onclick^="removeTrait"], .editor.ov-mode [onclick^="moveTrait"],
+.editor.ov-mode [onclick^="addChoice"], .editor.ov-mode [onclick^="removeChoice"], .editor.ov-mode [onclick^="addLevelFeature"],
+.editor.ov-mode input[type=number], .editor.ov-mode select:not(.keep), .editor.ov-mode input[type=checkbox],
+.editor.ov-mode [onclick="copyEntry()"], .editor.ov-mode [onclick="deleteEntry()"] { pointer-events:none; opacity:.35; }
+</style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Bibliothek · D&amp;D</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <link rel="preload" href="/static/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,6 +67,7 @@
 <link rel="stylesheet" href="/static/css/design-studio.css">
 <link rel="stylesheet" href="/static/css/fx.css">
 <script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/i18n.js"></script>
 <script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
@@ -188,37 +244,46 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0;}
   }
   </script>
 
-  <div class="cat-tabs" id="cat-tabs"></div>
+  <div class="lib-app">
+    <!-- Links: Bibliotheken + Bereiche/Kategorien -->
+    <aside class="lib-nav">
+      <div class="ln-h">Bibliotheken</div>
+      <div id="lib-switch"></div>
+      <button class="ln-add own-only" onclick="newLibrary()">＋ Neue Bibliothek</button>
+      <div id="area-nav"></div>
+    </aside>
 
-  <div class="layout">
-    <div class="lib-list-panel">
-      <h3 id="list-title">Einträge</h3>
-      <div class="src-filter" id="src-filter"></div>
-      <input type="text" class="search-box" id="search-box" placeholder="🔍 Suchen…" oninput="renderList()">
+    <!-- Mitte: Einträge -->
+    <section class="lib-mid">
+      <div class="lm-head"><h3 id="list-title">Einträge</h3><span id="list-sub"></span></div>
+      <div class="lm-tools">
+        <input type="text" class="search-box" id="search-box" placeholder="Suchen …" oninput="renderList()">
+        <button class="btn btn-primary own-only" style="width:auto;white-space:nowrap" onclick="newEntry()">＋ Neu</button>
+      </div>
       <div id="lib-list"></div>
-      <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="newEntry()">✨ Neu</button>
-      <button class="btn btn-secondary" style="width:100%;margin-top:5px;font-size:.78rem" onclick="seedDefaults()" title="Lädt Standard-D&D-Inhalte in die Bibliothek.">📥 Standards laden</button>
-    </div>
+    </section>
 
-    <div id="editor-container">
+    <!-- Rechts: Editor -->
+    <section id="editor-container">
       <div class="empty-editor" id="empty-editor">
         <div class="icon">📚</div>
         <h2>Bibliothek</h2>
-        <p>Wähle einen Eintrag oder erstelle einen neuen.</p>
+        <p>Wähle links einen Bereich und dann einen Eintrag – oder lege mit „＋ Neu" einen an.</p>
       </div>
       <div class="editor" id="editor" style="display:none">
         <h2 id="editor-title">Neu</h2>
+        <div id="ed-lib"></div>
         <input type="hidden" id="f-id">
         <div id="editor-body"></div>
-        <div class="buttons">
+        <div class="buttons own-only">
           <button class="btn btn-primary" style="flex:1" onclick="saveEntry()">💾 Speichern</button>
+          <button class="btn btn-secondary" onclick="copyEntry()" title="Kopie in einer Bibliothek anlegen">Kopie</button>
           <button class="btn btn-secondary" onclick="deleteEntry()">🗑 Löschen</button>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </div>
-
 <div id="toast"></div>
 
 <script>
@@ -228,16 +293,30 @@ hr{border:none;border-top:1px solid var(--border);margin:12px 0;}
 const CATEGORIES = [
   {id:"races",       icon:"🧬", label:"Völker"},
   {id:"classes",     icon:"⚔️", label:"Klassen"},
-  {id:"subclasses",  icon:"📜", label:"Subklassen"},
+  {id:"subclasses",  icon:"📜", label:"Unterklassen"},
   {id:"backgrounds", icon:"📖", label:"Hintergründe"},
   {id:"feats",       icon:"⭐", label:"Talente"},
   {id:"spells",      icon:"✨", label:"Zauber"},
-  {id:"attacks",     icon:"🎯", label:"Angriffe"},
   {id:"items",       icon:"🎒", label:"Gegenstände"},
-  {id:"magic_items", icon:"🔮", label:"Magische Ggst."},
+  {id:"magic_items", icon:"🔮", label:"Magische Gegenstände"},
+  {id:"languages",   icon:"🌐", label:"Sprachen"},
   {id:"conditions",  icon:"💫", label:"Zustände"},
   {id:"monsters",    icon:"🐉", label:"Monster"},
+  {id:"attacks",     icon:"🎯", label:"Angriffs-Vorlagen"},
 ];
+// Bereiche der Bibliothek. „Spielhilfen" sind KEINE Buchinhalte, sondern
+// Vorlagen für den Spieltisch (z.B. Angriffe für den Charakterbogen).
+const AREAS = [
+  {label:"Charakter",      cats:["races","classes","subclasses","backgrounds","feats"]},
+  {label:"Magie",          cats:["spells"]},
+  {label:"Ausrüstung",     cats:["items","magic_items"]},
+  {label:"Welt & Regeln",  cats:["languages","conditions"]},
+  {label:"Spielleitung",   cats:["monsters"]},
+  {label:"Spielhilfen", hint:"keine Buchinhalte", cats:["attacks"]},
+];
+const CAT_ICON = {races:"dna",classes:"swords",subclasses:"scroll-text",backgrounds:"book-open",feats:"star",spells:"sparkles",
+  items:"backpack",magic_items:"gem",languages:"globe",conditions:"orbit",monsters:"skull",attacks:"crosshair"};
+const lic = n => (typeof Icons!=="undefined" ? Icons.svg(n) : "");
 
 // Available choice types (for dynamic choice fields in traits)
 const CHOICE_TYPES = [
@@ -278,28 +357,98 @@ function uid(){return "x"+Math.random().toString(36).slice(2,9);}
 // ══════════════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════════════
-function renderCatTabs(){
-  document.getElementById("cat-tabs").innerHTML = CATEGORIES.map(c=>
-    `<div class="cat-tab ${c.id===currentCat?"active":""}" data-cat="${c.id}" onclick="switchCat('${c.id}')">${c.icon} ${c.label}</div>`
-  ).join("");
+// ══ ZWEISPRACHIGE EINTRÄGE (gleiche Logik wie i18n_content.py) ═══════════
+//  Hauptsprache: entry.lang (Standard "de"); Übersetzung: entry.i18n[andere].
+//  In der Übersetzung werden nur TEXTE gepflegt – Struktur und Zahlen kommen
+//  immer aus der Hauptsprache.
+const OTHER = l => l === "de" ? "en" : "de";
+// Technische Felder – nicht übersetzt (wie TECH in i18n_content.py)
+const SKIPK = new Set(["id","i18n","lang","source","created_by","parent_class","level","hd","primary","rkey","rules","rev","aliases","type","key","icon","color"]);
+function trMerge(base, over){
+  if (Array.isArray(base) && Array.isArray(over)) {
+    const byId = {}; over.forEach(o => { if (o && o.id) byId[o.id] = o; });
+    return base.map((b,i) => (b && typeof b === "object" && b.id) ? (byId[b.id] ? trMerge(b, byId[b.id]) : b) : (i < over.length ? trMerge(b, over[i]) : b));
+  }
+  if (base && over && typeof base === "object" && typeof over === "object") {
+    const out = {...base}; for (const k in over) if (!SKIPK.has(k) && k in base) out[k] = trMerge(base[k], over[k]); return out;
+  }
+  return (typeof base === "string" && typeof over === "string" && over.trim()) ? over : base;
 }
+// Nur die Texte, die sich von der Hauptsprache unterscheiden (= Übersetzung)
+function trDiff(edited, base){
+  if (Array.isArray(base) && Array.isArray(edited)) {
+    const out = [];
+    base.forEach((b,i) => { const e = (b && b.id) ? edited.find(x => x && x.id === b.id) : edited[i]; if (e === undefined) return;
+      const d = trDiff(e, b); if (d !== undefined) out.push(b && b.id ? {...d, id:b.id} : d); });
+    return out.length ? out : undefined;
+  }
+  if (base && typeof base === "object" && edited && typeof edited === "object") {
+    const out = {}; let any = false;
+    for (const k in base) { if (SKIPK.has(k)) continue; const d = trDiff(edited[k], base[k]); if (d !== undefined) { out[k] = d; any = true; } }
+    return any ? out : undefined;
+  }
+  return (typeof base === "string" && typeof edited === "string" && edited.trim() && edited !== base) ? edited : undefined;
+}
+function trCount(base, over){
+  if (Array.isArray(base)) return base.reduce((acc,b,i) => { const o = (b && b.id) ? (over||[]).find(x => x && x.id === b.id) : (over||[])[i];
+    const [d,t] = trCount(b,o); return [acc[0]+d, acc[1]+t]; }, [0,0]);
+  if (base && typeof base === "object") return Object.keys(base).reduce((acc,k) => { if (SKIPK.has(k)) return acc;
+    const [d,t] = trCount(base[k], over && over[k]); return [acc[0]+d, acc[1]+t]; }, [0,0]);
+  if (typeof base === "string" && base.trim() && !/^[\d\s.,+\-]+$/.test(base)) return [(typeof over === "string" && over.trim()) ? 1 : 0, 1];
+  return [0,0];
+}
+function trCoverage(e){ const main = e.lang || "de"; const [d,t] = trCount(e, ((e.i18n||{})[OTHER(main)])); return t ? d/t : 1; }
+let edLang = null;      // null = Hauptsprache, sonst Sprache der Übersetzung
+let edBase = null;      // Hauptfassung, während die Übersetzung bearbeitet wird
+function switchEdLang(l){
+  const main = (edBase || editState).lang || "de";
+  if (l === main) {                                     // zurück zur Hauptsprache
+    if (edBase) { const over = trDiff(editState, edBase) || {}; edBase.i18n = {...(edBase.i18n||{}), [OTHER(main)]: over}; editState = edBase; edBase = null; }
+    edLang = null;
+  } else if (!edBase) {                                 // in die Übersetzung wechseln
+    edBase = editState; editState = trMerge(JSON.parse(JSON.stringify(edBase)), (edBase.i18n||{})[l] || {}); edLang = l;
+  }
+  renderEditor();
+}
+function foldTranslation(){ if (edBase) switchEdLang(edBase.lang || "de"); }
 
-// Quellen (Erweiterungen) – siehe packs.py; verwaltet werden sie im Launcher
-let packs = [], srcFilter = "";
+// Aktuelle Bibliothek ("" = alle). Bibliotheken = Pakete (siehe packs.py):
+// Grundregeln, Meine Inhalte, selbst angelegte und importierte.
+let packs = [], curLib = "";
 const srcName = id => (packs.find(p => p.id === id) || {}).name || id;
+const libEditable = id => id !== "basis" && id !== "basis2024";   // Grundregeln: nur als Kopie ändern                  // Grundregeln: nur als Kopie ändern
+const targetLib = () => (curLib && libEditable(curLib)) ? curLib : "eigene";
 async function loadPacks(){
   try { packs = await (await fetch("/api/packs")).json(); } catch(e){ packs = []; }
 }
-function renderSrcFilter(){
-  const box = document.getElementById("src-filter");
-  const inCat = {};
-  Object.values(library[currentCat]||{}).forEach(e => { const s=e.source||"eigene"; inCat[s]=(inCat[s]||0)+1; });
-  const used = packs.filter(p => inCat[p.id]);
-  if (used.length < 2) { box.innerHTML = ""; if(srcFilter && !inCat[srcFilter]) srcFilter=""; return; }
-  box.innerHTML = `<button class="${srcFilter===""?"on":""}" onclick="setSrcFilter('')">Alle</button>` +
-    used.map(p => `<button class="${srcFilter===p.id?"on":""} ${p.enabled?"":"off-pack"}" title="${p.enabled?"":"Paket ist abgeschaltet"}" onclick="setSrcFilter('${esc(p.id)}')">${esc(p.name)} · ${inCat[p.id]}</button>`).join("");
+const inLib = e => !curLib || (e.source||"eigene") === curLib;
+function libIcon(p){ return (p.id==="basis"||p.id==="basis2024") ? "book-marked" : p.id==="eigene" ? "pen-line" : p.own ? "library" : "package"; }
+function renderNav(){
+  // Bibliotheken
+  const total = id => Object.values(library).reduce((n,cat)=>n+Object.values(cat||{}).filter(e=>(e.source||"eigene")===id).length,0);
+  const all = Object.values(library).reduce((n,cat)=>n+Object.keys(cat||{}).length,0);
+  const list = packs.filter(p => p.total || p.own || p.id==="eigene");
+  document.getElementById("lib-switch").innerHTML =
+    `<button class="lib-pick ${!curLib?"on":""}" onclick="pickLib('')"><span class="lp-ic">${lic("layout-panel-left")}</span><span class="lp-n">Alle Bibliotheken</span><span class="lp-c">${all}</span></button>` +
+    list.map(p => `<button class="lib-pick ${curLib===p.id?"on":""} ${p.enabled?"":"off"}" title="${esc(p.description||p.name)}" onclick="pickLib('${esc(p.id)}')">
+      <span class="lp-ic">${lic(libIcon(p))}</span><span class="lp-n">${esc(p.name)}</span><span class="lp-c">${total(p.id)}</span></button>`).join("");
+  // Bereiche + Kategorien (Anzahl in der gewählten Bibliothek)
+  const cnt = c => Object.values(library[c]||{}).filter(inLib).length;
+  document.getElementById("area-nav").innerHTML = AREAS.map(a => `<div class="area"><div class="area-h">${a.label}${a.hint?` <i>${a.hint}</i>`:""}</div>` +
+    a.cats.map(c => { const d = CATEGORIES.find(x=>x.id===c);
+      return `<button class="cat-pick ${c===currentCat?"on":""}" onclick="switchCat('${c}')">${lic(CAT_ICON[c])}<b>${d.label}</b><span>${cnt(c)}</span></button>`; }).join("") + `</div>`).join("");
 }
-function setSrcFilter(id){ srcFilter = id; renderList(); }
+function renderCatTabs(){ renderNav(); }
+function pickLib(id){ curLib = id; renderList(); }
+async function newLibrary(){
+  const name = await Dialog.prompt("Wie soll die neue Bibliothek heißen?", "", { title: "Neue Bibliothek", okText: "Anlegen" });
+  if (!name || !name.trim()) return;
+  const r = await fetch("/api/packs/create", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ name: name.trim() }) });
+  const d = await r.json().catch(()=>({}));
+  if (!r.ok) { toast("⚠️ " + (d.error || "Fehlgeschlagen")); return; }
+  await loadPacks(); curLib = d.id; renderList();
+  toast(`📚 „${d.name}" angelegt – neue Einträge landen jetzt dort. Teilen kannst du sie im Launcher.`);
+}
 
 // Besitzer-Prinzip: Über das Netzwerk verbundene Spieler sehen die
 // Bibliothek nur an (und können Pakete herunterladen), ändern aber nichts.
@@ -307,7 +456,7 @@ let isOwner = true;
 async function applyOwnerMode(){
   try { isOwner = (await (await fetch("/api/server/info")).json()).is_owner !== false; } catch(e){}
   if (isOwner) return;
-  document.querySelectorAll('[onclick="newEntry()"],[onclick^="seedDefaults"],[onclick="saveEntry()"],[onclick="deleteEntry()"]').forEach(b=>b.style.display="none");
+  document.querySelectorAll('.own-only').forEach(b=>b.style.display="none");
   document.querySelector("header").insertAdjacentHTML("beforeend",
     `<div style="margin-top:10px;font-size:.85rem;color:var(--text-dim)">👁 Nur ansehen – das ist die Bibliothek des Spielers, mit dessen Server du verbunden bist.</div>`);
 }
@@ -315,12 +464,10 @@ applyOwnerMode();
 
 async function loadLibrary(){
   await loadPacks();
-  const res = await fetch("/api/library");
+  const res = await fetch("/api/library?raw=1");    // roh: beide Sprachen zum Bearbeiten
   library = await res.json();
   // Ensure all categories exist in client-side object
   CATEGORIES.forEach(c=>{ if(!library[c.id]) library[c.id]={}; });
-  const total = Object.values(library).reduce((s,cat)=>s+Object.keys(cat||{}).length,0);
-  if(total === 0) await seedDefaults(true);
   renderList();
 }
 
@@ -342,8 +489,6 @@ function switchCat(cat){
   currentId = null;
   editState = {};
   renderCatTabs();
-  const catDef = CATEGORIES.find(c=>c.id===cat);
-  document.getElementById("list-title").textContent = catDef?`${catDef.icon} ${catDef.label}`:"Einträge";
   document.getElementById("editor").style.display="none";
   document.getElementById("empty-editor").style.display="block";
   renderList();
@@ -354,20 +499,23 @@ function switchCat(cat){
 // ══════════════════════════════════════════════════════════════════════
 function renderList(){
   const search = (document.getElementById("search-box").value||"").toLowerCase();
-  renderSrcFilter();
+  renderNav();
+  const catDef = CATEGORIES.find(c=>c.id===currentCat) || {};
+  document.getElementById("list-title").textContent = catDef.label || "Einträge";
+  document.getElementById("list-sub").textContent = curLib ? srcName(curLib) : "alle Bibliotheken";
   const entries = Object.values(library[currentCat]||{}).filter(e=>
-    (!search || (e.name||"").toLowerCase().includes(search)) &&
-    (!srcFilter || (e.source||"eigene") === srcFilter)
+    (!search || (e.name||"").toLowerCase().includes(search)) && inLib(e)
   ).sort((a,b)=>(a.name||"").localeCompare(b.name||""));
   const list = document.getElementById("lib-list");
   if(!entries.length){
-    list.innerHTML = `<div class="empty-list">Noch nichts hier.<br>Klicke „✨ Neu" zum Erstellen.</div>`;
+    list.innerHTML = `<div class="fx-empty"><div class="fx-empty-ic">${lic(CAT_ICON[currentCat]||"library")}</div>
+      <b>${search ? "Nichts gefunden" : "Noch keine " + (catDef.label||"Einträge")}</b>${search ? "Versuche einen anderen Suchbegriff." : (isOwner ? `Lege mit „＋ Neu" den ersten an – er landet in „${esc(srcName(targetLib()))}".` : "")}</div>`;
     return;
   }
   list.innerHTML = entries.map(e=>`
     <div class="lib-item ${e.id===currentId?"active":""}" onclick="selectEntry('${e.id}')">
       <div class="lib-item-info">
-        <div class="li-name">${esc(e.name||"Unbenannt")}<span class="src-badge ${esc(e.source||"eigene")}">${esc(srcName(e.source||"eigene"))}</span></div>
+        <div class="li-name">${esc(e.name||"Unbenannt")}${curLib ? "" : `<span class="src-badge ${esc(e.source||"eigene")}">${esc(typeof I18n!=="undefined"?I18n.t(srcName(e.source||"eigene")):srcName(e.source||"eigene"))}</span>`}${trCoverage(e) < 1 ? `<span class="tr-miss" title="${typeof I18n!=="undefined"?I18n.t("Übersetzung unvollständig"):"Übersetzung unvollständig"}">${OTHER(e.lang||"de").toUpperCase()} ${Math.round(trCoverage(e)*100)}%</span>` : ""}</div>
         <div class="li-meta">${esc(listMeta(e))}</div>
       </div>
     </div>`).join("");
@@ -386,6 +534,7 @@ function listMeta(e){
     case "magic_items": return [e.rarity||"", e.requires_attunement?"🔗 Einstimmung":""].filter(Boolean).join(" · ");
     case "conditions":  return "";
     case "monsters":    return [e.size||"", `HG ${e.cr||"—"}`, `${e.hp||"?"} HP`].filter(Boolean).join(" · ");
+    case "languages":   return [e.rarity||"", e.script?`Schrift: ${e.script}`:""].filter(Boolean).join(" · ");
     default: return "";
   }
 }
@@ -395,6 +544,9 @@ function listMeta(e){
 // ══════════════════════════════════════════════════════════════════════
 function newEntry(){
   editState = makeDefault(currentCat);
+  editState.source = targetLib();
+  editState.lang = (typeof I18n !== "undefined" ? I18n.lang : "de");   // Hauptsprache
+  edBase = null; edLang = null;
   currentId = null;
   renderEditor();
 }
@@ -402,6 +554,7 @@ function selectEntry(id){
   const e = library[currentCat]?.[id];
   if(!e) return;
   currentId = id;
+  edBase = null; edLang = null;
   editState = JSON.parse(JSON.stringify(e));  // deep clone to avoid mutating live data
   normalizeState();
   renderList();
@@ -458,6 +611,7 @@ function makeDefault(cat){
     case "items":       return {...base, category:"Sonstiges", weight:0, cost:"", ac_bonus:0, damage:"", damage_type:"", properties:""};
     case "magic_items": return {...base, item_category:"Wunderbarer Gegenstand", rarity:"Ungewöhnlich", requires_attunement:false, attunement_restriction:""};
     case "conditions":  return {...base};
+    case "languages":   return {...base, rarity:"Standard", script:"", speakers:""};
     case "monsters":    return {...base, size:"Mittel", type:"Humanoid", alignment:"Neutral", cr:"1", ac:12, hp:10, speed:"30 ft.", str:10, dex:10, con:10, int:10, wis:10, cha:10, skills:"", resistances:"", immunities:"", senses:"", actions:[]};
     default:            return base;
   }
@@ -472,16 +626,29 @@ function renderEditor(){
   document.getElementById("f-id").value = editState.id || "";
   const catDef = CATEGORIES.find(c=>c.id===currentCat);
   document.getElementById("editor-title").textContent = editState.id
-    ? `${catDef?.icon} Bearbeite: ${editState.name||"(unbenannt)"}`
-    : `${catDef?.icon} Neuer Eintrag (${catDef?.label})`;
+    ? `${editState.name||"(unbenannt)"}`
+    : `Neu: ${catDef?.label||""}`;
   const body = document.getElementById("editor-body");
   // Quelle anzeigen. Einträge aus importierten Paketen werden bei einem
   // Paket-Update ersetzt – darauf hinweisen, damit niemand umsonst editiert.
   const src = editState.source || "eigene";
-  const pk = packs.find(p => p.id === src);
-  const srcInfo = `<div style="margin:-4px 0 14px;font-size:.85rem;color:var(--text-dim)">Quelle: <span class="src-badge ${esc(src)}">${esc(srcName(src))}</span>
-    ${pk && !pk.builtin ? ` – Änderungen gehen beim nächsten Update dieses Pakets verloren.` : ""}</div>`;
-  body.innerHTML = srcInfo + renderCommonFields() + renderCatFields();
+  const pk = packs.find(p => p.id === src) || {};
+  const choices = packs.filter(p => libEditable(p.id) && (p.id==="eigene" || p.own || !p.builtin));
+  // Sprachleiste: Hauptsprache | Übersetzung (mit Fortschritt)
+  const base = edBase || editState, main = base.lang || "de", other = OTHER(main);
+  const pct = Math.round(trCoverage(edBase ? {...edBase, i18n:{...(edBase.i18n||{}), [other]: trDiff(editState, edBase)||{}}} : base) * 100);
+  const LN = {de:"Deutsch", en:"English"};
+  document.getElementById("editor").classList.toggle("ov-mode", !!edBase);
+  const langBar = `<div class="ed-langs notranslate"><span>Sprache:</span>
+      <button class="${!edBase?"on":""}" onclick="switchEdLang('${main}')">${LN[main]} <small>Hauptsprache</small></button>
+      <button class="${edBase?"on":""} ${pct<100?"todo":""}" onclick="switchEdLang('${other}')">${LN[other]} <small>${pct}%</small></button>
+      ${edBase ? `<span class="hint">Übersetzung: nur Texte übersetzen. Felder, Zahlen und Eigenschaften änderst du in der Hauptsprache.</span>` : (pct<100 ? `<span class="hint warn">Bitte auch auf ${LN[other]} pflegen, damit der Eintrag in beiden Sprachen vollständig ist.</span>` : "")}</div>`;
+  document.getElementById("ed-lib").innerHTML = langBar + ((src === "basis" || src === "basis2024")
+    ? `Bibliothek: <span class="src-badge basis">${esc(srcName(src))}</span>
+       <span class="hint">Grundregel-Eintrag. Für eine eigene Variante „Kopie" anlegen – sie landet in „${esc(srcName(targetLib()))}".</span>`
+    : `Bibliothek: <select ${isOwner?"":"disabled"} onchange="editState.source=this.value">${choices.map(p=>`<option value="${esc(p.id)}" ${p.id===src?"selected":""}>${esc(p.name)}</option>`).join("")}</select>
+       ${pk.id && !pk.builtin && !pk.own ? `<span class="hint">Importierte Erweiterung – Änderungen gehen beim nächsten Update dieser Erweiterung verloren.</span>` : ""}`);
+  body.innerHTML = renderCommonFields() + renderCatFields();
   bindCommonInputs();
 }
 
@@ -515,6 +682,7 @@ function renderCatFields(){
     case "items":       return renderItemFields();
     case "magic_items": return renderMagicItemFields();
     case "conditions":  return renderConditionFields();
+    case "languages":   return renderLanguageFields();
     case "monsters":    return renderMonsterFields();
     default: return "";
   }
@@ -866,6 +1034,16 @@ function bindMagicItemInputs(){
   if(a) a.onchange = e => editState.requires_attunement = e.target.checked;
 }
 
+function renderLanguageFields(){
+  const v = k => esc(editState[k]||"");
+  return `<div class="section"><div class="section-title">Sprache</div>
+    <div class="row"><div class="field"><label>Art</label><select onchange="editState.rarity=this.value">
+      ${["Standard","Exotisch","Geheim"].map(o=>`<option ${editState.rarity===o?"selected":""}>${o}</option>`).join("")}</select></div>
+    <div class="field"><label>Schrift</label><input value="${v("script")}" oninput="editState.script=this.value" placeholder="z. B. Zwergisch"></div></div>
+    <div class="field"><label>Typische Sprecher</label><input value="${v("speakers")}" oninput="editState.speakers=this.value" placeholder="z. B. Zwerge"></div>
+    <p class="help-text">Sprachen erscheinen im Charakter-Builder überall dort, wo eine Sprache gewählt wird.</p></div>`;
+}
+
 function renderConditionFields(){
   return `<div class="section"><div class="section-title">Zustand</div>
     <p class="help-text">Füge die Effekte als Eigenschaften hinzu (z.B. "Bewegung: halbiert", "Rettungswürfe: Nachteil").</p></div>
@@ -1083,7 +1261,7 @@ function addLevelFeature(lvl){
 // SAVE & DELETE
 // ══════════════════════════════════════════════════════════════════════
 async function saveEntry(){
-  // editState already contains everything (we update it on input)
+  foldTranslation();       // Übersetzung zurück in den Eintrag übernehmen
   if (!editState.name || !editState.name.trim()){
     toast("⚠️ Name fehlt"); return;
   }
@@ -1097,6 +1275,19 @@ async function saveEntry(){
   currentId = saved.id;
   await loadLibrary();
   toast("💾 Gespeichert!");
+}
+
+// Kopie in der gewählten Bibliothek anlegen (z.B. Variante eines Grundregel-Eintrags)
+async function copyEntry(){
+  foldTranslation();
+  if (!editState.name) return;
+  const copy = JSON.parse(JSON.stringify(editState));
+  copy.id = null; copy.source = targetLib(); copy.name = (copy.name||"") + " (Variante)";
+  const r = await fetch(`/api/library/${currentCat}`, {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(copy)});
+  const saved = await r.json();
+  if (saved.error){ toast("❌ " + saved.error); return; }
+  await loadLibrary(); selectEntry(saved.id);
+  toast(`📄 Kopie in „${srcName(saved.source)}" angelegt`);
 }
 
 async function deleteEntry(){
@@ -1115,9 +1306,8 @@ async function deleteEntry(){
 
 // Boot
 renderCatTabs();
-loadLibrary();
+(typeof Theme!=="undefined"&&Theme.hold?Theme.hold:(p=>p))(loadLibrary());
 </script>
-<script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/design-studio.js"></script>
 <footer style="max-width:1200px;margin:30px auto 20px;padding:0 20px;font-size:.72rem;line-height:1.5;color:var(--text-dim);text-align:center">
   Die „Grundregeln (SRD 5.1)" enthalten Material aus dem System Reference Document 5.1 von Wizards of the Coast LLC,

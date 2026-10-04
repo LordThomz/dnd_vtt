@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="color-scheme" content="dark light">
+<style>html{background:var(--bg-deep,#06070d)}</style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Anmelden · D&amp;D</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 <link rel="preload" href="/static/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,6 +14,7 @@
 <link rel="stylesheet" href="/static/css/design-studio.css">
 <link rel="stylesheet" href="/static/css/fx.css">
 <script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/i18n.js"></script>
 <script src="/static/js/design-runtime.js"></script>
 <script src="/static/js/theme.js"></script>
 <link rel="stylesheet" href="/static/css/base.css">
@@ -175,7 +178,7 @@ async function doGuest(){
     const res=await fetch("/api/auth/guest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name||"Gast"})});
     const data=await res.json();
     if(!res.ok||data.error){toast(data.error||"Fehler");return;}
-    window.location.href="/";
+    (typeof Theme!=="undefined"?Theme.go("/"):location.assign("/"));
   }catch(e){toast("Netzwerkfehler");}
 }
 async function doLogin(){
@@ -188,7 +191,7 @@ async function doLogin(){
     const res=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:user,password:pw,remember:remember})});
     const data=await res.json();
     if(!res.ok||data.error){err.textContent=data.error||"Fehler";return;}
-    window.location.href="/";
+    (typeof Theme!=="undefined"?Theme.go("/"):location.assign("/"));
   }catch(e){err.textContent="Netzwerkfehler";}
 }
 async function doRegister(){
@@ -223,7 +226,6 @@ async function doRegister(){
   }catch(e){err.textContent="Netzwerkfehler";}
 }
 </script>
-<script src="/static/js/dice-presets.js"></script>
 <script src="/static/js/design-studio.js"></script>
 <script>
 // Erster Start einer neuen Installation: noch kein Konto → direkt zur Registrierung

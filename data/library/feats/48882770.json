@@ -1,0 +1,22 @@
+{
+ "name": "Wachsam",
+ "prereq": "—",
+ "description": "Immer bereit.",
+ "benefits": "Übungsbonus auf Initiative; Initiative mit einem Verbündeten tauschen.",
+ "category": "Herkunft",
+ "id": "48882770",
+ "rkey": "srd52.feats.alert",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Alert",
+   "prereq": "—",
+   "description": "Always ready.",
+   "benefits": "Add proficiency bonus to initiative; swap initiative with an ally.",
+   "category": "Origin"
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Goblinisch",
+ "rarity": "Standard",
+ "script": "Zwergisch",
+ "speakers": "Goblinoide",
+ "description": "Standardsprache. Schrift: Zwergisch. Typische Sprecher: Goblinoide.",
+ "id": "b03c2e04",
+ "rkey": "srd52.languages.goblin",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Goblin",
+   "rarity": "Standard",
+   "script": "Dwarvish",
+   "speakers": "Goblinoids",
+   "description": "Standard language. Script: Dwarvish. Typical speakers: Goblinoids."
+  }
+ }
+}

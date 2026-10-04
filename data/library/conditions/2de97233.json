@@ -1,0 +1,16 @@
+{
+ "name": "Bezaubert",
+ "description": "Kann den Bezauberer nicht angreifen; er hat Vorteil bei sozialen Proben.",
+ "id": "2de97233",
+ "rkey": "srd52.conditions.charmed",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Charmed",
+   "description": "Can't attack the charmer; it has advantage on social checks."
+  }
+ }
+}

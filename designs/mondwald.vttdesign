@@ -39,5 +39,12 @@
     "--backdrop": "radial-gradient(ellipse 70% 50% at 20% 0%, rgba(169,216,162,.09) 0%, transparent 60%), radial-gradient(ellipse 50% 50% at 90% 80%, rgba(185,166,255,.08) 0%, transparent 60%)",
     "--stars-opacity": ".8"
   },
-  "scheme": "dark"
+  "scheme": "dark",
+  "i18n": {
+    "en": {
+      "name": "Moonwood",
+      "tag": "Elven",
+      "description": "Night green, moon silver and soft violet – calm and close to nature."
+    }
+  }
 }

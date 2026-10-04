@@ -1,0 +1,72 @@
+{
+ "name": "Halbling",
+ "size": "Klein",
+ "speed": 30,
+ "darkvision": 0,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Klein, mutig und vom Glück begünstigt.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Tapfer",
+   "description": "Vorteil gegen Verängstigung.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Halblings-Gewandtheit",
+   "description": "Durch den Raum größerer Kreaturen bewegen.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Glück",
+   "description": "Eine gewürfelte 1 beim W20 neu würfeln.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Natürlich verstohlen",
+   "description": "Verstecken hinter größeren Kreaturen möglich.",
+   "choices": []
+  }
+ ],
+ "id": "c3780c4e",
+ "rkey": "srd52.races.halfling",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Halfling",
+   "size": "Small",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Small, brave and favoured by luck.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Brave",
+     "description": "Advantage against being frightened."
+    },
+    {
+     "id": "t1",
+     "name": "Halfling Nimbleness",
+     "description": "Move through the space of larger creatures."
+    },
+    {
+     "id": "t2",
+     "name": "Luck",
+     "description": "Reroll a 1 on a d20 test."
+    },
+    {
+     "id": "t3",
+     "name": "Naturally Stealthy",
+     "description": "Hide behind larger creatures."
+    }
+   ]
+  }
+ }
+}

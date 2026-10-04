@@ -1,0 +1,22 @@
+{
+ "name": "Druidisch",
+ "rarity": "Selten",
+ "script": "Druidisch",
+ "speakers": "Druiden",
+ "description": "Seltene Sprache. Schrift: Druidisch. Typische Sprecher: Druiden.",
+ "id": "78a24e0d",
+ "rkey": "srd52.languages.druidic",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Druidic",
+   "rarity": "Rare",
+   "script": "Druidic",
+   "speakers": "Druids",
+   "description": "Rare language. Script: Druidic. Typical speakers: Druids."
+  }
+ }
+}

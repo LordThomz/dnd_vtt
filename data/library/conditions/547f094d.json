@@ -1,0 +1,16 @@
+{
+ "name": "Blind",
+ "description": "Sieht nichts; Angriffe gegen dich mit Vorteil, eigene mit Nachteil.",
+ "id": "547f094d",
+ "rkey": "srd51.conditions.blinded",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Blinded",
+   "description": "Can't see; attacks against you have advantage, yours have disadvantage."
+  }
+ }
+}

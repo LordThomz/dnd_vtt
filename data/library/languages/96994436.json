@@ -1,0 +1,22 @@
+{
+ "name": "Drakonisch",
+ "rarity": "Exotisch",
+ "script": "Drakonisch",
+ "speakers": "Drachen, Drachenblütige",
+ "description": "Exotische Sprache. Schrift: Drakonisch. Typische Sprecher: Drachen, Drachenblütige.",
+ "id": "96994436",
+ "rkey": "srd51.languages.draconic",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Draconic",
+   "rarity": "Exotic",
+   "script": "Draconic",
+   "speakers": "Dragons, dragonborn",
+   "description": "Exotic language. Script: Draconic. Typical speakers: Dragons, dragonborn."
+  }
+ }
+}

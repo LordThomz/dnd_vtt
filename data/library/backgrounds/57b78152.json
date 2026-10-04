@@ -1,0 +1,28 @@
+{
+ "name": "Weiser",
+ "skill_profs": "Arkana, Geschichte",
+ "languages": "—",
+ "tool_profs": "Kalligrafie-Ausrüstung",
+ "equipment": "Kampfstab, Kalligrafie-Ausrüstung, Buch, Pergament, Gewand, 8 GM – oder 50 GM",
+ "feature": "Herkunftstalent: Magie-Eingeweihter (Magier).",
+ "description": "Jahre zwischen Büchern und Gelehrten.",
+ "ability_scores": "KON, INT, WEI",
+ "id": "57b78152",
+ "rkey": "srd52.backgrounds.sage",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Sage",
+   "skill_profs": "Arcana, History",
+   "languages": "—",
+   "tool_profs": "Calligrapher's supplies",
+   "equipment": "Quarterstaff, calligrapher's supplies, book, parchment, robe, 8 gp – or 50 gp",
+   "feature": "Origin feat: Magic Initiate (Wizard).",
+   "description": "Years among books and scholars.",
+   "ability_scores": "CON, INT, WIS"
+  }
+ }
+}

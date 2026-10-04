@@ -1,0 +1,102 @@
+{
+ "name": "Zwerg",
+ "size": "Mittel",
+ "speed": 25,
+ "darkvision": 60,
+ "asi": "+2 KON, +1 WEI",
+ "languages": "Gemeinsprache, Zwergisch",
+ "description": "Robuste Krieger und Handwerker aus den Bergen (Hügelzwerg).",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Im Dämmerlicht auf 60 ft wie bei hellem Licht, im Dunkeln wie im Dämmerlicht (nur Graustufen).",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Zwergische Widerstandskraft",
+   "description": "Vorteil bei Rettungswürfen gegen Gift, Resistenz gegen Giftschaden.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Zwergische Kampfausbildung",
+   "description": "Geübt mit Streitaxt, Handaxt, leichtem Hammer und Kriegshammer.",
+   "choices": []
+  },
+  {
+   "id": "t3",
+   "name": "Werkzeugübung",
+   "description": "Geübt mit Schmiede-, Brauer- oder Steinmetzwerkzeug (eine Wahl).",
+   "choices": [
+    {
+     "id": "t3c0",
+     "type": "tool",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  },
+  {
+   "id": "t4",
+   "name": "Steingespür",
+   "description": "Doppelter Übungsbonus auf Geschichte-Proben zu Steinarbeiten.",
+   "choices": []
+  },
+  {
+   "id": "t5",
+   "name": "Zwergische Zähigkeit",
+   "description": "+1 Trefferpunkt-Maximum pro Stufe.",
+   "choices": []
+  }
+ ],
+ "id": "a23a93b7",
+ "rkey": "srd51.races.dwarf",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Dwarf",
+   "size": "Medium",
+   "asi": "+2 CON, +1 WIS",
+   "languages": "Common, Dwarvish",
+   "description": "Hardy warriors and crafters of the mountains (hill dwarf).",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Within 60 ft you see in dim light as if bright and in darkness as if dim (shades of grey only)."
+    },
+    {
+     "id": "t1",
+     "name": "Dwarven Resilience",
+     "description": "Advantage on saves against poison and resistance to poison damage."
+    },
+    {
+     "id": "t2",
+     "name": "Dwarven Combat Training",
+     "description": "Proficient with battleaxe, handaxe, light hammer and warhammer."
+    },
+    {
+     "id": "t3",
+     "name": "Tool Proficiency",
+     "description": "Proficient with smith's, brewer's or mason's tools (choose one)."
+    },
+    {
+     "id": "t4",
+     "name": "Stonecunning",
+     "description": "Double proficiency bonus on History checks about stonework."
+    },
+    {
+     "id": "t5",
+     "name": "Dwarven Toughness",
+     "description": "+1 hit point maximum per level."
+    }
+   ]
+  }
+ }
+}

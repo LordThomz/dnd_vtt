@@ -1,0 +1,334 @@
+{
+ "name": "Waldläufer",
+ "hd": "d10",
+ "primary": "dex",
+ "spellcaster": true,
+ "armor": "Leichte & mittlere Rüstung, Schilde",
+ "weapons": "Einfache & Kriegswaffen",
+ "tools": "",
+ "saves": "STR, GES",
+ "skill_count": 3,
+ "skill_options": "Tierführung, Athletik, Einsicht, Nachforschungen, Naturkunde, Wahrnehmung, Heimlichkeit, Überleben",
+ "description": "Jäger der Wildnis mit Spurenlesen und Naturmagie.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Bevorzugter Feind",
+    "description": "Vorteil beim Aufspüren und Erinnern an eine Kreaturenart (weitere ab Stufe 6 und 14).",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Naturkundiger Entdecker",
+    "description": "Vorteile beim Reisen in einem bevorzugten Gelände (weitere ab Stufe 6 und 10).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Kampfstil",
+    "description": "Einen Kampfstil wählen (z. B. Bogenschießen, Verteidigung, Duellieren).",
+    "choices": [
+     {
+      "id": "f2_0c0",
+      "type": "fighting_style",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f2_1",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste wirken. Attribut: WEI.",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Waldläufer-Archetyp",
+    "description": "Wähle deinen Archetyp (Unterklasse).",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f3_1",
+    "name": "Urtümliches Gespür",
+    "description": "Zauberplatz verbrauchen: bestimmte Kreaturenarten in der Nähe spüren.",
+    "choices": []
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Schritt durch das Land",
+    "description": "Nichtmagisches schwieriges Gelände kostet keine zusätzliche Bewegung.",
+    "choices": []
+   },
+   {
+    "id": "f8_1",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Im Verborgenen",
+    "description": "Getarnt +10 auf Heimlichkeit, solange du dich nicht bewegst.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Verschwinden",
+    "description": "Verstecken als Bonusaktion; magisch nicht aufspürbar.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Archetyp.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Wilde Sinne",
+    "description": "Unsichtbare Kreaturen in 30 ft wahrnehmen.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Feindbezwinger",
+    "description": "Einmal pro Zug WEI auf Angriff oder Schaden gegen einen bevorzugten Feind.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "91cb3b33",
+ "rkey": "srd51.classes.ranger",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Ranger",
+   "armor": "Light & medium armour, shields",
+   "weapons": "Simple & martial weapons",
+   "tools": "",
+   "saves": "STR, DEX",
+   "skill_options": "Animal Handling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival",
+   "description": "A hunter of the wilds with tracking and nature magic.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Favored Enemy",
+      "description": "Advantage to track and recall lore about a creature type (more at levels 6 and 14)."
+     },
+     {
+      "id": "f1_1",
+      "name": "Natural Explorer",
+      "description": "Travel benefits in a favoured terrain (more at levels 6 and 10)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Fighting Style",
+      "description": "Choose a fighting style (e.g. Archery, Defense, Dueling)."
+     },
+     {
+      "id": "f2_1",
+      "name": "Spellcasting",
+      "description": "Cast spells from your class list. Ability: WIS."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Ranger Archetype",
+      "description": "Choose your archetype (subclass)."
+     },
+     {
+      "id": "f3_1",
+      "name": "Primeval Awareness",
+      "description": "Spend a spell slot to sense certain creature types nearby."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Land's Stride",
+      "description": "Nonmagical difficult terrain costs no extra movement."
+     },
+     {
+      "id": "f8_1",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Hide in Plain Sight",
+      "description": "Camouflaged: +10 to Stealth while you don't move."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Vanish",
+      "description": "Hide as a bonus action; can't be tracked by nonmagical means."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen archetype."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Feral Senses",
+      "description": "Sense invisible creatures within 30 ft."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Foe Slayer",
+      "description": "Once per turn add WIS to attack or damage against a favoured enemy."
+     }
+    ]
+   }
+  }
+ }
+}

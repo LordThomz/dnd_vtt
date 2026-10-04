@@ -1,0 +1,22 @@
+{
+ "name": "Gabe des Schicksals",
+ "prereq": "Stufe 19+",
+ "description": "Das Schicksal biegen.",
+ "benefits": "+1 Attribut; 2W4 zu einem W20-Wurf addieren oder abziehen (einmal pro Rast).",
+ "category": "Epische Gabe",
+ "id": "3053f3ee",
+ "rkey": "srd52.feats.boon_fate",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Boon of Fate",
+   "prereq": "Level 19+",
+   "description": "Bend fate.",
+   "benefits": "+1 ability; add or subtract 2d4 to a d20 test (once per rest).",
+   "category": "Epic Boon"
+  }
+ }
+}

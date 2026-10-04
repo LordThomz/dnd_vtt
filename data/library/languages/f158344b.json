@@ -1,0 +1,22 @@
+{
+ "name": "Infernalisch",
+ "rarity": "Exotisch",
+ "script": "Infernalisch",
+ "speakers": "Teufel",
+ "description": "Exotische Sprache. Schrift: Infernalisch. Typische Sprecher: Teufel.",
+ "id": "f158344b",
+ "rkey": "srd51.languages.infernal",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Infernal",
+   "rarity": "Exotic",
+   "script": "Infernal",
+   "speakers": "Devils",
+   "description": "Exotic language. Script: Infernal. Typical speakers: Devils."
+  }
+ }
+}

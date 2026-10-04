@@ -1,0 +1,61 @@
+{
+ "name": "Ork",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 120,
+ "asi": "— (über den Hintergrund)",
+ "languages": "Gemeinsprache + 2 Sprachen",
+ "description": "Ausdauernd und von unbändiger Kraft.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Adrenalinschub",
+   "description": "Spurt als Bonusaktion und temporäre TP in Höhe des Übungsbonus. Übungsbonus-mal pro Rast.",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Dunkelsicht",
+   "description": "Dunkelsicht 120 ft.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Unermüdliche Ausdauer",
+   "description": "Fällst du auf 0 TP, bleibst du bei 1 TP. Einmal pro langer Rast.",
+   "choices": []
+  }
+ ],
+ "id": "d49fd259",
+ "rkey": "srd52.races.orc",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Orc",
+   "size": "Medium",
+   "asi": "— (from your background)",
+   "languages": "Common + 2 languages",
+   "description": "Enduring and of untamed strength.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Adrenaline Rush",
+     "description": "Dash as a bonus action and gain temporary HP equal to your proficiency bonus. Proficiency bonus times per rest."
+    },
+    {
+     "id": "t1",
+     "name": "Darkvision",
+     "description": "Darkvision 120 ft."
+    },
+    {
+     "id": "t2",
+     "name": "Relentless Endurance",
+     "description": "When reduced to 0 HP you drop to 1 instead. Once per long rest."
+    }
+   ]
+  }
+ }
+}

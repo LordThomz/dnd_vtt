@@ -1,0 +1,98 @@
+{
+ "name": "Unhold-Schutzherr",
+ "parent_class_name": "Hexer",
+ "parent_class": "bf1d1f3d",
+ "start_level": 3,
+ "description": "Ein Pakt mit den unteren Ebenen.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Segen des Dunklen",
+    "description": "Fällt ein Feind in deiner Nähe auf 0 TP: temporäre TP = CHA + Stufe.",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Unholdzauber",
+    "description": "Immer vorbereitet: u. a. Brennende Hände, Feuerball.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Glück des Dunklen",
+    "description": "+1W10 auf eine Probe oder einen Rettungswurf (CHA-mal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Unholdische Widerstandskraft",
+    "description": "Nach jeder Rast Resistenz gegen eine Schadensart.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Durch die Hölle schleudern",
+    "description": "Treffer: Ziel durch die Hölle, 8W10 psychischer Schaden.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "c3953821",
+ "rkey": "srd52.subclasses.fiend",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Fiend Patron",
+   "parent_class_name": "Warlock",
+   "description": "A pact with the lower planes.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Dark One's Blessing",
+      "description": "When a foe near you drops to 0 HP: temporary HP = CHA + level."
+     },
+     {
+      "id": "f3_1",
+      "name": "Fiend Spells",
+      "description": "Always prepared: e.g. burning hands, fireball."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Dark One's Own Luck",
+      "description": "+1d10 to a check or save (CHA times per long rest)."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Fiendish Resilience",
+      "description": "After each rest, resistance to one damage type."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Hurl Through Hell",
+      "description": "On a hit: the target is hurled through hell, 8d10 psychic damage."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "Der Unhold"
+ ]
+}

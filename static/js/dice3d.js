@@ -943,7 +943,9 @@ const Dice3D = (() => {
       _lastDisp = disp;
       if (!job.opts.suppressPopup) _showPopup(disp, stage.screenBox());
       if (job.onComplete) { try { job.onComplete(_collapse(job, results)); } catch (e) {} }
-      const hold = _queue.length ? HOLD_QUEUE_MS : HOLD_MS;
+      // Einstellungen → Würfel → „Ergebnis anzeigen": kurz / normal / lang
+      const holdF = { short: .5, normal: 1, long: 1.8 }[(typeof Theme !== "undefined" && Theme.setting) ? Theme.setting("diceHold", "normal") : "normal"] || 1;
+      const hold = (_queue.length ? HOLD_QUEUE_MS : HOLD_MS) * holdF;
       await new Promise(r => { _hideTimer = setTimeout(r, hold); });
     } catch (err) {
       _diag("Würfel-Engine konnte nicht starten. Details in der Konsole (F12).", err);
@@ -1139,8 +1141,8 @@ const Dice3D = (() => {
    *  vorab bauen, damit schon der ERSTE Wurf ohne Verzögerung startet. */
   function preload() {
     try {
-      if (!_librariesReady()) return;
-      _ensureStage().then(stage => {
+      if (!_librariesReady()) return Promise.resolve();
+      return _ensureStage().then(stage => {
         SIDES_LIST.forEach(s => {
           const g = DiceGeometry.build(s, DIE_RADIUS);
           DiceMaterial.build(s, g, _styleFor(s));
@@ -1149,7 +1151,7 @@ const Dice3D = (() => {
         // Shader einmal kompilieren (sonst ruckelt der erste Frame)
         try { const m = stage.makeDie(20, _styleFor(20)); stage.renderer.compile(stage.scene, stage.camera); stage.clear(); } catch (e) {}
       }).catch(() => {});
-    } catch (e) {}
+    } catch (e) { return Promise.resolve(); }
   }
 
   /** Vorschaubild eines Würfels als data:-URL (für Set-Karten in Werkstatt
@@ -1183,6 +1185,13 @@ const Dice3D = (() => {
     return p.catch(() => null);
   }
 
+  /** Alle Darstellungen anhalten (beim Verlassen der Seite). */
+  function pauseAll() {
+    try { _previews.forEach(e => e.stage && e.stage.stop()); } catch (e) {}
+    try { if (_stage) _stage.stop(); } catch (e) {}
+    try { if (_snapStage) _snapStage.stop(); } catch (e) {}
+  }
+
   /** Nur für automatische Tests: Simulation ohne Darstellung. */
   function _selfTest(sides, value, seed) {
     const specs = _expandSpecs([{ sides, value }]);
@@ -1205,7 +1214,7 @@ const Dice3D = (() => {
   // ══════════════════════════════════════════════════════════════════════
 
   return {
-    roll, testRoll, preview, stopPreview, preload, showFinalResult, snapshot,
+    roll, testRoll, preview, stopPreview, preload, showFinalResult, snapshot, pauseAll,
     setEnabled, isEnabled,
     getStyle, setStyle,
     getSets, getVisibleSets, getActiveSet, setActiveSet, saveSet, deleteSet, newSet,
@@ -1213,9 +1222,15 @@ const Dice3D = (() => {
   };
 })();
 
+// Seite wird verlassen: alle 3D-Darstellungen sofort anhalten, damit der
+// Ladebildschirm flüssig einblendet (siehe theme.js → Theme.go).
+if (typeof window !== "undefined") window.addEventListener("vtt:leaving", () => { try { Dice3D.pauseAll(); } catch (e) {} });
+
 // Engine vorwärmen, sobald die Seite bereit ist (nur wenn 3D aktiv).
+// Der Ladebildschirm wartet darauf → kein Stocken beim ersten Wurf.
 if (typeof window !== "undefined") {
-  const _warm = () => { try { if (Dice3D.isEnabled()) Dice3D.preload(); } catch (e) {} };
-  if (document.readyState === "complete" || document.readyState === "interactive") setTimeout(_warm, 200);
-  else window.addEventListener("DOMContentLoaded", () => setTimeout(_warm, 200));
+  const _warm = () => { try { if (Dice3D.isEnabled() && document.getElementById("map-area")) {
+    const p = Dice3D.preload(); if (typeof Theme !== "undefined" && Theme.hold) Theme.hold(p); } } catch (e) {} };
+  if (document.readyState === "complete" || document.readyState === "interactive") setTimeout(_warm, 0);
+  else window.addEventListener("DOMContentLoaded", () => setTimeout(_warm, 0));
 }

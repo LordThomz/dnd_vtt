@@ -1,0 +1,95 @@
+{
+ "name": "Der Unhold",
+ "parent_class_name": "Hexer",
+ "parent_class": "11f3d1d1",
+ "start_level": 1,
+ "description": "Ein Pakt mit einem Wesen der unteren Ebenen.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Erweiterte Zauberliste",
+    "description": "Zusätzlich wählbar: u. a. Brennende Hände, Feuerball, Feuerwand.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Segen des Dunklen",
+    "description": "Bringst du einen Feind auf 0 TP: temporäre TP = CHA + Stufe.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Glück des Dunklen",
+    "description": "+1W10 auf eine Probe oder einen Rettungswurf (einmal pro Rast).",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Unholdische Widerstandskraft",
+    "description": "Nach jeder Rast Resistenz gegen eine Schadensart.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Durch die Hölle schleudern",
+    "description": "Nach einem Treffer: Ziel durch die Hölle, 10W10 psychischer Schaden.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "312a1cba",
+ "rkey": "srd51.subclasses.fiend",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "The Fiend",
+   "parent_class_name": "Warlock",
+   "description": "A pact with a being of the lower planes.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Expanded Spell List",
+      "description": "Additional options: e.g. burning hands, fireball, wall of fire."
+     },
+     {
+      "id": "f1_1",
+      "name": "Dark One's Blessing",
+      "description": "When you drop a foe to 0 HP: temporary HP = CHA + level."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Dark One's Own Luck",
+      "description": "+1d10 to a check or save (once per rest)."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Fiendish Resilience",
+      "description": "After each rest gain resistance to one damage type."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Hurl Through Hell",
+      "description": "After a hit: the target is hurled through hell, 10d10 psychic damage."
+     }
+    ]
+   }
+  }
+ }
+}

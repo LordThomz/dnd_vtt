@@ -1,0 +1,99 @@
+{
+ "name": "Schule des Wissens",
+ "parent_class_name": "Barde",
+ "parent_class": "5e90baa1",
+ "start_level": 3,
+ "description": "Sammler von Geschichten, Geheimnissen und Wahrheiten.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Zusätzliche Übung",
+    "description": "Geübt in drei Fertigkeiten deiner Wahl.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "skill",
+      "count": 3,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f3_1",
+    "name": "Schneidende Worte",
+    "description": "Reaktion: Bardische Inspiration von einem gegnerischen Wurf abziehen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Zusätzliche magische Geheimnisse",
+    "description": "Zwei Zauber aus beliebigen Klassenlisten.",
+    "choices": [
+     {
+      "id": "f6_0c0",
+      "type": "spell",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Unvergleichliches Können",
+    "description": "Bardische Inspiration auf eigene Attributsproben anwenden.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "1a1ae163",
+ "rkey": "srd51.subclasses.lore",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "College of Lore",
+   "parent_class_name": "Bard",
+   "description": "Collectors of stories, secrets and truths.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Bonus Proficiencies",
+      "description": "Proficient in three skills of your choice."
+     },
+     {
+      "id": "f3_1",
+      "name": "Cutting Words",
+      "description": "Reaction: subtract Bardic Inspiration from an enemy's roll."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Additional Magical Secrets",
+      "description": "Two spells from any class list."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Peerless Skill",
+      "description": "Use Bardic Inspiration on your own ability checks."
+     }
+    ]
+   }
+  }
+ },
+ "aliases": [
+  "College of Lore"
+ ]
+}

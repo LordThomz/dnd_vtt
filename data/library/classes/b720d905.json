@@ -1,0 +1,290 @@
+{
+ "name": "Magier",
+ "hd": "d6",
+ "primary": "int",
+ "spellcaster": true,
+ "armor": "Keine",
+ "weapons": "Einfache Waffen",
+ "tools": "",
+ "saves": "INT, WEI",
+ "skill_count": 2,
+ "skill_options": "Arkana, Geschichte, Einsicht, Nachforschungen, Heilkunde, Naturkunde, Religion",
+ "description": "Ein Gelehrter der arkanen Magie.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste vorbereiten und wirken. Attribut: INT.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Ritualkundig",
+    "description": "Ritualzauber aus dem Zauberbuch ohne Vorbereitung.",
+    "choices": []
+   },
+   {
+    "id": "f1_2",
+    "name": "Arkane Erholung",
+    "description": "Bei kurzer Rast Zauberplätze bis zur halben Stufe zurück (einmal am Tag).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Gelehrter",
+    "description": "Expertise in einer Wissensfertigkeit.",
+    "choices": [
+     {
+      "id": "f2_0c0",
+      "type": "skill",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Magier-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zauber einprägen",
+    "description": "Bei kurzer Rast einen vorbereiteten Zauber tauschen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Zaubermeisterschaft",
+    "description": "Je ein Zauber 1. und 2. Grades ohne Platz.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Signaturzauber",
+    "description": "Zwei Zauber 3. Grades je einmal pro kurzer Rast ohne Platz.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "b720d905",
+ "rkey": "srd52.classes.wizard",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Wizard",
+   "armor": "None",
+   "weapons": "Simple weapons",
+   "tools": "",
+   "saves": "INT, WIS",
+   "skill_options": "Arcana, History, Insight, Investigation, Medicine, Nature, Religion",
+   "description": "A scholar of arcane magic.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Prepare and cast spells from your class list. Ability: INT."
+     },
+     {
+      "id": "f1_1",
+      "name": "Ritual Adept",
+      "description": "Cast ritual spells from your book without preparing them."
+     },
+     {
+      "id": "f1_2",
+      "name": "Arcane Recovery",
+      "description": "Recover spell slots up to half your level on a short rest (once a day)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Scholar",
+      "description": "Expertise in one knowledge skill."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Wizard Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Memorize Spell",
+      "description": "Swap one prepared spell on a short rest."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Spell Mastery",
+      "description": "One 1st- and one 2nd-level spell at will."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Signature Spells",
+      "description": "Two 3rd-level spells, each once per short rest without a slot."
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,69 @@
+{
+ "name": "Drachenblut",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 0,
+ "asi": "+2 STR, +1 CHA",
+ "languages": "Gemeinsprache, Drakonisch",
+ "description": "Stolze Nachfahren von Drachen mit Odemwaffe.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Drachenahnen",
+   "description": "Drachenart wählen – sie bestimmt Schadensart und Form der Odemwaffe.",
+   "choices": [
+    {
+     "id": "t0c0",
+     "type": "damage_type",
+     "count": 1,
+     "label": "",
+     "options": []
+    }
+   ]
+  },
+  {
+   "id": "t1",
+   "name": "Odemwaffe",
+   "description": "Aktion: 2W6 Schaden (ab Stufe 6/11/16: 3W6/4W6/5W6), Rettungswurf SG 8 + KON + Übungsbonus. Einmal pro Rast.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Schadensresistenz",
+   "description": "Resistenz gegen die Schadensart deiner Drachenahnen.",
+   "choices": []
+  }
+ ],
+ "id": "9bc3cf27",
+ "rkey": "srd51.races.dragonborn",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Dragonborn",
+   "size": "Medium",
+   "asi": "+2 STR, +1 CHA",
+   "languages": "Common, Draconic",
+   "description": "Proud descendants of dragons with a breath weapon.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Draconic Ancestry",
+     "description": "Choose a dragon type – it sets your damage type and breath shape."
+    },
+    {
+     "id": "t1",
+     "name": "Breath Weapon",
+     "description": "Action: 2d6 damage (3d6/4d6/5d6 at levels 6/11/16), save DC 8 + CON + proficiency. Once per rest."
+    },
+    {
+     "id": "t2",
+     "name": "Damage Resistance",
+     "description": "Resistance to your ancestry's damage type."
+    }
+   ]
+  }
+ }
+}

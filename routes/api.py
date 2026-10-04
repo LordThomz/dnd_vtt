@@ -16,7 +16,7 @@ from game_state import (get_session, all_sessions, session_safe_copy,
 api_bp = Blueprint("api", __name__)
 
 # Programmversion – wird später für die automatische Update-Prüfung genutzt.
-APP_VERSION = "0.2.2"
+APP_VERSION = "0.2.3"
 
 # Uploads landen im beschreibbaren Datenverzeichnis (wichtig für die gebündelte Exe).
 from config import app_data_dir
@@ -510,7 +510,7 @@ def get_char(cid):
 # die Seiten der eigenen Installation sie hierher; der Launcher holt sie ab
 # und gibt sie beim Beitreten mit (siehe theme.js → Handover).
 PROFILE_KEYS = ("vtt_theme_ui", "vtt_theme_table", "vtt_dice_sets", "vtt_dice3d",
-                "vtt_dice_sound", "vtt_dice_volume", "vtt_hidden_designs", "vtt_designs", "vtt_fx")
+                "vtt_dice_sound", "vtt_dice_volume", "vtt_hidden_designs", "vtt_designs", "vtt_fx", "vtt_settings")
 
 def _profile_path():
     from game_state import _BASE_DIR
@@ -658,13 +658,18 @@ def library_list():
     """Ohne Parameter: ALLE Einträge (für die Bibliotheks-Verwaltung).
     ?session=<id>: nur, was in dieser Kampagne erlaubt ist (Builder, Spieltisch).
     ?active=1:     nur Einträge aktiver Pakete."""
+    # Sprache: ?raw=1 = unverändert (Bibliotheks-Editor bearbeitet beide
+    # Sprachen), sonst in der Sprache des Spielers (Cookie, siehe i18n.js)
+    import i18n_content
+    lang = None if request.args.get("raw") else (request.args.get("lang") or request.cookies.get("vtt_lang") or "de")
+    loc = (lambda lib: i18n_content.localize_library(lib, lang)) if lang else (lambda lib: lib)
     sid = request.args.get("session")
     if sid:
         from game_state import _sessions
-        return jsonify(packs.filtered_library(_sessions.get(sid)))
+        return jsonify(loc(packs.filtered_library(_sessions.get(sid))))
     if request.args.get("active"):
-        return jsonify(packs.filtered_library(None))
-    return jsonify(get_library())
+        return jsonify(loc(packs.filtered_library(None)))
+    return jsonify(loc(get_library()))
 
 
 # ── Inhaltspakete (.vttpack) – Logik in packs.py ──────────────────────────
@@ -675,16 +680,44 @@ def _pack_error(e, code=400):
 def packs_list():
     return jsonify(packs.list_packs())
 
+@api_bp.route("/api/packs/create", methods=["POST"])
+def packs_create():
+    """Neue eigene Bibliothek (Bibliothek im Spiel → „Neue Bibliothek")."""
+    g = _owner_guard()
+    if g: return g
+    d = request.get_json(silent=True) or {}
+    try:
+        return jsonify(packs.create(d.get("name"), d.get("description", ""), _require_login() or ""))
+    except packs.PackError as e:
+        return _pack_error(str(e))
+
+@api_bp.route("/api/packs/<pid>/meta", methods=["POST"])
+def packs_meta(pid):
+    """Eigene Bibliothek umbenennen / Beschreibung ändern."""
+    g = _owner_guard()
+    if g: return g
+    d = request.get_json(silent=True) or {}
+    try:
+        return jsonify(packs.rename(pid, d.get("name"), d.get("description")))
+    except packs.PackError as e:
+        return _pack_error(str(e))
+
 @api_bp.route("/api/packs/<pid>/contents", methods=["GET"])
 def packs_contents(pid):
     """Übersicht für den Launcher: nur Namen + kurze Beschreibung je Kategorie,
     keine Regeldetails."""
     from game_state import get_library
+    import i18n_content
+    lang = request.args.get("lang") or request.cookies.get("vtt_lang") or "de"
     out = {}
     for cat, entries in get_library().items():
-        items = [{"name": e.get("name", ""), "description": str(e.get("description") or "")[:160],
-                  "parent": e.get("parent_class_name", "")}
-                 for e in entries.values() if (e.get("source") or "eigene") == pid]
+        items = []
+        for e0 in entries.values():
+            if (e0.get("source") or "eigene") != pid: continue
+            e = i18n_content.localize(e0, lang)
+            items.append({"name": e.get("name", ""), "description": str(e.get("description") or "")[:160],
+                          "parent": e.get("parent_class_name", ""),
+                          "translated": round(i18n_content.coverage(e0, "en" if (e0.get("lang") or "de") == "de" else "de"), 2)})
         if items:
             out[cat] = sorted(items, key=lambda x: x["name"].lower())
     return jsonify(out)
@@ -692,9 +725,8 @@ def packs_contents(pid):
 
 @api_bp.route("/api/packs/<pid>/enabled", methods=["POST"])
 def packs_enable(pid):
-    g = _owner_guard()
+    g = _owner_guard()            # angemeldet ODER Launcher am eigenen PC
     if g: return g
-    if not _require_login(): return _pack_error("Bitte anmelden", 401)
     data = request.get_json(silent=True) or {}
     try:
         return jsonify(packs.set_enabled(pid, bool(data.get("enabled", True))))
@@ -703,9 +735,8 @@ def packs_enable(pid):
 
 @api_bp.route("/api/packs/<pid>", methods=["DELETE"])
 def packs_remove(pid):
-    g = _owner_guard()
+    g = _owner_guard()            # angemeldet ODER Launcher am eigenen PC
     if g: return g
-    if not _require_login(): return _pack_error("Bitte anmelden", 401)
     try:
         return jsonify({"removed_entries": packs.remove(pid)})
     except packs.PackError as e:
@@ -744,9 +775,8 @@ def _uploaded_pack():
 
 @api_bp.route("/api/packs/preview", methods=["POST"])
 def packs_preview():
-    g = _owner_guard()
+    g = _owner_guard()            # angemeldet ODER Launcher am eigenen PC
     if g: return g
-    if not _require_login(): return _pack_error("Bitte anmelden", 401)
     try:
         return jsonify(packs.preview(_uploaded_pack()))
     except packs.PackError as e:
@@ -756,8 +786,7 @@ def packs_preview():
 def packs_import():
     g = _owner_guard()
     if g: return g
-    user = _require_login()
-    if not user: return _pack_error("Bitte anmelden", 401)
+    user = _require_login() or "Besitzer"     # der Launcher ist nicht angemeldet
     try:
         return jsonify(packs.import_pack(_uploaded_pack(), installed_by=user))
     except packs.PackError as e:
@@ -820,7 +849,12 @@ def _norm_level_features(lf):
 
 @api_bp.route("/api/library/seed_defaults", methods=["POST"])
 def seed_defaults():
-    """Seed the library with default D&D 5e content if empty categories exist."""
+    """Stillgelegt: Die Grundregeln 2014 + 2024 kommen automatisch mit dem
+    Programm und werden bei Updates abgeglichen (packs._sync_basis)."""
+    return jsonify({"ok": True, "added": 0, "info": "Grundregeln werden automatisch bereitgestellt"})
+
+def _seed_defaults_alt():
+    """(alt, nicht mehr in Gebrauch)"""
     g = _owner_guard()
     if g: return g
     lib = get_library()

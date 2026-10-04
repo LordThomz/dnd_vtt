@@ -1,0 +1,107 @@
+{
+ "name": "Champion",
+ "parent_class_name": "Kämpfer",
+ "parent_class": "cf8fb909",
+ "start_level": 3,
+ "description": "Meister der körperlichen Perfektion.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Verbesserter kritischer Treffer",
+    "description": "Kritischer Treffer bei 19–20.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Bemerkenswerter Athlet",
+    "description": "Halber Übungsbonus auf ungeübte STR-, GES- und KON-Proben; weitere Sprünge.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Zusätzlicher Kampfstil",
+    "description": "Einen zweiten Kampfstil wählen.",
+    "choices": [
+     {
+      "id": "f10_0c0",
+      "type": "fighting_style",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Überlegener kritischer Treffer",
+    "description": "Kritischer Treffer bei 18–20.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Überlebender",
+    "description": "Mit höchstens halben TP: jeden Zug 5 + KON Trefferpunkte zurück.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "6a52e79b",
+ "rkey": "srd51.subclasses.champion",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Champion",
+   "parent_class_name": "Fighter",
+   "description": "A master of physical perfection.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Improved Critical",
+      "description": "Critical hit on 19–20."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Remarkable Athlete",
+      "description": "Half proficiency on unproficient STR, DEX and CON checks; longer jumps."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Additional Fighting Style",
+      "description": "Choose a second fighting style."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Superior Critical",
+      "description": "Critical hit on 18–20."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Survivor",
+      "description": "At half HP or less, regain 5 + CON hit points each turn."
+     }
+    ]
+   }
+  }
+ }
+}

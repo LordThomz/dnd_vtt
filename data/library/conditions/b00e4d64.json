@@ -1,0 +1,16 @@
+{
+ "name": "Erschöpft",
+ "description": "Sechs Stufen mit wachsenden Nachteilen; Stufe 6 bedeutet den Tod.",
+ "id": "b00e4d64",
+ "rkey": "srd51.conditions.exhaustion",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Exhaustion",
+   "description": "Six levels with growing penalties; level 6 means death."
+  }
+ }
+}

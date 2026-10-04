@@ -1,0 +1,28 @@
+{
+ "name": "Akolyth",
+ "skill_profs": "Einsicht, Religion",
+ "languages": "—",
+ "tool_profs": "Kalligrafie-Ausrüstung",
+ "equipment": "Kalligrafie-Ausrüstung, Buch, heiliges Symbol, Pergament, Gewänder, 8 GM – oder 50 GM",
+ "feature": "Herkunftstalent: Magie-Eingeweihter (Kleriker).",
+ "description": "Dienst in einem Tempel hat dich geprägt.",
+ "ability_scores": "INT, WEI, CHA",
+ "id": "b4217f91",
+ "rkey": "srd52.backgrounds.acolyte",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Acolyte",
+   "skill_profs": "Insight, Religion",
+   "languages": "—",
+   "tool_profs": "Calligrapher's supplies",
+   "equipment": "Calligrapher's supplies, book, holy symbol, parchment, robe, 8 gp – or 50 gp",
+   "feature": "Origin feat: Magic Initiate (Cleric).",
+   "description": "Service in a temple has shaped you.",
+   "ability_scores": "INT, WIS, CHA"
+  }
+ }
+}

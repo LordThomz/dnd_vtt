@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="dark light">
+<style>html{background:var(--bg-deep,#06070d)}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D&amp;D Virtual Tabletop</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/themes.css">
+<!--
+  ══════════════════════════════════════════════════════════════════════════
+  RAHMEN DER APP (/app) – damit die Musik bei Seitenwechseln weiterläuft
+  ══════════════════════════════════════════════════════════════════════════
+  Die eigentlichen Seiten (Startbildschirm, Builder, Bibliothek, Werkstatt,
+  Spieltisch …) laufen in einem Vollbild-Rahmen (iframe). Seitenwechsel
+  passieren nur darin – dieser Rahmen und damit die Musik bleiben bestehen.
+
+  Musik-Regeln:
+    • Menüs (alles außer dem Spieltisch): eine durchgehende Musik
+    • Spieltisch: Musik blendet aus – dort läuft die Musik des DM (Jukebox)
+    • Wechsel zu einer anderen Adresse (Launcher, Server eines DM):
+      die ganze Seite wechselt (theme.js → Theme.go)
+
+  Die Seiten erkennen den Rahmen an window.top.VTT_SHELL und starten dann
+  keine eigene Musik (fx.js).
+  ══════════════════════════════════════════════════════════════════════════
+-->
+<script>window.VTT_SHELL = true;</script>
+<script>window.__VTT_PROFILE__ = {{ vtt_profile|tojson }};</script>
+<script src="/static/js/i18n.js"></script>
+<script src="/static/js/design-runtime.js"></script>
+<script src="/static/js/theme.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg-deep); }
+  #frame { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: var(--bg-deep); }
+  #vtt-loader { display: none !important; }   /* der Rahmen selbst zeigt keinen – das macht die Seite darin */
+</style>
+</head>
+<body>
+<iframe id="frame" title="D&amp;D Virtual Tabletop" allow="autoplay; fullscreen; clipboard-read; clipboard-write"></iframe>
+<script src="/static/js/sfx.js"></script>
+<script>
+"use strict";
+(function () {
+  // Schon in einem Rahmen? (z.B. eine Seite darin wechselte auf „/") → kein
+  // zweiter Rahmen, sondern direkt die Zielseite zeigen
+  if (window.top !== window) { location.replace(new URLSearchParams(location.search).get("start") || "/menu"); return; }
+  const frame = document.getElementById("frame");
+  // Startseite aus ?start=… (nur Pfade dieser App)
+  const want = new URLSearchParams(location.search).get("start") || "/menu";
+  frame.src = /^\/(?!\/)/.test(want) ? want : "/menu";
+
+  const isTable = path => /^\/table\//.test(path || "");
+  function musicFor(path) {
+    const s = Sfx.settings();
+    if (!s.music || isTable(path)) Sfx.music.stop(1.6);
+    else Sfx.music.start();
+  }
+  // Seite im Rahmen geladen → Titel übernehmen, Musik anpassen, Fokus geben
+  frame.addEventListener("load", () => {
+    let path = "";
+    try { path = frame.contentWindow.location.pathname; document.title = frame.contentDocument.title || document.title; } catch (e) {}
+    musicFor(path);
+    try { frame.contentWindow.focus(); } catch (e) {}
+  });
+  // Seite kündigt einen Wechsel an → Musik schon vorher passend ausblenden
+  window.addEventListener("message", e => {
+    if (e.origin !== location.origin || !e.data || e.data.type !== "vtt-nav") return;
+    try { const u = new URL(e.data.url, location.href); if (isTable(u.pathname)) Sfx.music.stop(1.2); } catch (x) {}
+  });
+  // Einstellungen im Spiel geändert (gleicher Speicher) → sofort übernehmen
+  window.addEventListener("storage", e => {
+    if (e.key !== "vtt_fx") return;
+    Sfx.configure({});
+    let path = ""; try { path = frame.contentWindow.location.pathname; } catch (x) {}
+    musicFor(path);
+  });
+})();
+</script>
+</body>
+</html>

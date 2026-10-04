@@ -1,0 +1,399 @@
+{
+ "name": "Waldläufer",
+ "hd": "d10",
+ "primary": "dex",
+ "spellcaster": true,
+ "armor": "Leichte & mittlere Rüstung, Schilde",
+ "weapons": "Einfache & Kriegswaffen",
+ "tools": "",
+ "saves": "STR, GES",
+ "skill_count": 3,
+ "skill_options": "Tierführung, Athletik, Einsicht, Nachforschungen, Naturkunde, Wahrnehmung, Heimlichkeit, Überleben",
+ "description": "Ein Wanderer der Wildnis mit Naturmagie.",
+ "level_features": {
+  "1": [
+   {
+    "id": "f1_0",
+    "name": "Zauberwirken",
+    "description": "Zauber aus der Klassenliste vorbereiten und wirken. Attribut: WEI.",
+    "choices": []
+   },
+   {
+    "id": "f1_1",
+    "name": "Bevorzugter Feind",
+    "description": "Mal des Jägers immer vorbereitet und mehrmals ohne Platz.",
+    "choices": []
+   },
+   {
+    "id": "f1_2",
+    "name": "Waffenmeisterschaft",
+    "description": "Meisterschafts-Eigenschaften von 2 Waffenarten nutzen (wechselbar nach langer Rast).",
+    "choices": []
+   }
+  ],
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Geschickter Entdecker",
+    "description": "Expertise in einer Fertigkeit und zwei Sprachen.",
+    "choices": []
+   },
+   {
+    "id": "f2_1",
+    "name": "Kampfstil",
+    "description": "Ein Talent der Kategorie Kampfstil.",
+    "choices": [
+     {
+      "id": "f2_1c0",
+      "type": "fighting_style",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Waldläufer-Unterklasse",
+    "description": "Wähle deine Unterklasse.",
+    "choices": [
+     {
+      "id": "f3_0c0",
+      "type": "subclass",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "4": [
+   {
+    "id": "f4_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "5": [
+   {
+    "id": "f5_0",
+    "name": "Zusätzlicher Angriff",
+    "description": "Mit der Angriffsaktion zweimal angreifen.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Umherstreifen",
+    "description": "+10 ft Geschwindigkeit, Klettern und Schwimmen.",
+    "choices": []
+   }
+  ],
+  "7": [
+   {
+    "id": "f7_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "8": [
+   {
+    "id": "f8_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "9": [
+   {
+    "id": "f9_0",
+    "name": "Expertise",
+    "description": "Doppelter Übungsbonus in zwei Fertigkeiten.",
+    "choices": [
+     {
+      "id": "f9_0c0",
+      "type": "skill",
+      "count": 2,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Unermüdlich",
+    "description": "Temporäre TP als Aktion; Erschöpfung nach kurzer Rast verringern.",
+    "choices": []
+   }
+  ],
+  "11": [
+   {
+    "id": "f11_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "12": [
+   {
+    "id": "f12_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "13": [
+   {
+    "id": "f13_0",
+    "name": "Gnadenloser Jäger",
+    "description": "Schaden bricht die Konzentration auf Mal des Jägers nicht.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Schleier der Natur",
+    "description": "Bonusaktion: bis zum nächsten Zug unsichtbar.",
+    "choices": []
+   }
+  ],
+  "15": [
+   {
+    "id": "f15_0",
+    "name": "Merkmal der Unterklasse",
+    "description": "Merkmal deiner gewählten Unterklasse.",
+    "choices": []
+   }
+  ],
+  "16": [
+   {
+    "id": "f16_0",
+    "name": "Attributswerterhöhung",
+    "description": "Ein Attribut um 2 oder zwei Attribute um je 1 erhöhen (höchstens 20) – oder stattdessen ein Talent.",
+    "choices": []
+   }
+  ],
+  "17": [
+   {
+    "id": "f17_0",
+    "name": "Präziser Jäger",
+    "description": "Vorteil gegen das Ziel deines Mals.",
+    "choices": []
+   }
+  ],
+  "18": [
+   {
+    "id": "f18_0",
+    "name": "Wilde Sinne",
+    "description": "Blindsicht 30 ft.",
+    "choices": []
+   }
+  ],
+  "19": [
+   {
+    "id": "f19_0",
+    "name": "Epische Gabe",
+    "description": "Ein Talent der Kategorie „Epische Gabe“ (oder ein anderes passendes).",
+    "choices": [
+     {
+      "id": "f19_0c0",
+      "type": "feat",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   }
+  ],
+  "20": [
+   {
+    "id": "f20_0",
+    "name": "Feindbezwinger",
+    "description": "Mal des Jägers verursacht W10 statt W6.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "e3ab0fc6",
+ "rkey": "srd52.classes.ranger",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Ranger",
+   "armor": "Light & medium armour, shields",
+   "weapons": "Simple & martial weapons",
+   "tools": "",
+   "saves": "STR, DEX",
+   "skill_options": "Animal Handling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival",
+   "description": "A wanderer of the wilds with nature magic.",
+   "level_features": {
+    "1": [
+     {
+      "id": "f1_0",
+      "name": "Spellcasting",
+      "description": "Prepare and cast spells from your class list. Ability: WIS."
+     },
+     {
+      "id": "f1_1",
+      "name": "Favored Enemy",
+      "description": "Hunter's mark always prepared and free several times."
+     },
+     {
+      "id": "f1_2",
+      "name": "Weapon Mastery",
+      "description": "Use the mastery properties of 2 kinds of weapons (swap after a long rest)."
+     }
+    ],
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Deft Explorer",
+      "description": "Expertise in one skill and two languages."
+     },
+     {
+      "id": "f2_1",
+      "name": "Fighting Style",
+      "description": "A Fighting Style feat."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Ranger Subclass",
+      "description": "Choose your subclass."
+     }
+    ],
+    "4": [
+     {
+      "id": "f4_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "5": [
+     {
+      "id": "f5_0",
+      "name": "Extra Attack",
+      "description": "Attack twice when you take the Attack action."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Roving",
+      "description": "+10 ft speed, climb and swim speeds."
+     }
+    ],
+    "7": [
+     {
+      "id": "f7_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "8": [
+     {
+      "id": "f8_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "9": [
+     {
+      "id": "f9_0",
+      "name": "Expertise",
+      "description": "Double proficiency in two skills."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Tireless",
+      "description": "Temporary HP as an action; reduce exhaustion on a short rest."
+     }
+    ],
+    "11": [
+     {
+      "id": "f11_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "12": [
+     {
+      "id": "f12_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "13": [
+     {
+      "id": "f13_0",
+      "name": "Relentless Hunter",
+      "description": "Damage can't break concentration on hunter's mark."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Nature's Veil",
+      "description": "Bonus action: invisible until your next turn."
+     }
+    ],
+    "15": [
+     {
+      "id": "f15_0",
+      "name": "Subclass feature",
+      "description": "Feature from your chosen subclass."
+     }
+    ],
+    "16": [
+     {
+      "id": "f16_0",
+      "name": "Ability Score Improvement",
+      "description": "Increase one ability score by 2 or two by 1 (max 20) – or take a feat instead."
+     }
+    ],
+    "17": [
+     {
+      "id": "f17_0",
+      "name": "Precise Hunter",
+      "description": "Advantage against the target of your mark."
+     }
+    ],
+    "18": [
+     {
+      "id": "f18_0",
+      "name": "Feral Senses",
+      "description": "Blindsight 30 ft."
+     }
+    ],
+    "19": [
+     {
+      "id": "f19_0",
+      "name": "Epic Boon",
+      "description": "An Epic Boon feat (or another feat you qualify for)."
+     }
+    ],
+    "20": [
+     {
+      "id": "f20_0",
+      "name": "Foe Slayer",
+      "description": "Hunter's mark deals d10 instead of d6."
+     }
+    ]
+   }
+  }
+ }
+}

@@ -40,5 +40,12 @@
     "--backdrop": "radial-gradient(ellipse 90% 60% at 50% -10%, rgba(200,65,47,.13) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 50% 110%, rgba(0,0,0,.8) 0%, transparent 70%)",
     "--stars-opacity": ".25"
   },
-  "scheme": "dark"
+  "scheme": "dark",
+  "i18n": {
+    "en": {
+      "name": "Shadowkeep",
+      "tag": "Dark",
+      "description": "Soot-black iron, blood red and bone-coloured script. For grimdark games."
+    }
+  }
 }

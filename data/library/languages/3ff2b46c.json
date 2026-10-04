@@ -1,0 +1,22 @@
+{
+ "name": "Orkisch",
+ "rarity": "Standard",
+ "script": "Zwergisch",
+ "speakers": "Orks",
+ "description": "Standardsprache. Schrift: Zwergisch. Typische Sprecher: Orks.",
+ "id": "3ff2b46c",
+ "rkey": "srd51.languages.orc",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Orc",
+   "rarity": "Standard",
+   "script": "Dwarvish",
+   "speakers": "Orcs",
+   "description": "Standard language. Script: Dwarvish. Typical speakers: Orcs."
+  }
+ }
+}

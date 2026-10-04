@@ -13,5 +13,12 @@
     "--table-grid-rgb": "47,227,255",
     "--table-fog-rgb": "2,8,16",
     "--table-measure": "#ff3ea5"
+  },
+  "i18n": {
+    "en": {
+      "name": "Holo Table",
+      "tag": "Futuristic",
+      "description": "Glowing cyan grid on deep blue."
+    }
   }
 }

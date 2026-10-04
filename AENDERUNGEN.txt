@@ -9,6 +9,184 @@ Zusammenfassung aller Einträge unten seit 0.1.x:
   • Inhaltspakete, Besitzer-Prinzip, Charakter mitbringen
 
 ────────────────────────────────────────────────────────────
+  ENGLISCH, ETAPPE 3 + GRUNDREGELN 2014 UND 2024 – 4. Oktober (0.2.0)
+────────────────────────────────────────────────────────────
+ZWEI FREIE REGELWERKE, VORINSTALLIERT, DEUTSCH + ENGLISCH
+  • „Grundregeln 2014 (SRD 5.1)" – 66 Einträge: 9 Völker, 12 Klassen
+    (Stufe 1–20), 12 Unterklassen, Hintergrund, Talent, 15 Zustände,
+    16 Sprachen
+  • „Grundregeln 2024 (SRD 5.2)" – 88 Einträge: 9 Völker (u. a. Goliath, Ork),
+    12 Klassen inkl. Waffenmeisterschaft und epischer Gabe, 12 Unterklassen
+    (alle ab Stufe 3), 4 Hintergründe mit Herkunftstalent, 17 Talente,
+    15 Zustände, 19 Sprachen
+  • Eigene, zweisprachige Kurzfassungen; ausschließlich SRD (CC-BY-4.0) –
+    die „Basic Rules 2024" von D&D Beyond sind NICHT frei und nicht enthalten
+  • Die alten 2014er-Einträge wurden NEU geschrieben (vorher Deutsch/Englisch
+    gemischt, Merkmalsnamen abgeschnitten)
+  • Erzeugt mit tools/content/build_rules.py aus srd51.py / srd52.py
+    (stabile Kennungen rkey + Revision rev; frühere Namen als aliases)
+
+UPDATE BESTEHENDER INSTALLATIONEN (packs._sync_basis)
+  • Ältere Fassungen werden ersetzt, die Kennung bleibt → Charaktere passen
+    (Test mit unveränderter 0.1-Installation: 62/62 Kennungen erhalten,
+    keine Doppelungen)
+  • Unterklassen werden mit der Klasse DESSELBEN Regelwerks verknüpft
+  • Frühere „Grundregel"-Einträge ohne Gegenstück (Spielerhandbuch-Inhalte
+    aus 0.1) → „Eigene Inhalte"; das private Paket ersetzt sie beim Import
+  • „Standards laden" stillgelegt (alte, einsprachige Daten)
+
+REGELWERK WÄHLEN
+  • Neue Kampagne: Regeln 2024 / 2014 / beide → erlaubte Erweiterungen
+    (Pakete mit anderem Regelwerk werden ausgeschlossen)
+  • Charakter-Builder: Umschalter Regeln 2024 / 2014 (nie zwei „Elf");
+    neue Charaktere 2024, bestehende 2014; Völker und Klassen alphabetisch
+  • Pakete können ihr Regelwerk im Manifest angeben („rules")
+
+KATALOGE & PRIVATES PAKET
+  • Designs und Würfel-Sets im Katalog zweisprachig; Launcher zeigt und
+    installiert in der eingestellten Sprache
+  • Privates Spielerhandbuch-Paket zweisprachig, als „Regeln 2014"
+    gekennzeichnet; korrigiert: Durchhaltevermögen/Robust hatten falsche Regeln
+
+SPRACHE
+  • Startsprache = Systemsprache (deutsches Windows → Deutsch, sonst Englisch)
+  • Technische Felder (Trefferwürfel, Kennungen …) zählen nicht mehr zur
+    Übersetzungs-Abdeckung
+
+BEHOBEN
+  • Paket-Import/-Vorschau verlangten zusätzlich eine Anmeldung – im
+    Launcher (nie angemeldet) wäre ein Import immer gescheitert
+
+
+────────────────────────────────────────────────────────────
+  ENGLISCH, ETAPPE 2: GESAMTE OBERFLÄCHE – 4. Oktober (0.2.0)
+────────────────────────────────────────────────────────────
+  • Alle 1.616 Oberflächentexte übersetzt (Spieltisch, Bibliothek, Builder,
+    Charakterbogen, Inspektor, Würfel-Werkstatt, Design-Studio, Journal,
+    Notizen, Dialoge, Meldungen). Regelbegriffe mit den offiziellen
+    englischen D&D-Bezeichnungen (Conditions, Skills, Alignments …)
+  • Engine: Platzhalter/Titel von Textfeldern werden übersetzt (der Inhalt
+    nie); mehrzeilige Quelltexte werden erkannt; Info-Symbol als Präfix
+  • Automatischer Seiten-Scan auf Englisch: keine deutschen Resttexte mehr
+    in Startbildschirm, Einstellungen, Bibliothek, Builder, Spieltisch,
+    Werkstatt – außer Bibliotheks-INHALTEN (Etappe 3)
+
+
+────────────────────────────────────────────────────────────
+  ENGLISCH, ETAPPE 1: ENGINE, ZWEISPRACHIGE BIBLIOTHEK – 4. Oktober (0.2.0)
+────────────────────────────────────────────────────────────
+OBERFLÄCHE
+  • static/js/i18n.js: übersetzt die Oberfläche anhand eines Wörterbuchs
+    (static/i18n/en.json, Schlüssel = deutscher Text), auch später per
+    JavaScript entstehende Texte; Muster mit Platzhaltern („{} Einträge");
+    Nutzerinhalte (Chat, Namen, Notizen …) bleiben unangetastet
+  • Einstellungen → Allgemein → Sprache: Deutsch / English (lädt neu);
+    der Launcher übernimmt die Sprache aus dem Profil
+  • tools/i18n.py sammelt alle Oberflächentexte und meldet fehlende
+    Übersetzungen (--missing), --sync kopiert Engine + Wörterbuch in den
+    Launcher. Stand: 431 von 1611 Texten (Launcher, Startbildschirm,
+    Einstellungen, Anmeldung, gemeinsame Bausteine)
+  • Bis die Übersetzung vollständig ist, startet die App auf Deutsch
+    (Stellschraube in i18n.js)
+
+ZWEISPRACHIGE INHALTE (i18n_content.py)
+  • Jeder Bibliotheks-Eintrag: Hauptsprache (lang) + Übersetzung (i18n.en
+    bzw. i18n.de); Listen werden über die Kennung ihrer Elemente zugeordnet
+  • Der Server liefert Bibliotheken in der Sprache des Spielers (Cookie) –
+    Builder, Charakterbogen, Spieltisch brauchen keine Änderung
+  • Charakter-Abgleich und Paket-Import erkennen Namen in beiden Sprachen
+  • Bibliotheks-Editor: Umschalter Hauptsprache / Übersetzung mit
+    Fortschritt in %; in der Übersetzung nur Texte (Struktur gesperrt);
+    Liste markiert unvollständige Einträge („EN 15%")
+  • Neue Einträge: Hauptsprache = eingestellte Oberflächensprache
+
+
+────────────────────────────────────────────────────────────
+  MUSIK DURCHGEHEND, EINSTELLUNGEN, NEUE BIBLIOTHEK – 4. Oktober (0.2.0)
+────────────────────────────────────────────────────────────
+LADEBILDSCHIRM
+  • Kein Ladekreis mehr: leuchtendes Wappen + echter Fortschrittsbalken
+    (Struktur → geladen → Schriften → Wartepunkte); Theme.progress(0…1)
+
+DURCHGEHENDE MUSIK (templates/shell.html, Route /app)
+  • Das Spiel läuft in einem festen Rahmen; nur der Inhalt darin wechselt –
+    die Musik spielt im Rahmen und läuft bei Seitenwechseln weiter
+  • Musikwechsel: Menüs = eine durchgehende Musik; Spieltisch = Musik blendet
+    aus (dort spielt der DM); zurück aus dem Spieltisch = blendet wieder ein
+  • Andere Adressen (Launcher, Server eines DM) verlassen den Rahmen
+  • „/" führt angemeldet in den Rahmen; Launcher startet /app?start=/menu
+  • Desktop-Funktionen (Dateien speichern …) werden aus dem Rahmen
+    durchgereicht
+
+EINSTELLUNGSMENÜ (Startbildschirm → Einstellungen)
+  • Kategorien: Allgemein, Audio, Grafik & Bewegung, Spieltisch, Würfel,
+    Konto & Daten, Über
+  • Neu und wirksam: Gesamtlautstärke, Würfel-Geräusche + Lautstärke,
+    Intro an/aus (Launcher), „Weiterspielen" an/aus, Lichtpartikel,
+    3D-Würfel, Würfel-Texturen Hoch/Standard, abgerundete Kanten,
+    Seitenleiste beim Start, Steuerungshilfe automatisch/immer/nie,
+    Chat-Ton, Anzeigedauer der Würfelergebnisse, Vorschaubilder neu
+    erzeugen, Einstellungen zurücksetzen, Lizenzen
+  • Sprache: Deutsch (weitere Sprachen in Vorbereitung – Auswahl gesperrt)
+  • Gespeichert im Profil der Installation (vtt_settings), Theme.setting()
+
+BIBLIOTHEK (komplett neu)
+  • Drei Spalten: Bibliotheken + Bereiche · Einträge · Editor
+  • Eigene Bibliotheken anlegen („＋ Neue Bibliothek"), umschalten; neue
+    Einträge landen in der gewählten Bibliothek; Einträge per Auswahl im
+    Editor in eine andere Bibliothek verschieben; „Kopie" für Varianten
+    (Grundregeln selbst werden nicht verschoben)
+  • Eigene Bibliotheken sind normale Erweiterungen → im Launcher an/aus,
+    exportieren, teilen (packs.create / /api/packs/create)
+  • Bereiche: Charakter · Magie · Ausrüstung · Welt & Regeln ·
+    Spielleitung · Spielhilfen
+  • Aussortiert: „Angriffe" sind keine Buchinhalte → Bereich „Spielhilfen"
+    als „Angriffs-Vorlagen"
+  • NEU: Kategorie Sprachen (16 Sprachen aus dem SRD 5.1); der Builder nutzt
+    sie jetzt bei jeder Sprachwahl (vorher feste, abweichende Liste)
+  • „Subklassen" heißt einheitlich „Unterklassen"; „Standards laden"
+    entfällt (Grundregeln kommen automatisch)
+
+
+────────────────────────────────────────────────────────────
+  LADEBILDSCHIRM, MUSIK IM SPIEL, WÜRFEL-KATALOG – 4. Oktober (0.2.0)
+────────────────────────────────────────────────────────────
+LADEBILDSCHIRM (theme.js – ersetzt den Ladeschleier)
+  • Echter Ladebildschirm: leuchtendes W20-Wappen, Ring, „Lädt", Lichtleiste
+    (Animationen nur über transform/opacity → bleiben flüssig, auch wenn im
+    Hintergrund gerechnet wird)
+  • Erscheint SOFORT beim Klick (Links und Theme.go – 19 Seitenwechsel im
+    Code umgestellt); die alte Seite stoppt dabei 3D-Darstellungen und
+    Partikel (Ereignis „vtt:leaving")
+  • Neue Seite startet mit demselben Bild und blendet erst ein, wenn alles
+    fertig ist: Startbildschirm (Konto + Kampagnenlisten), Builder,
+    Bibliothek, Spieltisch (Spielstand + vorbereitete Würfel-Engine),
+    Werkstatt (Würfel + alle Vorschaubilder, mit Fortschrittsanzeige)
+  • Kein weißer Blitz mehr: Fenster hat ab dem ersten Moment die dunkle
+    Grundfarbe
+
+LAUNCHER → SPIEL
+  • Intro blendet nicht mehr aus (vorher war kurz wieder der Launcher zu
+    sehen), sondern geht nahtlos in den Ladebildschirm des Spiels über
+
+MUSIK
+  • Hintergrundmusik auch im Spiel: Startbildschirm, Builder, Bibliothek,
+    Werkstatt. Nicht am Spieltisch – dort läuft die Musik des DM (Jukebox).
+    Beim Seitenwechsel kurzes Aus- und Einblenden.
+
+WÜRFEL-SETS ZUM HERUNTERLADEN
+  • Eingebaut ist nur noch das Standard-Set. Die 14 System-Sets liegen im
+    Katalog dice/ (+ dice/index.json) und werden im Launcher unter
+    „Würfel-Sets → Katalog" heruntergeladen (inkl. Updates)
+  • static/js/dice-presets.js entfernt
+  • Werkstatt: „Vorlagen" zeigt deine anderen Sets; „Neues Set" startet leer
+    oder als Kopie eines deiner Sets; „Überrasch mich" kombiniert Material,
+    Palette, Muster, Kanten und Schrift selbst
+  • VTT_CATALOG_URL (desktop/src/config.js) ist jetzt die Basis beider
+    Kataloge (darunter designs/ und dice/)
+
+
+────────────────────────────────────────────────────────────
   FLÜSSIGER: LADESCHLEIER + RUCKELFREIE WERKSTATT – 3. Oktober (0.2.0)
 ────────────────────────────────────────────────────────────
 SEITENWECHSEL

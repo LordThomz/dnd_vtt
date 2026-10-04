@@ -1,0 +1,22 @@
+{
+ "name": "Gabe der Kampfkraft",
+ "prereq": "Stufe 19+",
+ "description": "Unaufhaltsam.",
+ "benefits": "+1 Attribut; einmal pro Zug einen verfehlten Angriff in einen Treffer verwandeln.",
+ "category": "Epische Gabe",
+ "id": "e52c3b7c",
+ "rkey": "srd52.feats.boon_combat",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Boon of Combat Prowess",
+   "prereq": "Level 19+",
+   "description": "Unstoppable.",
+   "benefits": "+1 ability; once per turn turn a miss into a hit.",
+   "category": "Epic Boon"
+  }
+ }
+}

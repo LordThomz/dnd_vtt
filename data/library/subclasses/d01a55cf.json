@@ -1,0 +1,118 @@
+{
+ "name": "Zirkel des Landes",
+ "parent_class_name": "Druide",
+ "parent_class": "c5261463",
+ "start_level": 2,
+ "description": "Hüter alter Naturorte mit Magie einer Landschaft.",
+ "level_features": {
+  "2": [
+   {
+    "id": "f2_0",
+    "name": "Zusätzlicher Zaubertrick",
+    "description": "Ein weiterer Druiden-Zaubertrick.",
+    "choices": [
+     {
+      "id": "f2_0c0",
+      "type": "cantrip",
+      "count": 1,
+      "label": "",
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "f2_1",
+    "name": "Natürliche Erholung",
+    "description": "Bei kurzer Rast Zauberplätze bis zur halben Stufe zurück (einmal pro langer Rast).",
+    "choices": []
+   }
+  ],
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Zirkelzauber",
+    "description": "Je nach Landschaft zusätzliche, immer vorbereitete Zauber.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Schritt durch das Land",
+    "description": "Nichtmagisches schwieriges Gelände und Pflanzen behindern dich nicht.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Schutz der Natur",
+    "description": "Immun gegen Gift und Krankheit; Elementare und Feen können dich nicht bezaubern oder verängstigen.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Zuflucht der Natur",
+    "description": "Tiere und Pflanzen zögern, dich anzugreifen (WEI-Rettungswurf).",
+    "choices": []
+   }
+  ]
+ },
+ "id": "d01a55cf",
+ "rkey": "srd51.subclasses.land",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Circle of the Land",
+   "parent_class_name": "Druid",
+   "description": "Keepers of ancient places, drawing magic from a landscape.",
+   "level_features": {
+    "2": [
+     {
+      "id": "f2_0",
+      "name": "Bonus Cantrip",
+      "description": "One additional druid cantrip."
+     },
+     {
+      "id": "f2_1",
+      "name": "Natural Recovery",
+      "description": "Recover spell slots up to half your level on a short rest (once per long rest)."
+     }
+    ],
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Circle Spells",
+      "description": "Extra always-prepared spells depending on your land."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Land's Stride",
+      "description": "Nonmagical difficult terrain and plants don't hinder you."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Nature's Ward",
+      "description": "Immune to poison and disease; elementals and fey can't charm or frighten you."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Nature's Sanctuary",
+      "description": "Beasts and plants hesitate to attack you (WIS save)."
+     }
+    ]
+   }
+  }
+ }
+}

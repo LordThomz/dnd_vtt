@@ -1,0 +1,91 @@
+{
+ "name": "Halb-Elf",
+ "size": "Mittel",
+ "speed": 30,
+ "darkvision": 60,
+ "asi": "+2 CHA, +1 auf zwei andere",
+ "languages": "Gemeinsprache, Elfisch, +1 Sprache",
+ "description": "Zwischen zwei Welten – charmant und anpassungsfähig.",
+ "traits": [
+  {
+   "id": "t0",
+   "name": "Dunkelsicht",
+   "description": "Im Dämmerlicht auf 60 ft wie bei hellem Licht, im Dunkeln wie im Dämmerlicht (nur Graustufen).",
+   "choices": []
+  },
+  {
+   "id": "t1",
+   "name": "Feenblut",
+   "description": "Vorteil gegen Bezauberung; Magie kann dich nicht einschläfern.",
+   "choices": []
+  },
+  {
+   "id": "t2",
+   "name": "Vielseitige Fertigkeiten",
+   "description": "Geübt in zwei Fertigkeiten deiner Wahl.",
+   "choices": [
+    {
+     "id": "t2c0",
+     "type": "skill",
+     "count": 2,
+     "label": "",
+     "options": []
+    }
+   ]
+  },
+  {
+   "id": "t3",
+   "name": "Attributsbonus",
+   "description": "+1 auf zwei Attribute deiner Wahl (außer CHA).",
+   "choices": [
+    {
+     "id": "t3c0",
+     "type": "ability",
+     "count": 2,
+     "label": "",
+     "options": []
+    }
+   ]
+  }
+ ],
+ "id": "e547e3b0",
+ "rkey": "srd51.races.halfelf",
+ "rev": 2,
+ "rules": "2014",
+ "source": "basis",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Half-Elf",
+   "size": "Medium",
+   "asi": "+2 CHA, +1 to two others",
+   "languages": "Common, Elvish, +1 language",
+   "description": "Between two worlds – charming and adaptable.",
+   "traits": [
+    {
+     "id": "t0",
+     "name": "Darkvision",
+     "description": "Within 60 ft you see in dim light as if bright and in darkness as if dim (shades of grey only)."
+    },
+    {
+     "id": "t1",
+     "name": "Fey Ancestry",
+     "description": "Advantage against being charmed; magic can't put you to sleep."
+    },
+    {
+     "id": "t2",
+     "name": "Skill Versatility",
+     "description": "Proficient in two skills of your choice."
+    },
+    {
+     "id": "t3",
+     "name": "Ability Score Increase",
+     "description": "+1 to two ability scores of your choice (not CHA)."
+    }
+   ]
+  }
+ },
+ "aliases": [
+  "Halbelf"
+ ]
+}

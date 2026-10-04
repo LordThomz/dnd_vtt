@@ -1,0 +1,16 @@
+{
+ "name": "Festgesetzt",
+ "description": "Geschwindigkeit 0; Angriffe gegen dich mit Vorteil, eigene mit Nachteil.",
+ "id": "455c7734",
+ "rkey": "srd52.conditions.restrained",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Restrained",
+   "description": "Speed 0; attacks against you have advantage, yours disadvantage."
+  }
+ }
+}

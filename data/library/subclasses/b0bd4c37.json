@@ -1,0 +1,95 @@
+{
+ "name": "Zirkel des Landes",
+ "parent_class_name": "Druide",
+ "parent_class": "3ce2228f",
+ "start_level": 3,
+ "description": "Hüter der Landschaften.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Zirkelzauber",
+    "description": "Zauber je nach gewähltem Land (Arktis, Küste, Wüste, Wald, Grasland, Gebirge, Sumpf, Unterreich).",
+    "choices": []
+   },
+   {
+    "id": "f3_1",
+    "name": "Hilfe des Landes",
+    "description": "Tiergestalt nutzen: Schaden in einem Bereich und Heilung eines Verbündeten.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Natürliche Erholung",
+    "description": "Zauberplätze zurück bei kurzer Rast; ein Zirkelzauber ohne Platz.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Schutz der Natur",
+    "description": "Immun gegen Vergiftung; Resistenz je nach Land.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Zuflucht der Natur",
+    "description": "Tiergestalt: schützender Hain aus Bäumen.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "b0bd4c37",
+ "rkey": "srd52.subclasses.land",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Circle of the Land",
+   "parent_class_name": "Druid",
+   "description": "Keepers of the lands.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Circle Spells",
+      "description": "Spells by chosen land (arctic, coast, desert, forest, grassland, mountain, swamp, underdark)."
+     },
+     {
+      "id": "f3_1",
+      "name": "Land's Aid",
+      "description": "Spend Wild Shape: damage an area and heal an ally."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Natural Recovery",
+      "description": "Recover slots on a short rest; one circle spell without a slot."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Nature's Ward",
+      "description": "Immune to poisoned; resistance by land."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Nature's Sanctuary",
+      "description": "Spend Wild Shape: a protective grove of trees."
+     }
+    ]
+   }
+  }
+ }
+}

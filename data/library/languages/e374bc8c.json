@@ -1,0 +1,22 @@
+{
+ "name": "Tiefensprache",
+ "rarity": "Selten",
+ "script": "—",
+ "speakers": "Aberrationen",
+ "description": "Seltene Sprache. Schrift: —. Typische Sprecher: Aberrationen.",
+ "id": "e374bc8c",
+ "rkey": "srd52.languages.deep_speech",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Deep Speech",
+   "rarity": "Rare",
+   "script": "—",
+   "speakers": "Aberrations",
+   "description": "Rare language. Script: —. Typical speakers: Aberrations."
+  }
+ }
+}

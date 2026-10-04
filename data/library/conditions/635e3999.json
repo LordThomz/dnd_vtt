@@ -1,0 +1,16 @@
+{
+ "name": "Betäubt",
+ "description": "Kampfunfähig; Angriffe gegen dich mit Vorteil.",
+ "id": "635e3999",
+ "rkey": "srd52.conditions.stunned",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Stunned",
+   "description": "Incapacitated; attacks against you have advantage."
+  }
+ }
+}

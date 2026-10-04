@@ -1,0 +1,22 @@
+{
+ "name": "Halblingisch",
+ "rarity": "Standard",
+ "script": "Gemeinsprache",
+ "speakers": "Halblinge",
+ "description": "Standardsprache. Schrift: Gemeinsprache. Typische Sprecher: Halblinge.",
+ "id": "9a64f614",
+ "rkey": "srd52.languages.halfling",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Halfling",
+   "rarity": "Standard",
+   "script": "Common",
+   "speakers": "Halflings",
+   "description": "Standard language. Script: Common. Typical speakers: Halflings."
+  }
+ }
+}

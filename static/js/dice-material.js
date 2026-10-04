@@ -711,7 +711,9 @@ const DiceMaterial = (() => {
   //  Ecke". Jetzt rechnet _toCanvas() sauber um.
   // ══════════════════════════════════════════════════════════════════════
 
-  const RES = 512;   // «STELLSCHRAUBE» echte Texturauflösung je Fläche
+  // «STELLSCHRAUBE» echte Texturauflösung je Fläche – Einstellungen →
+  // Grafik → „Würfel-Texturen": Hoch (512) oder Standard (256, schneller)
+  const RES = (() => { try { return JSON.parse(localStorage.getItem("vtt_settings") || "{}") || {}; } catch (e) { return {}; } })().diceQuality === "standard" ? 256 : 512;
 
   function _canvas() {
     const c = document.createElement("canvas");

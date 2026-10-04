@@ -1,0 +1,84 @@
+{
+ "name": "Pfad des Berserkers",
+ "parent_class_name": "Barbar",
+ "parent_class": "b3110e4d",
+ "start_level": 3,
+ "description": "Wut als rohe Gewalt.",
+ "level_features": {
+  "3": [
+   {
+    "id": "f3_0",
+    "name": "Raserei",
+    "description": "Rücksichtsloser Angriff im Kampfrausch: Zusatzschaden beim ersten Treffer.",
+    "choices": []
+   }
+  ],
+  "6": [
+   {
+    "id": "f6_0",
+    "name": "Gedankenloser Kampfrausch",
+    "description": "Im Kampfrausch immun gegen Bezauberung und Verängstigung.",
+    "choices": []
+   }
+  ],
+  "10": [
+   {
+    "id": "f10_0",
+    "name": "Vergeltung",
+    "description": "Reaktion: Gegenangriff gegen nahe Angreifer.",
+    "choices": []
+   }
+  ],
+  "14": [
+   {
+    "id": "f14_0",
+    "name": "Einschüchternde Präsenz",
+    "description": "Bonusaktion: Feinde in 30 ft verängstigen.",
+    "choices": []
+   }
+  ]
+ },
+ "id": "01e590df",
+ "rkey": "srd52.subclasses.berserker",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Path of the Berserker",
+   "parent_class_name": "Barbarian",
+   "description": "Rage as raw violence.",
+   "level_features": {
+    "3": [
+     {
+      "id": "f3_0",
+      "name": "Frenzy",
+      "description": "Reckless Attack while raging: extra damage on your first hit."
+     }
+    ],
+    "6": [
+     {
+      "id": "f6_0",
+      "name": "Mindless Rage",
+      "description": "Immune to charm and fear while raging."
+     }
+    ],
+    "10": [
+     {
+      "id": "f10_0",
+      "name": "Retaliation",
+      "description": "Reaction: strike back at a nearby attacker."
+     }
+    ],
+    "14": [
+     {
+      "id": "f14_0",
+      "name": "Intimidating Presence",
+      "description": "Bonus action: frighten foes within 30 ft."
+     }
+    ]
+   }
+  }
+ }
+}

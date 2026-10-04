@@ -1,0 +1,22 @@
+{
+ "name": "Gabe des wahren Blicks",
+ "prereq": "Stufe 19+",
+ "description": "Nichts bleibt verborgen.",
+ "benefits": "+1 Attribut; Wahrsicht 60 ft.",
+ "category": "Epische Gabe",
+ "id": "6e20fc2b",
+ "rkey": "srd52.feats.boon_truesight",
+ "rev": 2,
+ "rules": "2024",
+ "source": "basis2024",
+ "lang": "de",
+ "i18n": {
+  "en": {
+   "name": "Boon of Truesight",
+   "prereq": "Level 19+",
+   "description": "Nothing stays hidden.",
+   "benefits": "+1 ability; truesight 60 ft.",
+   "category": "Epic Boon"
+  }
+ }
+}

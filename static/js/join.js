@@ -61,7 +61,7 @@ const JoinDM = (() => {
     let frag = pack(payload);
     if (frag.length > 1_500_000) { payload.characters = payload.characters.map(c => ({ ...c, portrait: null })); frag = pack(payload); }
     addRecent(url);
-    location.href = url + "/play#vttprofile=" + frag;
+    (typeof Theme!=="undefined"?Theme.go(url + "/play#vttprofile=" + frag):location.assign(url + "/play#vttprofile=" + frag));
   }
 
   function open() {
